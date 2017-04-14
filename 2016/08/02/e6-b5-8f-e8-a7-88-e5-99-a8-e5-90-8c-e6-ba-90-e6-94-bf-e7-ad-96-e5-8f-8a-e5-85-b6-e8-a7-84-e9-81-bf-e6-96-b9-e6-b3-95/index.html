@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>浏览器同源政策及其规避方法 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="浏览器安全的基石是”同源政策”(same-origin policy). 概述所谓”同源”, 是指三个”相同”.  协议相同: http:\\ 域名相同: www.example.com 与 example.com 不同 端口相同  目的同源政策的目的是为了保证用户信息安全, 防止恶意的网络窃取数据 限制范围如果非同源, 共有三种行为受到限制  Cookie, LocalStorage 和 Ind">
+<meta name="keywords" content="AJAX">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器同源政策及其规避方法">
+<meta property="og:url" content="http://yoursite.com/2016/08/02/e6-b5-8f-e8-a7-88-e5-99-a8-e5-90-8c-e6-ba-90-e6-94-bf-e7-ad-96-e5-8f-8a-e5-85-b6-e8-a7-84-e9-81-bf-e6-96-b9-e6-b3-95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="浏览器安全的基石是”同源政策”(same-origin policy). 概述所谓”同源”, 是指三个”相同”.  协议相同: http:\\ 域名相同: www.example.com 与 example.com 不同 端口相同  目的同源政策的目的是为了保证用户信息安全, 防止恶意的网络窃取数据 限制范围如果非同源, 共有三种行为受到限制  Cookie, LocalStorage 和 Ind">
+<meta property="og:updated_time" content="2017-04-14T06:40:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浏览器同源政策及其规避方法">
+<meta name="twitter:description" content="浏览器安全的基石是”同源政策”(same-origin policy). 概述所谓”同源”, 是指三个”相同”.  协议相同: http:\\ 域名相同: www.example.com 与 example.com 不同 端口相同  目的同源政策的目的是为了保证用户信息安全, 防止恶意的网络窃取数据 限制范围如果非同源, 共有三种行为受到限制  Cookie, LocalStorage 和 Ind">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-e6-b5-8f-e8-a7-88-e5-99-a8-e5-90-8c-e6-ba-90-e6-94-bf-e7-ad-96-e5-8f-8a-e5-85-b6-e8-a7-84-e9-81-bf-e6-96-b9-e6-b3-95" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/02/e6-b5-8f-e8-a7-88-e5-99-a8-e5-90-8c-e6-ba-90-e6-94-bf-e7-ad-96-e5-8f-8a-e5-85-b6-e8-a7-84-e9-81-bf-e6-96-b9-e6-b3-95/" class="article-date">
+  <time datetime="2016-08-01T19:30:48.000Z" itemprop="datePublished">2016-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      浏览器同源政策及其规避方法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>浏览器安全的基石是”同源政策”(same-origin policy).</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>所谓”同源”, 是指三个”相同”.</p>
+<ul>
+<li>协议相同: <code>http:\\</code></li>
+<li>域名相同: <code>www.example.com</code> 与 <code>example.com</code> 不同</li>
+<li>端口相同</li>
+</ul>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>同源政策的目的是为了保证用户信息安全, 防止恶意的网络窃取数据</p>
+<h3 id="限制范围"><a href="#限制范围" class="headerlink" title="限制范围"></a>限制范围</h3><p>如果非同源, 共有三种行为受到限制</p>
+<ul>
+<li>Cookie, LocalStorage 和 IndexDB 无法读取</li>
+<li>DOM 无法获得</li>
+<li>AJAX 请求无法发送</li>
+</ul>
+<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><p>Cookie 是服务器写入浏览器的一小段信息, 只有同源的网站才能共享. 但是两个网页一级域名相同, 只有二级域名不同, 浏览器允许通过设置 <code>document.domain</code> 共享 Cookie.</p>
+<p>举例来说, A 网页是 <code>http://w1.example.com/a.html</code>, B 网页是 <code>http://w2.example.com/b.html</code>, 那么只要设置相同的 <code>document.domain</code>, 这两个网页可以共享 Cookie.</p>
+<pre><code>document.domain = &apos;example.com&apos;;
+`&lt;/pre&gt;
+
+现在 A 网页通过脚本设置一个 Cookie
+
+&lt;pre&gt;`document.cookie = &apos;test1=hello&apos;;
+`&lt;/pre&gt;
+
+B 网页就可以读取这个 Cookie
+
+&lt;pre&gt;`var allCookie = document.cookie;
+`&lt;/pre&gt;
+
+注意, 这种方法只适用于 Cookie 和 iframe 窗口, LocalStorage 和 IndexDB 无法通过这种方法, 规避同源政策.
+
+另外, 服务器也可以在设置 Cookie 的时候指定 Cookie 所属域名为一级域名, 比如 `.example.com`
+
+&lt;pre&gt;`Set-Cookie: key=value; domain=.example.com; path=/
+`&lt;/pre&gt;
+
+这样的话, 二级域名和三级域名不用做任何设置就可以读取这个 Cookie
+
+### iframe
+
+如果两个网页不同源, 就无法拿到对方的 DOM, 典型的例子就是`iframe`窗口和`window.open` 方法打开的窗口, 他们与父窗口无法通信.
+
+如果两个窗口一级域名相同, 只是二级域名不同, 那么设置`document.domain`也可以规避同源政策, 实现 DOM 获取.
+
+### 完全不同源的网站
+
+#### 片段识别符(fragment identifier)
+
+片段识别符值得是 URL 中`#` 后的部分, 也就是 hash.
+
+如果只是改变片段识别符, 页面不会重新刷新
+
+父窗口可以把信息写入子窗口的片段识别符
+
+&lt;pre&gt;`var src = originURL + &apos;#&apos; + data;
+document.getElementById(&apos;myFrame&apos;).src = src;
+`&lt;/pre&gt;
+
+子窗口通过监听 `hashchange` 事件得到通知
+
+&lt;pre&gt;`window.onhashchange = checkMessage;
+
+function checkMessage(){
+  var message = window.location.hash;
+  // ...
+}
+`&lt;/pre&gt;
+
+同样子窗口也可以改变父窗口的片段识别符
+
+&lt;pre&gt;`parent.location.href = target + &quot;#&quot; + hash;
+`&lt;/pre&gt;
+
+#### window.name
+
+浏览器窗口有 `window.name` 属性, 这个属性的最大特点是, 无论是否同源, 只要在同一个窗口里, 前一个网页设置这个属性后, 后一个网页可以读取他
+
+父窗口先打开一个子窗口, 载入一个不同源的网站, 该网页将写入 `widnow.name` 属性
+
+&lt;pre&gt;`window.name = data;
+`&lt;/pre&gt;
+
+接着, 子窗口跳回一个与主窗口同域的网址
+
+&lt;pre&gt;`location = &apos;http:parent.url.com/xxx.html&apos;
+`&lt;/pre&gt;
+
+然后主窗口就可以读取子窗口的 `window.name` 属性了
+
+&lt;pre&gt;`var data = document.getElementById(&apos;myFrame&apos;).contentWindow.name;
+`&lt;/pre&gt;
+
+这种方法的优点是 `window.name` 容量大, 缺点是必须监听子窗口的 `window.name` 属性的变化, 影响性能.
+
+#### window.postMessage
+
+以上信息都属于破解, HTML5 为了解决这个问题, 引入一个全新的 API: 跨文档通信 API(Cross-document messaging)
+
+这个 API 为 `window` 对象新增一个 `window.postMessage` 方法, 允许跨窗口通信, 不论两个窗口是否同源.
+
+举例来说, 父窗口 `http://aaa.com` 向子窗口 `http://bbb.com` 发消息, 调用 `postMessage` 方法就可以了
+
+&lt;pre&gt;`var popup = window.open(&apos;http://bbb.com&apos;, &apos;title&apos;);
+popup.postMessage(&apos;Hello World&apos;, &apos;http://bbb.com&apos;);
+`&lt;/pre&gt;
+
+`postMessage` 方法的第一个参数是要传递的 Message, 第二个参数是接受信息的窗口的源(origin), 即`协议+域名+端口`, 也可以设置为`*`, 表示不限制域名, 向所有窗口发送.
+
+子窗口向父窗口发送消息的写法类似
+
+&lt;pre&gt;`window.opener.postMessage(&apos;Hello World&apos;, &apos;http://aaa.com&apos;);
+`&lt;/pre&gt;
+
+通过`message`事件监听对象消息
+
+&lt;pre&gt;`window.addEventListener(&apos;message&apos;, function(e){
+console.log(e.data);
+}, false);
+`&lt;/pre&gt;
+
+`message` 事件的事件对象 `event` , 提供一下三个属性
+</code></pre><ul>
+<li><code>event.source</code>: 发送信息的窗口, 子窗口通过 <code>event.source</code> 引用父窗口然后发送消息<pre>`window.addEventListener('message', receiveMessage);
+function receiveMessage(event){
+event.source.postMessage('Hello Opener', '*');
+}
+`</pre></li>
+<li>‘event.origin’: 发送信息的网址(‘<a href="http://aaa.com" target="_blank" rel="external">http://aaa.com</a>‘), 可以过滤不是指定来源的信息<pre>`window.addEventListener('message', receiveMessage);
+function receiveMessage(event){
+if (event.origin != 'http://aaa.com') return;
+if (event.data === 'Hello World') {
+  event.source.postMessage('Hello', event.origin);
+} else {
+  console.log(event.data);
+}
+}
+`</pre></li>
+<li><p>‘event.data’: 信息内容</p><p></p>
+<h4 id="LocalStorage"><a href="#LocalStorage" class="headerlink" title="LocalStorage"></a>LocalStorage</h4><p></p><p>通过 <code>window.postMessage</code> 读写其他窗口的 <code>LocalStorage</code> 也是可能的</p>
+<p>例: 主窗口写入 <code>iframe</code> 子窗口的 <code>localStorage</code></p>
+<pre>`window.onmessage = function(event){
+  if(event.origin !== 'http://bbb.com') return;
+  var payload = JSON.parse(event.data);
+  localStorage.setItem(payload.key, JSON.stringify(payload.data));
+};
+`</pre>
+
+<p>上面代码中, 子窗口将父窗口发送的消息写入自己的 <code>localStorage</code></p>
+<p>父窗口发送消息的代码如下:</p>
+<pre>`var win = document.getElementByTagName('iframe')[0].contentWindow;
+var obj = { name: 'Jack' };
+win.postMessage(JSON.stringify({key: 'storage', data: obj}), 'http://bbb.com');
+`</pre>
+
+<p>加强版子窗口接收消息的代码</p>
+<pre>`window.onmessage = function(e) {
+  if (e.origin !== 'http://bbb.com') return;
+  var payload = JSON.parse(e.data);
+  switch(payload.method) {
+    case 'set': localStorage.setItem(payload.key, JSON.stringify(parload.data));
+                break;
+    case 'get': var parent = window.parent;
+                var data = localStorage.getItem(payload.key);
+                parent.postMessage(data, 'http://aaa.com');
+                break;
+    case 'remove': localStorage.removeItem(payload.key);
+                   break;
+  }
+};
+`</pre>
+
+<p>加强版的父窗口消息发送代码</p>
+<pre>`var win = document.getElementByTagName('iframe')[0].contentWindow;
+var obj = { name: 'Jack' };
+// 存入对象
+win.postMessage(JSON.stringify(key: 'storage', method: 'set', data: obj), 'http://bbb.com');
+// 读取对象
+win.postMessage(JSON.stringify(key: 'storage', method: 'get',), '*');
+window.onmessage = function(e){
+  if(e.origin !== 'http://bbb.com') return;
+  // 'Jack'
+  console.log(JSON.parse(e.data).name);
+};
+`</pre>
+
+<h3 id="AJAX"><a href="#AJAX" class="headerlink" title="AJAX"></a>AJAX</h3><p>同源政策规定, AJAX 请求只能发给同源的网址, 否则会报错</p>
+<p>除了假设服务器代理, 有三中方法规避这个限制</p>
+<h4 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h4><p>JSONP 是服务器与客户端跨源通信的常用方法, 最大特点是简单实用, 老式浏览器全部支持, 服务器改造非常小.</p>
+<p>基本思想是, 网页通过添加一个<code>&amp;lt;script&amp;gt;</code>元素, 向服务器请求 JSON 数据,在何种做法不受同源政策限制. 服务器接收请求后, 将数据放在一个指定名字的回调函数里传回来.</p>
+<p>首先, 网页动态插入<code>&amp;lt;script&amp;gt;</code>元素, 由它向跨源网址发出请求.</p>
+<pre>`function addScriptTag(src) {
+  var script = document.createElement('script');
+  script.setAttribute('type', 'text/javascript');
+  script.src = src;
+  document.body.appendChild(script);
+}
+window.onload = function(){
+  addScritpTag('http://example.com/ip?callback=foo');
+}
+
+function foo(data){
+  console.log("Your public IP address is: " + data.ip);
+};
+`</pre>
+
+<p>上面的代码通过动态添加<code>&amp;lt;script&amp;gt;</code>元素, 向服务器<code>example.com</code>发出请求. 注意, 该请求的查询字符串有一个<code>callback</code> 参数, 用来指定回调函数的名字, 这对 JSONP 是必须的.</p>
+<p>服务器接收到这个请求后, 会将数据放在回调函数的参数位置返回.</p>
+<pre>`foo({
+  'ip': '8.8.8.8'
+});
+`</pre>
+
+<p>由于<code>&amp;lt;script&amp;gt;</code>元素请求的脚本, 直接作为代码运行, 这时只要浏览器定义了<code>foo</code>函数, 该函数就会立即调用. 作为参数的 JSON 数据会被视为 JavaScript 对象, 而不是字符串, 因此避免了使用<code>JSON.parse</code>的步骤</p>
+<h4 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h4><p>WebSocket 是一种通信协议, 使用<code>ws://</code>(非加密)和<code>wss://</code>(加密)作为协议前缀.</p>
+<p>该协议不实行同源政策, 只要服务器支持, 就可以与他进行夸源通信.</p>
+<p>下面是一个例子, 浏览器发出的 WebSocket 请求的头信息:</p>
+<p><pre>`GET /chat HTTP/1.1<br>Host: server.example.com<br>Upgrade: websocket<br>Connection: Upgrade<br>Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==<br>Sec-WebSocket-Protocol: chat, superchat<br>Sec-WebSocket-Version: 13<br>Origin: <a href="http://example.com" target="_blank" rel="external">http://example.com</a></pre></p>
+</li>
+</ul>
+<p>上面代码中, 有一个字段是<code>Origin</code>, 表示该请求的请求源(origin)</p>
+<p>正式因为有了<code>Origin</code>这个字段, 所以 WebSocket 才没有实行同源政策, 因为服务器可以根据这个字段判断是否许可此次通信</p>
+<h4 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h4><p>CORS 是跨源资源分享(Corss-Origin Resource Sharing) 的缩写, 是 W3C 标准, 是跨源 AJAX 请求的根本解决办法. 相比 JSONP 只能发<code>GET</code>请求, CORS 允许任何类型的请求.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/02/e6-b5-8f-e8-a7-88-e5-99-a8-e5-90-8c-e6-ba-90-e6-94-bf-e7-ad-96-e5-8f-8a-e5-85-b6-e8-a7-84-e9-81-bf-e6-96-b9-e6-b3-95/" data-id="cj1hgzf2v0066eoxh5ru933tl" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AJAX/">AJAX</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/01/node-js-url-e6-a8-a1-e5-9d-97-e7-9a-84-e4-bd-bf-e7-94-a8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Node.js URL 模块的使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/02/e8-b7-a8-e5-9f-9f-e8-b5-84-e6-ba-90-e5-85-b1-e4-ba-ab-cors/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">跨域资源共享 CORS</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/">AJAX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BOOTSTRAP/">BOOTSTRAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS3/">CSS3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Closure/">Closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonJS/">CommonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevTools/">DevTools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FP/">FP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gulp/">Gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDL/">MDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Material-Design/">Material Design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NODE/">NODE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nock/">Nock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Promise/">Promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Redux/">React-Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Router/">React-Router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/">RegExp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJS/">RxJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thunk/">Thunk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Trick/">Trick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automatic/">automatic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel-polyfill/">babel-polyfill</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commandline/">commandline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack2/">webpack2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/14/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/20/baisc-usage-of-redux-observable/">Baisc Usage of Redux-Observable</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/27/functor-e5-87-bd-e5-ad-90/">Functor 函子</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/throttle-e5-87-bd-e6-95-b0/">Throttle 函数</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/debounce-e5-87-bd-e6-95-b0/">Debounce 函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

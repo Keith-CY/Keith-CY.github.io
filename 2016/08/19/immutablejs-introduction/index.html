@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ImmutableJS Introduction | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logi">
+<meta name="keywords" content="Redux,Immutable">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ImmutableJS Introduction">
+<meta property="og:url" content="http://yoursite.com/2016/08/19/immutablejs-introduction/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logi">
+<meta property="og:updated_time" content="2017-04-14T06:40:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ImmutableJS Introduction">
+<meta name="twitter:description" content="Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logi">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-immutablejs-introduction" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/19/immutablejs-introduction/" class="article-date">
+  <time datetime="2016-08-18T21:29:36.000Z" itemprop="datePublished">2016-08-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ImmutableJS Introduction
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logic. Persistent data presetns a mutative API which does not update the data in-place, but instead always yields new updated data.</p>
+<p>Immutable.js provides many Persistent Immutable data structures including: <code>List</code>, <code>Stack</code>, <code>Map</code>, <code>OrderedMap</code>, <code>Set</code>, <code>OrderedSet</code> and <code>Record</code>.</p>
+<p>These data structures are highly efficient on modern JavaScript VMs by using structural sharing via ‘hash maps tries’ and ‘vector tries’ as popularized by Clojure and Scala, minimizing the need to copy or cache data.</p>
+<p>Immutable also provides a lazy <code>Seq</code>, allowing efficient chaining of collection methods like <code>map</code> and <code>filter</code> without creating intermediate representations. Create some <code>Seq</code> with <code>Range</code> and <code>Repeat</code>.</p>
+<h3 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h3><p><code>npm install Immutable</code></p>
+<p><code>var Immutable = require(&#39;immutable&#39;);
+  var map1 = Immutable.Map({a:1,b:2,c:3});
+  var map2 = map1.set(&#39;b&#39;,50);
+  map1.get(&#39;b&#39;); //2
+  map2.get(&#39;b&#39;); //50</code></p>
+<h3 id="The-case-for-Immutability"><a href="#The-case-for-Immutability" class="headerlink" title="The case for Immutability"></a>The case for Immutability</h3><p>Much of what makes application development difficult is tracking mutation and maintaining state. Development with immutable data encourages you to think differently about how data flows through your application.</p>
+<p>Subscribing to data event throughout your application.</p>
+<p>Immutable data never change.</p>
+<p>Immutable collections should be treated as <em>value</em> rather than <em>object</em>. While objects represents some thing which could change over time, a value represents the state of that thing at a particular instance of time. This principle is most important to understanding the appropriate use of immutable data. In order to treat Immutable.js collections as values, it’s important to use the <strong>Immutable.is()</strong> function or <strong>.equals()</strong> method to determine value equality instead of <code>===</code> operator which determines object reference identity.</p>
+<p><code>var map1 = Immutable.Map({a:1,b:2,c:3});
+  var map2 = map1.set(&#39;b&#39;,2);
+  assert(map1.equals(map2) === true);
+  var map3 = map1.set(&#39;b&#39;,50);
+  assert(map1.equals(map3) === false);</code></p>
+<p><strong>Note</strong>: As a performance optimization <strong>Immutable</strong> attempts to return the existing collection when an operation would result in an identical collection, allowing for using <code>===</code> reference equality to determine if something definitely has not changed. This can be extremely useful when used within memoization function which would prefer to re-run the function if a deeper equality check could potentially be more costly. The <code>===</code> equality check is also used internally by <strong>Immutable.js</strong> and <code>equals()</code> as a performance as a performance optimization.</p>
+<p>If an object is immutable, it can <strong>be ‘copied’ simply by marking another reference</strong> to it instead of copying the entire object. Because a reference is much smaller than the object itself, this results in memory savings and a potential boost in execution speed for programs which rely on copies(such as an undo-stack).</p>
+<p><code>var map1 = Immutable.Map({&#39;a&#39;:1,&#39;b&#39;:2,&#39;c&#39;:3});
+  var clone = map1;</code></p>
+<h3 id="JavaScript-first-API"><a href="#JavaScript-first-API" class="headerlink" title="JavaScript-first API"></a>JavaScript-first API</h3><p>While <code>immutable</code> is inspired by Clojure, Scala, Haskell and other functional programming environments, it’s designed to bring these powerful concepts to JavaScript, and therefore has an Object-Oriented API that closely mirrors that of <strong>ES6 Array, Map, and Set</strong>.</p>
+<p>The difference for the immutable collections is that methods which would mutate the collection, like <code>push</code>, <code>set</code>, <code>unshift</code>, or <code>splice</code> instead of return a new immutable collection. Methods which return new array like <code>slice</code> or <code>concat</code> instead return new immutable collections.</p>
+<p><code>var list1 = Immutable.List.of(1,2);
+  var list2 = list1.push(3,4,5);
+  var list3 = list2.unshift(0);
+  var list4 = list1.concat(list2,list3);
+  assert(list1.size === 2);
+  assert(list2.size === 5);
+  assert(list3.size === 6);
+  assert(list4.size === 13);
+  assert(list4.get(0) === 1);</code></p>
+<p>Almost all of the methods on <strong>Array</strong> will be found in similar form on <strong>Immutable.List</strong>, those of <strong>Map</strong> found on <strong>Immutable.Map</strong> and those of <strong>Set</strong> found on<strong>Immutable.Set</strong>, including collection operation like <strong>forEach()</strong>, and <strong>map()</strong>.</p>
+<p><code>var alpha = Immutable.Map({a:1,b:2,c:3,d:4});
+  alpha.map((v,k) =&amp;gt; k.toUpperCase()).join();
+  // &#39;A,B,C,D&#39;</code></p>
+<h3 id="Accepts-raw-JavaScript-objects"><a href="#Accepts-raw-JavaScript-objects" class="headerlink" title="Accepts raw JavaScript objects"></a>Accepts raw JavaScript objects</h3><p>  ‘immutable’ accepts plain JavaScript Arrays and Objects anywhere a mehtod expects an <strong>Iterable</strong> with no performance penalty.</p>
+<p><code>var map1 = Immutable.Map({a:1,b:2,c:3,d:4});
+  var map2 = Immutable.Map({c:10,a:20,t:30});
+  var obj = {d:100,o:200,g:300};
+  var map3 = map1.merge(map2,obj);
+  // Map {a:20,b2,c:10,d:100,t:30,o:200,g:300}</code></p>
+<p><strong>Immutable</strong> can treat any JavaScript Array or Object as an Iterable. You can take advantage of this in order to get sophisticated collection methods on JavaScript Objects, which otherwise have a very sparse native API.</p>
+<p><code>var myObject = {a:1,b:2,c:3};
+  Immutable.Seq(myObject).map(x=&amp;gt;x*x).toObject();
+  // {a:1,b:4,c:9};</code></p>
+<p>Keep in Mind, when using JS objects to construct Immutable Maps, that JS Object properties are always <strong>strings</strong>, even if written in a quote-less shorthand, while Immutable Map accept keys of any type.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  var obj = &#123;1: &amp;#039;one&amp;#039;&#125;;</div><div class="line">  Object.keys(obj); // [&amp;#039;1&amp;#039;]</div><div class="line">  obj[1]; // &amp;#039;one&amp;#039;</div><div class="line">  obj[&amp;#039;1&amp;#039;]; // &amp;#039;one&amp;#039;</div><div class="line"></div><div class="line">var map = Immutable.fromJS(obj);</div><div class="line">  map.get(&amp;#039;1&amp;#039;); // &amp;#039;one&amp;#039;</div><div class="line">  map.get(1); // undefined</div></pre></td></tr></table></figure>
+<p>Property access for JS Object first converts the key to a string, but since Immutable Map keys can be of any type the argument to <code>get()</code> is not altered.<br>  Namely Immutable Map will treat ‘1’ and 1 differently.</p>
+<h3 id="Converts-Back-to-Raw-JS-Obejcts"><a href="#Converts-Back-to-Raw-JS-Obejcts" class="headerlink" title="Converts Back to Raw JS Obejcts"></a>Converts Back to Raw JS Obejcts</h3><p>  All <strong>Immutable</strong> Iterable can be converted to plain JS Arrays and Objects shallowly with <code>toArray()</code> and <code>toObject()</code> or deeply with <code>toJS()</code>. All Immutable Iterables also implement <code>toJSON()</code> allowing them to be passed to <code>JSON.stringify()</code> directly.</p>
+<p><code>var deep = Immutable.Map({a:1,b:2,c:Immutable.List.of(3,4,5)});
+  deep.toObject() // {a:1,b:2,c:List [3,4,5]}
+  deep.toArray() // [1,2,List [3,4,5]]
+  deep.toJS() // {a:1,b:2,c:[3,4,5]}
+  JSON.stringify(deep) // &#39;{&quot;a&quot;:1,&quot;b&quot;,&quot;c&quot;:[3,4,5]}&#39;</code></p>
+<h3 id="Embraces-ES6"><a href="#Embraces-ES6" class="headerlink" title="Embraces ES6"></a>Embraces ES6</h3><p>  <code>Immutable</code> takes advantage of features added to JS ES6, the latest standard version of ECMAScript, including <code>Interators</code>,<code>Arrow Function</code>, <code>Classes</code>, and <code>Modules</code>.</p>
+<h3 id="Nested-Structures"><a href="#Nested-Structures" class="headerlink" title="Nested Structures"></a>Nested Structures</h3><p>The collections in <code>immutable</code> are intended to be nested, allowing for deep trees of data, similar to JSON</p>
+<p><code>var nested = Immutable.fromJS({a:{b:{c:[3,4,5]}}})
+  // Map{ a: Map { b: Map { c: List [3,4,5]}}}</code><br>  A few power-tool allow for reading and operating on nested data. The most useful are <code>mergeDeep</code>, <code>getIn</code>, <code>setIn</code> and <code>updateIn</code> found on <code>List</code>, <code>Map</code> and <code>OrderedMap</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  var nested2 = nested.mergeDeep(&#123;a:&#123;b:&#123;d:6&#125;&#125;&#125;)</div><div class="line">  // Map &#123;a: Map &#123; b: &#123; c: List [3,4,5], d: 6&#125;&#125;&#125;</div><div class="line"></div><div class="line">nested2.getIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;]); //6</div><div class="line"></div><div class="line">var nested3 = nested2.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;], value =&amp;gt; value + 1); d =&amp;gt; 7</div><div class="line"></div><div class="line">var nest4 = nested3.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;c&amp;#039;], list =&amp;gt; list.push(6)); c =&amp;gt; List [3,4,5,6]</div></pre></td></tr></table></figure>
+<h3 id="Lazy-Seq"><a href="#Lazy-Seq" class="headerlink" title="Lazy Seq"></a>Lazy Seq</h3><p>  <strong>Seq</strong> describes a lazy operation, allowing them to efficiently chain use all the Iterable methods.(such as map and filter)</p>
+<p><strong>Seq is immutable</strong> – Once a Seq is created it cannot be changed, appended to, rerranged or otherwise modified. Instead, any mutative method called on a Seq will return a new Seq.</p>
+<p><strong>Seq is lazy</strong> – Seq does as little work as necessary to respond to any method call.</p>
+<p>Once the Seq is used, it performs only the work necessary.</p>
+<p>Any collection can be converted to a lazy Seq with <code>toSeq()</code>.</p>
+<p><code>var seq = Immutable.Map({a:1,b:2,c:3}).toSeq();</code></p>
+<p>Seq allow for the efficient chaining of sequence operations, especially when converting to a different concrete type(such as to a JS Object)</p>
+<p><code>seq.flip().map(k =&amp;gt; k.toUpperCase()).flip().toObject();
+  // Map {A: 1, B:2, C:3}</code></p>
+<h3 id="Equality-treats-Collection-as-Data"><a href="#Equality-treats-Collection-as-Data" class="headerlink" title="Equality treats Collection as Data"></a>Equality treats Collection as Data</h3><p><strong>Immutable</strong> provides equality which treats immutable data structures as pure data, performing a deep equality check if necessary.</p>
+<p><code>var map1 = Immutable.Map({a:1,b:1,c:1});
+  var map2 = Immutable.Map({a:1,b:1,c:1});
+  assert(map1 !== map2) // two different instance, not same address
+  assert(Immutable.is(map1,map2)); // have equivalent values
+  assert(map1.equals(map2)); // alternatively use the equals methods.</code></p>
+<p><strong>Immutable.is()</strong> uses the same measure of equality as <strong>Object.is</strong> including if both are immutable and all keys and values are equal using the same measure of equality.</p>
+<h3 id="Batching-Mutations"><a href="#Batching-Mutations" class="headerlink" title="Batching Mutations"></a>Batching Mutations</h3><p>  Applying a mutation to create a new immutable object results in some overhead, which can add up to a minor performance penalty. If you need to apply a series of mutations locally before returning, <strong>Immutable</strong> gives you the ability to create a temporary mutable(transient) copy of a collection and apply a batch of mutations in a performance manner by using <code>withMutations</code>. In fact, this is exactly how <code>Immutable</code> applies complex mutations itself.</p>
+<p>As an example, building <code>list2</code> results in the creation of 1 , not 3, new immutable Lists<br>  <code>var list1 = Immutable.List.of(1,2,3);
+  var list2 = list1.withMutations(function(list){
+    list.push(4).push(5).push(6)
+  });
+  assert(list1.size === 3);
+  assert(list2.size === 6);</code></p>
+<p><strong>Note</strong>: <strong>Immutable</strong> also provides <code>asMutable</code> and <code>asImmutable</code>, but only encourages their use when <code>withMutations</code> will not suffice. Use caution to not return a mutable copy could result in undesired behavior.</p>
+<p><strong>important</strong>: Only a select few method can be used in <code>withMutations</code> including <code>set</code>, <code>push</code>, <code>pop</code>. These methods can be applied directly against a persistent data-structure where other methods like <code>map</code>,<code>filter</code>,<code>sort</code>and <code>splice</code> will always return new immutable data-structure and never mutate a mutable collection.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/19/immutablejs-introduction/" data-id="cj1hgzf3u008deoxhu5apqn95" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/16/redux-e6-90-ad-e9-85-8d-react/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          redux 搭配 react
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/19/webpack-e5-b8-b8-e7-94-a8-plugin-e5-92-8c-loader/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Webpack 常用 plugin 和 loader</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/">AJAX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BOOTSTRAP/">BOOTSTRAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS3/">CSS3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Closure/">Closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonJS/">CommonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevTools/">DevTools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FP/">FP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gulp/">Gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDL/">MDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Material-Design/">Material Design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NODE/">NODE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nock/">Nock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Promise/">Promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Redux/">React-Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Router/">React-Router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/">RegExp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJS/">RxJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thunk/">Thunk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Trick/">Trick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automatic/">automatic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel-polyfill/">babel-polyfill</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commandline/">commandline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack2/">webpack2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/14/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/20/baisc-usage-of-redux-observable/">Baisc Usage of Redux-Observable</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/27/functor-e5-87-bd-e5-ad-90/">Functor 函子</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/throttle-e5-87-bd-e6-95-b0/">Throttle 函数</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/debounce-e5-87-bd-e6-95-b0/">Debounce 函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

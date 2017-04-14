@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>XTemplate 模板语法 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="变量变量会从当前模板的上下文查找值, 如果要输出一个变量的值, 可以使用 {{ variable }} `&amp;lt;/pre&amp;gt;  这样模板引擎会从上下文寻找变量`variable`并打印出来. 变量可以使用`.`访问其属性, 和 js 一样也可以通过`[]`访问属性  &amp;lt;pre&amp;gt;`{{ user.name }} {{ user[&apos;name&apos;] }} `&amp;lt;/pre&amp;gt;  如">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XTemplate 模板语法">
+<meta property="og:url" content="http://yoursite.com/2016/09/18/xtemplate-e6-a8-a1-e6-9d-bf-e8-af-ad-e6-b3-95/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="变量变量会从当前模板的上下文查找值, 如果要输出一个变量的值, 可以使用 {{ variable }} `&amp;lt;/pre&amp;gt;  这样模板引擎会从上下文寻找变量`variable`并打印出来. 变量可以使用`.`访问其属性, 和 js 一样也可以通过`[]`访问属性  &amp;lt;pre&amp;gt;`{{ user.name }} {{ user[&apos;name&apos;] }} `&amp;lt;/pre&amp;gt;  如">
+<meta property="og:updated_time" content="2017-04-14T06:40:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="XTemplate 模板语法">
+<meta name="twitter:description" content="变量变量会从当前模板的上下文查找值, 如果要输出一个变量的值, 可以使用 {{ variable }} `&amp;lt;/pre&amp;gt;  这样模板引擎会从上下文寻找变量`variable`并打印出来. 变量可以使用`.`访问其属性, 和 js 一样也可以通过`[]`访问属性  &amp;lt;pre&amp;gt;`{{ user.name }} {{ user[&apos;name&apos;] }} `&amp;lt;/pre&amp;gt;  如">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-xtemplate-e6-a8-a1-e6-9d-bf-e8-af-ad-e6-b3-95" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/18/xtemplate-e6-a8-a1-e6-9d-bf-e8-af-ad-e6-b3-95/" class="article-date">
+  <time datetime="2016-09-18T08:21:47.000Z" itemprop="datePublished">2016-09-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      XTemplate 模板语法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p>变量会从当前模板的上下文查找值, 如果要输出一个变量的值, 可以使用</p>
+<pre><code>{{ variable }}
+`&lt;/pre&gt;
+
+这样模板引擎会从上下文寻找变量`variable`并打印出来. 变量可以使用`.`访问其属性, 和 js 一样也可以通过`[]`访问属性
+
+&lt;pre&gt;`{{ user.name }}
+{{ user['name'] }}
+`&lt;/pre&gt;
+
+如果一个变量的值是`undefined`或`null`, 那么什么也不会输出, 也不会报错.
+
+### 支持的数据类型
+
+XTemplate 支持 js 中所有基本数据类型
+- Boolean
+- Number
+- String
+- Null
+- Undefined
+- Object
+- Array
+
+### 输出
+
+使用`{{ foo }}`来输出`escape`之后的数据, `{{{ foo }}}`来输出`unescape`的原始数据
+
+&lt;pre&gt;`escaped: {{ foo }}
+unescaped: {{{ foo }}}
+`&lt;/pre&gt;
+
+如果希望输出最原始数据(包括`{{}}`), 那么需要使用`{{% %}}`语法
+
+&lt;pre&gt;`{{% 
+      {{ x }}
+    %}}
+`&lt;/pre&gt;
+
+渲染这个模板, 会输出
+
+&lt;pre&gt;`{{ x }}
+`&lt;/pre&gt;
+
+#### 添加注释
+
+&lt;pre&gt;`{{! comment }}
+`&lt;/pre&gt;
+
+#### 添加空格
+
+`{{~`删除空格前缀
+    `~}}`删除空格后缀
+
+### 作用域
+
+每一个模板都有一个独立的作用于, 在字幕版中可以访问父模板的上下文, 但是字幕版中定义或者修改变量不会影响到父模板的变量
+
+&lt;pre&gt;`// parent.xtpl
+{{ set (a=1,b=2) }}
+{{ include ('sub.xtpl') }}
+in parent:
+a = {{ a }}
+b = {{ b }}
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// sub.xtpl
+in sub:
+{{ set b = 3 }}
+a = {{ a }}
+b = {{ b }}
+`&lt;/pre&gt;
+
+渲染 parent.xtpl 得到
+
+&lt;pre&gt;`in sub: 
+a: 1
+b: 3
+in parent:
+a: 1
+b: 2
+`&lt;/pre&gt;
+
+### 根数据
+
+通过`root.foo` 可以访问到渲染的根数据, 即调用`render`方法时传入的数据
+
+用数据`{ name: &apos;foo&apos;, array: [{name:&apos;bar&apos;}] }`渲染下面模板:
+
+&lt;pre&gt;`{{ #each(arr) }}
+{{root.name}} {{name}}
+{{/each}}
+`&lt;/pre&gt;
+
+得到
+
+&lt;pre&gt;`foo bar
+`&lt;/pre&gt;
+
+## 方法和逻辑
+
+可以使用变量上 js 提供的方法:
+
+&lt;pre&gt;`var x = [1,2,3]
+`&lt;/pre&gt;
+
+&lt;pre&gt;`{{#each(x.slice(1))}}{{this}} {{/each}} // =&amp;gt; 2 3
+`&lt;/pre&gt;
+
+### 操作符
+
+XTemplate 支持在数据上使用一些操作符:
+
+&lt;pre&gt;`+, -, *, /, %
+`&lt;/pre&gt;
+
+&lt;pre&gt;`===, !==, &amp;gt;, &amp;gt;=, &amp;lt;, &amp;lt;=
+`&lt;/pre&gt;
+
+&lt;pre&gt;`||, &amp;amp;&amp;amp;, !
+`&lt;/pre&gt;
+
+&lt;pre&gt;`?:
+`&lt;/pre&gt;
+
+### 函数调用
+
+如果你传递 js 的方法到模板中, 那么可以使用它
+
+&lt;pre&gt;`{{foo(1,2,3)}}
+`&lt;/pre&gt;
+
+### 内置函数
+
+&lt;pre&gt;`range(start, end, [step])
+`&lt;/pre&gt;
+
+不包括 end
+
+&lt;pre&gt;`set(key = value, [key = value])
+`&lt;/pre&gt;
+
+`set` 用于定义或修改一个变量
+
+&lt;pre&gt;`{{ set(x=1) }}
+{{ set(y=3,z=2) }}
+{{x}}
+{{y+z}}
+`&lt;/pre&gt;
+
+渲染得到
+
+&lt;pre&gt;`1
+5
+`&lt;/pre&gt;
+
+`void`, 允许忽略模板渲染
+
+&lt;pre&gt;`{{ set(x=1) }}
+{{ void(x) }}
+`&lt;/pre&gt;
+
+将渲染空
+
+## 命令
+
+命令是一些特殊的区块, 对于这些特殊的区块, XTemplate 会做特殊处理. XTemplate 自带了一些内置的命令, 也可以自定义命令
+
+`if`
+
+&lt;pre&gt;`{{# if(variable) }}
+  It is true
+{{/ if}}
+`&lt;/pre&gt;
+
+如果 vairable 为 true, 则渲染命令块
+
+&lt;pre&gt;`{{# if(variable) }}
+{{ elseif (vairable)}}
+{{ else }}
+{{/ if }}
+
+`with`
+和 js 中的`with`类似
+`&lt;/pre&gt;
+
+var a = {
+  b:1
+}
+```
+
+&lt;pre&gt;`{{{#with(a)}}}
+{{b}} // 1
+{{/with}}
+`&lt;/pre&gt;
+
+`each`
+`each`可以对 array 和 dictionary 进行迭代
+
+&lt;pre&gt;`// array
+{{ set (array = [{
+      name: 'foo'
+    }, {
+      name: 'bar'
+    }])}}
+
+{{#each(array)}}
+  {{xindex}} {{this.name}}
+{{/each}}
+`&lt;/pre&gt;
+
+渲染得到
+
+&lt;pre&gt;`0 foo
+1 bar
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// dictionary
+{{ set (dictionary = {
+      foo:'bar',
+      hello:'world'
+    })}}
+
+{{#each(dictionary,'value','key')}}
+  {{key}}{{value}}
+{{/each}}
+`&lt;/pre&gt;
+
+渲染得到
+
+&lt;pre&gt;`foo bar
+hello world
+`&lt;/pre&gt;
+
+### 访问上层变量
+
+在`with`和`each`中, 可以通过`../`访问外层的同名变量
+
+&lt;pre&gt;`// {a: 1, b:[{a:2}]}
+{{#with(x)}}
+  {{#each(b)}}
+    {{../a}}{{a}} // 12
+  {{/with}}
+{{/with}}
+`&lt;/pre&gt;
+
+### 宏
+
+宏允许你定义一个可复用的代码片段
+
+&lt;pre&gt;`{{#macro("test","param",default=1)}}
+  param is {{param}} {{default}}
+{{/macro}}
+`&lt;/pre&gt;
+
+现在可以调用该宏
+
+&lt;pre&gt;`{{macro("test", "2")}}
+{{macro("test","2",default=2)}}
+`&lt;/pre&gt;
+
+渲染结果
+
+&lt;pre&gt;`param is 2 1
+param is 2 2
+`&lt;/pre&gt;
+
+### include
+
+`include` 引入其他的模板, 在共享组件的时候十分有效
+
+&lt;pre&gt;`{{ include ('item.html') }}
+`&lt;/pre&gt;
+
+如果下网引入子模板的时候可以在子模板的上下文设置其他值, 可以通过`include`后面的参数传入
+
+&lt;pre&gt;`// parent.html
+{{ set(x='x',y='y') }}
+{{ include ('sub.html', xx=x,yy=x) }}
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// sub.html
+x:{{x}}
+y:{{y}}
+xx:{{xx}}
+yy:{{yy}}
+`&lt;/pre&gt;
+
+parent.html渲染结果
+
+&lt;pre&gt;`x: x // from parent.html
+y: y // from parent.html
+xx: x // from sub.html
+yy: x // from sub.html
+`&lt;/pre&gt;
+
+### includeOnce
+
+功能和`include`一样, 区别在于对于同一个模板, 只在第一次调用的时候起作用.
+
+### parse
+
+如果希望能够让子模板拥有一个完全独立的上下文, 不需要父级作用于, 则可以使用`parse`
+
+&lt;pre&gt;`// parent.html
+{{ set(x = 'x', y = 'y') }}
+{{ parse('sub.html', xx = x, yy = x) }}
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// sub.html
+x: {{x}}
+y: {{y}}
+xx: {{xx}}
+yy: {{yy}}
+`&lt;/pre&gt;
+
+parent.html渲染结果
+
+&lt;pre&gt;`x:
+y:
+xx:x
+yy:x
+`&lt;/pre&gt;
+
+## 模板继承
+
+当编写一个 template 的时候, 可以定义`blocks`, 这样在字幕版中可以重写这些 block
+
+&lt;pre&gt;`// parent.xtpl
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;....&amp;gt;
+    {{{block ('head')}}}
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    {{{block ('body')}}}
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// child.xtpl
+{{ extend ('./parent.xtpl')}}
+
+{{#block ('head')}} // overwrite head block
+  &amp;lt;....&amp;gt;
+{{/block}}
+
+{{#block ('body')}} // overwrite body block
+  &amp;lt;...&amp;gt;
+{{/block}}
+</code></pre><p>渲染 child.xtpl 可以获得新的模板下的实例</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/09/18/xtemplate-e6-a8-a1-e6-9d-bf-e8-af-ad-e6-b3-95/" data-id="cj1hgzf8i00hbeoxho1kr8kxo" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/09/17/flex-e5-b1-9e-e6-80-a7-e8-af-a6-e8-a7-a3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Flex 属性详解
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/19/koa-e4-bd-bf-e7-94-a8/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">koa 使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/">AJAX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BOOTSTRAP/">BOOTSTRAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS3/">CSS3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Closure/">Closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonJS/">CommonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevTools/">DevTools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FP/">FP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gulp/">Gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDL/">MDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Material-Design/">Material Design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NODE/">NODE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nock/">Nock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Promise/">Promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Redux/">React-Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Router/">React-Router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/">RegExp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJS/">RxJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thunk/">Thunk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Trick/">Trick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automatic/">automatic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel-polyfill/">babel-polyfill</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commandline/">commandline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack2/">webpack2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/14/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/20/baisc-usage-of-redux-observable/">Baisc Usage of Redux-Observable</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/27/functor-e5-87-bd-e5-ad-90/">Functor 函子</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/throttle-e5-87-bd-e6-95-b0/">Throttle 函数</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/debounce-e5-87-bd-e6-95-b0/">Debounce 函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

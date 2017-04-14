@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Webpack | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Webpack 是一款模块加载兼打包工具, 能把各种资源, 例如 JS(X), coffee, css(sass/less), 图片等都作为模块来使用和处理 可以直接使用 require 的形式来引入各模块, 即时他们可能需要经过编译, webpack 上有各种健全的加载器(loader)会处理这些事情. Webpack 优势 webpack 是一 commonJS 的形式来书写脚本的, 但对 A">
+<meta name="keywords" content="webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Webpack">
+<meta property="og:url" content="http://yoursite.com/2016/07/20/webpack/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Webpack 是一款模块加载兼打包工具, 能把各种资源, 例如 JS(X), coffee, css(sass/less), 图片等都作为模块来使用和处理 可以直接使用 require 的形式来引入各模块, 即时他们可能需要经过编译, webpack 上有各种健全的加载器(loader)会处理这些事情. Webpack 优势 webpack 是一 commonJS 的形式来书写脚本的, 但对 A">
+<meta property="og:updated_time" content="2017-04-14T06:40:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Webpack">
+<meta name="twitter:description" content="Webpack 是一款模块加载兼打包工具, 能把各种资源, 例如 JS(X), coffee, css(sass/less), 图片等都作为模块来使用和处理 可以直接使用 require 的形式来引入各模块, 即时他们可能需要经过编译, webpack 上有各种健全的加载器(loader)会处理这些事情. Webpack 优势 webpack 是一 commonJS 的形式来书写脚本的, 但对 A">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-webpack" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/20/webpack/" class="article-date">
+  <time datetime="2016-07-19T23:32:41.000Z" itemprop="datePublished">2016-07-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>►<a class="article-category-link" href="/categories/note/workNote/">workNote</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Webpack
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Webpack 是一款模块加载兼打包工具, 能把各种资源, 例如 JS(X), coffee, css(sass/less), 图片等都作为模块来使用和处理</p>
+<p>可以直接使用 require 的形式来引入各模块, 即时他们可能需要经过编译, webpack 上有各种健全的加载器(loader)会处理这些事情.</p>
+<h3 id="Webpack-优势"><a href="#Webpack-优势" class="headerlink" title="Webpack 优势"></a>Webpack 优势</h3><ol>
+<li>webpack 是一 commonJS 的形式来书写脚本的, 但对 AMD/CMD 的支持也很全面, 方便就项目进行代码迁移</li>
+<li>能被模块化的不仅是 JS 了</li>
+<li>开发便捷, 能替代部分 grunt/gulp 工作, 比如打包, 压缩混淆, 图片转 base64等</li>
+<li>扩展性强, 插件机制完善, 特别支持 React 热拔插(react-hot-loader).</li>
+</ol>
+<h3 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h3><p>常规使用 npm 安装<br><code>$npm install -g webpack</code><br>如果是常规项目, 还是把依赖写入 package.json 更好</p>
+<pre><code>$npm init
+$npm install --save-dev webpack
+`&lt;/pre&gt;
+
+### 配置
+
+每个项目下都必须配置一个 webpack.config.js, 他的作用如同常规的 gulpfile.js, 就是一个配置项, 告诉 webpack 需要做什么
+
+比如:
+
+&lt;pre&gt;`var webpack = require(&apos;webpack&apos;);
+var commonsPlugin = new webpack.optimize.CommonsChunkPlugin(&apos;common.js&apos;);
+
+module.exports = {
+  //插件项
+  plugins: [commonsPlugin],
+
+  //页面入口文件配置
+  entry:{
+    index: &apos;./src/js/page/entry1.js&apos;
+  },
+
+  //文件输出配置
+  output:{
+    path: &apos;dist/js/page&apos;,
+    filename: &apos;[name].js&apos;
+  },
+
+  module:{
+    //加载器配置
+    loaders:[
+      {test: /\.css$/, loader: &apos;style-loader!css-loader&apos;},
+      {test: /\.js$/, loader: &apos;jsx-loader?harmony&apos;},
+      {test: /\.scss$/, loader: &apos;style!css!sass?sourceMap&apos;},
+      {test: /\.(png|jpg)$/, loader: &apos;url-loader?limit-8192&apos;}
+    ]
+  },
+};
+`&lt;/pre&gt;
+
+#### plugins 插件项
+
+这里使用了一个 CommonsChunkPlugin 的插件, 用于提取多个入口文件的公共部分, 然后生成一个 common.js 来访方便多页面之间的复用
+
+#### entry 是页面入口文件配置, output 是输出配置
+
+决定入口文件要生成什么名字的文件, 存放到哪里
+
+&lt;pre&gt;`{
+  entry: {
+    page1: &apos;./page1&apos;,
+    //支持数组, 将加载数组中的所有模块, 但一最后一个模块为输出
+    page2: [&apos;./entry1&apos;,&apos;./entry2&apos;]
+  },
+  output:{
+    path:&apos;dist/js/page&apos;,
+    filename: &apos;[name].bundle.js&apos;
+  }
+}
+`&lt;/pre&gt;
+
+这段代码最终会生成一个page1.bundle.js, 和一个page2.bundle.js, 并存放到./dist/page下
+
+#### module.loaders 是最关键的配置
+
+告诉 webpack 每一种文件都要用什么加载器来处理
+多个 loader 之间用&apos;!&apos;连接
+所有加载器都要通过 npm 来加载
+配置信息的参数&apos;?limit=8192&apos;表示将所有小于8kb的图片都转为 base64格式, 超过8kb 的图片用 url-loader 来处理
+
+### 运行 webpack
+
+`$webpack --display-error-details`
+后面的参数&apos;--display-error-details&apos; 是推荐加上的, 方便出错的时候能查阅更详细的信息
+其他主要参数有
+
+&lt;pre&gt;`$webpack --config XXX.js //使用另一份配置文件
+$webpack --watch //监听变动并自动打包
+$webpack -p //压缩混淆脚本, 这个很重要
+$webpack -d //生成 map 隐射文件, 告知哪些模块被最终打包到哪里
+`&lt;/pre&gt;
+
+### 模块引入
+
+#### HTML
+
+直接在页面&amp;lt;body&amp;gt;中引入 webpack 最终生成的页面脚本即可
+
+&lt;pre&gt;`&amp;lt;body&amp;gt;
+  &amp;lt;script scr = &apos;dist/js/page/common.js&apos;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script scr = &apos;dist/js/page/index.js&apos;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+`&lt;/pre&gt;
+
+可以看到连样式都不需要, 脚本执行的时候会动态生成&amp;lt;style&amp;gt;并注入 head
+
+#### JS
+
+各脚本模块可以直接用 commonJS 来书写, 并可以直接引入未经编译的模块, 比如 JSX, Sass, coffee 等(只要在 webpack.config.js 中配置好加载器)
+看一下编译前的页面入口文件(index.js)
+
+&lt;pre&gt;`require(&apos;../../css/reset.scss&apos;); //加载 Reset 模块
+require(&apos;../../css/allComponent.scss&apos;); //加载组件模块
+var React = require(&apos;react&apos;);
+var AppWrap = require(&apos;redux&apos;).createRedux;
+var Provider = require(&apos;redux/react&apos;).Provider;
+var stores = require(&apos;AppStore&apos;);
+
+var redux = createRedux(stores);
+var App = React.createClass({
+  render: function(){
+    return (
+      &amp;lt;Provider redux = {redux}&amp;gt;
+        {function() {return &amp;lt;AppWrap /&amp;gt;;}}
+      &amp;lt;/Provider&amp;gt;
+    );
+  }
+});
+
+ReactDOM.render(
+  &amp;lt;App /&amp;gt;,document.body
+);
+</code></pre><p>后续的都由 webpack 处理</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/20/webpack/" data-id="cj1hgzf8g00h8eoxhq8qsymjs" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/20/array-from/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Array.from()
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/07/20/react-e7-bb-84-e4-bb-b6-e7-94-9f-e5-91-bd-e5-91-a8-e6-9c-9f/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">React 组件生命周期</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/">AJAX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BOOTSTRAP/">BOOTSTRAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS3/">CSS3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Closure/">Closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonJS/">CommonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevTools/">DevTools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FP/">FP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gulp/">Gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDL/">MDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Material-Design/">Material Design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NODE/">NODE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nock/">Nock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Promise/">Promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Redux/">React-Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Router/">React-Router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/">RegExp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJS/">RxJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thunk/">Thunk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Trick/">Trick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automatic/">automatic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel-polyfill/">babel-polyfill</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commandline/">commandline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack2/">webpack2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/14/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/20/baisc-usage-of-redux-observable/">Baisc Usage of Redux-Observable</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/27/functor-e5-87-bd-e5-ad-90/">Functor 函子</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/throttle-e5-87-bd-e6-95-b0/">Throttle 函数</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/debounce-e5-87-bd-e6-95-b0/">Debounce 函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

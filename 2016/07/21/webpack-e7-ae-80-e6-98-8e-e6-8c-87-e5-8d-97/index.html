@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>webpack简明指南 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Thanks to Webpack 傻瓜式指南 安装npm install -g webpack `&amp;lt;/pre&amp;gt;  ### 建立项目  &amp;lt;pre&amp;gt;`mkdir webpack cd webpack npm init touch .gitignore `&amp;lt;/pre&amp;gt;  #### 项目结构  &amp;lt;pre&amp;gt;`project | |---app |    |">
+<meta name="keywords" content="webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack简明指南">
+<meta property="og:url" content="http://yoursite.com/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Thanks to Webpack 傻瓜式指南 安装npm install -g webpack `&amp;lt;/pre&amp;gt;  ### 建立项目  &amp;lt;pre&amp;gt;`mkdir webpack cd webpack npm init touch .gitignore `&amp;lt;/pre&amp;gt;  #### 项目结构  &amp;lt;pre&amp;gt;`project | |---app |    |">
+<meta property="og:updated_time" content="2017-04-14T06:40:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack简明指南">
+<meta name="twitter:description" content="Thanks to Webpack 傻瓜式指南 安装npm install -g webpack `&amp;lt;/pre&amp;gt;  ### 建立项目  &amp;lt;pre&amp;gt;`mkdir webpack cd webpack npm init touch .gitignore `&amp;lt;/pre&amp;gt;  #### 项目结构  &amp;lt;pre&amp;gt;`project | |---app |    |">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/" class="article-date">
+  <time datetime="2016-07-21T02:10:30.000Z" itemprop="datePublished">2016-07-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      webpack简明指南
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Thanks to <a href="https://github.com/vikingmute/webpack-for-fools/blob/master/entries/chapter-1.md" target="_blank" rel="external">Webpack 傻瓜式指南</a></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre><code>npm install -g webpack
+`&lt;/pre&gt;
+
+### 建立项目
+
+&lt;pre&gt;`mkdir webpack
+cd webpack
+npm init
+touch .gitignore
+`&lt;/pre&gt;
+
+#### 项目结构
+
+&lt;pre&gt;`project
+|
+|---app
+|    |
+|    |---index.js
+|    |---sub.js
+|
+|---package.json
+|
+|---webpack.config.js
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//sub.js
+function generateText(){
+  var element = document.createElement(&apos;h2&apos;);
+  element.innerHTML = &quot;Hello, I&apos;m h2&quot;;
+  return element;
+}
+module.exports = generateText;
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//index.js
+var sub = require(&apos;./sub&apos;);
+var app = document.createElement(&apos;div&apos;);
+app.innerHTML = &quot;&amp;lt;h1&amp;gt;Hello, I&apos;m h1&quot;;
+app.appendChild(sub())
+`&lt;/pre&gt;
+
+### 配置 Webpack
+
+目的是将两个 js 根据依赖关系合并, 然后在 dist 目录创建一个 index.html 并引用合并后的 js.
+
+这里安装一个 plugin, 可以快速生成 HTML
+
+&lt;pre&gt;`npm install --save-dev html-webpack-plugin
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`var path = require(&apos;path&apos;);
+var HtmlWebpackPlugin = require(&apos;html-webpack-plugin&apos;);
+//定义文件夹路径
+var ROOT_PATH = path.resolve(__dirname);
+var APP_PATH = path.resolve(ROOT_PATH, &apos;app&apos;);
+var DIST_PATH = path.resolve(ROOT_PATH, &apos;dist&apos;);
+
+module.exports = {
+  //项目文件夹, 可以直接用文件夹名, 默认寻找 index.js
+  entry: APP_PATH,
+  output: {
+    path: DIST_PATH,
+    filename: &apos;bundle.js&apos;
+  },
+  //添加插件, 自动生成 html
+  plugins: [
+    new HtmlWebpackPlugin({title: &apos;Hello World App&apos;})
+  ]
+};
+`&lt;/pre&gt;
+
+然后在项目目录运行
+
+&lt;pre&gt;`webpack
+`&lt;/pre&gt;
+
+可以看到 html 已经引用了 bundle.js
+
+### 配置 webpack-dev-server
+
+用于自动刷新浏览器
+
+安装webpack-dev-server
+
+&lt;pre&gt;`npm install -g webpack-dev-server
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`module.exports = {
+  ...
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+        inline: true,
+    progress: true,
+  },
+  ...
+}
+
+`&lt;/pre&gt;
+
+修改 package.json
+
+&lt;pre&gt;`...
+&quot;scripts&quot;: {
+  &quot;start&quot;: &quot;webpack-dev-server --hot --inline&quot;
+},
+...
+`&lt;/pre&gt;
+
+在项目目录执行
+
+&lt;pre&gt;`npm start
+`&lt;/pre&gt;
+
+登录 http://localhost:8080
+
+### 添加 CSS 样式
+
+css-loader 会遍历 css 文件, style-loader 会把样式插入到&amp;lt;style&amp;gt;
+
+&lt;pre&gt;`npm install -save-dev css-loader style-laoder
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`...
+module:{
+  loaders: [
+    {
+      test: /\.css$/,
+      loaders: [&apos;style&apos;,&apos;css&apos;],
+      include: APP_PATH
+    }
+  ]
+}
+...
+`&lt;/pre&gt;
+
+注意 loaders 的书写方式, 从右向左执行
+
+添加样式文件 app/main.css
+
+&lt;pre&gt;`h1 {
+  color: red;
+}
+`&lt;/pre&gt;
+
+在入口文件&quot;index.js&quot; 中引用
+
+&lt;pre&gt;`require(&apos;./main.css&apos;)
+`&lt;/pre&gt;
+
+### 使用 sass
+
+这里需要 sass-loader 和 node-sass 一起解析文件
+
+&lt;pre&gt;`npm install --save-dev sass-loader node-sass
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`//先删除 css 规则
+{
+  test: /\.scss$/,
+  loaders: [&apos;style&apos;,&apos;css&apos;,&apos;sass&apos;],
+  include: APP_PATH
+},
+`&lt;/pre&gt;
+
+添加两个 sass 文件 app/variables.scss 和 app/main.scss
+
+&lt;pre&gt;`//variables.scss
+$red: red;
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//main.scss
+@import &apos;./variables.scss&apos;;
+h1{
+  color: $red;
+}
+`&lt;/pre&gt;
+
+在入口文件 index.js 中引用
+
+&lt;pre&gt;`require(&apos;./main.scss&apos;);
+`&lt;/pre&gt;
+
+### 处理图片
+
+&lt;pre&gt;`npm install --save-dev url-loader
+`&lt;/pre&gt;
+
+配置webpack.config.js
+
+&lt;pre&gt;`{
+  test: /\.(png|jpg)$/,
+  loader: &apos;url?limit=8192&apos;
+}
+`&lt;/pre&gt;
+
+注意, Limit参数制定了小于 8M 的图片会被转为 base64 编码, 可以减轻网络请求.
+
+&lt;pre&gt;`@import &apos;./variabels.scss&apos;
+h1 {
+  color: $red;
+  background-image: url(&apos;./imgs/avatar.jpg&apos;);
+}
+`&lt;/pre&gt;
+
+### 添加第三方库
+
+&lt;pre&gt;`npm install --save-dev jquery moment
+`&lt;/pre&gt;
+
+修改 index.js
+
+&lt;pre&gt;`var sub = require(&apos;./sub&apos;);
+require(&apos;./main.scss&apos;);
+var $ = require(&apos;jquery&apos;);
+var moment = require(&apos;moment&apos;);
+var app = document.createElement(&apos;div&apos;);
+app.innerHTML = &apos;&amp;lt;h1&amp;gt;Hello, h1&apos;;
+document.body.append(app);
+app.appendChild(sub());
+$(&apos;body&apos;).append(&apos;&amp;lt;p&amp;gt;Inserted By Jquery. Now is &apos; + moment().format() + &apos;&amp;lt;/p&amp;gt;&apos;);
+`&lt;/pre&gt;
+
+### 添加 ES6 支持
+
+安装 loader
+
+&lt;pre&gt;`npm install -save-dev babel-loader babel-preset-es2015
+`&lt;/pre&gt;
+
+配置 webpack.config.js
+
+&lt;pre&gt;`...
+{
+  test: /\.jsx$/,
+  loaders: babel,
+  include: APP_PATH,
+  query:{
+    presets: [&apos;es2015&apos;]
+  }
+}
+...
+`&lt;/pre&gt;
+
+es2015 这个参数是 babel 的 plugin, 可以支持最新的 ES6 的特性
+
+现在可以 js 文件改为 ES6 风格
+
+&lt;pre&gt;`//sub.js
+export default function(){
+  var element = document.createElement(&apos;h2&apos;);
+  element.innerHTML = &apos;This is h2&apos;;
+  return element;
+}
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//index.js
+import &apos;./main.scss&apos;;
+import generateText from &apos;./sub&apos;;
+import $ from &apos;jquery&apos;;
+import moment from &apos;moment&apos;;
+
+let app = document.createElement(&apos;div&apos;);
+const myPromise = Promise.resolve(42);
+myPromise.then((number) =&amp;gt; {
+  $(&apos;body&apos;).append(&apos;&amp;lt;p&amp;gt;Promise result is &apos; + number + &apos;now is &apos; + moment().format() + &apos;&amp;lt;/p&amp;gt;&apos;);
+});
+app.innerHTML = &apos;&amp;lt;h1&amp;gt;This is h1&apos;;
+document.body.appendChild(app);
+app.appendChild(generateText());
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/" data-id="cj1hgzf8900gzeoxh5rsc7jzp" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/07/21/webpack-config-js/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Webpack.config.js
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/07/22/webpack-e5-bc-80-e5-8f-91-e5-92-8c-e9-83-a8-e7-bd-b2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Webpack 开发和部署</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/">AJAX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BOOTSTRAP/">BOOTSTRAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS3/">CSS3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Closure/">Closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonJS/">CommonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevTools/">DevTools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FP/">FP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gulp/">Gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDL/">MDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Material-Design/">Material Design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NODE/">NODE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nock/">Nock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Promise/">Promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Redux/">React-Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Router/">React-Router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/">RegExp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJS/">RxJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thunk/">Thunk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Trick/">Trick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automatic/">automatic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel-polyfill/">babel-polyfill</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commandline/">commandline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack2/">webpack2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/14/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/20/baisc-usage-of-redux-observable/">Baisc Usage of Redux-Observable</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/27/functor-e5-87-bd-e5-ad-90/">Functor 函子</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/throttle-e5-87-bd-e6-95-b0/">Throttle 函数</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/debounce-e5-87-bd-e6-95-b0/">Debounce 函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>koa 使用 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="安装Koa 当前需要 node 0.11.x 并开启 –harmony(或– harmony-generators), 因为他依赖于 ES6的 generator 特性node --harmony my-koa-app.js 应用Koa 应用是一个包含中间件 generator 方法数组的对象. 当请求到来时, 这些方法会以 stack-slice 的顺序执行. Koa 的一大设计理念是, 通过其">
+<meta name="keywords" content="NODE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="koa 使用">
+<meta property="og:url" content="http://yoursite.com/2016/09/19/koa-e4-bd-bf-e7-94-a8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="安装Koa 当前需要 node 0.11.x 并开启 –harmony(或– harmony-generators), 因为他依赖于 ES6的 generator 特性node --harmony my-koa-app.js 应用Koa 应用是一个包含中间件 generator 方法数组的对象. 当请求到来时, 这些方法会以 stack-slice 的顺序执行. Koa 的一大设计理念是, 通过其">
+<meta property="og:updated_time" content="2017-04-14T06:40:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="koa 使用">
+<meta name="twitter:description" content="安装Koa 当前需要 node 0.11.x 并开启 –harmony(或– harmony-generators), 因为他依赖于 ES6的 generator 特性node --harmony my-koa-app.js 应用Koa 应用是一个包含中间件 generator 方法数组的对象. 当请求到来时, 这些方法会以 stack-slice 的顺序执行. Koa 的一大设计理念是, 通过其">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-koa-e4-bd-bf-e7-94-a8" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/19/koa-e4-bd-bf-e7-94-a8/" class="article-date">
+  <time datetime="2016-09-18T19:02:51.000Z" itemprop="datePublished">2016-09-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      koa 使用
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>Koa 当前需要 node 0.11.x 并开启 –harmony(或– harmony-generators), 因为他依赖于 ES6的 generator 特性<br><code>node --harmony my-koa-app.js</code></p>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>Koa 应用是一个包含中间件 generator 方法数组的对象. 当请求到来时, 这些方法会以 stack-slice 的顺序执行.</p>
+<p>Koa 的一大设计理念是, 通过其他底层中间件层提供高级”语法糖”, 而不是 Koa, 大大提高了框架的互操作性和健壮性, 并让中间件开发变得有趣.</p>
+<p>简单例子</p>
+<pre><code>var koa = require(&quot;koa&quot;);
+var app = koa();
+app.use(function*(){
+  this.body = &quot;Hello World&quot;;
+});
+app.listen(3000);
+`&lt;/pre&gt;
+
+**注**: 与普通 function 不同, generator function 以 function* 的形式声明.
+
+### 编写级联代码
+
+koa 中间件以一种更加传统的方式级联.
+
+以往的 Node 开发中, 级联是通过回调实现的, 用户友好度上有欠缺
+
+Koa 借助 generator 实现了中间件架构
+
+Koa 的执行代码的形式不再是简单的将控制权依次移交给一个又一个方法直到结束, 而是像一个回形针, 用户请求中间件, 遇到 yield next 关键字的时候, 会被传递给下游中间件(downstream), 在 yield next 捕获不到 downstream 的时候, 逆序返回执行代码(upstream)(yield next 后面的代码)
+
+&lt;pre&gt;`var koa = require(&quot;koa&quot;);
+var app = koa();
+
+// x-response-time
+
+app.use(function* (next){
+  var start = new Date;
+  yield next;
+  var ms = new Date - start;
+  this.set(&quot;X-Response-Time&quot;, ms+&quot;ms&quot;);
+})
+
+// logger
+app.use(function* (next){
+  var start = new Date;
+  yield next;
+  var ms = new Date - start;
+  console.log(&quot;%s %s - %s&quot;, this.method, this.url, ms)
+});
+
+// response
+app.use(function* (){
+  this.body = &quot;Hello World&quot;;
+});
+
+app.listen(3000);
+`&lt;/pre&gt;
+
+### 应用配置
+
+应用配置是 app 实例的属性, 目前支持以下配置:
+- app.name 应用名
+- app.env 执行环境, 默认是`NODE_ENV`或者`development`字符串
+- app.proxy, 当该属性为 true 时, `proxy header` 参数会被添加到信任列表中
+
+### app.listen(...)
+
+一个 Koa 应用跟 HTTP Server 不是1-to-1关系, 一个或多个 Koa应用可以被加载到一块, 组成一个更大的包含一个 HTTP server 的应用
+
+该方法创建并返回一个 http server, 并支持传递固定参数
+
+&lt;pre&gt;`var koa = require(&quot;koa&quot;)
+var app = koa()
+app.listen(3000)
+`&lt;/pre&gt;
+
+方法 app.listen(...)是一个语法糖, 等价于
+
+&lt;pre&gt;`var http = require(&quot;http&quot;)
+var koa = require(&quot;koa&quot;)
+var app = koa()
+http.createServer(app.callback()).listen(3000)
+`&lt;/pre&gt;
+
+这意味着可以在多个端口使用同一个 app
+
+&lt;pre&gt;`http.createServer(app.callback()).listen(3000)
+http.createServer(app.callback()).listen(3001)
+`&lt;/pre&gt;
+
+### app.callback()
+
+返回一个回调方法能用于 http.createServer()来处理请求, 也可以将这个回调函数挂载到 Connect/Express 应用上
+
+### app.use(function)
+
+将给定的 function 当做中间件加载到应用中
+
+### app.keys=
+
+设置 Cookie 签名密钥
+
+### 错误处理
+
+除非应用执行环境(NODE_ENV)被配置为&quot;test&quot;, Koa 都会将所有错误信息输出到 stderr, 如果想自定义错误处理逻辑, 可以定义一个&quot;错误事件&quot;来坚挺 Koa App 中的错误:
+
+&lt;pre&gt;`app.on(&quot;error&quot;,function(err){
+  log.error(&quot;server error&quot;, err);
+})
+`&lt;/pre&gt;
+
+当 req/res 周期中出现任何错误且无法响应客户端时, koa 会把 Context(上下文)实例作为第二个参数传递给 error 事件:
+
+&lt;pre&gt;`app.on(&quot;error&quot;, function(err, ctx){
+  log.error(&quot;server error&quot;, err, ctx)
+})
+`&lt;/pre&gt;
+
+### 上下文
+
+Koa 的 Context 把 node 的 request 和 response 对象封装在一个单独对象, 并提供许多开发 web 应用和 APIs 有用的方法. 那些 HTTP Server 开发中使用非常频繁操作, 直接在 Koa 里实现, 而不是放在更高层次的框架, 这样中间件就不需要重复实现这些通用的功能.
+
+每个请求会创建自己的 Context 实例, 在中间件中作为 receiver 引用, 或通过 this 标示引用:
+
+&lt;pre&gt;`app.use(function* (){
+  this; // is the Context
+  this.request; // is a koa Request
+  this.response; // is a koa Response
+})
+</code></pre><p>Context 的许多访问器和方法直接委托为他们的 ctx.request 或 ctx.response 的等价方法, 用于访问方便, 是完全相同的, 比如 ctx.type 和 ctx.length 委托与 response 对象, ctx.path 和 ctx.method 委托与 request.</p>
+<h3 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h3><p>Koa Request 对象是 node 普通 request 对象之上的抽象, 提供了日常 Http Server 中更多有用的功能</p>
+<h4 id="API"><a href="#API" class="headerlink" title="API"></a>API</h4><ul>
+<li>request.header</li>
+<li>request.headers: req.header 的别名</li>
+<li>request.method: 请求方法</li>
+<li>request.method=: 设置请求方法, 实现中间件的时候非常有用</li>
+<li>request.length: 将请求的 Content-length 返回为数字, 或 undefined</li>
+<li>request.url: 获取请求 URL</li>
+<li>request.url=: 设置请求 URL<br>…</li>
+</ul>
+<h3 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h3><p>Koa Response 对象是 node 普通 response 对象之上的抽象, 提供了日常 Http Server 中有用的功能</p>
+<h4 id="API-1"><a href="#API-1" class="headerlink" title="API"></a>API</h4><p>….</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/09/19/koa-e4-bd-bf-e7-94-a8/" data-id="cj1hgzf4c009ceoxhwlxinz4r" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NODE/">NODE</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/09/18/xtemplate-e6-a8-a1-e6-9d-bf-e8-af-ad-e6-b3-95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          XTemplate 模板语法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">编写 Koa 中间件</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/">AJAX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BOOTSTRAP/">BOOTSTRAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS3/">CSS3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Closure/">Closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonJS/">CommonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevTools/">DevTools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FP/">FP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gulp/">Gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDL/">MDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Material-Design/">Material Design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NODE/">NODE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nock/">Nock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Promise/">Promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Redux/">React-Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Router/">React-Router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/">RegExp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJS/">RxJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thunk/">Thunk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Trick/">Trick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automatic/">automatic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel-polyfill/">babel-polyfill</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commandline/">commandline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack2/">webpack2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/14/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/20/baisc-usage-of-redux-observable/">Baisc Usage of Redux-Observable</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/27/functor-e5-87-bd-e5-ad-90/">Functor 函子</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/throttle-e5-87-bd-e6-95-b0/">Throttle 函数</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/debounce-e5-87-bd-e6-95-b0/">Debounce 函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

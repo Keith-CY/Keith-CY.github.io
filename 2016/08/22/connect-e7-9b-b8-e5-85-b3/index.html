@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Connect 相关 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="预备知识回顾一下 Redux 基本用法 const reducer = (state = {count: 0}, action ) =&amp;amp;gt; {   switch(action.type){   case &amp;quot;INCRESE&amp;quot;: return {count: state.count + 1}   case &amp;quot;DECRESE&amp;quot;: return {cou">
+<meta name="keywords" content="Redux,React,React-Redux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Connect 相关">
+<meta property="og:url" content="http://yoursite.com/2016/08/22/connect-e7-9b-b8-e5-85-b3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="预备知识回顾一下 Redux 基本用法 const reducer = (state = {count: 0}, action ) =&amp;amp;gt; {   switch(action.type){   case &amp;quot;INCRESE&amp;quot;: return {count: state.count + 1}   case &amp;quot;DECRESE&amp;quot;: return {cou">
+<meta property="og:updated_time" content="2017-04-14T06:40:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Connect 相关">
+<meta name="twitter:description" content="预备知识回顾一下 Redux 基本用法 const reducer = (state = {count: 0}, action ) =&amp;amp;gt; {   switch(action.type){   case &amp;quot;INCRESE&amp;quot;: return {count: state.count + 1}   case &amp;quot;DECRESE&amp;quot;: return {cou">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-connect-e7-9b-b8-e5-85-b3" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/22/connect-e7-9b-b8-e5-85-b3/" class="article-date">
+  <time datetime="2016-08-22T02:53:22.000Z" itemprop="datePublished">2016-08-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Connect 相关
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h1><p>回顾一下 Redux 基本用法</p>
+<pre><code>const reducer = (state = {count: 0}, action ) =&amp;gt; {
+  switch(action.type){
+  case &quot;INCRESE&quot;: return {count: state.count + 1}
+  case &quot;DECRESE&quot;: return {count: state.count - 1}
+  default: return state;
+  }
+}
+
+const actions = {
+  increase: () =&amp;gt; { type: &apos;INCREASE&apos;},
+  decrease: () =&amp;gt; { type: &apos;DECREASE&apos;}
+}
+
+const store = createStore(reducer);
+
+store.subscribe(()=&amp;gt;{
+  console.log(store.getState())
+});
+
+store.dispatch(action.increase());
+`&lt;/pre&gt;
+
+通过 reducer 创建一个 store, 每当我们在 store 上 dispatch 一个 action, store 内的数据就会通过 reducer 变化.
+
+我们当然可以直接在 React 中使用 Redux, 在最外层容器中初始化 store, 然后将 state 上的属性作为 props 层层传下去
+
+&lt;pre&gt;`class App extends Component{
+  componentWillMount(){
+    store.subscribe((state) =&amp;gt; this.setState(state))
+  }
+  render(){
+    return &amp;lt;Comp state={this.state} onIncrease = {()=&amp;gt;store.dispatch(actions.increase())} onDecrease = {()=&amp;gt; store.dispatch(actions.decrease())}
+  } /&amp;gt;
+}
+`&lt;/pre&gt;
+
+但这不是最佳方式, 最佳方式是使用 react-redux 提供的 Provider 和 connect 方法
+
+### 使用 React-redux
+
+首先在最外层容器中, 把所有内容包裹在 Provider 组件中, 将之前创建的 store 作为 prop 传递给 Provider
+
+&lt;pre&gt;`const App = () =&amp;gt; {
+  return(
+    &amp;lt;Provider store = {store}&amp;gt;
+      &amp;lt;Comp /&amp;gt;
+    &amp;lt;/Provider&amp;gt;
+  )
+}
+`&lt;/pre&gt;
+
+Provider 中的任何一个组件(比如这里的 Comp) 如果需要使用 state 中的数据, 就必须是 `被 connect 过的`组件, 使用 connect 方法对你编写的组件(MyComp)进行包装后的产物.
+
+&lt;pre&gt;`class MyComp extends Component {
+  // content...
+}
+
+const Comp = connect(...args)(MyComp);
+`&lt;/pre&gt;
+
+可见 connect 是重中之重
+
+### connect 详解
+
+究竟 connect 做了什么
+
+首先看一下函数的签名:
+
+&lt;pre&gt;`connect([mapStatToProps], [mapDispatchToProps], [mergeProps], [options])
+`&lt;/pre&gt;
+
+connect() 函数接受四个参数, 分别是
+
+&lt;pre&gt;`mapStatToProps, mapDispatchToProps, mergeProps, options
+`&lt;/pre&gt;
+
+&lt;pre&gt;`mapStatToProps(state, ownProps): stateProps
+`&lt;/pre&gt;
+
+这个函数允许我们将 store 中的数据作为 props 绑定到组件上
+
+&lt;pre&gt;`const mapStatToProps = (state) =&amp;gt; {
+  return {
+    count: state.count
+  }
+}
+`&lt;/pre&gt;
+
+这个函数的第一个参数就是 Redux 的 store, 我们从中摘取 count 属性, 因为返回了具有 count 属性的对象, 所以 MyComp 会有名为 count 的 props 字段
+
+&lt;pre&gt;`class MyComp extends Component{
+  render(){
+    return &amp;lt;div&amp;gt;Count: {this.props.count}&amp;lt;/div&amp;gt;
+  }
+}
+
+const Comp = connect(...args)(MyComp);
+`&lt;/pre&gt;
+
+当然你不必将 state 原封不动传递给组件, 可以根据 state 中的数据, 动态的输出组件需要的(最小)属性
+
+&lt;pre&gt;`const mapStateToProps = (state) =&amp;gt; {
+  return {
+    greaterThanFive: state.count &amp;gt; 5
+  }
+}
+`&lt;/pre&gt;
+
+第二个参数 ownProps, 是 MyComp 自己的 props, 有时候 ownProps 也会对其产生影响, 比如当你在 store 中维护一个用户列表, 而你的组件 MyComp 只关心一个用户(通过 props 中的 userId体现)
+
+&lt;pre&gt;`const mapStateToProps = (state, ownProps) =&amp;gt; {
+  // state 是{ userList:[{id:0,name;&apos;王二&apos;}]}
+  return {
+    user: _.find(state.userList, {id:ownProps.userId})
+  }
+}
+
+class MyComp extends Component{
+  static PropTypes = {
+    userId: PropTypes.string.isRequired,
+    user: PropTypes.object
+  };
+  render(){
+    return &amp;lt;div&amp;gt;UserName: {this.props.user.name}&amp;lt;/div&amp;gt;
+  }
+}
+
+const Comp = connect(mapStateToProps)(MyComp)
+`&lt;/pre&gt;
+
+当 state 变化, 或者 ownProps 变化时, mapStateToProps 都会被调用, 计算出一个新的 stateProps , 在与 ownProps merge 后, 更新给 MyComp
+
+这就是将 Redux store 中的数据连接到组件的基本方法
+
+mapDispatchToProps(dispatch, ownProps): dispatchProps
+
+connect 的第二个参数是 mapDispatchToProps, 功能是将 action 作为 props 绑定到 MyComp 上
+
+&lt;pre&gt;`const mapDispatchToProps = (dispatch, ownProps) =&amp;gt; {
+  return {
+    increase: (...args) =&amp;gt; dispatch(actions.increase(...args)),
+    decrease: (...args) =&amp;gt; dispatch(actions.decrease(...args))
+  }
+}
+
+class MyComp extends Component{
+  render(){
+    const {count, increase, decrease} = this.props
+    return (
+      &amp;lt;div&amp;gt;
+        &amp;lt;div&amp;gt;Count:{count}&amp;lt;/div&amp;gt;
+        &amp;lt;button onClick={increase}&amp;gt;+&amp;lt;/button&amp;gt;
+        &amp;lt;button onClick={decrease}&amp;gt;-&amp;lt;/button&amp;gt;
+      &amp;lt;/div&amp;gt;
+    )
+  }
+}
+
+const Comp = connect(mapStateToProps, mapDispatchToProps)(MyComp)
+`&lt;/pre&gt;
+
+由于 mapDispatchToProps 方法返回了具有 increase 属性和 decrease 属性的对象, 这两个属性也会成为 MyComp 的 props
+
+如上所示, 调用 actions.increase()只能得到一个 action 对象{type:&apos;INCREASE&apos;}, 要触发这个 action 必须要通过 dispatch 调用, dispatch 正式 mapDispatchToProps 的第一个参数, 但是为了不让 MyComp 组件感知到 dispatch 的存在, 我们需要将 increase 和 decrease 方法包装一下, 使之成为直接可以被调用的函数(即触发该方法就会触发 dispatch)
+
+Redux 本身提供了 bindActionCreator 函数, 来将 action 包装成可以直接被调用的函数
+
+&lt;pre&gt;`import {bindActionCreator} from &apos;redux&apos;
+const mapDispatchToProps = (dispatch,ownProps) =&amp;gt; {
+  return bindActionCreator({
+    increase: actions.increase,
+    decrease: actions.decrease
+  })
+}
+</code></pre><p>同样当 ownProps 变化时, 该函数也会被调用, 生成一个新的 dispatchProps( 在与 stateProps 和 ownPorps merge 后), 更新给 MyComp. 注意 action 的变化不会引起上述过程, 默认 action 在组件的生命周期中是固定的</p>
+<p>[mergeProps(stateProps, dispatchProps, ownProps): props]</p>
+<p>之前说过不管是 stateProps 还是 dispatchProps, 都需要和 ownProps merge 之后才会被赋给 MyComp, connect 的第三个参数就是来做这个事情的, 通常情况下不需要传这个参数, connect 会使用 Object.assign 方法代替该方法.</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>最后还有一个 options 参数, 比较简单, 一般也不会用到.</p>
+<p><a href="http://taobaofed.org/blog/2016/08/18/react-redux-connect/" target="_blank" rel="external">参考</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/22/connect-e7-9b-b8-e5-85-b3/" data-id="cj1hgzf180039eoxh37mog0yy" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React-Redux/">React-Redux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/08/22/configuring-eslint/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          Configuring ESLint
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/08/23/middleware/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title">Middleware</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/">AJAX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BOOTSTRAP/">BOOTSTRAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS3/">CSS3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Closure/">Closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonJS/">CommonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevTools/">DevTools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FP/">FP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gulp/">Gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDL/">MDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Material-Design/">Material Design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NODE/">NODE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nock/">Nock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Promise/">Promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Redux/">React-Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Router/">React-Router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/">RegExp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJS/">RxJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thunk/">Thunk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Trick/">Trick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automatic/">automatic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel-polyfill/">babel-polyfill</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commandline/">commandline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack2/">webpack2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/14/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/20/baisc-usage-of-redux-observable/">Baisc Usage of Redux-Observable</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/27/functor-e5-87-bd-e5-ad-90/">Functor 函子</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/throttle-e5-87-bd-e6-95-b0/">Throttle 函数</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/debounce-e5-87-bd-e6-95-b0/">Debounce 函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

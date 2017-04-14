@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/page/6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-immutablejs-introduction" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/19/immutablejs-introduction/" class="article-date">
+  <time datetime="2016-08-18T21:29:36.000Z" itemprop="datePublished">2016-08-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/19/immutablejs-introduction/">ImmutableJS Introduction</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logic. Persistent data presetns a mutative API which does not update the data in-place, but instead always yields new updated data.</p>
+<p>Immutable.js provides many Persistent Immutable data structures including: <code>List</code>, <code>Stack</code>, <code>Map</code>, <code>OrderedMap</code>, <code>Set</code>, <code>OrderedSet</code> and <code>Record</code>.</p>
+<p>These data structures are highly efficient on modern JavaScript VMs by using structural sharing via ‘hash maps tries’ and ‘vector tries’ as popularized by Clojure and Scala, minimizing the need to copy or cache data.</p>
+<p>Immutable also provides a lazy <code>Seq</code>, allowing efficient chaining of collection methods like <code>map</code> and <code>filter</code> without creating intermediate representations. Create some <code>Seq</code> with <code>Range</code> and <code>Repeat</code>.</p>
+<h3 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h3><p><code>npm install Immutable</code></p>
+<p><code>var Immutable = require(&#39;immutable&#39;);
+  var map1 = Immutable.Map({a:1,b:2,c:3});
+  var map2 = map1.set(&#39;b&#39;,50);
+  map1.get(&#39;b&#39;); //2
+  map2.get(&#39;b&#39;); //50</code></p>
+<h3 id="The-case-for-Immutability"><a href="#The-case-for-Immutability" class="headerlink" title="The case for Immutability"></a>The case for Immutability</h3><p>Much of what makes application development difficult is tracking mutation and maintaining state. Development with immutable data encourages you to think differently about how data flows through your application.</p>
+<p>Subscribing to data event throughout your application.</p>
+<p>Immutable data never change.</p>
+<p>Immutable collections should be treated as <em>value</em> rather than <em>object</em>. While objects represents some thing which could change over time, a value represents the state of that thing at a particular instance of time. This principle is most important to understanding the appropriate use of immutable data. In order to treat Immutable.js collections as values, it’s important to use the <strong>Immutable.is()</strong> function or <strong>.equals()</strong> method to determine value equality instead of <code>===</code> operator which determines object reference identity.</p>
+<p><code>var map1 = Immutable.Map({a:1,b:2,c:3});
+  var map2 = map1.set(&#39;b&#39;,2);
+  assert(map1.equals(map2) === true);
+  var map3 = map1.set(&#39;b&#39;,50);
+  assert(map1.equals(map3) === false);</code></p>
+<p><strong>Note</strong>: As a performance optimization <strong>Immutable</strong> attempts to return the existing collection when an operation would result in an identical collection, allowing for using <code>===</code> reference equality to determine if something definitely has not changed. This can be extremely useful when used within memoization function which would prefer to re-run the function if a deeper equality check could potentially be more costly. The <code>===</code> equality check is also used internally by <strong>Immutable.js</strong> and <code>equals()</code> as a performance as a performance optimization.</p>
+<p>If an object is immutable, it can <strong>be ‘copied’ simply by marking another reference</strong> to it instead of copying the entire object. Because a reference is much smaller than the object itself, this results in memory savings and a potential boost in execution speed for programs which rely on copies(such as an undo-stack).</p>
+<p><code>var map1 = Immutable.Map({&#39;a&#39;:1,&#39;b&#39;:2,&#39;c&#39;:3});
+  var clone = map1;</code></p>
+<h3 id="JavaScript-first-API"><a href="#JavaScript-first-API" class="headerlink" title="JavaScript-first API"></a>JavaScript-first API</h3><p>While <code>immutable</code> is inspired by Clojure, Scala, Haskell and other functional programming environments, it’s designed to bring these powerful concepts to JavaScript, and therefore has an Object-Oriented API that closely mirrors that of <strong>ES6 Array, Map, and Set</strong>.</p>
+<p>The difference for the immutable collections is that methods which would mutate the collection, like <code>push</code>, <code>set</code>, <code>unshift</code>, or <code>splice</code> instead of return a new immutable collection. Methods which return new array like <code>slice</code> or <code>concat</code> instead return new immutable collections.</p>
+<p><code>var list1 = Immutable.List.of(1,2);
+  var list2 = list1.push(3,4,5);
+  var list3 = list2.unshift(0);
+  var list4 = list1.concat(list2,list3);
+  assert(list1.size === 2);
+  assert(list2.size === 5);
+  assert(list3.size === 6);
+  assert(list4.size === 13);
+  assert(list4.get(0) === 1);</code></p>
+<p>Almost all of the methods on <strong>Array</strong> will be found in similar form on <strong>Immutable.List</strong>, those of <strong>Map</strong> found on <strong>Immutable.Map</strong> and those of <strong>Set</strong> found on<strong>Immutable.Set</strong>, including collection operation like <strong>forEach()</strong>, and <strong>map()</strong>.</p>
+<p><code>var alpha = Immutable.Map({a:1,b:2,c:3,d:4});
+  alpha.map((v,k) =&amp;gt; k.toUpperCase()).join();
+  // &#39;A,B,C,D&#39;</code></p>
+<h3 id="Accepts-raw-JavaScript-objects"><a href="#Accepts-raw-JavaScript-objects" class="headerlink" title="Accepts raw JavaScript objects"></a>Accepts raw JavaScript objects</h3><p>  ‘immutable’ accepts plain JavaScript Arrays and Objects anywhere a mehtod expects an <strong>Iterable</strong> with no performance penalty.</p>
+<p><code>var map1 = Immutable.Map({a:1,b:2,c:3,d:4});
+  var map2 = Immutable.Map({c:10,a:20,t:30});
+  var obj = {d:100,o:200,g:300};
+  var map3 = map1.merge(map2,obj);
+  // Map {a:20,b2,c:10,d:100,t:30,o:200,g:300}</code></p>
+<p><strong>Immutable</strong> can treat any JavaScript Array or Object as an Iterable. You can take advantage of this in order to get sophisticated collection methods on JavaScript Objects, which otherwise have a very sparse native API.</p>
+<p><code>var myObject = {a:1,b:2,c:3};
+  Immutable.Seq(myObject).map(x=&amp;gt;x*x).toObject();
+  // {a:1,b:4,c:9};</code></p>
+<p>Keep in Mind, when using JS objects to construct Immutable Maps, that JS Object properties are always <strong>strings</strong>, even if written in a quote-less shorthand, while Immutable Map accept keys of any type.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  var obj = &#123;1: &amp;#039;one&amp;#039;&#125;;</div><div class="line">  Object.keys(obj); // [&amp;#039;1&amp;#039;]</div><div class="line">  obj[1]; // &amp;#039;one&amp;#039;</div><div class="line">  obj[&amp;#039;1&amp;#039;]; // &amp;#039;one&amp;#039;</div><div class="line"></div><div class="line">var map = Immutable.fromJS(obj);</div><div class="line">  map.get(&amp;#039;1&amp;#039;); // &amp;#039;one&amp;#039;</div><div class="line">  map.get(1); // undefined</div></pre></td></tr></table></figure>
+<p>Property access for JS Object first converts the key to a string, but since Immutable Map keys can be of any type the argument to <code>get()</code> is not altered.<br>  Namely Immutable Map will treat ‘1’ and 1 differently.</p>
+<h3 id="Converts-Back-to-Raw-JS-Obejcts"><a href="#Converts-Back-to-Raw-JS-Obejcts" class="headerlink" title="Converts Back to Raw JS Obejcts"></a>Converts Back to Raw JS Obejcts</h3><p>  All <strong>Immutable</strong> Iterable can be converted to plain JS Arrays and Objects shallowly with <code>toArray()</code> and <code>toObject()</code> or deeply with <code>toJS()</code>. All Immutable Iterables also implement <code>toJSON()</code> allowing them to be passed to <code>JSON.stringify()</code> directly.</p>
+<p><code>var deep = Immutable.Map({a:1,b:2,c:Immutable.List.of(3,4,5)});
+  deep.toObject() // {a:1,b:2,c:List [3,4,5]}
+  deep.toArray() // [1,2,List [3,4,5]]
+  deep.toJS() // {a:1,b:2,c:[3,4,5]}
+  JSON.stringify(deep) // &#39;{&quot;a&quot;:1,&quot;b&quot;,&quot;c&quot;:[3,4,5]}&#39;</code></p>
+<h3 id="Embraces-ES6"><a href="#Embraces-ES6" class="headerlink" title="Embraces ES6"></a>Embraces ES6</h3><p>  <code>Immutable</code> takes advantage of features added to JS ES6, the latest standard version of ECMAScript, including <code>Interators</code>,<code>Arrow Function</code>, <code>Classes</code>, and <code>Modules</code>.</p>
+<h3 id="Nested-Structures"><a href="#Nested-Structures" class="headerlink" title="Nested Structures"></a>Nested Structures</h3><p>The collections in <code>immutable</code> are intended to be nested, allowing for deep trees of data, similar to JSON</p>
+<p><code>var nested = Immutable.fromJS({a:{b:{c:[3,4,5]}}})
+  // Map{ a: Map { b: Map { c: List [3,4,5]}}}</code><br>  A few power-tool allow for reading and operating on nested data. The most useful are <code>mergeDeep</code>, <code>getIn</code>, <code>setIn</code> and <code>updateIn</code> found on <code>List</code>, <code>Map</code> and <code>OrderedMap</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  var nested2 = nested.mergeDeep(&#123;a:&#123;b:&#123;d:6&#125;&#125;&#125;)</div><div class="line">  // Map &#123;a: Map &#123; b: &#123; c: List [3,4,5], d: 6&#125;&#125;&#125;</div><div class="line"></div><div class="line">nested2.getIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;]); //6</div><div class="line"></div><div class="line">var nested3 = nested2.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;], value =&amp;gt; value + 1); d =&amp;gt; 7</div><div class="line"></div><div class="line">var nest4 = nested3.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;c&amp;#039;], list =&amp;gt; list.push(6)); c =&amp;gt; List [3,4,5,6]</div></pre></td></tr></table></figure>
+<h3 id="Lazy-Seq"><a href="#Lazy-Seq" class="headerlink" title="Lazy Seq"></a>Lazy Seq</h3><p>  <strong>Seq</strong> describes a lazy operation, allowing them to efficiently chain use all the Iterable methods.(such as map and filter)</p>
+<p><strong>Seq is immutable</strong> – Once a Seq is created it cannot be changed, appended to, rerranged or otherwise modified. Instead, any mutative method called on a Seq will return a new Seq.</p>
+<p><strong>Seq is lazy</strong> – Seq does as little work as necessary to respond to any method call.</p>
+<p>Once the Seq is used, it performs only the work necessary.</p>
+<p>Any collection can be converted to a lazy Seq with <code>toSeq()</code>.</p>
+<p><code>var seq = Immutable.Map({a:1,b:2,c:3}).toSeq();</code></p>
+<p>Seq allow for the efficient chaining of sequence operations, especially when converting to a different concrete type(such as to a JS Object)</p>
+<p><code>seq.flip().map(k =&amp;gt; k.toUpperCase()).flip().toObject();
+  // Map {A: 1, B:2, C:3}</code></p>
+<h3 id="Equality-treats-Collection-as-Data"><a href="#Equality-treats-Collection-as-Data" class="headerlink" title="Equality treats Collection as Data"></a>Equality treats Collection as Data</h3><p><strong>Immutable</strong> provides equality which treats immutable data structures as pure data, performing a deep equality check if necessary.</p>
+<p><code>var map1 = Immutable.Map({a:1,b:1,c:1});
+  var map2 = Immutable.Map({a:1,b:1,c:1});
+  assert(map1 !== map2) // two different instance, not same address
+  assert(Immutable.is(map1,map2)); // have equivalent values
+  assert(map1.equals(map2)); // alternatively use the equals methods.</code></p>
+<p><strong>Immutable.is()</strong> uses the same measure of equality as <strong>Object.is</strong> including if both are immutable and all keys and values are equal using the same measure of equality.</p>
+<h3 id="Batching-Mutations"><a href="#Batching-Mutations" class="headerlink" title="Batching Mutations"></a>Batching Mutations</h3><p>  Applying a mutation to create a new immutable object results in some overhead, which can add up to a minor performance penalty. If you need to apply a series of mutations locally before returning, <strong>Immutable</strong> gives you the ability to create a temporary mutable(transient) copy of a collection and apply a batch of mutations in a performance manner by using <code>withMutations</code>. In fact, this is exactly how <code>Immutable</code> applies complex mutations itself.</p>
+<p>As an example, building <code>list2</code> results in the creation of 1 , not 3, new immutable Lists<br>  <code>var list1 = Immutable.List.of(1,2,3);
+  var list2 = list1.withMutations(function(list){
+    list.push(4).push(5).push(6)
+  });
+  assert(list1.size === 3);
+  assert(list2.size === 6);</code></p>
+<p><strong>Note</strong>: <strong>Immutable</strong> also provides <code>asMutable</code> and <code>asImmutable</code>, but only encourages their use when <code>withMutations</code> will not suffice. Use caution to not return a mutable copy could result in undesired behavior.</p>
+<p><strong>important</strong>: Only a select few method can be used in <code>withMutations</code> including <code>set</code>, <code>push</code>, <code>pop</code>. These methods can be applied directly against a persistent data-structure where other methods like <code>map</code>,<code>filter</code>,<code>sort</code>and <code>splice</code> will always return new immutable data-structure and never mutate a mutable collection.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/19/immutablejs-introduction/" data-id="cj1hgzf3u008deoxhu5apqn95" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-redux-e6-90-ad-e9-85-8d-react" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/16/redux-e6-90-ad-e9-85-8d-react/" class="article-date">
+  <time datetime="2016-08-16T07:08:29.000Z" itemprop="datePublished">2016-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/16/redux-e6-90-ad-e9-85-8d-react/">redux 搭配 react</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>第一步是初始化 react 组件</p>
+<pre><code>getInitialState(){
+  return{
+    item: store.getState()
+  }
+}
+`&lt;/pre&gt;
+
+第二步是在组件 render 后调用 subscribe 函数, 每次 redux 发生 dispatch 的时候都要调用 react 的 setState
+
+&lt;pre&gt;`componentDidMount(){
+  var unsubscribe = store.subscribe(this.onChange)
+}
+onChange(){
+  this.setState({
+    item: store.getState()
+  })
+}
+</code></pre><p>React 会根据 State 的变化重新 render 组件<br>this.state.item.todos.map()</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/16/redux-e6-90-ad-e9-85-8d-react/" data-id="cj1hgzf6o00d2eoxhywagkrcp" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redux/">Redux</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-commonchunks-e6-8f-92-e4-bb-b6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/16/commonchunks-e6-8f-92-e4-bb-b6/" class="article-date">
+  <time datetime="2016-08-15T23:32:03.000Z" itemprop="datePublished">2016-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/16/commonchunks-e6-8f-92-e4-bb-b6/">CommonChunks 插件</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>作用就是提取代码中的公共模块, 然后将公共模块打包到一个独立的文件中, 以便在其他的入口和模块中使用.</p>
+<pre><code>// in main.js
+var a = require(&apos;./a&apos;);
+a.sayHello();
+
+var b = require(&apos;./b&apos;);
+b.sayHello();
+
+var c = require(&apos;./c&apos;);
+c.sayHello()
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// in main2.js
+var a = require(&apos;./a&apos;);
+a.sayHello();
+
+var b = require(&apos;./b&apos;);
+b.sayHello();
+`&lt;/pre&gt;
+
+a, b, c 和之前一样, 只有一个 sayHello 方法.
+
+打包后看到`bundle.main.js` 和`bundle.main2.js` 中分别包含了 a, b, c 三个模块, 其中 a, b 是要使用`CommonChunksLoader` 提取出来的公共模块.
+
+### 配置 CommonChunksLoader
+
+&lt;pre&gt;`var webpack = require(&apos;webpack&apos;);
+module.exports = {
+  entry:{
+    main1: &apos;./main&apos;,
+    main2: &apos;./main2&apos;
+  },
+  output:{
+    filename: &apos;bundle.[name].js&apos;
+  },
+  plugins:[
+    new webpack.optimize.CommonsChunkPlugin(&apos;common.js&apos;,[&apos;main1&apos;,&apos;main2&apos;])
+  ]
+} ;
+`&lt;/pre&gt;
+
+第一行中, 添加 webpack 引用, 然后添加`plugins` 选项, 引用`webpack.optimize.CommonsChunkPlugin` 来提取公共模块, 参数`common.js` 表示公共模块的文件名, 后面的数组表示依赖这个模块的入口文件.
+
+重新打包后, 生成三个文件
+
+&lt;pre&gt;`bundle.main1.js,
+bundle.main2.js
+common.js
+</code></pre><p>其中 <code>bundle.main1.js</code> 只包含了<code>c</code>模块, <code>bundle.main2.js</code>则没包含任何模块.</p>
+<p>当然, 生成了<code>common.js</code> 还需要在 html 中进行引用, 而且要先于 main1, main2</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/16/commonchunks-e6-8f-92-e4-bb-b6/" data-id="cj1hgzf0s002veoxhb44kekvz" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-webpack-e5-8f-91-e5-b8-83-e9-85-8d-e7-bd-ae" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/16/webpack-e5-8f-91-e5-b8-83-e9-85-8d-e7-bd-ae/" class="article-date">
+  <time datetime="2016-08-15T21:00:34.000Z" itemprop="datePublished">2016-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/16/webpack-e5-8f-91-e5-b8-83-e9-85-8d-e7-bd-ae/">webpack 发布配置</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="单文件模式"><a href="#单文件模式" class="headerlink" title="单文件模式"></a>单文件模式</h3><pre><code>// 新建 webpack.production.config.js
+// in package.json
+&quot;deploy&quot;:&quot;NODE_EVN=production webpack -p -config webpack.production.config.js&quot;
+// in web.production.config.js
+// 和开发环境不同之处在于入口和出口. 相应的在 HTML 和 JS 源也要进行修改
+
+var path = require(&apos;path&apos;)
+var node_modules_dir = path.resolve(__dirname, &apos;node_modules&apos;)
+
+module.exports = {
+  entry:[
+    &apos;babel-polyfill&apos;,
+    path.resolve(__dirname, &apos;app/main.js&apos;)
+  ],
+  output:{
+    path: path.resolve(__dirname, &apos;build&apos;),
+    filename: &apos;app.js&apos;
+  },
+  module:{
+    loaders:[
+      {
+        ...
+      }
+    ]
+  }
+}
+`&lt;/pre&gt;
+
+### 多文件模式
+
+库最好不要打包, 因为一般库都不会改动, 所以 load 一次就够了.
+
+对库进行分离
+
+&lt;pre&gt;`// in webpack.production.config.js
+var path = require(&apos;path&apos;)
+var webpack = require(&apos;webpack&apos;)
+var node_modules_dir = path.resolve(__dirname, &apos;node_modules&apos;)
+
+module.exports = {
+  entry:{
+    app: [path.resolve(__dirname, &apos;app/main.js&apos;)],
+    react: [&apos;babel-polyfill&apos;,&apos;react&apos;,&apos;react-dom&apos;]
+  },
+  output:{
+    path: path.resolve(__dirname, &apos;build&apos;),
+    filename: &apos;app.js&apos;
+  },
+  module:{
+    loaders:[
+      ...
+    ]
+  },
+  plugins:[
+    new webpack.optimize.CommonsChunkPlugin(&apos;react&apos;,&apos;react.js&apos;)
+  ]
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/16/webpack-e5-8f-91-e5-b8-83-e9-85-8d-e7-bd-ae/" data-id="cj1hgzf8200gqeoxh24zh562f" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-webpack-e9-85-8d-e7-bd-ae-reactbabel" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/16/webpack-e9-85-8d-e7-bd-ae-reactbabel/" class="article-date">
+  <time datetime="2016-08-15T20:02:12.000Z" itemprop="datePublished">2016-08-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/16/webpack-e9-85-8d-e7-bd-ae-reactbabel/">webpack 配置 react/babel</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="安装-react"><a href="#安装-react" class="headerlink" title="安装 react"></a>安装 react</h3><pre><code>npm install --save react react-dom
+`&lt;/pre&gt;
+
+### 安装 babel-loader
+
+&lt;pre&gt;`npm install --save-dev babel-loader babel-core babel-preset-es2015 babel-preset-react babel-preset-stage-2 
+// 支持 ES2015, JSX, ES7
+`&lt;/pre&gt;
+
+&lt;pre&gt;`npm install --save polyfill
+`&lt;/pre&gt;
+
+&lt;pre&gt;`npm install --save babel-runtime
+npm install --save-dev babel-plugin-transform-runtime
+// 减少打包时候的重复代码
+`&lt;/pre&gt;
+
+### 配置 babel
+
+&lt;pre&gt;`// 在入口添加 polyfill
+entry:[
+  &apos;babel-polyfill&apos;,
+  &apos;webpack/hot/dev-server&apos;,
+  &apos;webpack-dev-server/client?http://localhost:8080&apos;
+]
+`&lt;/pre&gt;
+
+添加`.babalrc`
+
+&lt;pre&gt;`{
+  &quot;presets&quot;:[
+    &quot;es2015&quot;,
+    &quot;react&quot;,
+    &quot;stage-2&quot;
+  ],
+  &quot;plugins&quot;:[
+    &quot;transform-runtime&quot;
+  ]
+}
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/16/webpack-e9-85-8d-e7-bd-ae-reactbabel/" data-id="cj1hgzf8e00h5eoxhze1bf2j7" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-webpack-dev-server" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/15/webpack-dev-server/" class="article-date">
+  <time datetime="2016-08-14T21:33:05.000Z" itemprop="datePublished">2016-08-15</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/15/webpack-dev-server/">Webpack Dev Server</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>The webpack-dev-server is a little node.js Express server, which uses the <code>webpack-dev-middleware</code> to serve a webpack bundle. It also has a little runtime which is connected to the server via <code>Socket.IO</code>.</p>
+<p>Let’s say you have the following config file(<code>webpack.config.js</code>)</p>
+<pre><code>var path = require(&apos;path&apos;);
+module.exports = {
+  entry:{
+    app:[&apos;./app/main.js&apos;]
+  },
+  output:{
+    path: path.resolve(__dirname, &apos;build&apos;),
+    publicPath:&apos;/assets/&apos;,
+    filename: &apos;bundle.js&apos;
+  },
+}
+`&lt;/pre&gt;
+
+You have an `app` folder with your initial entry point that webpack will bundle into a `bundle.js` file in the `build` folder.
+
+### Content Base
+
+The webpack-dev-server will serve the files in the **current directory**, unless you configure a specific content base.
+
+&lt;pre&gt;`webpack-dev-server --content-base build/
+`&lt;/pre&gt;
+
+it will serve you `build` folder.
+
+This modified bundle is served from memory at the relative path specified in `publicPath`. Namely your bundle will be available as `localhost:8080/assets/bundle.js`
+
+### Automatic Refresh
+
+The webpack-dev-server supports multiple modes to automatic refresh pages:
+</code></pre><ul>
+<li>Iframe mode(page is embedded in an iframe and reload on change)</li>
+<li><p>Inline mode(as a small webpack-dev-server client entry is added to the bundle which refresh the page on change)</p>
+<h4 id="Inline-Mode"><a href="#Inline-Mode" class="headerlink" title="Inline Mode"></a>Inline Mode</h4><p>To use the inline mode, specify <code>--inline</code> on the command line(you cannot specify it in configuration).</p>
+<h3 id="配置-webpack-dev-server-自动刷新"><a href="#配置-webpack-dev-server-自动刷新" class="headerlink" title="配置 webpack-dev-server 自动刷新"></a>配置 webpack-dev-server 自动刷新</h3><pre>`// webpack.config.js
+entry: [
+    'webpack/hot/dev-server',
+    'webpack-dev-server/client?http://localhost:8080',
+    path.resolve(__dirname, 'app/main.js')
+  ],
+  devServer:{
+    historyApiFallback: true,
+    hot:true,
+    inline:true,
+    progress: true
+  }
+`</pre>
+
+<p><pre>`//package.json</pre></p>
+</li>
+</ul>
+<p>“dev”: “webpack-dev-server –progress –colors –inline –hot –content-base build/“,<br>    “build”: “webpack”<br>```</p>
+<p>此时访问 localhost:8080 相当于访问 build/, 所以可以省略 index.html</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/15/webpack-dev-server/" data-id="cj1hgzf7z00gkeoxhiekpnc4q" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/webpack/">webpack</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-react-ajax" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/02/react-ajax/" class="article-date">
+  <time datetime="2016-08-02T01:04:45.000Z" itemprop="datePublished">2016-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/02/react-ajax/">React Ajax</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>组件的数据来源, 通常是通过 AJAX 请求从服务器获取, 可以使用 <code>componentDidMount</code> 方法设置 AJAX 请求, 等到请求成功, 再用<code>this.setState()</code>方法重新渲染 UI.</p>
+<pre><code>var UserGist = React.createClass({
+  getInitialState(){
+    return {
+      userName: &apos;&apos;,
+      lastGistUrl: &apos;&apos;
+    }
+  },
+
+  componentDidMounted(){
+    $.get(this.props.source, function(result){
+      var lastGist = result[0];
+      if(this.isMouted()){
+        this.setState({
+          userName: lastGist.owner.login,
+          lastGistUrl: lastGist.html_url
+        });
+      }
+    }.bind(this));
+  },
+
+  render(){
+    return (
+      &amp;lt;div&amp;gt;
+        {this.state.userName}&apos;s last Gist is 
+        &amp;lt;a href={this.state.lastGistUrl}&amp;gt;here&amp;lt;/a&amp;gt;
+      &amp;lt;/div&amp;gt;
+    );
+  }
+});
+
+React.render(
+  &amp;lt;UserGist source= &apos;....&apos; /&amp;gt;, document.body
+)
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/02/react-ajax/" data-id="cj1hgzf6600c8eoxh5u4n0hfi" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-react-e8-a1-a8-e5-8d-95" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/02/react-e8-a1-a8-e5-8d-95/" class="article-date">
+  <time datetime="2016-08-02T00:58:50.000Z" itemprop="datePublished">2016-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/02/react-e8-a1-a8-e5-8d-95/">React 表单</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>用户在表单输入的内容, 属于用户与组件的互动, 要用<code>this.setState()</code>修改</p>
+<pre><code>var Input = React.cr而奥特Class({
+  getInitialState(){
+    return {
+      value: &apos;Hello&apos;
+    };
+  },
+
+  handleChange(event){
+    this.setState({
+      value: event.target.value;
+    })
+  },
+
+  render(){
+    return(
+      &amp;lt;div&amp;gt;&amp;lt;input type=&apos;text&apos; onChange={this.handleChange} value = {this.state.value} /&amp;gt;&amp;lt;p&amp;gt;{this.state.value}&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;
+    );
+  }
+});
+
+ReactDOM.render(
+  &amp;lt;Input /&amp;gt;, document.body
+);
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/02/react-e8-a1-a8-e5-8d-95/" data-id="cj1hgzf6g00cieoxhiarw0p13" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-proptypes-e4-b8-8e-getdefaultprops" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/02/proptypes-e4-b8-8e-getdefaultprops/" class="article-date">
+  <time datetime="2016-08-02T00:17:55.000Z" itemprop="datePublished">2016-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/02/proptypes-e4-b8-8e-getdefaultprops/">PropTypes 与 getDefaultProps</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>组件的属性可以接受任意值. 有时候我们需要一种机制, 验证别人使用组件时, 提供的参数是否符合要求.</p>
+<p>组件类的 PropTypes 属性, 就是用来验证组件实例的属性是否符合要求的.</p>
+<pre><code>var MyTitle = React.createClass({
+  propTypes: {
+    title: React.PropTypes.string.isRequried,
+  },
+
+  render() {
+    return &amp;lt;h1&amp;gt; {this.props.title} &amp;lt;/h1&amp;gt;;
+  }
+});
+`&lt;/pre&gt;
+
+上面的 `MyTitle` 组件有一个 `title` 属性, `PropTypes` 告诉 React, 这个 `title` 属性是必须的, 而且数据类型是字符串.
+
+如果在实例化的时候设置 `title=123`, 控制台会显示一行错误信息
+
+&lt;pre&gt;`Warning: Failed propType: Invalid prop `title` of type `number` supplied to `MyTitle`, expected `string`.
+`&lt;/pre&gt;
+
+此外, `getDefaultProps` 可以用来设置组件属性的默认值
+
+&lt;pre&gt;`var MyTitle = React.createClass({
+  getDefaultProps() {
+    return {
+      title: &apos;Hello World&apos;
+    };
+  },
+
+  render(){
+    return &amp;lt;h1&amp;gt;{this.props.title}&amp;lt;/h1&amp;gt;;
+  }
+})
+
+ReactDOM.render(&amp;lt;MyTitle /&amp;gt;, document.body); // &apos;Hello World&apos;
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/02/proptypes-e4-b8-8e-getdefaultprops/" data-id="cj1hgzf6300c1eoxho0bs175b" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React/">React</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-e8-b7-a8-e5-9f-9f-e8-b5-84-e6-ba-90-e5-85-b1-e4-ba-ab-cors" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/08/02/e8-b7-a8-e5-9f-9f-e8-b5-84-e6-ba-90-e5-85-b1-e4-ba-ab-cors/" class="article-date">
+  <time datetime="2016-08-01T21:00:04.000Z" itemprop="datePublished">2016-08-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/note/">note</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/02/e8-b7-a8-e5-9f-9f-e8-b5-84-e6-ba-90-e5-85-b1-e4-ba-ab-cors/">跨域资源共享 CORS</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>CORS 是一个 W3C 标准, 全称是”跨域资源共享”(cross-origin resource sharing)</p>
+<p>他允许浏览器向跨域服务器发出 <code>XMLHttpRequest</code>, 从而克服了 AJAX 只能同源使用的限制</p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>CORS 需要浏览器和服务器同时支持. 目前所有浏览器都支持该功能, IE 浏览器不能低于 IE10.</p>
+<p>整个 CORS 通信过程, 都是浏览器自动完成, 不需要用户参与, 对于开发者而言, CORS 通信与同源的 AJAX 通信没有差别, 代码完全一样. 浏览器一旦发现 AJAX 跨域请求, 就会自动添加一些附加的头信息. 有时还会多出一次附加的请求, 但是用户不会有感觉.</p>
+<p>因此, 实现 CORS 的关键是服务器, 只要服务器实现了 CORS 接口, 就可以跨域通信</p>
+<h3 id="两种请求"><a href="#两种请求" class="headerlink" title="两种请求"></a>两种请求</h3><p>CORS 请求分两类: 简单请求(simple request)和非简单请求(not-so-simple request)</p>
+<p>只要同时满足以下两大条件, 就属于简单请求:</p>
+<ol>
+<li>请求方法是: HEAD, GET 或者 POST</li>
+<li>HTTP 头信息不超出以下几种字段: Accept, Accept-Language, Content-Language, Last-Event-ID, Content-Type(只限于三个值: application/x-www-form-urlencoded, multipart/form-data, text/plain)</li>
+</ol>
+<p>凡是不能同时满足上面两个条件的, 就属于非简单请求.</p>
+<h3 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h3><h4 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h4><p>对于简单请求, 浏览器直接发出 CORS 请求, 具体来说, 就是在头信息中增加一个<code>Origin</code>字段</p>
+<pre><code>GET /cors HTTP/1.1
+Origin: http://api.bob.com
+Host: api.alice.com
+Accept-Language: en-US
+Connection: keep-alive
+User-Agent: Mozilla/5.0...
+`&lt;/pre&gt;
+
+上面的头信息中, `Origin`字段用来说明, 本次请求来此哪个源(协议+域名+端口), 服务器根据这个值, 决定是否同意此次请求.
+
+如果`Origin`指定的源, 不在许可范围内, 服务器会返回一个正常的 HTTP 响应. **浏览器**发现这个回应的头信息中没有包含`Access-Control-Allow-Origin`字段, 就知道出错了, 从而抛出一个错误, 被`XMLHttpRequest`的`onerror`回调函数捕获. 注意, 这种错误无法通过状态码识别, 因为 HTTP 回应的状态码可能是200.
+
+如果`Origin`指定的域名在许可范围内, 服务器返回的相应, 会多出几个头信息字段
+
+&lt;pre&gt;`Access-Control-Allow-Origin: http://api.bob.com
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: FooBar
+Content-Type: text/html; charset=utf-8
+`&lt;/pre&gt;
+
+上面的头信息中, 有三个与 CORS 请求相关的字段, 都以 `Access-Control-` 开头
+
+##### Access-Control-Allow-Origin
+
+这个字段是必须的, 他的值要么是请求时 `Origin` 的值, 要么是一个 `*`, 表示接收任意域名的请求
+
+##### Access-Control-Allow-Credentials
+
+该字段是可选的, 是一个布尔值, 表示是否允许发送 Cookie. 默认情况下, Cookie 不包括在 CORS 请求之中.
+
+设为 `true` 表示服务器明确许可, Cookie 可以包括在请求之中, 一起发给服务器
+
+这个值也只能设为`true`, 如果服务器不需要浏览器发送 Cookie, 删除字段即可
+
+##### Access-Control-Expose-Headers
+
+该字段可选, CORS 请求时, `XMLHttpRequest` 对象的 `getResponseHeader()` 方法只能拿到6个基本字段
+- Cache-Control
+- Content-Language
+- Content-Type
+- Expires
+- Last-Modified
+-Pragma
+
+如果想要拿到其他字段, 必须在 `Access-Control-Expose-Headers` 里面指定
+
+上面的例子中, `getResponseHeader(&apos;FooBar&apos;)` 可以返回 `FooBar` 字段的值
+
+#### withCredentials 属性
+
+CORS 请求默认不发送 Cookie 和 HTTP 认证信息, 如果要把 Cookie 发送给服务器, 一方面要服务器同意, 指定 `Access-Control-Allow-Credentials` 字段
+
+&lt;pre&gt;`Access-Control-Allow-Credientials: true
+`&lt;/pre&gt;
+
+另一方面, 开发者需要在 AJAX 请求中打开`withCredientials`属性
+
+&lt;pre&gt;`var xhr = new XMLHttpRequest();
+xhr.withCredientials = true;
+`&lt;/pre&gt;
+
+否则即使服务器同意发送 Cookie, 浏览器也不会发送
+
+要注意, 如果要发送 Cookie, `Access-Control-Allow-Origin` 不能设置为 `*`, 必须指定明确的, 与请求网页一致的域名. 同时 Cookie 依然遵循同源政策, 只有用服务器域名设置的 Cookie 才会上传, 其他域名的 Cookie 不会上传.
+
+### 非简单请求
+
+#### 预检请求
+
+非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 `PUT`, 或 `DELETE`, 或者 `Content-Type` 字段类型是 `application/json`
+
+非简单请求的 CORS 请求, 会在正是通信钱, 增加一次 HTTP 查询请求, 称为 &quot;预检请求&quot; (preflight)
+
+浏览器先询问服务器, 当前网页所在的域名是否在服务器的许可名单中, 以及可以使用哪些 HTTP 动词和头信息字段, 只有得到肯定的答复, 浏览器才会发出正式的 `XMLHttpRequest` 请求, 否则就报错
+
+下面是一段浏览器的 JavaScript 脚本
+
+&lt;pre&gt;`var url = &apos;http://api.alice.com/cors&apos;
+var xhr = new XMLHttpRequest();
+xhr.open(&apos;PUT&apos;, url, true);
+xhr.setRequestHeader(&apos;X-Custom-Header&apos;, &apos;value&apos;);
+xhr.send()
+`&lt;/pre&gt;
+
+上面代码中, HTTP 请求的方法是 `PUT`, 并且发送一个自定义头信息 `X-Custom-Header`
+
+浏览器发现这是一个非简单请求, 就自动发出一个 &quot;预检&quot; 请求, 要求服务器确认可以这样请求. 下面是这个 &quot;预检&quot; 请求的 HTTP 头信息
+
+&lt;pre&gt;`OPTIONS /cors HTTP/1.1
+Origin: http://api.bob.com
+Access-Control-Request-Method: PUT
+Access-Control-Request-Headers: X-Custom-Header
+Host: api.alice.com
+Connection: keep-alive
+User-Agent: Molliza/5.0...
+`&lt;/pre&gt;
+
+&quot;预检&quot; 请求用的请求方法是 `OPTIONS`, 表示这个请求是用来询问的, 头信息里面, 关键字段是 `Origin`, &quot;预检&quot; 秦秋的头信息包括两个特殊字段
+- Access-Control-Request-Method
+  这个字段是必须的, 用来列出请求方法
+</code></pre><ul>
+<li><p>Access-Control-Request-Headers<br>该字段是一个逗号分隔的字符串, 永安里指定浏览器 CORS 请求会格外发送的头信息字段</p>
+<h5 id="预检请求的响应"><a href="#预检请求的响应" class="headerlink" title="预检请求的响应"></a>预检请求的响应</h5><p>服务器取得”预检”请求后, 检查<code>Origin</code>, <code>Access-Control-Request-Method</code> 和 <code>Access-Control-Request-Header</code> 子弹后, 确认允许跨源请求, 就可以做出回应</p>
+<pre>`HTTP/1.1 200 OK
+Date: Mon, 01 Dec 2008 01:15:39 GMT
+Server: Apache/2.0.61 (Unix)
+Access-Control-Allow-Origin: http://api.bob.com
+Access-Control-Allow-Methods: GET, POST, PUT
+Access-Control-Allow-Headers: X-Custom-Header
+Content-Type: text/html; charset=utf-8
+Content-Encoding: gzip
+Content-Length: 0
+Keep-Alive: timeout=2, max=100
+Connection: Keep-Alive
+Content-Type: text/plain
+`</pre>
+
+<p>上面 HTTP 响应中, 关键的是 <code>Access-Control-Allow-Origin</code> 字段, 表示 <code>http://api.bob.com</code> 可以请求数据, 该字段也可以设置为<code>*</code>, 表示同意跨源请求.</p>
+<p>如果浏览器否定了”预检”请求, 返回一个正常的 HTTP 响应, 但是没有任何 CORS 相关的头信息字段, 这时候浏览器会认为服务器不同意预检请求, 从而触发一个错误, 被 <code>XMLHttpRequest</code> 对象的 <code>onerror</code> 回调函数捕获, 控制台会打印如下报错信息</p>
+<pre>`XMLHttpRequest cannot load http://api.alice.com.
+Origin http://api.bob.com is not allowed by Access-Control-Allow-Origin.
+`</pre>
+
+<p>服务器回应其他 CORES 相关字段如下:</p>
+<pre>`Access-Control-Allow-Methods: GET, POST, PUT
+Access-Control-Allow-Headers: X-Custom-Header
+Access-Control-Allow-Credentials: true
+Access-Control-Max-Age: 1728000
+`</pre>
+
+<h5 id="Access-Control-Allow-Method"><a href="#Access-Control-Allow-Method" class="headerlink" title="Access-Control-Allow-Method"></a>Access-Control-Allow-Method</h5><p>该字段是必须的, 他的值是逗号分隔的一个字符串, 表明服务器支持的跨域请求方式</p>
+<h5 id="Access-Control-Allow-Headers"><a href="#Access-Control-Allow-Headers" class="headerlink" title="Access-Control-Allow-Headers"></a>Access-Control-Allow-Headers</h5><p>如果浏览器包含<code>Access-Control-Request-Headers</code>, 则 <code>Access-Control-Allow-Headers</code> 也是必须的, 其值也是一个逗号分隔的字符串</p>
+<h5 id="Access-Control-Allow-Credentials"><a href="#Access-Control-Allow-Credentials" class="headerlink" title="Access-Control-Allow-Credentials"></a>Access-Control-Allow-Credentials</h5><p>该字段与简单请求时的含义相同</p>
+<h5 id="Access-Control-Max-Age"><a href="#Access-Control-Max-Age" class="headerlink" title="Access-Control-Max-Age"></a>Access-Control-Max-Age</h5><p>该字段可选, 永安里指定本次预检请求的有效期(s), 有效期内发起跨域请求不需要预检请求.</p>
+<h4 id="浏览器的正常请求与回应"><a href="#浏览器的正常请求与回应" class="headerlink" title="浏览器的正常请求与回应"></a>浏览器的正常请求与回应</h4><p>一旦服务器通过”预检”请求, 以后每次浏览器正常的 CORS 请求, 都会和简单请求一样, 有一个<code>Origin</code> 头信息字段, 服务器的回应也会有一个<code>Access-Control-Allow-Origin</code>头信息字段</p>
+<p>“预检”请求之后, 浏览器的正常 CORS 请求</p>
+<pre>`PUT /cors HTTP/1.1
+Origin: http://api.bob.com
+Host: api.alice.com
+X-Custom-Header: value
+Access-Language: en-US
+Connection: keep-alive
+User-Agent: Mozilla/5.0...
+`</pre>
+
+<p>其中<code>Origin</code>字段是浏览器自动添加的</p>
+<p>服务器的正常回应</p>
+<p><pre>`Access-Control-Allow-Origin: <a href="http://api.bob.com" target="_blank" rel="external">http://api.bob.com</a><br>Content-Type: text/html; charset=utf-8</pre></p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/08/02/e8-b7-a8-e5-9f-9f-e8-b5-84-e6-ba-90-e5-85-b1-e4-ba-ab-cors/" data-id="cj1hgzf38006ueoxhf38846ib" class="article-share-link">Partager</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AJAX/">AJAX</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CORS/">CORS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/page/5/">&laquo; __('prev')</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/7/">__('next') &raquo;</a>
+  </nav>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Catégories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AJAX/">AJAX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BOOTSTRAP/">BOOTSTRAP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bash/">Bash</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CORS/">CORS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS3/">CSS3</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Closure/">Closure</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CommonJS/">CommonJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DevTools/">DevTools</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES6/">ES6</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint/">ESLint</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FP/">FP</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gulp/">Gulp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML5/">HTML5</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Immutable/">Immutable</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Koa/">Koa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MDL/">MDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Material-Design/">Material Design</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NODE/">NODE</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nginx/">Nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Nock/">Nock</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Node-js/">Node.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Promise/">Promise</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React/">React</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Redux/">React-Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/React-Router/">React-Router</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redux/">Redux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RegExp/">RegExp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RxJS/">RxJS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thunk/">Thunk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Trick/">Trick</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/automatic/">automatic</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel/">babel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/babel-polyfill/">babel-polyfill</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/commandline/">commandline</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jQuery/">jQuery</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack/">webpack</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/webpack2/">webpack2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/测试/">测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/04/14/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2017/03/20/baisc-usage-of-redux-observable/">Baisc Usage of Redux-Observable</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/27/functor-e5-87-bd-e5-ad-90/">Functor 函子</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/throttle-e5-87-bd-e6-95-b0/">Throttle 函数</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/22/debounce-e5-87-bd-e6-95-b0/">Debounce 函数</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

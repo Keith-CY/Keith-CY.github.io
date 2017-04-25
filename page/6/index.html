@@ -287,6 +287,850 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/22/configuring-eslint/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/22/configuring-eslint/" itemprop="url">
+                  Configuring ESLint
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-22T02:27:49+08:00">
+                2016-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>Configuration Comments - use JS comments to embed configuration information directly into a file.<p></p></li>
+<li>Configuration Files - use a JS, JSON, or YAML file to specify configuration information for an entire directory and all of its subdirectories. This can be in the form of an <code>.eslintrc</code> file or an <code>eslintConfig</code> field in a <code>package.json</code> file, both of which ESLint will look for and reed automatically, or you can specify a configuration file on the command line.</li>
+</ol>
+<h3 id="Specifying-Parser-Options"><a href="#Specifying-Parser-Options" class="headerlink" title="Specifying Parser Options"></a>Specifying Parser Options</h3><p></p><p>ESLint allows you to specify the JS language options you want to support. By Default, ESLint support only ES5 syntax. You can override that setting to enable support for ES6 and 7 as well as JSX by using parser options.</p>
+<p>Parser options are set in your <code>.eslintrc</code> file by using the <code>parserOptions</code> property. The available options are:</p>
+<ul>
+<li><code>ecmaVersion</code> - set to 3, 5(default), 6 or 7 to specify the version of ECMAScript you want to use.</li>
+<li><code>sourceType</code> - set to <code>&quot;script&quot;</code> (default) or <code>&quot;module&quot;</code> if your code is in ECMAScript modules.</li>
+<li><p><code>emcaFeatures</code> - an object indicating which additional language features you’d like to use:</p>
+<pre><code>*   `globalReturn` - allow `return` statements in the global scope.
+</code></pre><ul>
+<li><code>impliedStrict</code> - enable global <code>strict mode</code> (if <code>ecmaVersion</code> is 5 or greater)</li>
+<li><code>jsx</code>: enable <code>JSX</code></li>
+<li><code>experimentalObjectRestSpread</code> - enable support for the experimental <code>object rest/spread properties</code></li>
+</ul>
+</li>
+</ul>
+<p>An example:</p>
+<pre><code>{
+  &quot;parserOptions&quot;:{
+    &quot;emcaVersion&quot;: 6,
+    &quot;sourceType&quot;: &quot;module&quot;,
+    &quot;ecmaFeatures&quot;: {
+      &quot;jsx&quot;: true
+    }
+  },
+  &quot;rules&quot;:{
+    &quot;semi&quot;: 2
+  }
+}
+`&lt;/pre&gt;
+
+### Specifying Parser
+
+By Default, ESLint uses `Espree` as its parser. You can optionally specify that a different parser should be used in your configuration file so long as the parser meets the following requirements:
+</code></pre><ul>
+<li>It must be an npm module installled locally;</li>
+<li>It must have an Esprima-compatible interface</li>
+<li><p>It must produce Esprima-compatible AST and token objects.</p>
+<h3 id="Specifying-ENV"><a href="#Specifying-ENV" class="headerlink" title="Specifying ENV"></a>Specifying ENV</h3></li>
+<li><p>browser</p>
+</li>
+<li>node</li>
+<li>commonjs</li>
+<li>es6</li>
+<li><p>mocha</p>
+<pre>`{
+  "env":{
+    "browser": true,
+    "node": true
+  }
+}
+
+### Configuring Rules
+
+ESLint comes with a large number of rules, you can modify which rules your project use either using configuration comments or configuration files. To change a rules setting, you must set the rule ID equal to one of these values: 
+
+- `"off"` or `0` to turn rule off.
+- `"warn"` or `1` to turn the rule as a warning(doesn't affect exit code)
+- `"error"` or `2` to turn the rule on as an error(exit code is 1 when triggered)
+
+### Demo
+
+`</pre>
+
+<p>npm install -g eslint</p>
+<p><pre>`</pre></p>
+</li>
+</ul>
+<p>eslint –init<br><code>``
+生成</code>.eslintrc.js`</p>
+<p>但是这个文件最好手动生成</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/21/js-e5-bc-80-e5-8f-91-e5-b7-a5-e5-85-b7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/21/js-e5-bc-80-e5-8f-91-e5-b7-a5-e5-85-b7/" itemprop="url">
+                  JS 开发工具
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-21T07:12:50+08:00">
+                2016-08-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>开发工具是让开发人员工作更轻松的一些软件, 传统上包括集成开发环境, 代码检查工具, 编译器, 调试工具和性能测试工具</p>
+<p>但是 JS 是一种动态语言, 伴随他动态本质而来的是对更多运行时开发者工具的需求.</p>
+<h4 id="Quick-List"><a href="#Quick-List" class="headerlink" title="Quick List"></a>Quick List</h4><ul>
+<li>Atom &amp; Atom-ternjs</li>
+<li>Chrome DevTools</li>
+<li>PageSpeed Insights</li>
+<li>BrowserSycn</li>
+<li>TraceGL</li>
+<li>ironNode</li>
+<li>ESLint</li>
+<li>Babel</li>
+<li>React</li>
+<li>Webpack + Hot Module Replacement</li>
+<li>Redux + Redux DevTools</li>
+</ul>
+<p>关于工具, 主要是编辑器和运行时环境(比如浏览器)</p>
+<p>主要用 Atom, 需要 atom-ternjs 来开启 JavaScript 智能识别</p>
+<p>很多很棒的 <a href="https://medium.com/@satya164/supercharged-javascript-development-in-atom-ea034e22eabc#.a2b8sthbw" target="_blank" rel="external">Atom 插件</a></p>
+<p>调试器: Chrome DevTools, 注意其 flame charts 和 dominators view 功能</p>
+<p>性能审查: <a href="https://www.youtube.com/watch?list=PLOU2XLYxmsILKwwASNS0xgfcmakbK_8JZ&amp;v=bDUDuQy3R7Y" target="_blank" rel="external">PageSpeed Insights</a></p>
+<p>BrowserSync是一款测试响应式布局非常好用的工具, 可以一次模拟多种浏览器(电脑, 平板, 手机)<br>可以监视文件, 并在文件修改的时候自动重载同步刷新浏览器, 像滚动, 点击, 表单交互等动作也会跨设别同步.</p>
+<p><a href="https://www.youtube.com/watch?v=heNWfzc7ufQ" target="_blank" rel="external">视频链接</a></p>
+<p>TraceGL 是一种运行时调试工具, 可以让你在软件中的方法实时调用时观察他们, 而不是手动逐步跟踪代码</p>
+<p><a href="https://www.youtube.com/watch?v=heNWfzc7ufQ" target="_blank" rel="external">视频链接</a></p>
+<p>代码检查: ESLint 可配置性特别强, 每一个选项都可以设置开启或禁用, 甚至给他们添加参数. 可以创建自己的规则, 支持插件</p>
+<p>Babel 是一种编译器, 可以让现在的 JS 代码使用 ES6+ 尚未支持的特性, JSX 等, 工作原理是讲代码转换为等价的 ES5.</p>
+<p><a href="https://medium.com/javascript-scene/how-to-use-es6-for-isomorphic-javascript-apps-2a9c3abe5ea2" target="_blank" rel="external">文章链接</a></p>
+<p>Webpack 会将模块和以来打包成针对浏览器的静态资源, 他支持大量有趣的特性, 比如模块热拔插, 可以让当前浏览器中的代码在你修改文件的时候自动更新, 而不用刷新页面. 模块热拔插</p>
+<p><a href="https://github.com/cloverfield-tools/universal-react-boilerplate" target="_blank" rel="external">参考资料</a></p>
+<p>React: 不算开发者工具</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/20/e9-83-a8-e7-bd-b2react-redux-e7-9a-84-web-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/20/e9-83-a8-e7-bd-b2react-redux-e7-9a-84-web-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83/" itemprop="url">
+                  部署React + Redux 的 Web 开发环境
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-20T16:27:34+08:00">
+                2016-08-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>好的部署需要做到两点:<br>1. 性能优化: 包括代码执行速度, 页面载入速度<br>2. 自动化: 减少重复工作</p>
+<p>使用 React+Redux 的时候往往会用到其调试工具 Redux DevTools, 在手动配置 DevTools 时需要针对 Store 和 Component 进行一些配置, 然而这些都是为了方便调试的, 生产环境下我们不希望加入这些东西, 所以建议从代码上隔离 development 和 production 环境:</p>
+<pre><code>containers/
+  Root.js
+  Root.dev.js
+  Root.prod.js
+  ...
+
+store/
+  index.js
+  store.dev.js
+  store.prod.js
+`&lt;/pre&gt;
+
+同时采用单独的入口文件, 比如上面的 containers/Root.js, 按需要加载不同环境的代码
+
+&lt;pre&gt;`if (process.env.NODE_ENV === &apos;production&apos;){
+  module.exports = require(&apos;./Root.prod&apos;);
+} else {
+  module.exports = require(&apos;./Root.dev&apos;);
+}
+`&lt;/pre&gt;
+
+有一个细节需要注意: ES6 语法不支持在 if 中书写 import 语句, 所以这里采用了 CommonJS 的模块引入方法 require.
+
+另一个需要注意的地方是按需要 import, 否则可能在打包的时候引入不必要的代码
+
+使用 webpack 进行打包工作
+
+&lt;pre&gt;`webpack --config webpack.config.prod.js --progress
+`&lt;/pre&gt;
+
+注意要为不同的环境准备不同的 webpack 配置文件. 比如 `webpack.config.dev.js` 和 `webpack.config.prod.js` . 看一下比较关键的配置选项
+
+### devtools
+
+启用 source-map, 这样 webpack 会生成两个包
+- bundle.js
+- bundle.js.map
+把用于定位源码的 source map 分离出去, 减少 bundle.js 的体积
+
+source-map 只会在浏览器 devtools 激活时加载, 并不会影响正常页面的饿加载速度.
+
+### plugins
+
+&lt;pre&gt;`plugins:[
+  new webpack.optimize.UglifyJsPlugin({
+    compress:{
+      warning: false
+    }
+  }),
+  new webpack.optimize.DedupePlugin(),
+  new webpack.optimize.OccurenceOrderPlugin()
+]
+`&lt;/pre&gt;
+
+### 不要忽视 NODE_ENV
+
+NODE_ENV 其实就是一个环境变量, 在 Node 中 可以通过`process.env.NODE_ENV`获取, 目前大家汪汪用这个变量区分当前是 development 还是 production.
+
+通过 webpack 的 DefinePlugin 设置环境变量:
+
+&lt;pre&gt;`plugins:[
+  ...
+  new webpack.DefinePlugin({
+    &apos;process.env.NODE_ENV&apos;: JSON.stingify(&apos;production&apos;)
+  })
+]
+
+### 添加 hash
+前端公认的 Best Practice 就是给资源打上 hash 标签, 这对缓存静态资源很有用
+
+1\. 给 bundle.js 添加 hash 标签
+`&lt;/pre&gt;
+
+output{
+  path: ...
+  filename: &apos;bundle.[hash].js&apos;
+}
+
+&lt;pre&gt;`使用 html-webpack-plugin 这个插件自动生成带有
+`&lt;/pre&gt;
+
+&amp;lt;script src=&apos;bundle.[hash].js&gt;&amp;lt;/script&gt;&apos;的 html 文件
+
+&lt;pre&gt;`配置如下:
+`&lt;/pre&gt;
+
+plugins:[
+  ...
+  new HtmlWebpackPlugin({
+    title:&apos;html title&apos;,
+    template:&apos;./template.html&apos;,
+    favicon: &apos;./static/images/logo.ico&apos;
+  })
+]
+
+&lt;pre&gt;`配置 template.html
+`&lt;/pre&gt;
+
+&lt;!DOCTYPE html&gt;
+&amp;lt;html&gt;
+&amp;lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
+&amp;lt;/head&gt;
+&amp;lt;body&gt;
+
+&lt;div id=&quot;react-container&quot;&gt;&lt;/div&gt;
+
+&amp;lt;/body&gt;
+&amp;lt;/html&gt;
+
+&lt;pre&gt;`
+如果需要在 React Component 中添加图片, 建议采用
+`&lt;/pre&gt;
+
+import LOGO.png from &apos;./static/images/logo.png&apos;
+&amp;lt;img src={LOGO.png} alt=&quot;&quot; /&gt;
+
+&lt;pre&gt;`使用 import 或 require 可以让 webpack 对图片进行打包
+
+使用 file-loader 可以对图片添加 hash 标签然后返回相应的 URL
+</code></pre><p>module:{<br>  loaders:[<br>    {<br>      test: /&#46;(png|jpg),<br>      loader:”file?name=[hash].[ext]”<br>    }<br>  ]<br>}<br>```</p>
+<h3 id="引入-CSS"><a href="#引入-CSS" class="headerlink" title="引入 CSS"></a>引入 CSS</h3><p>可以直接在 js 文件中 <code>require(&#39;./foo.css&#39;)</code>, 然后使用 style-loader 和 css-loader 进行处理, 最终效果是将 css 嵌入到 HTML 的 style 标签中, 这样就不需要使用 hash</p>
+<p>CSS 较大的话, 可以考虑使用 extract-text-webpack-plugin 插件将 CSS 合并后独立为一个文件, 并自定在页面加载的时候添加 link 标签</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/19/webpack-e5-b8-b8-e7-94-a8-plugin-e5-92-8c-loader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/19/webpack-e5-b8-b8-e7-94-a8-plugin-e5-92-8c-loader/" itemprop="url">
+                  Webpack 常用 plugin 和 loader
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-19T13:58:43+08:00">
+                2016-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="常用Loader"><a href="#常用Loader" class="headerlink" title="常用Loader"></a>常用Loader</h3><p>html 相关</p>
+<pre><code>html-loader
+`&lt;/pre&gt;
+
+css 相关
+
+&lt;pre&gt;`style-loader
+css-loader
+autoprefixer-loader
+sass-loader
+`&lt;/pre&gt;
+
+js 相关
+
+&lt;pre&gt;`babel-loader
+babel-core
+babel-preset-es2015
+babel-preset-react
+babel-preset-stage3
+eslint-loader
+`&lt;/pre&gt;
+
+### 常用插件Plugin
+
+#### config 类
+
+&lt;pre&gt;`NormalModuleReplacementPlugin
+ContextReplacementPlugin
+IgnorePlugin
+PrefetchPlugin
+`&lt;/pre&gt;
+
+#### Optimize
+
+&lt;pre&gt;`DedupePlugin
+LimitChunkCountPlugin
+OccurenceOrderPlugin
+UglifyJsPlugin
+CommonsChunkPlugin
+`&lt;/pre&gt;
+
+#### 其他
+
+&lt;pre&gt;`HotModuleReplacementPlugin
+NoErrorPlugin
+ProgressPlugin
+HtmlWebpackPlugin
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/19/immutablejs-introduction/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1436,830 +2280,6 @@ entry: [
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/02/react-ajax/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/02/react-ajax/" itemprop="url">
-                  React Ajax
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-02T09:04:45+08:00">
-                2016-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>组件的数据来源, 通常是通过 AJAX 请求从服务器获取, 可以使用 <code>componentDidMount</code> 方法设置 AJAX 请求, 等到请求成功, 再用<code>this.setState()</code>方法重新渲染 UI.</p>
-<pre><code>var UserGist = React.createClass({
-  getInitialState(){
-    return {
-      userName: &apos;&apos;,
-      lastGistUrl: &apos;&apos;
-    }
-  },
-
-  componentDidMounted(){
-    $.get(this.props.source, function(result){
-      var lastGist = result[0];
-      if(this.isMouted()){
-        this.setState({
-          userName: lastGist.owner.login,
-          lastGistUrl: lastGist.html_url
-        });
-      }
-    }.bind(this));
-  },
-
-  render(){
-    return (
-      &amp;lt;div&amp;gt;
-        {this.state.userName}&apos;s last Gist is 
-        &amp;lt;a href={this.state.lastGistUrl}&amp;gt;here&amp;lt;/a&amp;gt;
-      &amp;lt;/div&amp;gt;
-    );
-  }
-});
-
-React.render(
-  &amp;lt;UserGist source= &apos;....&apos; /&amp;gt;, document.body
-)
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/02/react-e8-a1-a8-e5-8d-95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/02/react-e8-a1-a8-e5-8d-95/" itemprop="url">
-                  React 表单
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-02T08:58:50+08:00">
-                2016-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>用户在表单输入的内容, 属于用户与组件的互动, 要用<code>this.setState()</code>修改</p>
-<pre><code>var Input = React.cr而奥特Class({
-  getInitialState(){
-    return {
-      value: &apos;Hello&apos;
-    };
-  },
-
-  handleChange(event){
-    this.setState({
-      value: event.target.value;
-    })
-  },
-
-  render(){
-    return(
-      &amp;lt;div&amp;gt;&amp;lt;input type=&apos;text&apos; onChange={this.handleChange} value = {this.state.value} /&amp;gt;&amp;lt;p&amp;gt;{this.state.value}&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;
-    );
-  }
-});
-
-ReactDOM.render(
-  &amp;lt;Input /&amp;gt;, document.body
-);
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/02/proptypes-e4-b8-8e-getdefaultprops/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/02/proptypes-e4-b8-8e-getdefaultprops/" itemprop="url">
-                  PropTypes 与 getDefaultProps
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-02T08:17:55+08:00">
-                2016-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>组件的属性可以接受任意值. 有时候我们需要一种机制, 验证别人使用组件时, 提供的参数是否符合要求.</p>
-<p>组件类的 PropTypes 属性, 就是用来验证组件实例的属性是否符合要求的.</p>
-<pre><code>var MyTitle = React.createClass({
-  propTypes: {
-    title: React.PropTypes.string.isRequried,
-  },
-
-  render() {
-    return &amp;lt;h1&amp;gt; {this.props.title} &amp;lt;/h1&amp;gt;;
-  }
-});
-`&lt;/pre&gt;
-
-上面的 `MyTitle` 组件有一个 `title` 属性, `PropTypes` 告诉 React, 这个 `title` 属性是必须的, 而且数据类型是字符串.
-
-如果在实例化的时候设置 `title=123`, 控制台会显示一行错误信息
-
-&lt;pre&gt;`Warning: Failed propType: Invalid prop `title` of type `number` supplied to `MyTitle`, expected `string`.
-`&lt;/pre&gt;
-
-此外, `getDefaultProps` 可以用来设置组件属性的默认值
-
-&lt;pre&gt;`var MyTitle = React.createClass({
-  getDefaultProps() {
-    return {
-      title: &apos;Hello World&apos;
-    };
-  },
-
-  render(){
-    return &amp;lt;h1&amp;gt;{this.props.title}&amp;lt;/h1&amp;gt;;
-  }
-})
-
-ReactDOM.render(&amp;lt;MyTitle /&amp;gt;, document.body); // &apos;Hello World&apos;
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/02/e8-b7-a8-e5-9f-9f-e8-b5-84-e6-ba-90-e5-85-b1-e4-ba-ab-cors/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/02/e8-b7-a8-e5-9f-9f-e8-b5-84-e6-ba-90-e5-85-b1-e4-ba-ab-cors/" itemprop="url">
-                  跨域资源共享 CORS
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-02T05:00:04+08:00">
-                2016-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>CORS 是一个 W3C 标准, 全称是”跨域资源共享”(cross-origin resource sharing)</p>
-<p>他允许浏览器向跨域服务器发出 <code>XMLHttpRequest</code>, 从而克服了 AJAX 只能同源使用的限制</p>
-<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>CORS 需要浏览器和服务器同时支持. 目前所有浏览器都支持该功能, IE 浏览器不能低于 IE10.</p>
-<p>整个 CORS 通信过程, 都是浏览器自动完成, 不需要用户参与, 对于开发者而言, CORS 通信与同源的 AJAX 通信没有差别, 代码完全一样. 浏览器一旦发现 AJAX 跨域请求, 就会自动添加一些附加的头信息. 有时还会多出一次附加的请求, 但是用户不会有感觉.</p>
-<p>因此, 实现 CORS 的关键是服务器, 只要服务器实现了 CORS 接口, 就可以跨域通信</p>
-<h3 id="两种请求"><a href="#两种请求" class="headerlink" title="两种请求"></a>两种请求</h3><p>CORS 请求分两类: 简单请求(simple request)和非简单请求(not-so-simple request)</p>
-<p>只要同时满足以下两大条件, 就属于简单请求:</p>
-<ol>
-<li>请求方法是: HEAD, GET 或者 POST</li>
-<li>HTTP 头信息不超出以下几种字段: Accept, Accept-Language, Content-Language, Last-Event-ID, Content-Type(只限于三个值: application/x-www-form-urlencoded, multipart/form-data, text/plain)</li>
-</ol>
-<p>凡是不能同时满足上面两个条件的, 就属于非简单请求.</p>
-<h3 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h3><h4 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h4><p>对于简单请求, 浏览器直接发出 CORS 请求, 具体来说, 就是在头信息中增加一个<code>Origin</code>字段</p>
-<pre><code>GET /cors HTTP/1.1
-Origin: http://api.bob.com
-Host: api.alice.com
-Accept-Language: en-US
-Connection: keep-alive
-User-Agent: Mozilla/5.0...
-`&lt;/pre&gt;
-
-上面的头信息中, `Origin`字段用来说明, 本次请求来此哪个源(协议+域名+端口), 服务器根据这个值, 决定是否同意此次请求.
-
-如果`Origin`指定的源, 不在许可范围内, 服务器会返回一个正常的 HTTP 响应. **浏览器**发现这个回应的头信息中没有包含`Access-Control-Allow-Origin`字段, 就知道出错了, 从而抛出一个错误, 被`XMLHttpRequest`的`onerror`回调函数捕获. 注意, 这种错误无法通过状态码识别, 因为 HTTP 回应的状态码可能是200.
-
-如果`Origin`指定的域名在许可范围内, 服务器返回的相应, 会多出几个头信息字段
-
-&lt;pre&gt;`Access-Control-Allow-Origin: http://api.bob.com
-Access-Control-Allow-Credentials: true
-Access-Control-Expose-Headers: FooBar
-Content-Type: text/html; charset=utf-8
-`&lt;/pre&gt;
-
-上面的头信息中, 有三个与 CORS 请求相关的字段, 都以 `Access-Control-` 开头
-
-##### Access-Control-Allow-Origin
-
-这个字段是必须的, 他的值要么是请求时 `Origin` 的值, 要么是一个 `*`, 表示接收任意域名的请求
-
-##### Access-Control-Allow-Credentials
-
-该字段是可选的, 是一个布尔值, 表示是否允许发送 Cookie. 默认情况下, Cookie 不包括在 CORS 请求之中.
-
-设为 `true` 表示服务器明确许可, Cookie 可以包括在请求之中, 一起发给服务器
-
-这个值也只能设为`true`, 如果服务器不需要浏览器发送 Cookie, 删除字段即可
-
-##### Access-Control-Expose-Headers
-
-该字段可选, CORS 请求时, `XMLHttpRequest` 对象的 `getResponseHeader()` 方法只能拿到6个基本字段
-- Cache-Control
-- Content-Language
-- Content-Type
-- Expires
-- Last-Modified
--Pragma
-
-如果想要拿到其他字段, 必须在 `Access-Control-Expose-Headers` 里面指定
-
-上面的例子中, `getResponseHeader(&apos;FooBar&apos;)` 可以返回 `FooBar` 字段的值
-
-#### withCredentials 属性
-
-CORS 请求默认不发送 Cookie 和 HTTP 认证信息, 如果要把 Cookie 发送给服务器, 一方面要服务器同意, 指定 `Access-Control-Allow-Credentials` 字段
-
-&lt;pre&gt;`Access-Control-Allow-Credientials: true
-`&lt;/pre&gt;
-
-另一方面, 开发者需要在 AJAX 请求中打开`withCredientials`属性
-
-&lt;pre&gt;`var xhr = new XMLHttpRequest();
-xhr.withCredientials = true;
-`&lt;/pre&gt;
-
-否则即使服务器同意发送 Cookie, 浏览器也不会发送
-
-要注意, 如果要发送 Cookie, `Access-Control-Allow-Origin` 不能设置为 `*`, 必须指定明确的, 与请求网页一致的域名. 同时 Cookie 依然遵循同源政策, 只有用服务器域名设置的 Cookie 才会上传, 其他域名的 Cookie 不会上传.
-
-### 非简单请求
-
-#### 预检请求
-
-非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 `PUT`, 或 `DELETE`, 或者 `Content-Type` 字段类型是 `application/json`
-
-非简单请求的 CORS 请求, 会在正是通信钱, 增加一次 HTTP 查询请求, 称为 &quot;预检请求&quot; (preflight)
-
-浏览器先询问服务器, 当前网页所在的域名是否在服务器的许可名单中, 以及可以使用哪些 HTTP 动词和头信息字段, 只有得到肯定的答复, 浏览器才会发出正式的 `XMLHttpRequest` 请求, 否则就报错
-
-下面是一段浏览器的 JavaScript 脚本
-
-&lt;pre&gt;`var url = &apos;http://api.alice.com/cors&apos;
-var xhr = new XMLHttpRequest();
-xhr.open(&apos;PUT&apos;, url, true);
-xhr.setRequestHeader(&apos;X-Custom-Header&apos;, &apos;value&apos;);
-xhr.send()
-`&lt;/pre&gt;
-
-上面代码中, HTTP 请求的方法是 `PUT`, 并且发送一个自定义头信息 `X-Custom-Header`
-
-浏览器发现这是一个非简单请求, 就自动发出一个 &quot;预检&quot; 请求, 要求服务器确认可以这样请求. 下面是这个 &quot;预检&quot; 请求的 HTTP 头信息
-
-&lt;pre&gt;`OPTIONS /cors HTTP/1.1
-Origin: http://api.bob.com
-Access-Control-Request-Method: PUT
-Access-Control-Request-Headers: X-Custom-Header
-Host: api.alice.com
-Connection: keep-alive
-User-Agent: Molliza/5.0...
-`&lt;/pre&gt;
-
-&quot;预检&quot; 请求用的请求方法是 `OPTIONS`, 表示这个请求是用来询问的, 头信息里面, 关键字段是 `Origin`, &quot;预检&quot; 秦秋的头信息包括两个特殊字段
-- Access-Control-Request-Method
-  这个字段是必须的, 用来列出请求方法
-</code></pre><ul>
-<li><p>Access-Control-Request-Headers<br>该字段是一个逗号分隔的字符串, 永安里指定浏览器 CORS 请求会格外发送的头信息字段</p>
-<h5 id="预检请求的响应"><a href="#预检请求的响应" class="headerlink" title="预检请求的响应"></a>预检请求的响应</h5><p>服务器取得”预检”请求后, 检查<code>Origin</code>, <code>Access-Control-Request-Method</code> 和 <code>Access-Control-Request-Header</code> 子弹后, 确认允许跨源请求, 就可以做出回应</p>
-<pre>`HTTP/1.1 200 OK
-Date: Mon, 01 Dec 2008 01:15:39 GMT
-Server: Apache/2.0.61 (Unix)
-Access-Control-Allow-Origin: http://api.bob.com
-Access-Control-Allow-Methods: GET, POST, PUT
-Access-Control-Allow-Headers: X-Custom-Header
-Content-Type: text/html; charset=utf-8
-Content-Encoding: gzip
-Content-Length: 0
-Keep-Alive: timeout=2, max=100
-Connection: Keep-Alive
-Content-Type: text/plain
-`</pre>
-
-<p>上面 HTTP 响应中, 关键的是 <code>Access-Control-Allow-Origin</code> 字段, 表示 <code>http://api.bob.com</code> 可以请求数据, 该字段也可以设置为<code>*</code>, 表示同意跨源请求.</p>
-<p>如果浏览器否定了”预检”请求, 返回一个正常的 HTTP 响应, 但是没有任何 CORS 相关的头信息字段, 这时候浏览器会认为服务器不同意预检请求, 从而触发一个错误, 被 <code>XMLHttpRequest</code> 对象的 <code>onerror</code> 回调函数捕获, 控制台会打印如下报错信息</p>
-<pre>`XMLHttpRequest cannot load http://api.alice.com.
-Origin http://api.bob.com is not allowed by Access-Control-Allow-Origin.
-`</pre>
-
-<p>服务器回应其他 CORES 相关字段如下:</p>
-<pre>`Access-Control-Allow-Methods: GET, POST, PUT
-Access-Control-Allow-Headers: X-Custom-Header
-Access-Control-Allow-Credentials: true
-Access-Control-Max-Age: 1728000
-`</pre>
-
-<h5 id="Access-Control-Allow-Method"><a href="#Access-Control-Allow-Method" class="headerlink" title="Access-Control-Allow-Method"></a>Access-Control-Allow-Method</h5><p>该字段是必须的, 他的值是逗号分隔的一个字符串, 表明服务器支持的跨域请求方式</p>
-<h5 id="Access-Control-Allow-Headers"><a href="#Access-Control-Allow-Headers" class="headerlink" title="Access-Control-Allow-Headers"></a>Access-Control-Allow-Headers</h5><p>如果浏览器包含<code>Access-Control-Request-Headers</code>, 则 <code>Access-Control-Allow-Headers</code> 也是必须的, 其值也是一个逗号分隔的字符串</p>
-<h5 id="Access-Control-Allow-Credentials"><a href="#Access-Control-Allow-Credentials" class="headerlink" title="Access-Control-Allow-Credentials"></a>Access-Control-Allow-Credentials</h5><p>该字段与简单请求时的含义相同</p>
-<h5 id="Access-Control-Max-Age"><a href="#Access-Control-Max-Age" class="headerlink" title="Access-Control-Max-Age"></a>Access-Control-Max-Age</h5><p>该字段可选, 永安里指定本次预检请求的有效期(s), 有效期内发起跨域请求不需要预检请求.</p>
-<h4 id="浏览器的正常请求与回应"><a href="#浏览器的正常请求与回应" class="headerlink" title="浏览器的正常请求与回应"></a>浏览器的正常请求与回应</h4><p>一旦服务器通过”预检”请求, 以后每次浏览器正常的 CORS 请求, 都会和简单请求一样, 有一个<code>Origin</code> 头信息字段, 服务器的回应也会有一个<code>Access-Control-Allow-Origin</code>头信息字段</p>
-<p>“预检”请求之后, 浏览器的正常 CORS 请求</p>
-<pre>`PUT /cors HTTP/1.1
-Origin: http://api.bob.com
-Host: api.alice.com
-X-Custom-Header: value
-Access-Language: en-US
-Connection: keep-alive
-User-Agent: Mozilla/5.0...
-`</pre>
-
-<p>其中<code>Origin</code>字段是浏览器自动添加的</p>
-<p>服务器的正常回应</p>
-<p><pre>`Access-Control-Allow-Origin: <a href="http://api.bob.com" target="_blank" rel="external">http://api.bob.com</a><br>Content-Type: text/html; charset=utf-8</pre></p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2309,7 +2329,7 @@ User-Agent: Mozilla/5.0...
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">154</span>
+                <span class="site-state-item-count">158</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -287,6 +287,1113 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/" itemprop="url">
+                  babel-polyfill 入门
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-04T06:28:06+08:00">
+                2017-02-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>yarn add babel-polyfill
+
+import &apos;babel-polyfill&apos;
+`&lt;/pre&gt;
+
+babel-polyfill 提供了全局访问 API, 如 Promise, Set 以及 Map, 但是 polyfill 提供的 api 可能会污染到全局作用域, 特别在你把代码导报为第三方库给其他人用时, 或者你无法控制代码运行环境时, 都可能存在问题
+
+`babel` 提供了 `transform-runtime` 插件来解决此问题, `transform-runtime` 提供一个沙盒机制来组织全局变量的污染
+
+&gt; 需要注意, transform-runtime 依赖于 babel-runtime
+
+&lt;pre&gt;`# transform-runtime 只应用于开发环境
+yarn add --dev babel-plugin-transform-runtime 
+
+# 其依赖包 babel-runtime 需要打包到生产环境
+yarn add babel-runtime
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// .babelrc
+{
+  &quot;plugins&quot;: [&quot;transform-runtime&quot;]
+}
+
+or
+
+{
+  &quot;plugins&quot;: [
+    [&quot;transform&quot;, {
+      &quot;helpers&quot;: false,
+      &quot;polyfill&quot;: false,
+      &quot;regenerator&quot;: true,
+      &quot;moduleName&quot;: &quot;babel-runtime&quot;,
+      }]
+  ]
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/01/e8-a7-a3-e5-86-b3-commonschunkplugin-e7-9a-84-hash-e5-8f-98-e5-8c-96-e9-97-ae-e9-a2-98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/01/e8-a7-a3-e5-86-b3-commonschunkplugin-e7-9a-84-hash-e5-8f-98-e5-8c-96-e9-97-ae-e9-a2-98/" itemprop="url">
+                  解决 CommonsChunkPlugin 的 hash 变化问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-01T17:32:28+08:00">
+                2017-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="原文"><a href="#原文" class="headerlink" title="原文:"></a>原文:</h3><blockquote>
+<p>Manifest File<br>  But, if we change application code and run webpack again, we see that the hash for the vendor file changes. Even though we achieved separate bundles for vendor and main bundles, we see that the vendor bundle changes when the application code changes. This means that we still don’t reap the benefits of browser caching because the hash for vendor file changes on every build and the browser will have to reload the file.</p>
+<p>  The issue here is that on every build, webpack generates some webpack runtime code, which helps webpack do it’s job. When there is a single bundle, the runtime code resides in it. But when multiple bundles are generated, the runtime code is extracted into the common module, here the vendor file.</p>
+</blockquote>
+<p>To prevent this, we need extract out the runtime into a separate manifest file. Even though we are creating another bundle, the overhead is offset by the long term caching benefits that we obtain on the vendor file.</p>
+<h3 id="非翻译"><a href="#非翻译" class="headerlink" title="非翻译:"></a>非翻译:</h3><p>每次打包时 vendor 文件的 hash 也会变化的原因在于, webpack 打包时必定会产生 runtime code.</p>
+<p>当我们需要打包出 vendor.js 的时候, 尽管公共代码没有变化, 但是 webpack 会生成新的 runtime code 并注入 vendor.js, 导致其 hash 变化.</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h3><p>将 vendor.js 中的 runtime code 单独打包出来, 这样只有 bundle.js 和 runtime code 的 hash 会变化, vendor.js 的代码不会变化.</p>
+<h3 id="具体做法"><a href="#具体做法" class="headerlink" title="具体做法:"></a>具体做法:</h3><pre><code>new webpack.optimize.CommonsChunkPlugin({
+  name: [&apos;vendor&apos;, &apos;manifest&apos;],
+}
+</code></pre><p>这样就可以把 runtime code 打包进 manifest.js, 此后该类操作不会改变 vendor.js 的 hash 了</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/" itemprop="url">
+                  webpack 2 config 文件入门
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-29T11:57:13+08:00">
+                2017-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>webpack 2 config 文件入门</p>
+<h3 id="webpack-config-js-的基本结构"><a href="#webpack-config-js-的基本结构" class="headerlink" title="webpack.config.js 的基本结构"></a>webpack.config.js 的基本结构</h3><pre><code>var path = require(&apos;path&apos;)
+
+module.exports = {
+  entry:  {
+    home: &apos;./home.js&apos;,
+    about: &apos;./about.js&apos;,
+    contact: &apos;./contact.js&apos;,
+  }, // 入口文件
+  // string | [string] | object {&amp;lt;key&amp;gt;: string | [string] }
+  // 一个页面搭配一个入口文件
+  output: {
+    // output 包含一系列关于打包后文件的配置
+    // output.chunkFilename: string, 这个参数确定了加载 chunk 的名称
+    // output.crossOriginLoading: boolean | string, 只在 target 参数指定为 web 的时候使用, 因为此时通过 jsonp 加载模块
+    // crossOriginLoading: false(default) , 禁止跨域加载
+    // crossOriginLoading: &apos;anonymous&apos;, 允许无 credential 的跨域加载
+    // crossOriginLoading: &apos;use-credentials&apos;, 允许有 credential 的跨域加载
+    // 
+    // output.devtoolFallbackModuleFilenameTemplate: string | function(info)
+    // output.hotUpdateChunkFilename: string, 指定热刷新的 chunk 的名称, 仅支持 id 和 hash 占位符
+    // hotUpdateChunkFilename: &apos;[id].[hash].hot-update.js&apos;
+    // output.sourceMapFilename: string, 仅当 devtool 使用 source map 时生效, 默认为[ file].map, 可选占位符有[name], [id], [hash], [chunkhash]
+
+    path: path.resolve(__dirname, &apos;dist&apos;), // 打包后文件存储路径, 必须是绝对路径, 可以用 path 模块生成
+
+    publicPath: /assert/, // 解析文件中相对路径时依赖的根目录
+    // 该字段设定了输出文件的 public Url
+    // 
+    // 默认的, 相对路径会基于 html 文件位置或&amp;lt;base&amp;gt;标签进行解析, 添加 publicPath 后, 各个 loaders 会在每个相对路径前添加 publicPath, 即相对路径基于 publicPath 进行解析
+    // 该值一般以&apos;/&apos;结尾
+    // 默认值为&apos;&apos;
+    // simple rule: 该参数的值为html 页面到 output.path 的相对值
+    // path: path.resolve(__dirname, &apos;public/assets&apos;),
+    // publicPath: &apos;https://cdn.example.com/assets/&apos;,
+    // publicPath 也会对 webpack-dev-server 生效
+    // publicPath: &apos;https://cdn.example.com/assets/&apos; cdn, 并且应该使用 https
+    // publicPath: &apos;//cdn.example.com/assets/&apos;, cdn, 使用相同协议
+    // publicPath: &apos;/assets/&apos;, 相对于服务器根路径
+    // publicPath: &apos;assets/&apos;, 相对于 html 页面
+    // publicPath: &apos;../assets/&apos;, 相对于 html 页面
+    // publicPath: &apos;&apos;, 相对于 html 页面(同一路径)
+
+    filename: &apos;bundle.js&apos;, // 打包后的文件名称
+    // 对于单一入口文件, filename 可以为静态名称&apos;bundle.js&apos;
+    // 对于多入口文件, 可以使用参数生成特定名称
+    // [name], [id], [hash], [chunkhash]
+    // 可以为文件添加路径: &apos;js/[name]/bundle.js&apos;
+
+    library: &apos;MyLibrary&apos;, // 输出库的名称
+
+    libraryTarget: &apos;umd&apos;, // 输出库的类型
+  },
+  module: {
+    // module.noParse: RegExp | [RegExp], 符合正则的字段被 import, require, define 后不会被处理, 可以提高打包速度
+    // noParse: /jquery|lodash/
+    //
+    rules: [
+      // 模块应用规则(loaders, parser 的设定等)
+      // module.rules: array
+      // 一条 Rule 可以分为三部分, Conditions, Results, Nested Rules
+
+      // Conditions, 有两个输入值, 
+      // 1\. The resource: 文件引用的绝对路径经过 resolve 规则解析后的结果
+      // 2\. The issuer: 引用 resource 的模块到文件的绝对路径
+      // 比如, &apos;app.js&apos; 中 &apos;import ./style.css&apos;, resource 是 &apos;/path/to/style.css&apos;, issuer 是 &apos;/path/to/app.js&apos;
+      // 在 rule 中, test, include, exclude 和 resource 作用于resource, 而 issuer 族谱用于 issuer
+
+      // Results
+      // Rule Results 仅在 Rule Conditions 满足时起作用
+      // Rule Results 有二种输出值
+      // Applied Loaders: 一个数组, 其元素是应用于 resource 的 loaders
+      // Parser options: 一个 options 对象, 作为当前 module 的 parser
+      // loader, options, use 用于 loaders,
+      // query, loaders 用于提高兼容性
+      // enforce 属性指定 loader 类型, 可选值有: normal, pre, post
+      // parser 属性影响 parser options
+
+      // Nested Rules
+      // 在 rules 和 oneOf 属性中可以指定 nested rules
+
+      // Rule.enforce: &apos;pre&apos; | &apos;post&apos;, 指定 loader 的类型, 默认为 normal
+      // 还有一种 inline loader 应用于 inline import/require, 
+      // 所有 loaders 按照 post, inline, normal, pre 排序并依次执行
+      // 所有 normal loaders 可以通过在 request 中添加前缀 &apos;!&apos; 进行忽略
+      // 所有 normal 和 pre loaders 可以通过在 request 中添加前缀 &apos;-!&apos; 进行忽略
+      // 所有 normal, post 和 pre loaders 可以通过在 request 前添加 &apos;!!&apos; 进行忽略
+
+      // Rule.exclude
+      // Rule.exclude 是 Rule.resource.exclude 的缩写
+      // 
+      // Rule.include
+      // Rule.include 是 Rule.resource.include 的缩写
+      //
+      // Rule.issuer
+      //
+      // Rule.loader
+      // Rule.loader 是 Rule.use: [{loader}] 的别名
+      // 
+      // Rule.loaders
+      // Rule.loaders 是 Rule.use 的别名, 他的存在仅为了兼容 webpack1, 应使用 Rule.use
+      // 
+      // Rule.oneOf
+      // 一个数组, 其元素为一系列 rules, 仅第一个符合条件的 rule 会起作用
+      // 
+      // Rule.options/ Rule.query
+      // Rule.options 和 Rule.query 都是 Rule.use: [{options}] 的缩写
+      // Rule.query 的存在仅为了兼容 webpack1, 应使用 Rule.options
+      // 
+      // Rule.parser
+      // 一个 parser options 的对象, 所有要使用的 parser options 都集中在此
+      // 每个不同的 parser options 都会创建对应 parser, 并且 plugins 可以根据 parser options 应用.  当 parser options 中没有设置或设置为 true 时, 大部分 plugins 默认只应用他们自己的 parser plugins
+      // parser: {
+      // amd: false, // disable AMD
+      // commonjs: false, // disable CommonJS
+      // harmony: false, // disable ES6 Harmony import/exports
+      // requireInclude: false, // disable require.include
+      // requreEnsure: false, // disable require.ensure
+      // }
+
+      // Rule.resource
+      // Rule.rules, 一个 Rules 组成 的数组
+      // Rule.test, Rule.resource.test 的缩写
+      // Rule.use, 一系列应用于 modules 的 UseEntries, 每一个 entry 指定一个 loader
+      // use: [&apos;style-loader&apos;] 是 use: [{loader: &apos;style-loader&apos;}] 的缩写
+      // 可以链式传入多个 loaders, 从右向左依次执行
+      // use: [
+      //   {loader: &apos;style-loader&apos;},
+      //   {loader: &apos;css-loader&apos;, options: { importLoader: 1}},
+      //   {loader: &apos;less-loader&apos;, options: { noIeCompat: true}},
+      // ]
+
+      // Condition
+      // Condition 可以为以下之一:
+      // String: 比如 exclude: &apos;node_modules&apos;
+      // RegExp: 比如 test: /\.js$/, exclude: /node_modules/
+      // function: 返回 true 或 false
+      // Condition Array: 至少有一个满足时刻认为满足 condition
+      // Object: 所有属性都满足时可认为满足
+      // 
+      // {test: Condition}, {include: Condition}, {exclude: Condition}, {and: [Condition]}, {or: [Condition]}, {not: Condition}
+      // 
+      // UseEntry: object
+      // 该属性必须有一个字符串 loader.
+      // 该属性相对 context 的值解析 loader
+      // 该属性拥有 options 属性, 该属性为 string 或 object, 该属性会作为 loader options 被传给 loader
+      // 考虑到兼容性, 目前仍支持 query 作为 options 的别名
+      // 
+
+      {
+        test: /\.jsx?$/, // 通过正则表达式选择要处理的文件
+        include: [ // 限定文件范围
+          path.resolve(__dirname, &apos;app&apos;)
+        ],
+        exclude: [ // 排除文件范围
+          path.resolve(__dirname, &apos;demo&apos;)
+        ]
+        // 最佳实践
+        // test 中使用正则表达式
+        // include 和 exclude 中使用绝对路径
+        // 优先使用 include 而不是 exclude
+        issuer: { test, include, exclude },
+        // issuer 的应用范围
+        enforce: &apos;pre&apos;,
+        enforce: &apos;post&apos;,
+        loader: &apos;babel-loader&apos;,
+        // 使用 babel-loader 处理符合条件的文件
+        // webpack2 中 -loader 不再可以省略
+        options: {
+          presets: [&apos;es2015&apos;]
+        }
+        // babel-loader 的配置
+      },
+      {
+        test: /\.html$/,
+        use: [
+          // 应用多个 loader 及相关配置
+          &apos;htmllint-loader&apos;,
+          {
+            loader: &apos;html-loader&apos;,
+            options: {
+              // ...
+            }
+          }
+        ]
+      },
+
+      {
+         oneOf: [ /* rules */ ],
+         // 仅应用 rules 数组中的一条规则
+      },
+
+      {
+        rules: [ /* rules */ ],
+        // 应用所有 rules
+      },
+
+      {
+        resource: { and: [ /* conditions */ ]}
+        // 当所有 conditions 都满足时才认为符合条件
+      },
+
+      { resource: { or: [ /* conditions */ ]}, },
+      { resource: [ /* conditions */] },
+      // 当某一 condition 满足时即可认为符合条件
+
+      {
+        resource: { not: /* condition */ }
+        // 当某一 condition 不满足时可认为符合条件
+      }
+    ],
+    // rules 结束
+  },
+  resolve: {
+    // 解析模块 request 时的配置
+    // (不会应用于解析 loader )
+    modules: [
+      &apos;node_modules&apos;,
+      path.resolve(__dirname, &apos;app&apos;)
+    ],
+    // 解析 modules 时的路径
+    extensions: [&apos;.js&apos;, &apos;.json&apos;, &apos;.jsx&apos;, &apos;.css&apos;],
+    // 可以省略的扩展名
+    alias: {
+      // 模块别名
+      // 为 import 或 require 创建别名
+      // Utilities: path.resolve(__dirname, &apos;src/utilities&apos;)
+      // import Utility from &apos;../../utilities/utility&apos; 可以缩写为 
+      // import Utility from &apos;Utilities/utility&apos;
+      // 末尾添加$可以进行精确匹配, 类似正则
+      // 
+      &apos;module&apos;: &apos;new-module&apos;,
+      // 别名 module 可以表示 new-module, 包括文件与路径, 比如 module/path/file 会被解析为 new-module/path/file
+      &apos;only-module$&apos;: &apos;new-module&apos;,
+      // 别名 only-module(处于尾部) 会被解析成 new-module, 因此 module/path/file 不会被解析
+    },
+    // aliasFields: string
+    // 指定一个 field, 比如 browser, 来执行特定的 alias
+    // aliasFields: [&apos;browser&apos;]
+    // 
+    // resolve.descriptionFiles: array
+    // 用于描述的 JSON 文件, 默认为
+    // descriptionFiles: [&apos;package.json&apos;]
+    // 
+    // resolve.enforceExtension: boolean
+    // 如果为 true, webpack 不会处理没有扩展名的文件, 默认为 false, 及允许 require(&apos;./foo&apos;) 这种写法
+    //
+    //resolve.enforceModuleExtension: boolean
+    //默认为 false, 是否允许 modules(loaders) 省略扩展名
+    //
+    //resolve.extensions: array, 自动解析指定的扩展名
+    //默认为
+    // extensions: [&apos;.js&apos;, &apos;.json&apos;]
+    // 因此可以使用 import File from (&apos;../path/to/file&apos;) 这种写法
+    // 
+    // resolve.mainFields: array
+    // 当 import 一个包时, 比如 import * as D3 from &apos;d3&apos;, 这个设置决定package.json中的哪个 field 对应的包的会被检索, 默认值基于 target 的值
+    // 当 target 指定为 webworker, web 或不指定
+    // mainFields: [&apos;browser&apos;, &apos;module&apos;, &apos;main&apos;]
+    // 对于其他 target, 
+    // mainFields [&apos;module&apos;, &apos;main&apos;]
+    // 例如, D3的 package 包括这些 fields
+    // {
+    // ...
+    // main: &apos;build/d3.Node.js&apos;,
+    // browser: &apos;build/d3.js&apos;,
+    // module: &apos;index&apos;
+    // ...
+    // }
+    // 
+    // resolve.mainFiles: array
+    // 这里的 filename 会在解析路径的时候用到, 默认为
+    // mainFiles: [&apos;index&apos;]
+    // 
+    // resolve.modules: array
+    // 限定 webpack 搜索与解析的范围
+    // 可以使用绝对路径偶相对路径, 但是他们的行为有少许不同.
+    // 相对路径的检索方式与 Node 检索 module 相近, 首先检索当前路径及父路径
+    // 绝对路径则只会检索给定路径
+    // 默认值为 modules: [&apos;node_modules&apos;]
+    //
+    // 如果要添加路径, 应当添加在 node_modules 前面
+    // modules: [path.resolve(__dirname, &apos;src&apos;), &apos;node_modules&apos;]
+    // 
+    // resolve.unsafeCache: regex | array | boolean
+    // 默认为 true, 即允许模块缓存, 即使这种行为是不安全的
+    // 
+  },
+
+  performance: {
+    // 此配置决定 webpack 的通知功能
+    // 主要用于对文件尺寸的控制
+    hints: &apos;warning&apos;, // enum
+    // hints: boolean | &apos;error&apos; | &apos;warning&apos;
+    // 设定 webpack 何时显示通知
+    // 默认为 warning
+
+    maxAssetSize: 200000, // int (in bytes)
+    // maxAssetSize: int, 这个选项限制了单个 asset 的尺寸, 默认为250000
+
+    maxEntrypointSize: 400000, // int (in bytes)
+    // maxEntrypointSize: int, 限制初始加载时单个 entry 的最大请求数, 默认为250000
+
+    assetFilter: function (assetFilename) {
+      return assetFilename.endsWith(&apos;.css&apos;) || assetFilename.endsWith(&apos;.js&apos;)
+    }
+    // assetFilter: function, 这个属性允许 webpack 控制使用哪些文件来计算 performance hint, 默认为
+    // function (assertFilename) {
+    //   return !(/\.map$/.test(assetFilename))
+    // }
+    //
+    // 可以自己设定 filter function
+    // assetFilter: function(assetFilename) {
+    //   return assetFilename.endsWith(&apos;.js&apos;)
+    // }
+  },
+
+  devtool: &apos;source-map&apos;, // enum, string | false
+  // 可以提高 debug 的便利性, 但是会影响打包速度
+  // 面向开发有: eval, inline-source-map, eval-source-map, cheap-module-eval-source-map
+  // 面向生产有: source-map, hidden-source-map, cheap-source-map, nosources-source-map
+
+  context: __dirname, // 使用绝对路径
+  // webpack 的根路径, loaders 的配置文件(.babelrc, postcss.config.js)和 entry 都是基于 context 来解析的
+  // 该属性值默认为当前目录, 但是强烈建议书写这一字段, 可以使你的配置文件独立于当前工作目录
+
+  target: &apos;web&apos;, // enum
+  // 打包文件运行环境
+  // webpack 可以针对多个 environment 或 target 编译
+  // target: string, (async-node|electron|electron-renderer|node|node-webkit|web|webworker)
+
+  externals: [&apos;react&apos;, /^@angular\//],
+  // 不必打包的内容
+  // externals: string| RegExp | function | array | object
+  // 例如要使用 jquery 的 cdn, 则可以这样配置
+  // externals: {
+  //   jquery: &apos;jQuery&apos;
+  // }
+  // import $ from &apos;jquery&apos;
+  // 
+  // externals: {
+  //   substract: [&apos;./math&apos;, &apos;substract&apos;]
+  // }
+  // 会形成一个负责结构, ./math 是父模块, 而你的 bundle 仅请求其子模块 substract
+  // 
+  // externals: {
+  //   react: &apos;react&apos;,
+  //   lodash: {
+  //     commonjs: &apos;lodash&apos;,
+  //     amd: &apos;lodash&apos;,
+  //     root: &apos;_&apos;
+  //   }
+  // }
+  // 
+
+  watch: boolean
+  // webpack 可以监控文件并在他们变化时进行重新编译
+  // 默认为 false
+
+  watchOptions: object, 
+  // 配置 watch 的模式
+  // {
+  //   aggregateTimeout: number, 从第一次检测到文件变化到进行重新编译的延迟时间, 这个段时间内的其他变化会被整合进此次编译
+  //   ignored: string | RegExp, 忽视某些文件的变化, 减轻 CPU 负担
+  //   poll: boolean | number, 每隔1000ms 进行一次检测
+  // }
+
+  stats: {
+    // 待补充
+  },
+
+  devServer: {
+    // 这一部分的设置会被 webpack-dev-server 采用
+    contentBase: path.resolve(__dirname, &apos;dist&apos;), // 指定 serve 目录为 dist
+    compress: true, // 开启 gzip 压缩
+    port: 9000, // 指定端口
+    // 当 devServer 启动时, 控制台会打印
+    // http://localhost:9000
+    // webpack result is served from /build/
+    // content is served from dist/
+    // 这几行指出了 server 的位置和 served 内容
+    // 如果你使用了 Node.js API, 那么这部分会被忽略
+    // 
+    // devServer.filename: string, 这个选项可以减少 lazy mode 下的编译次数
+    // 默认的, 在 lazy mode 下, 每一个请求会进行一次新的编译 
+    // 添加 filename 后, devServer 仅在请求 filename 时进行编译, 比如
+    // lazy: true,
+    // filename: bundle.js
+    // 此时, devServer 仅在请求/ bundle.js 时进行编译
+    // filename 仅在 lazy mode 中起作用
+    // devServer.headers: object, 在所有 request 中添加请求头
+    // headers: {
+    //   &apos;X-Custom-Foo&apos;: &apos;bar&apos;
+    // }
+    // 
+    // devServer.historyApiFallback: boolean, object
+    // 当使用 Html5 History Api 时, index.html 可能得到404响应
+    // 
+    // devServer.hot: boolean, 开启 webpack 模块热替换
+    // 
+    // devServer.host - CLI only
+    // 指定 host
+    // 
+    // devServer.https: boolean | object, devServer 默认false, 即使用 http
+    // 
+    // devServer.inline - CLI only
+    // 切换 devServer 的模式, 默认使用 inline 模式, 即脚本会直接注入到你的 bundle 以实现重载, 设置 devServer.inline: false 可以启用 iframe 模式
+    // 
+    // 
+  },
+
+  plugins: [
+    // 待补充
+  ]
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/" itemprop="url">
+                  webpack 2 起步
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-29T07:25:10+08:00">
+                2017-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>虽然和 webpack1 一样, 还是过一遍</p>
+<h3 id="创建一个-bundle"><a href="#创建一个-bundle" class="headerlink" title="创建一个 bundle"></a>创建一个 bundle</h3><pre><code>mkdir webpack-demo &amp;amp;&amp;amp; webpack-demo
+
+npm init -y
+
+yarn add --dev webpack@beta
+
+yarn add lodash
+`&lt;/pre&gt;
+
+#### 创建 app/index.js
+
+&lt;pre&gt;`// app/index.js
+import _ from &apos;lodash&apos;
+function component () {
+  let element = document.createElement(&apos;div&apos;);
+
+// use lodash
+  element.innerHtml = _.join([&apos;Hello&apos;, &apos;webpack&apos;], &apos; &apos;)
+
+  return element
+}
+
+document.body.appendChild(component())
+`&lt;/pre&gt;
+
+#### 创建 index.html
+
+&lt;pre&gt;`&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;webpack 2 demo&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;script src=&quot;public/bundle.js&quot;&amp;gt;&amp;gt;/script&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+`&lt;/pre&gt;
+
+#### 创建打包后文件
+
+&lt;pre&gt;`./node_modules/.bin/webpack app/index.js public/bundle.js
+`&lt;/pre&gt;
+
+webpack 会自动处理包的依赖关系
+
+### 添加配置文件
+
+&lt;pre&gt;`var path = require(&apos;path&apos;)
+
+module.exports = {
+  entry: &apos;./app/index.js&apos;,
+  output: {
+    path: path.resolve(__dirname, &apos;public&apos;),
+    filename: &apos;bundle.js&apos;
+  }
+}
+`&lt;/pre&gt;
+
+通过 webpack 命令行进行打包
+
+&lt;pre&gt;`webpack --config webpack.config.js
+`&lt;/pre&gt;
+
+`webpack` 会默认执行名为 `webpack.config.js` 的配置文件, 因此仅输入`webpack` 即可进行打包
+
+### 通过 yarn 执行打包
+
+在 `yarn init` 生成的 `package.json` 中添加
+
+&lt;pre&gt;`{
+  ...
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;webpack&quot;
+  }
+  ...
+}
+</code></pre><p>即可将<code>webpack</code>指令添加进 yarn 的快捷方式, 此时执行 <code>yarn build</code> 即可打包</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/18/stacking-context-e6-88-90-e5-9b-a0-e5-8f-8a-e7-89-b9-e6-80-a7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1378,740 +2485,6 @@ Promise 构造器接受一个函数作为参数, 传入两个回调函数resolve
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/27/javascript-e4-ba-8b-e4-bb-b6-e4-b8-8e-e6-80-a7-e8-83-bd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/27/javascript-e4-ba-8b-e4-bb-b6-e4-b8-8e-e6-80-a7-e8-83-bd/" itemprop="url">
-                  JavaScript 事件与性能
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-27T16:23:11+08:00">
-                2016-09-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>事件处理程序本质上是一种函数, 是一种对象, 存放在内存中, 设置大量的事件处理程序会使内存中的对象变多, Web 程序的性能会变得越来越差.</p>
-<p>为了更好利用事件处理程序, 出现了<strong>事件委托</strong>, 用来提升性能</p>
-<h3 id="事件委托"><a href="#事件委托" class="headerlink" title="事件委托"></a>事件委托</h3><p>Event Delegate: 把若干个子节点上的相同事件的处理函数绑定到父节点, 从父节点统一处理子节点冒泡上来的事件, 这种技术叫做事件委托.</p>
-<p>举例:</p>
-<pre><code>&amp;lt;ul id=&apos;parent-list&apos;&amp;gt;
-    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
-    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
-    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
-    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
-&amp;lt;/ul&amp;gt;
-`&lt;/pre&gt;
-
-通过父节点监听冒泡事件可以处理子节点上的对应事件
-
-&lt;pre&gt;`var parentList = document.getElementById(&apos;parent-list&apos;);
-parentList.addEventListener(&apos;click&apos;, function(){
-  var target = event.target; // li
-  if(target.nodeName.toLowerCase() === &apos;li&apos;){
-    alert(target.firstChild.nodeValue);
-  }
-}, false)
-</code></pre><p>因为事件委托依赖事件冒泡机制, 所以并不是所有事件都可以委托</p>
-<p>最适合的事件: click, mousedown, mouseup, keydown, keyup, keypress</p>
-<h3 id="移除事件处理程序"><a href="#移除事件处理程序" class="headerlink" title="移除事件处理程序"></a>移除事件处理程序</h3><p>每当将事件处理程序制定给元素时, 运行中的浏览器代码与支持页面交互的 Js 代码之间就会建立一个连接, 这种连接越多, 页面执行越慢</p>
-<p>如果使用完后不再使用的事件处理程序, 应当释放掉<br>```</p>
-<p><button id="button">Submit</button><br>var button = document.getElementById(‘button’);<br>button.onclick = function(){<br>  button.onclick = null;<br>  event.target.firstChild.nodeValue = “Submitting”<br>}</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/27/javascript-e5-81-9c-e6-ad-a2-e5-86-92-e6-b3-a1-e5-92-8c-e9-98-bb-e6-ad-a2-e6-b5-8f-e8-a7-88-e5-99-a8-e9-bb-98-e8-ae-a4-e8-a1-8c-e4-b8-ba/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/27/javascript-e5-81-9c-e6-ad-a2-e5-86-92-e6-b3-a1-e5-92-8c-e9-98-bb-e6-ad-a2-e6-b5-8f-e8-a7-88-e5-99-a8-e9-bb-98-e8-ae-a4-e8-a1-8c-e4-b8-ba/" itemprop="url">
-                  JavaScript 停止冒泡和阻止浏览器默认行为
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-27T15:25:00+08:00">
-                2016-09-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="事件兼容"><a href="#事件兼容" class="headerlink" title="事件兼容"></a>事件兼容</h3><pre><code>function myFn(e){
-  var evt = e ? e:window.event
-}
-`&lt;/pre&gt;
-
-### JS 停止冒泡
-
-&lt;pre&gt;`function myFn(e){
-  window.event ? window.event.cancelBubble = true : e.stopPropagation();
-}
-`&lt;/pre&gt;
-
-### JS 阻止默认行为
-
-&lt;pre&gt;`function myFn(e){
-  window.event ? window.event.returnValue = false : e.preventDefault();
-}
-</code></pre><h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>event 表示事件的状态, 例如, event.target 是触发事件的对象</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/koa-router/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/19/koa-router/" itemprop="url">
-                  koa-router
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T04:35:48+08:00">
-                2016-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ul>
-<li>Express 式路由使用<code>app.get</code>, <code>app.put</code>, <code>app.post</code> 等</li>
-<li>Named URL parameters and regexp captures</li>
-<li>String or regular expression route matching</li>
-<li>Named Routes with URL generation</li>
-<li>Responds to <code>OPTIONS</code> request with allowed methods</li>
-<li>Support for <code>405 Method Not Allowed</code> and <code>501 Not Implemented</code></li>
-<li>Multiple route middleware</li>
-<li>Multiple routers</li>
-</ul>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre><code>npm install koa-router
-`&lt;/pre&gt;
-
-### 使用
-
-&lt;pre&gt;`var koa = require(&quot;koa&quot;),
-    router = require(&quot;koa-router&quot;),
-    app = koa();
-
-app.use(router(app))
-`&lt;/pre&gt;
-
-After the router has been initialized you can register routes:
-
-&lt;pre&gt;`app.get(&quot;/users/:id&quot;, function*(next){
-  var user = yield User.findOne(this.params.id);
-  this.body = user;
-});
-`&lt;/pre&gt;
-
-### 多路由
-
-You can use multiple routers and sets of routes by omitting the `app` argument. For example, separate routes for two versions of an API:
-
-&lt;pre&gt;`var koa = require(&quot;koa&quot;),
-    mount = require(&quot;mount&quot;),
-    Router = require(&quot;koa-router&quot;);
-
-var app = koa();
-
-var APIv1 = new Router();
-var APIv2 = new Router();
-
-APIv1.get(&quot;/sign-in&quot;, function*(){
-  // ...
-})
-APIv2.get(&quot;/sign-in&quot;, function*(){
-  // ...
-})
-
-app.use(mount(&quot;/v1&quot;, APIv1.middleware())).use(mount(&quot;/v2&quot;, APIv2.middleware()));
-`&lt;/pre&gt;
-
-### 链
-
-The http methods(get, post, etc) return their `Router` instance, so routes can be chained as you&apos;re used to with express:
-
-&lt;pre&gt;`var api = new Router();
-
-api.get(&quot;/foo&quot;, showFoo).get(&quot;/bar&quot;, showBar).post(&quot;/foo&quot;, createFoo)
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/" itemprop="url">
-                  编写 Koa 中间件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T03:23:36+08:00">
-                2016-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Koa middlewares are simple function which return a <code>GeneratorFunction</code>, and accept another (middleware). When the middleware is run by an “upstream” middleware, it must manually <code>yield</code> to the “downstream” middleware.</p>
-<p>For example if you wanted to track how long it takes for a request to propagate through Koa by adding an <code>x-Response-Time</code> header field the middleware would look like the following:</p>
-<pre><code>function *responseTime(next){
-  var start = new Date;
-  yield next;
-  var ms = new Date - start;
-  this.set(&quot;X-Response-Time&quot;, ms+&quot;ms&quot;);
-}
-app.use(responseTime);
-`&lt;/pre&gt;
-
-Here is another way to write the same thing, inline:
-
-&lt;pre&gt;`app.use(function *(next){
-  var start = new Date;
-  yield next;
-  var ms = new Date - start;
-  this.set(&quot;X-Response-Time&quot;, ms+&quot;ms&quot;);
-});
-`&lt;/pre&gt;
-
-### 中间件最佳实践
-
-Imcluding Middleware accepting options, named middleware for debugging, among others
-
-#### 中间件选项
-
-When creating public middleware it&apos;s useful to conform to the convention of wrapping the middleware in a function that accepts options, allowing users to extend functionality. Even if your middleware accepts no options, this is still a good idea to keep things uniform.
-
-Here our contrived `logger` middleware accepts a `format` string for customization, and returns the middleware itself:
-
-&lt;pre&gt;`function logger(format){
-  format = format || &quot;:method\&quot;:url\&quot;&quot;;
-  return function*(next){
-    var str = format.replace(&quot;:method&quot;, this.method).replace(&quot;:url&quot;, this.url);
-    console.log(str);
-    yield next;
-  }
-}
-`&lt;/pre&gt;
-
-app.use(logger());
-app.use(logger(&quot;:method:url&quot;))
-
-&lt;pre&gt;`
-### 命名中间件
-Naming middlewares is optional, however it&apos;s useful for debugging purpose to assign a name
-`&lt;/pre&gt;
-
-function logger(format){
-  return function *logger(next){
-    // ...
-  }
-}
-
-&lt;pre&gt;`### 结合多个中间件
-Sometimes you want to &quot;compose&quot; multiple middleware into a single middleware for easy re-use or exporting. To do so, you may chain them together with `.call(this, next)`, then return another function that yields the chain
-</code></pre><p>function _random(next) {<br>  if (‘/random’ == this.path) {<br>    this.body = Math.floor(Math.random()_10);<br>  } else {<br>    yield next;<br>  }<br>};</p>
-<p>function *backwards(next) {<br>  if (‘/backwards’ == this.path) {<br>    this.body = ‘sdrawkcab’;<br>  } else {<br>    yield next;<br>  }<br>}</p>
-<p>function *pi(next) {<br>  if (‘/pi’ == this.path) {<br>    this.body = String(Math.PI);<br>  } else {<br>    yield next;<br>  }<br>}</p>
-<p>function *all(next) {<br>  yield random.call(this, backwards.call(this, pi.call(this, next)));<br>}</p>
-<p>app.use(all);<br>```</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2161,7 +2534,7 @@ Sometimes you want to &quot;compose&quot; multiple middleware into a single midd
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">154</span>
+                <span class="site-state-item-count">158</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

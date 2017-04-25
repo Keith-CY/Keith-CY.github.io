@@ -287,7 +287,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/14/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/25/node-inspector-s-crash/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chen Yu">
@@ -309,8 +309,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/04/14/hello-world/" itemprop="url">
-                  Hello World
+                <a class="post-title-link" href="/2017/04/25/node-inspector-s-crash/" itemprop="url">
+                  node-inspector's crash
                 </a>
               
             
@@ -326,8 +326,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-14T14:34:15+08:00">
-                2017-04-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-25T12:23:55+08:00">
+                2017-04-25
               </time>
             
 
@@ -364,15 +364,672 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+            <p>I had encountered a problem using <code>node-inspector</code> with info</p>
+<blockquote>
+<p>cb(error, NM[0].ref); Cannot read property ‘ref’ of undefined</p>
+</blockquote>
+<p>And one method to resolve it is to modify the packagge</p>
+<blockquote>
+<p>Same issue with node v6.5.0 can be solved like this :</p>
+<p>Edit …\node_modules\node-inspector\lib\InjectorClient.js file at line 111 if(NM.length &gt; 0) cb(error, NM[0].ref);</p>
+<p>It works</p>
+</blockquote>
+<p>which is hack, and another method is without side-effect</p>
+<blockquote>
+<p>use the local node-inspector</p>
+</blockquote>
+<p>hope it helps</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/21/Usage-of-Chai/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/21/Usage-of-Chai/" itemprop="url">
+                  Usage of Chai
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-21T13:22:32+08:00">
+                2017-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Chains"><a href="#Chains" class="headerlink" title="Chains"></a>Chains</h1><ul>
+<li>to</li>
+<li>be</li>
+<li>been</li>
+<li>is</li>
+<li>that</li>
+<li>which</li>
+<li>and</li>
+<li>has</li>
+<li>have</li>
+<li>with</li>
+<li>at</li>
+<li>of</li>
+<li>same</li>
+</ul>
+<h1 id="not"><a href="#not" class="headerlink" title="not"></a>not</h1><blockquote>
+<p>negative any of assertions following in the Chains</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(foo).to.not.equal(<span class="string">'bar'</span>)</div></pre></td></tr></table></figure>
+<h1 id="deep"><a href="#deep" class="headerlink" title="deep"></a>deep</h1><blockquote>
+<p>set the <code>deep</code> flag, later used by the <code>equal</code> and <code>property</code> assertions</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(foo).to.deep.equal(&#123;<span class="attr">bar</span>: <span class="string">'bar'</span>&#125;)</div></pre></td></tr></table></figure>
+<h1 id="any"><a href="#any" class="headerlink" title="any"></a>any</h1><blockquote>
+<p>set the <code>any</code> flag, (opposite of the <code>all</code> flag), later used in the <code>keys</code> assertion</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(foo).to.have.any.keys(<span class="string">'bar'</span>, <span class="string">'foo'</span>)</div></pre></td></tr></table></figure>
+<h1 id="all"><a href="#all" class="headerlink" title="all"></a>all</h1><blockquote>
+<p>set the <code>all</code> flag, (opposite of the <code>any</code> flag), later used by the <code>keys</code> assertions</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(foo).to.have.all.keys(<span class="string">'bar'</span>, <span class="string">'foo'</span>)</div></pre></td></tr></table></figure>
+<h1 id="a-type"><a href="#a-type" class="headerlink" title="a(type)"></a>a(type)</h1><ul>
+<li>@param {String} type</li>
+<li>@param {String} message [optional]</li>
+</ul>
+<blockquote>
+<p>The <code>a</code> and <code>an</code> assertion are aliases that can be used either as language chains or to assert a value’s type</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// typeof</span></div><div class="line">expect(<span class="string">'test'</span>).to.be.a(<span class="string">'string'</span>)</div><div class="line"><span class="comment">// language chain</span></div><div class="line">expect(foo).to.be.an.instanceof(Foo)</div></pre></td></tr></table></figure>
+<h1 id="include-value"><a href="#include-value" class="headerlink" title="include(value)"></a>include(value)</h1><ul>
+<li>@param {Object | String | Number} obj</li>
+<li>@param {String} message [optional]</li>
+</ul>
+<blockquote>
+<p>The <code>include</code> and <code>contain</code> assertion can be used as either property based language chains or methods to assert the inclusion of an object in an array or a substring in a string.</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">expect([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).to.include(<span class="number">2</span>)</div><div class="line">expect(<span class="string">'foobar'</span>).to.contain(<span class="string">'foo'</span>)</div><div class="line">expect(&#123; <span class="attr">foo</span>: <span class="string">'foo'</span>, <span class="attr">bar</span>: <span class="string">'bar'</span> &#125;).to.include.keys(<span class="string">'foo'</span>)</div></pre></td></tr></table></figure>
+<h1 id="ok"><a href="#ok" class="headerlink" title="ok"></a>ok</h1><blockquote>
+<p>Assert that the target is truthy</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">expect(<span class="string">'everything'</span>).to.be.ok</div><div class="line">expect(<span class="literal">undefined</span>).to.not.be.ok</div></pre></td></tr></table></figure>
+<h1 id="true"><a href="#true" class="headerlink" title="true"></a>true</h1><blockquote>
+<p>Assert that the target is <code>true</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">expect(<span class="literal">true</span>).to.be.true</div><div class="line">expect(<span class="number">1</span>).to.be.true</div></pre></td></tr></table></figure>
+<h1 id="false"><a href="#false" class="headerlink" title="false"></a>false</h1><blockquote>
+<p>Assert that the target is <code>false</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">expect(<span class="literal">false</span>).to.be.false</div><div class="line">expect(<span class="number">0</span>).to.be.false</div></pre></td></tr></table></figure>
+<h1 id="null"><a href="#null" class="headerlink" title="null"></a>null</h1><blockquote>
+<p>Assert that the target to be <code>null</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="literal">null</span>).to.be.null</div></pre></td></tr></table></figure>
+<h1 id="undefined"><a href="#undefined" class="headerlink" title="undefined"></a>undefined</h1><blockquote>
+<p>Assert that the target is <code>undefined</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="literal">undefined</span>).to.be.undefined</div></pre></td></tr></table></figure>
+<h1 id="NaN"><a href="#NaN" class="headerlink" title="NaN"></a>NaN</h1><blockquote>
+<p>Assert that the target is <code>NaN</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="string">'foo'</span>).to.be.NaN</div></pre></td></tr></table></figure>
+<h1 id="exist"><a href="#exist" class="headerlink" title="exist"></a>exist</h1><blockquote>
+<p>Assert that the target is neither <code>null</code> nor <code>undefined</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="string">'foo'</span>).to.be.exist</div></pre></td></tr></table></figure>
+<h1 id="empty"><a href="#empty" class="headerlink" title="empty"></a>empty</h1><blockquote>
+<p>Assert that the target’s length is 0. For Array and String, it will check the length of propertes. For Object, it will check the length of enumerable keys</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect([]).to.be.empty</div></pre></td></tr></table></figure>
+<h1 id="arguments"><a href="#arguments" class="headerlink" title="arguments"></a>arguments</h1><blockquote>
+<p>Assert that the target is an arguments object</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  expect(<span class="built_in">arguments</span>).to.be.arguments</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="equal-value"><a href="#equal-value" class="headerlink" title="equal(value)"></a>equal(value)</h1><ul>
+<li>@param {Mixed} value</li>
+<li>@param {String} message [optional]</li>
+</ul>
+<blockquote>
+<p>Assert that the target is strictly equal(===) to <code>value</code>. Alternately, if the <code>.deep</code> flag is set, assert that the target is deeply equal to <code>value</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">expect(<span class="string">'hello'</span>).to.equal(<span class="string">'hello'</span>)</div><div class="line">expect(&#123;<span class="attr">foo</span>: <span class="string">'foo'</span>&#125;).to.deep.equal(&#123;<span class="attr">foo</span>: <span class="string">'foo'</span>&#125;)</div></pre></td></tr></table></figure>
+<h1 id="eql-value"><a href="#eql-value" class="headerlink" title="eql(value)"></a>eql(value)</h1><ul>
+<li>@param {Mixed} value</li>
+<li>@param {String} message [optional]</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(&#123;<span class="attr">foo</span>: <span class="string">'foo'</span>&#125;).to.eql(&#123;<span class="attr">foo</span>: <span class="string">'foo'</span>&#125;)</div></pre></td></tr></table></figure>
+<h1 id="above-value"><a href="#above-value" class="headerlink" title="above(value)"></a>above(value)</h1><ul>
+<li>@param {Number} value</li>
+<li>@param {String} message [optional]</li>
+</ul>
+<blockquote>
+<p>Assert that the target is greater than <code>value</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="number">10</span>).to.be.above(<span class="number">5</span>)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Can also be used in conjunction with <code>length</code> to assert a minimum length.</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="string">'foo'</span>).to.have.length.above(<span class="number">2</span>)</div></pre></td></tr></table></figure>
+<h1 id="least-value"><a href="#least-value" class="headerlink" title="least(value)"></a>least(value)</h1><ul>
+<li>@param {Number} value</li>
+<li>@param {String} message [optional]</li>
+</ul>
+<blockquote>
+<p>Assert that the target is greater than or equal to <code>value</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="number">10</span>).to.be.at.least(<span class="number">10</span>)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>used for length too</p>
+</blockquote>
+<h1 id="below-value"><a href="#below-value" class="headerlink" title="below(value)"></a>below(value)</h1><ul>
+<li>@param {Number} value</li>
+<li>@param {String} message [optinal]</li>
+</ul>
+<blockquote>
+<p>Assert that the target is less than <code>value</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="number">5</span>).to.be.below(<span class="number">10</span>)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>used for length too</p>
+</blockquote>
+<h1 id="most-value"><a href="#most-value" class="headerlink" title="most(value)"></a>most(value)</h1><ul>
+<li>@param {Number} value</li>
+<li>@param {String} message [optinal]</li>
+</ul>
+<blockquote>
+<p>Assert that the target is less than or equal to <code>value</code></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="number">5</span>).to.be.at.most(<span class="number">5</span>)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>used for length o</p>
+</blockquote>
+<h1 id="within-start-finish"><a href="#within-start-finish" class="headerlink" title="within(start, finish)"></a>within(start, finish)</h1><ul>
+<li>@param {Number} start lowerbound inclusive</li>
+<li>@param {Number} finish upperbound inclusive</li>
+<li>@param {String} message [optional]</li>
+</ul>
+<blockquote>
+<p>Assert that the target is within a range</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">expect(<span class="number">28</span>).to.be.within(<span class="number">2</span>, <span class="number">30</span>)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>used for length too</p>
+</blockquote>
+<h1 id="instanceof-constructor"><a href="#instanceof-constructor" class="headerlink" title="instanceof(constructor)"></a>instanceof(constructor)</h1><ul>
+<li>@param {Constructor} constructor</li>
+<li>@param {String} message [optional]</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Tea = <span class="function"><span class="keyword">function</span> (<span class="params">name</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.name = name,</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> Chai = <span class="keyword">new</span> Tea(<span class="string">'chai'</span>)</div><div class="line"></div><div class="line">expect(Chai).to.be.an.instanceof(Tea)</div><div class="line">expect([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]).to.be.an.instanceof(<span class="built_in">Array</span>)</div></pre></td></tr></table></figure>
+<h1 id="property-name-value"><a href="#property-name-value" class="headerlink" title="property(name[, value])"></a>property(name[, value])</h1><ul>
+<li>@param {String} name</li>
+<li>@param {Mixed} value [optional]</li>
+<li>@param {String} message [optional]</li>
+</ul>
+<blockquote>
+<p>Assert that the target has a property <code>name</code>, optionally asserting that the value of that property is strictly equal to <code>value</code>. If the <code>deep</code> flag is set, you can use dot- and bracket-notation for deep reference into objects and arrays.</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">expect(obj).to.have.property(<span class="string">'foo'</span>)</div><div class="line">expect(obj).to.have.property(<span class="string">'foo'</span>, <span class="string">'bar'</span>)</div></pre></td></tr></table></figure>
+<h2 id="to-be-continued"><a href="#to-be-continued" class="headerlink" title="to be continued"></a>to be continued</h2>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/20/AVA-Usage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/20/AVA-Usage/" itemprop="url">
+                  AVA Usage
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-20T23:50:43+08:00">
+                2017-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="测试语法"><a href="#测试语法" class="headerlink" title="测试语法"></a>测试语法</h1><p>``` import test from ‘ava’</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/20/Usage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/20/Usage/" itemprop="url">
+                  Usage
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-20T23:47:12+08:00">
+                2017-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/17/用-javascript-实现选中粘贴/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/17/用-javascript-实现选中粘贴/" itemprop="url">
+                  用 javascript 实现选中粘贴
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-17T01:27:41+08:00">
+                2017-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>为了对付单位愚蠢的每日工作总结的要求, 写了一个小脚本来导出任务管理器里的内容到剪贴板, 于是接触了一下纯 javascript 实现复制到剪贴板功能</p>
+<p>代码先行贴出</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">    'use strict'</span>;</div><div class="line">    <span class="keyword">if</span> (<span class="string">'your_url'</span>)&#123;</div><div class="line">        <span class="keyword">var</span> issueList = <span class="built_in">document</span>.querySelectorAll(<span class="string">'.issue-list li'</span>);</div><div class="line">        <span class="keyword">var</span> taskList = [];</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>, len = issueList.length; i &lt; len; i++)&#123;</div><div class="line">            <span class="keyword">var</span> key = issueList[i].getAttribute(<span class="string">'data-key'</span>);</div><div class="line">            <span class="keyword">var</span> title = issueList[i].getAttribute(<span class="string">'title'</span>);</div><div class="line">            <span class="keyword">var</span> task = <span class="string">'已完成: '</span>+key+<span class="string">'-'</span>+title;</div><div class="line">            taskList.push(task);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> text = taskList.join(<span class="string">'\n'</span>);</div><div class="line">        <span class="keyword">var</span> clipboard = <span class="built_in">document</span>.createElement(<span class="string">'textarea'</span>);</div><div class="line">        clipboard.style.width = <span class="string">'100%'</span>;</div><div class="line">        clipboard.style.height = <span class="string">'300px'</span>;</div><div class="line">        clipboard.value = text;</div><div class="line">        <span class="keyword">var</span> listPanel = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'list-panel'</span>)[<span class="number">0</span>];</div><div class="line">        listPanel.appendChild(clipboard);</div><div class="line">        <span class="keyword">var</span> today = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</div><div class="line">        today.style.width = <span class="string">'100%'</span>;</div><div class="line">        today.innerText = <span class="string">'Today'</span>;</div><div class="line">        listPanel.appendChild(today);</div><div class="line">        today.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="built_in">window</span>.location.href = <span class="string">'url_to_today'</span>;</div><div class="line">        &#125;);</div><div class="line">        <span class="keyword">var</span> button = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</div><div class="line">        button.style.width = <span class="string">'100%'</span>;</div><div class="line">        button.innerText = <span class="string">'copy to clipboard'</span>;</div><div class="line">        listPanel.appendChild(button);</div><div class="line">        button.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">          clipboard.select();</div><div class="line">          <span class="built_in">document</span>.execCommand(<span class="string">'copy'</span>);</div><div class="line">          clipboard.blur();</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
 
           
         
@@ -1312,1113 +1969,6 @@ Example:
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/" itemprop="url">
-                  babel-polyfill 入门
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-04T06:28:06+08:00">
-                2017-02-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <pre><code>yarn add babel-polyfill
-
-import &apos;babel-polyfill&apos;
-`&lt;/pre&gt;
-
-babel-polyfill 提供了全局访问 API, 如 Promise, Set 以及 Map, 但是 polyfill 提供的 api 可能会污染到全局作用域, 特别在你把代码导报为第三方库给其他人用时, 或者你无法控制代码运行环境时, 都可能存在问题
-
-`babel` 提供了 `transform-runtime` 插件来解决此问题, `transform-runtime` 提供一个沙盒机制来组织全局变量的污染
-
-&gt; 需要注意, transform-runtime 依赖于 babel-runtime
-
-&lt;pre&gt;`# transform-runtime 只应用于开发环境
-yarn add --dev babel-plugin-transform-runtime 
-
-# 其依赖包 babel-runtime 需要打包到生产环境
-yarn add babel-runtime
-`&lt;/pre&gt;
-
-&lt;pre&gt;`// .babelrc
-{
-  &quot;plugins&quot;: [&quot;transform-runtime&quot;]
-}
-
-or
-
-{
-  &quot;plugins&quot;: [
-    [&quot;transform&quot;, {
-      &quot;helpers&quot;: false,
-      &quot;polyfill&quot;: false,
-      &quot;regenerator&quot;: true,
-      &quot;moduleName&quot;: &quot;babel-runtime&quot;,
-      }]
-  ]
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/01/e8-a7-a3-e5-86-b3-commonschunkplugin-e7-9a-84-hash-e5-8f-98-e5-8c-96-e9-97-ae-e9-a2-98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/02/01/e8-a7-a3-e5-86-b3-commonschunkplugin-e7-9a-84-hash-e5-8f-98-e5-8c-96-e9-97-ae-e9-a2-98/" itemprop="url">
-                  解决 CommonsChunkPlugin 的 hash 变化问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-01T17:32:28+08:00">
-                2017-02-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="原文"><a href="#原文" class="headerlink" title="原文:"></a>原文:</h3><blockquote>
-<p>Manifest File<br>  But, if we change application code and run webpack again, we see that the hash for the vendor file changes. Even though we achieved separate bundles for vendor and main bundles, we see that the vendor bundle changes when the application code changes. This means that we still don’t reap the benefits of browser caching because the hash for vendor file changes on every build and the browser will have to reload the file.</p>
-<p>  The issue here is that on every build, webpack generates some webpack runtime code, which helps webpack do it’s job. When there is a single bundle, the runtime code resides in it. But when multiple bundles are generated, the runtime code is extracted into the common module, here the vendor file.</p>
-</blockquote>
-<p>To prevent this, we need extract out the runtime into a separate manifest file. Even though we are creating another bundle, the overhead is offset by the long term caching benefits that we obtain on the vendor file.</p>
-<h3 id="非翻译"><a href="#非翻译" class="headerlink" title="非翻译:"></a>非翻译:</h3><p>每次打包时 vendor 文件的 hash 也会变化的原因在于, webpack 打包时必定会产生 runtime code.</p>
-<p>当我们需要打包出 vendor.js 的时候, 尽管公共代码没有变化, 但是 webpack 会生成新的 runtime code 并注入 vendor.js, 导致其 hash 变化.</p>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h3><p>将 vendor.js 中的 runtime code 单独打包出来, 这样只有 bundle.js 和 runtime code 的 hash 会变化, vendor.js 的代码不会变化.</p>
-<h3 id="具体做法"><a href="#具体做法" class="headerlink" title="具体做法:"></a>具体做法:</h3><pre><code>new webpack.optimize.CommonsChunkPlugin({
-  name: [&apos;vendor&apos;, &apos;manifest&apos;],
-}
-</code></pre><p>这样就可以把 runtime code 打包进 manifest.js, 此后该类操作不会改变 vendor.js 的 hash 了</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/" itemprop="url">
-                  webpack 2 config 文件入门
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-29T11:57:13+08:00">
-                2017-01-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>webpack 2 config 文件入门</p>
-<h3 id="webpack-config-js-的基本结构"><a href="#webpack-config-js-的基本结构" class="headerlink" title="webpack.config.js 的基本结构"></a>webpack.config.js 的基本结构</h3><pre><code>var path = require(&apos;path&apos;)
-
-module.exports = {
-  entry:  {
-    home: &apos;./home.js&apos;,
-    about: &apos;./about.js&apos;,
-    contact: &apos;./contact.js&apos;,
-  }, // 入口文件
-  // string | [string] | object {&amp;lt;key&amp;gt;: string | [string] }
-  // 一个页面搭配一个入口文件
-  output: {
-    // output 包含一系列关于打包后文件的配置
-    // output.chunkFilename: string, 这个参数确定了加载 chunk 的名称
-    // output.crossOriginLoading: boolean | string, 只在 target 参数指定为 web 的时候使用, 因为此时通过 jsonp 加载模块
-    // crossOriginLoading: false(default) , 禁止跨域加载
-    // crossOriginLoading: &apos;anonymous&apos;, 允许无 credential 的跨域加载
-    // crossOriginLoading: &apos;use-credentials&apos;, 允许有 credential 的跨域加载
-    // 
-    // output.devtoolFallbackModuleFilenameTemplate: string | function(info)
-    // output.hotUpdateChunkFilename: string, 指定热刷新的 chunk 的名称, 仅支持 id 和 hash 占位符
-    // hotUpdateChunkFilename: &apos;[id].[hash].hot-update.js&apos;
-    // output.sourceMapFilename: string, 仅当 devtool 使用 source map 时生效, 默认为[ file].map, 可选占位符有[name], [id], [hash], [chunkhash]
-
-    path: path.resolve(__dirname, &apos;dist&apos;), // 打包后文件存储路径, 必须是绝对路径, 可以用 path 模块生成
-
-    publicPath: /assert/, // 解析文件中相对路径时依赖的根目录
-    // 该字段设定了输出文件的 public Url
-    // 
-    // 默认的, 相对路径会基于 html 文件位置或&amp;lt;base&amp;gt;标签进行解析, 添加 publicPath 后, 各个 loaders 会在每个相对路径前添加 publicPath, 即相对路径基于 publicPath 进行解析
-    // 该值一般以&apos;/&apos;结尾
-    // 默认值为&apos;&apos;
-    // simple rule: 该参数的值为html 页面到 output.path 的相对值
-    // path: path.resolve(__dirname, &apos;public/assets&apos;),
-    // publicPath: &apos;https://cdn.example.com/assets/&apos;,
-    // publicPath 也会对 webpack-dev-server 生效
-    // publicPath: &apos;https://cdn.example.com/assets/&apos; cdn, 并且应该使用 https
-    // publicPath: &apos;//cdn.example.com/assets/&apos;, cdn, 使用相同协议
-    // publicPath: &apos;/assets/&apos;, 相对于服务器根路径
-    // publicPath: &apos;assets/&apos;, 相对于 html 页面
-    // publicPath: &apos;../assets/&apos;, 相对于 html 页面
-    // publicPath: &apos;&apos;, 相对于 html 页面(同一路径)
-
-    filename: &apos;bundle.js&apos;, // 打包后的文件名称
-    // 对于单一入口文件, filename 可以为静态名称&apos;bundle.js&apos;
-    // 对于多入口文件, 可以使用参数生成特定名称
-    // [name], [id], [hash], [chunkhash]
-    // 可以为文件添加路径: &apos;js/[name]/bundle.js&apos;
-
-    library: &apos;MyLibrary&apos;, // 输出库的名称
-
-    libraryTarget: &apos;umd&apos;, // 输出库的类型
-  },
-  module: {
-    // module.noParse: RegExp | [RegExp], 符合正则的字段被 import, require, define 后不会被处理, 可以提高打包速度
-    // noParse: /jquery|lodash/
-    //
-    rules: [
-      // 模块应用规则(loaders, parser 的设定等)
-      // module.rules: array
-      // 一条 Rule 可以分为三部分, Conditions, Results, Nested Rules
-
-      // Conditions, 有两个输入值, 
-      // 1\. The resource: 文件引用的绝对路径经过 resolve 规则解析后的结果
-      // 2\. The issuer: 引用 resource 的模块到文件的绝对路径
-      // 比如, &apos;app.js&apos; 中 &apos;import ./style.css&apos;, resource 是 &apos;/path/to/style.css&apos;, issuer 是 &apos;/path/to/app.js&apos;
-      // 在 rule 中, test, include, exclude 和 resource 作用于resource, 而 issuer 族谱用于 issuer
-
-      // Results
-      // Rule Results 仅在 Rule Conditions 满足时起作用
-      // Rule Results 有二种输出值
-      // Applied Loaders: 一个数组, 其元素是应用于 resource 的 loaders
-      // Parser options: 一个 options 对象, 作为当前 module 的 parser
-      // loader, options, use 用于 loaders,
-      // query, loaders 用于提高兼容性
-      // enforce 属性指定 loader 类型, 可选值有: normal, pre, post
-      // parser 属性影响 parser options
-
-      // Nested Rules
-      // 在 rules 和 oneOf 属性中可以指定 nested rules
-
-      // Rule.enforce: &apos;pre&apos; | &apos;post&apos;, 指定 loader 的类型, 默认为 normal
-      // 还有一种 inline loader 应用于 inline import/require, 
-      // 所有 loaders 按照 post, inline, normal, pre 排序并依次执行
-      // 所有 normal loaders 可以通过在 request 中添加前缀 &apos;!&apos; 进行忽略
-      // 所有 normal 和 pre loaders 可以通过在 request 中添加前缀 &apos;-!&apos; 进行忽略
-      // 所有 normal, post 和 pre loaders 可以通过在 request 前添加 &apos;!!&apos; 进行忽略
-
-      // Rule.exclude
-      // Rule.exclude 是 Rule.resource.exclude 的缩写
-      // 
-      // Rule.include
-      // Rule.include 是 Rule.resource.include 的缩写
-      //
-      // Rule.issuer
-      //
-      // Rule.loader
-      // Rule.loader 是 Rule.use: [{loader}] 的别名
-      // 
-      // Rule.loaders
-      // Rule.loaders 是 Rule.use 的别名, 他的存在仅为了兼容 webpack1, 应使用 Rule.use
-      // 
-      // Rule.oneOf
-      // 一个数组, 其元素为一系列 rules, 仅第一个符合条件的 rule 会起作用
-      // 
-      // Rule.options/ Rule.query
-      // Rule.options 和 Rule.query 都是 Rule.use: [{options}] 的缩写
-      // Rule.query 的存在仅为了兼容 webpack1, 应使用 Rule.options
-      // 
-      // Rule.parser
-      // 一个 parser options 的对象, 所有要使用的 parser options 都集中在此
-      // 每个不同的 parser options 都会创建对应 parser, 并且 plugins 可以根据 parser options 应用.  当 parser options 中没有设置或设置为 true 时, 大部分 plugins 默认只应用他们自己的 parser plugins
-      // parser: {
-      // amd: false, // disable AMD
-      // commonjs: false, // disable CommonJS
-      // harmony: false, // disable ES6 Harmony import/exports
-      // requireInclude: false, // disable require.include
-      // requreEnsure: false, // disable require.ensure
-      // }
-
-      // Rule.resource
-      // Rule.rules, 一个 Rules 组成 的数组
-      // Rule.test, Rule.resource.test 的缩写
-      // Rule.use, 一系列应用于 modules 的 UseEntries, 每一个 entry 指定一个 loader
-      // use: [&apos;style-loader&apos;] 是 use: [{loader: &apos;style-loader&apos;}] 的缩写
-      // 可以链式传入多个 loaders, 从右向左依次执行
-      // use: [
-      //   {loader: &apos;style-loader&apos;},
-      //   {loader: &apos;css-loader&apos;, options: { importLoader: 1}},
-      //   {loader: &apos;less-loader&apos;, options: { noIeCompat: true}},
-      // ]
-
-      // Condition
-      // Condition 可以为以下之一:
-      // String: 比如 exclude: &apos;node_modules&apos;
-      // RegExp: 比如 test: /\.js$/, exclude: /node_modules/
-      // function: 返回 true 或 false
-      // Condition Array: 至少有一个满足时刻认为满足 condition
-      // Object: 所有属性都满足时可认为满足
-      // 
-      // {test: Condition}, {include: Condition}, {exclude: Condition}, {and: [Condition]}, {or: [Condition]}, {not: Condition}
-      // 
-      // UseEntry: object
-      // 该属性必须有一个字符串 loader.
-      // 该属性相对 context 的值解析 loader
-      // 该属性拥有 options 属性, 该属性为 string 或 object, 该属性会作为 loader options 被传给 loader
-      // 考虑到兼容性, 目前仍支持 query 作为 options 的别名
-      // 
-
-      {
-        test: /\.jsx?$/, // 通过正则表达式选择要处理的文件
-        include: [ // 限定文件范围
-          path.resolve(__dirname, &apos;app&apos;)
-        ],
-        exclude: [ // 排除文件范围
-          path.resolve(__dirname, &apos;demo&apos;)
-        ]
-        // 最佳实践
-        // test 中使用正则表达式
-        // include 和 exclude 中使用绝对路径
-        // 优先使用 include 而不是 exclude
-        issuer: { test, include, exclude },
-        // issuer 的应用范围
-        enforce: &apos;pre&apos;,
-        enforce: &apos;post&apos;,
-        loader: &apos;babel-loader&apos;,
-        // 使用 babel-loader 处理符合条件的文件
-        // webpack2 中 -loader 不再可以省略
-        options: {
-          presets: [&apos;es2015&apos;]
-        }
-        // babel-loader 的配置
-      },
-      {
-        test: /\.html$/,
-        use: [
-          // 应用多个 loader 及相关配置
-          &apos;htmllint-loader&apos;,
-          {
-            loader: &apos;html-loader&apos;,
-            options: {
-              // ...
-            }
-          }
-        ]
-      },
-
-      {
-         oneOf: [ /* rules */ ],
-         // 仅应用 rules 数组中的一条规则
-      },
-
-      {
-        rules: [ /* rules */ ],
-        // 应用所有 rules
-      },
-
-      {
-        resource: { and: [ /* conditions */ ]}
-        // 当所有 conditions 都满足时才认为符合条件
-      },
-
-      { resource: { or: [ /* conditions */ ]}, },
-      { resource: [ /* conditions */] },
-      // 当某一 condition 满足时即可认为符合条件
-
-      {
-        resource: { not: /* condition */ }
-        // 当某一 condition 不满足时可认为符合条件
-      }
-    ],
-    // rules 结束
-  },
-  resolve: {
-    // 解析模块 request 时的配置
-    // (不会应用于解析 loader )
-    modules: [
-      &apos;node_modules&apos;,
-      path.resolve(__dirname, &apos;app&apos;)
-    ],
-    // 解析 modules 时的路径
-    extensions: [&apos;.js&apos;, &apos;.json&apos;, &apos;.jsx&apos;, &apos;.css&apos;],
-    // 可以省略的扩展名
-    alias: {
-      // 模块别名
-      // 为 import 或 require 创建别名
-      // Utilities: path.resolve(__dirname, &apos;src/utilities&apos;)
-      // import Utility from &apos;../../utilities/utility&apos; 可以缩写为 
-      // import Utility from &apos;Utilities/utility&apos;
-      // 末尾添加$可以进行精确匹配, 类似正则
-      // 
-      &apos;module&apos;: &apos;new-module&apos;,
-      // 别名 module 可以表示 new-module, 包括文件与路径, 比如 module/path/file 会被解析为 new-module/path/file
-      &apos;only-module$&apos;: &apos;new-module&apos;,
-      // 别名 only-module(处于尾部) 会被解析成 new-module, 因此 module/path/file 不会被解析
-    },
-    // aliasFields: string
-    // 指定一个 field, 比如 browser, 来执行特定的 alias
-    // aliasFields: [&apos;browser&apos;]
-    // 
-    // resolve.descriptionFiles: array
-    // 用于描述的 JSON 文件, 默认为
-    // descriptionFiles: [&apos;package.json&apos;]
-    // 
-    // resolve.enforceExtension: boolean
-    // 如果为 true, webpack 不会处理没有扩展名的文件, 默认为 false, 及允许 require(&apos;./foo&apos;) 这种写法
-    //
-    //resolve.enforceModuleExtension: boolean
-    //默认为 false, 是否允许 modules(loaders) 省略扩展名
-    //
-    //resolve.extensions: array, 自动解析指定的扩展名
-    //默认为
-    // extensions: [&apos;.js&apos;, &apos;.json&apos;]
-    // 因此可以使用 import File from (&apos;../path/to/file&apos;) 这种写法
-    // 
-    // resolve.mainFields: array
-    // 当 import 一个包时, 比如 import * as D3 from &apos;d3&apos;, 这个设置决定package.json中的哪个 field 对应的包的会被检索, 默认值基于 target 的值
-    // 当 target 指定为 webworker, web 或不指定
-    // mainFields: [&apos;browser&apos;, &apos;module&apos;, &apos;main&apos;]
-    // 对于其他 target, 
-    // mainFields [&apos;module&apos;, &apos;main&apos;]
-    // 例如, D3的 package 包括这些 fields
-    // {
-    // ...
-    // main: &apos;build/d3.Node.js&apos;,
-    // browser: &apos;build/d3.js&apos;,
-    // module: &apos;index&apos;
-    // ...
-    // }
-    // 
-    // resolve.mainFiles: array
-    // 这里的 filename 会在解析路径的时候用到, 默认为
-    // mainFiles: [&apos;index&apos;]
-    // 
-    // resolve.modules: array
-    // 限定 webpack 搜索与解析的范围
-    // 可以使用绝对路径偶相对路径, 但是他们的行为有少许不同.
-    // 相对路径的检索方式与 Node 检索 module 相近, 首先检索当前路径及父路径
-    // 绝对路径则只会检索给定路径
-    // 默认值为 modules: [&apos;node_modules&apos;]
-    //
-    // 如果要添加路径, 应当添加在 node_modules 前面
-    // modules: [path.resolve(__dirname, &apos;src&apos;), &apos;node_modules&apos;]
-    // 
-    // resolve.unsafeCache: regex | array | boolean
-    // 默认为 true, 即允许模块缓存, 即使这种行为是不安全的
-    // 
-  },
-
-  performance: {
-    // 此配置决定 webpack 的通知功能
-    // 主要用于对文件尺寸的控制
-    hints: &apos;warning&apos;, // enum
-    // hints: boolean | &apos;error&apos; | &apos;warning&apos;
-    // 设定 webpack 何时显示通知
-    // 默认为 warning
-
-    maxAssetSize: 200000, // int (in bytes)
-    // maxAssetSize: int, 这个选项限制了单个 asset 的尺寸, 默认为250000
-
-    maxEntrypointSize: 400000, // int (in bytes)
-    // maxEntrypointSize: int, 限制初始加载时单个 entry 的最大请求数, 默认为250000
-
-    assetFilter: function (assetFilename) {
-      return assetFilename.endsWith(&apos;.css&apos;) || assetFilename.endsWith(&apos;.js&apos;)
-    }
-    // assetFilter: function, 这个属性允许 webpack 控制使用哪些文件来计算 performance hint, 默认为
-    // function (assertFilename) {
-    //   return !(/\.map$/.test(assetFilename))
-    // }
-    //
-    // 可以自己设定 filter function
-    // assetFilter: function(assetFilename) {
-    //   return assetFilename.endsWith(&apos;.js&apos;)
-    // }
-  },
-
-  devtool: &apos;source-map&apos;, // enum, string | false
-  // 可以提高 debug 的便利性, 但是会影响打包速度
-  // 面向开发有: eval, inline-source-map, eval-source-map, cheap-module-eval-source-map
-  // 面向生产有: source-map, hidden-source-map, cheap-source-map, nosources-source-map
-
-  context: __dirname, // 使用绝对路径
-  // webpack 的根路径, loaders 的配置文件(.babelrc, postcss.config.js)和 entry 都是基于 context 来解析的
-  // 该属性值默认为当前目录, 但是强烈建议书写这一字段, 可以使你的配置文件独立于当前工作目录
-
-  target: &apos;web&apos;, // enum
-  // 打包文件运行环境
-  // webpack 可以针对多个 environment 或 target 编译
-  // target: string, (async-node|electron|electron-renderer|node|node-webkit|web|webworker)
-
-  externals: [&apos;react&apos;, /^@angular\//],
-  // 不必打包的内容
-  // externals: string| RegExp | function | array | object
-  // 例如要使用 jquery 的 cdn, 则可以这样配置
-  // externals: {
-  //   jquery: &apos;jQuery&apos;
-  // }
-  // import $ from &apos;jquery&apos;
-  // 
-  // externals: {
-  //   substract: [&apos;./math&apos;, &apos;substract&apos;]
-  // }
-  // 会形成一个负责结构, ./math 是父模块, 而你的 bundle 仅请求其子模块 substract
-  // 
-  // externals: {
-  //   react: &apos;react&apos;,
-  //   lodash: {
-  //     commonjs: &apos;lodash&apos;,
-  //     amd: &apos;lodash&apos;,
-  //     root: &apos;_&apos;
-  //   }
-  // }
-  // 
-
-  watch: boolean
-  // webpack 可以监控文件并在他们变化时进行重新编译
-  // 默认为 false
-
-  watchOptions: object, 
-  // 配置 watch 的模式
-  // {
-  //   aggregateTimeout: number, 从第一次检测到文件变化到进行重新编译的延迟时间, 这个段时间内的其他变化会被整合进此次编译
-  //   ignored: string | RegExp, 忽视某些文件的变化, 减轻 CPU 负担
-  //   poll: boolean | number, 每隔1000ms 进行一次检测
-  // }
-
-  stats: {
-    // 待补充
-  },
-
-  devServer: {
-    // 这一部分的设置会被 webpack-dev-server 采用
-    contentBase: path.resolve(__dirname, &apos;dist&apos;), // 指定 serve 目录为 dist
-    compress: true, // 开启 gzip 压缩
-    port: 9000, // 指定端口
-    // 当 devServer 启动时, 控制台会打印
-    // http://localhost:9000
-    // webpack result is served from /build/
-    // content is served from dist/
-    // 这几行指出了 server 的位置和 served 内容
-    // 如果你使用了 Node.js API, 那么这部分会被忽略
-    // 
-    // devServer.filename: string, 这个选项可以减少 lazy mode 下的编译次数
-    // 默认的, 在 lazy mode 下, 每一个请求会进行一次新的编译 
-    // 添加 filename 后, devServer 仅在请求 filename 时进行编译, 比如
-    // lazy: true,
-    // filename: bundle.js
-    // 此时, devServer 仅在请求/ bundle.js 时进行编译
-    // filename 仅在 lazy mode 中起作用
-    // devServer.headers: object, 在所有 request 中添加请求头
-    // headers: {
-    //   &apos;X-Custom-Foo&apos;: &apos;bar&apos;
-    // }
-    // 
-    // devServer.historyApiFallback: boolean, object
-    // 当使用 Html5 History Api 时, index.html 可能得到404响应
-    // 
-    // devServer.hot: boolean, 开启 webpack 模块热替换
-    // 
-    // devServer.host - CLI only
-    // 指定 host
-    // 
-    // devServer.https: boolean | object, devServer 默认false, 即使用 http
-    // 
-    // devServer.inline - CLI only
-    // 切换 devServer 的模式, 默认使用 inline 模式, 即脚本会直接注入到你的 bundle 以实现重载, 设置 devServer.inline: false 可以启用 iframe 模式
-    // 
-    // 
-  },
-
-  plugins: [
-    // 待补充
-  ]
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/" itemprop="url">
-                  webpack 2 起步
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-29T07:25:10+08:00">
-                2017-01-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>虽然和 webpack1 一样, 还是过一遍</p>
-<h3 id="创建一个-bundle"><a href="#创建一个-bundle" class="headerlink" title="创建一个 bundle"></a>创建一个 bundle</h3><pre><code>mkdir webpack-demo &amp;amp;&amp;amp; webpack-demo
-
-npm init -y
-
-yarn add --dev webpack@beta
-
-yarn add lodash
-`&lt;/pre&gt;
-
-#### 创建 app/index.js
-
-&lt;pre&gt;`// app/index.js
-import _ from &apos;lodash&apos;
-function component () {
-  let element = document.createElement(&apos;div&apos;);
-
-// use lodash
-  element.innerHtml = _.join([&apos;Hello&apos;, &apos;webpack&apos;], &apos; &apos;)
-
-  return element
-}
-
-document.body.appendChild(component())
-`&lt;/pre&gt;
-
-#### 创建 index.html
-
-&lt;pre&gt;`&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;title&amp;gt;webpack 2 demo&amp;lt;/title&amp;gt;
-  &amp;lt;/head&amp;gt;
-  &amp;lt;body&amp;gt;
-    &amp;lt;script src=&quot;public/bundle.js&quot;&amp;gt;&amp;gt;/script&amp;gt;
-  &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-`&lt;/pre&gt;
-
-#### 创建打包后文件
-
-&lt;pre&gt;`./node_modules/.bin/webpack app/index.js public/bundle.js
-`&lt;/pre&gt;
-
-webpack 会自动处理包的依赖关系
-
-### 添加配置文件
-
-&lt;pre&gt;`var path = require(&apos;path&apos;)
-
-module.exports = {
-  entry: &apos;./app/index.js&apos;,
-  output: {
-    path: path.resolve(__dirname, &apos;public&apos;),
-    filename: &apos;bundle.js&apos;
-  }
-}
-`&lt;/pre&gt;
-
-通过 webpack 命令行进行打包
-
-&lt;pre&gt;`webpack --config webpack.config.js
-`&lt;/pre&gt;
-
-`webpack` 会默认执行名为 `webpack.config.js` 的配置文件, 因此仅输入`webpack` 即可进行打包
-
-### 通过 yarn 执行打包
-
-在 `yarn init` 生成的 `package.json` 中添加
-
-&lt;pre&gt;`{
-  ...
-  &quot;scripts&quot;: {
-    &quot;build&quot;: &quot;webpack&quot;
-  }
-  ...
-}
-</code></pre><p>即可将<code>webpack</code>指令添加进 yarn 的快捷方式, 此时执行 <code>yarn build</code> 即可打包</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2468,7 +2018,7 @@ module.exports = {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">154</span>
+                <span class="site-state-item-count">158</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

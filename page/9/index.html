@@ -287,6 +287,644 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/" itemprop="url">
+                  webpack简明指南
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-21T10:10:30+08:00">
+                2016-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Thanks to <a href="https://github.com/vikingmute/webpack-for-fools/blob/master/entries/chapter-1.md" target="_blank" rel="external">Webpack 傻瓜式指南</a></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre><code>npm install -g webpack
+`&lt;/pre&gt;
+
+### 建立项目
+
+&lt;pre&gt;`mkdir webpack
+cd webpack
+npm init
+touch .gitignore
+`&lt;/pre&gt;
+
+#### 项目结构
+
+&lt;pre&gt;`project
+|
+|---app
+|    |
+|    |---index.js
+|    |---sub.js
+|
+|---package.json
+|
+|---webpack.config.js
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//sub.js
+function generateText(){
+  var element = document.createElement(&apos;h2&apos;);
+  element.innerHTML = &quot;Hello, I&apos;m h2&quot;;
+  return element;
+}
+module.exports = generateText;
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//index.js
+var sub = require(&apos;./sub&apos;);
+var app = document.createElement(&apos;div&apos;);
+app.innerHTML = &quot;&amp;lt;h1&amp;gt;Hello, I&apos;m h1&quot;;
+app.appendChild(sub())
+`&lt;/pre&gt;
+
+### 配置 Webpack
+
+目的是将两个 js 根据依赖关系合并, 然后在 dist 目录创建一个 index.html 并引用合并后的 js.
+
+这里安装一个 plugin, 可以快速生成 HTML
+
+&lt;pre&gt;`npm install --save-dev html-webpack-plugin
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`var path = require(&apos;path&apos;);
+var HtmlWebpackPlugin = require(&apos;html-webpack-plugin&apos;);
+//定义文件夹路径
+var ROOT_PATH = path.resolve(__dirname);
+var APP_PATH = path.resolve(ROOT_PATH, &apos;app&apos;);
+var DIST_PATH = path.resolve(ROOT_PATH, &apos;dist&apos;);
+
+module.exports = {
+  //项目文件夹, 可以直接用文件夹名, 默认寻找 index.js
+  entry: APP_PATH,
+  output: {
+    path: DIST_PATH,
+    filename: &apos;bundle.js&apos;
+  },
+  //添加插件, 自动生成 html
+  plugins: [
+    new HtmlWebpackPlugin({title: &apos;Hello World App&apos;})
+  ]
+};
+`&lt;/pre&gt;
+
+然后在项目目录运行
+
+&lt;pre&gt;`webpack
+`&lt;/pre&gt;
+
+可以看到 html 已经引用了 bundle.js
+
+### 配置 webpack-dev-server
+
+用于自动刷新浏览器
+
+安装webpack-dev-server
+
+&lt;pre&gt;`npm install -g webpack-dev-server
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`module.exports = {
+  ...
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+        inline: true,
+    progress: true,
+  },
+  ...
+}
+
+`&lt;/pre&gt;
+
+修改 package.json
+
+&lt;pre&gt;`...
+&quot;scripts&quot;: {
+  &quot;start&quot;: &quot;webpack-dev-server --hot --inline&quot;
+},
+...
+`&lt;/pre&gt;
+
+在项目目录执行
+
+&lt;pre&gt;`npm start
+`&lt;/pre&gt;
+
+登录 http://localhost:8080
+
+### 添加 CSS 样式
+
+css-loader 会遍历 css 文件, style-loader 会把样式插入到&amp;lt;style&amp;gt;
+
+&lt;pre&gt;`npm install -save-dev css-loader style-laoder
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`...
+module:{
+  loaders: [
+    {
+      test: /\.css$/,
+      loaders: [&apos;style&apos;,&apos;css&apos;],
+      include: APP_PATH
+    }
+  ]
+}
+...
+`&lt;/pre&gt;
+
+注意 loaders 的书写方式, 从右向左执行
+
+添加样式文件 app/main.css
+
+&lt;pre&gt;`h1 {
+  color: red;
+}
+`&lt;/pre&gt;
+
+在入口文件&quot;index.js&quot; 中引用
+
+&lt;pre&gt;`require(&apos;./main.css&apos;)
+`&lt;/pre&gt;
+
+### 使用 sass
+
+这里需要 sass-loader 和 node-sass 一起解析文件
+
+&lt;pre&gt;`npm install --save-dev sass-loader node-sass
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`//先删除 css 规则
+{
+  test: /\.scss$/,
+  loaders: [&apos;style&apos;,&apos;css&apos;,&apos;sass&apos;],
+  include: APP_PATH
+},
+`&lt;/pre&gt;
+
+添加两个 sass 文件 app/variables.scss 和 app/main.scss
+
+&lt;pre&gt;`//variables.scss
+$red: red;
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//main.scss
+@import &apos;./variables.scss&apos;;
+h1{
+  color: $red;
+}
+`&lt;/pre&gt;
+
+在入口文件 index.js 中引用
+
+&lt;pre&gt;`require(&apos;./main.scss&apos;);
+`&lt;/pre&gt;
+
+### 处理图片
+
+&lt;pre&gt;`npm install --save-dev url-loader
+`&lt;/pre&gt;
+
+配置webpack.config.js
+
+&lt;pre&gt;`{
+  test: /\.(png|jpg)$/,
+  loader: &apos;url?limit=8192&apos;
+}
+`&lt;/pre&gt;
+
+注意, Limit参数制定了小于 8M 的图片会被转为 base64 编码, 可以减轻网络请求.
+
+&lt;pre&gt;`@import &apos;./variabels.scss&apos;
+h1 {
+  color: $red;
+  background-image: url(&apos;./imgs/avatar.jpg&apos;);
+}
+`&lt;/pre&gt;
+
+### 添加第三方库
+
+&lt;pre&gt;`npm install --save-dev jquery moment
+`&lt;/pre&gt;
+
+修改 index.js
+
+&lt;pre&gt;`var sub = require(&apos;./sub&apos;);
+require(&apos;./main.scss&apos;);
+var $ = require(&apos;jquery&apos;);
+var moment = require(&apos;moment&apos;);
+var app = document.createElement(&apos;div&apos;);
+app.innerHTML = &apos;&amp;lt;h1&amp;gt;Hello, h1&apos;;
+document.body.append(app);
+app.appendChild(sub());
+$(&apos;body&apos;).append(&apos;&amp;lt;p&amp;gt;Inserted By Jquery. Now is &apos; + moment().format() + &apos;&amp;lt;/p&amp;gt;&apos;);
+`&lt;/pre&gt;
+
+### 添加 ES6 支持
+
+安装 loader
+
+&lt;pre&gt;`npm install -save-dev babel-loader babel-preset-es2015
+`&lt;/pre&gt;
+
+配置 webpack.config.js
+
+&lt;pre&gt;`...
+{
+  test: /\.jsx$/,
+  loaders: babel,
+  include: APP_PATH,
+  query:{
+    presets: [&apos;es2015&apos;]
+  }
+}
+...
+`&lt;/pre&gt;
+
+es2015 这个参数是 babel 的 plugin, 可以支持最新的 ES6 的特性
+
+现在可以 js 文件改为 ES6 风格
+
+&lt;pre&gt;`//sub.js
+export default function(){
+  var element = document.createElement(&apos;h2&apos;);
+  element.innerHTML = &apos;This is h2&apos;;
+  return element;
+}
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//index.js
+import &apos;./main.scss&apos;;
+import generateText from &apos;./sub&apos;;
+import $ from &apos;jquery&apos;;
+import moment from &apos;moment&apos;;
+
+let app = document.createElement(&apos;div&apos;);
+const myPromise = Promise.resolve(42);
+myPromise.then((number) =&amp;gt; {
+  $(&apos;body&apos;).append(&apos;&amp;lt;p&amp;gt;Promise result is &apos; + number + &apos;now is &apos; + moment().format() + &apos;&amp;lt;/p&amp;gt;&apos;);
+});
+app.innerHTML = &apos;&amp;lt;h1&amp;gt;This is h1&apos;;
+document.body.appendChild(app);
+app.appendChild(generateText());
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/webpack-config-js/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/21/webpack-config-js/" itemprop="url">
+                  Webpack.config.js
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-21T07:37:19+08:00">
+                2016-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="entry"><a href="#entry" class="headerlink" title="entry"></a>entry</h3><p>The entry point for the bundle.</p>
+<p>If you pass a string: The string is resolved to a module which is loaded upon startup.</p>
+<p>If you pass an array: All modules are loaded upon startup. The last one is exported.</p>
+<pre><code>entry:[&apos;./entry1&apos;,&apos;./entry2&apos;]
+`&lt;/pre&gt;
+
+If you pass an object: Multiple entry bundles are created. The key is the chunk name. The value can be a string or an array
+
+&lt;pre&gt;`{
+  entry:{
+    page1: &apos;./pages1&apos;,
+    page2: [&apos;./entry1&apos;,&apos;./entry2&apos;]
+  },
+  output: {
+    // Make sure to use [name] or [id] in output.filename
+    // when using multiple entry points
+    filename: &apos;[name].bundle.js&apos;,
+    chunkFilename: &apos;[id].bundle.js&apos;
+  }
+}
+`&lt;/pre&gt;
+
+### Output
+
+`output` options tell webpack how to write the compiled files to disk.
+
+Note, that while there can be multiple &apos;entry&apos; points, only &apos;output&apos; configuration is specified.
+
+If you use hashing(`[hash]` or `[chunkhash]`) make sure to have a consistent ordering of modules. Use the `OccurenceOrderPlugin` or `recordsPath`
+
+#### output.filename
+
+Specifies the name of each output file on disk. You must **not** specify an absolute path here! The `output.path` option determines the location on disk the files are written to, `filename` is used solely for naming the individual files.
+
+##### single entry
+
+&lt;pre&gt;`{
+  entry: &apos;./src/app.js&apos;,
+  output: {
+    filename: &apos;bundle.js&apos;,
+    path: &apos;./build&apos;
+  }
+}
+`&lt;/pre&gt;
+
+##### multiple entries
+
+If you configuration creates more than a single &quot;chunk&quot;(as with multiple entry points or when using plugins like CommonsChunkPlugin), you should use substitutions below to ensure that each file has a unique name.
+
+`[name]` is replaced by the name of the chunk
+
+`[hash]` is replaced by the hash of the compilation.
+
+`[chunkhash]` is replaced by the hash of the chunk.
+
+&lt;pre&gt;`{
+  entry:{
+    app: &apos;./src/app.js&apos;,
+    search: &apos;./src/search.js&apos;
+  },
+  output:{
+    filename: [name].js,
+    path: __dirname + &apos;/built&apos;
+  }
+}
+</code></pre><h4 id="output-path"><a href="#output-path" class="headerlink" title="output.path"></a>output.path</h4><p>The output directory as <strong>absolute path</strong>(required).</p>
+<h3 id="Module-loaders"><a href="#Module-loaders" class="headerlink" title="Module.loaders"></a>Module.loaders</h3><p>An array of automatically applied loaders.</p>
+<p>Each item can have there properties: </p>
+<ul>
+<li><code>test</code>: A condition that must be met</li>
+<li><code>exclude</code>: A condition that must not be met</li>
+<li><code>include</code>: A condition that must be met</li>
+<li><code>loader</code>: A string of ‘!’ separated loaders</li>
+<li>‘loaders’: An array of loaders as string</li>
+</ul>
+<h3 id="resolve"><a href="#resolve" class="headerlink" title="resolve"></a>resolve</h3>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/webpack-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1939,456 +2577,6 @@ var arr1 = Array.from(obj,(v,k) =&amp;gt; k); //return [0,1,2,3,4]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/package-json-e5-b1-9e-e6-80-a7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/20/package-json-e5-b1-9e-e6-80-a7/" itemprop="url">
-                  package.json 属性
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-20T04:52:32+08:00">
-                2016-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
-                    <span itemprop="name">workNote</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="name"><a href="#name" class="headerlink" title="name"></a>name</h3><p>package.json 中最重要的属性是 name 和 version. 这两个属性是必须要有的, 否则模块无法被安装. 这两个属性一起形成了一个 npm 模块的唯一标识符.<br>模块中内容变化的同时, 模块版本也应该一起变化.<br>name 属性就是你的模块名称, 下面是一些命名规则:</p>
-<ul>
-<li>name 必须小于等于214字节, 包括前缀名称在内(如../..module)</li>
-<li>name 不能以’_’或’.’开头</li>
-<li>不能有大写字母</li>
-<li>name 会成为 url 的一部分, 不能有 url 非法字符</li>
-<li>不要使用和 node 核心模块一样的名称</li>
-<li>name 中不要有 ‘js’ 和 ‘node’</li>
-</ul>
-<h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><p>version 必须可以被 npm 依赖的一个 node-server 模块解析</p>
-<h3 id="description"><a href="#description" class="headerlink" title="description"></a>description</h3><p>一个描述, 方便别人了解你的模块的作用, 搜索的时候也有用</p>
-<h3 id="keywords"><a href="#keywords" class="headerlink" title="keywords"></a>keywords</h3><p>一个字符串数组, 方便别人搜到本模块</p>
-<h3 id="homepage"><a href="#homepage" class="headerlink" title="homepage"></a>homepage</h3><p>项目主页 url<br>注意: 这个项目主页 url 和 url 属性不同, npm 注册工具会认为你把项目发布到其他地方了, 获取模块的时候不是从官方仓库后去, 而是去 url 配置的地址</p>
-<h3 id="bugs"><a href="#bugs" class="headerlink" title="bugs"></a>bugs</h3><p>填写一个提交 bug 的地址或邮箱</p>
-<pre><code>{
- &apos;url&apos;: &apos;https://www.ezcook.de/project/issue&apos;,
- &apos;email&apos;: &apos;project@ezcook.de&apos;
-}
-`&lt;/pre&gt;
-
-如果只填写一个, 可以返回字符串而不是对象
-
-### license
-
-为模块制定一个协议, 通知用户可以使用的权限, 最常见的是 BSD-3-Clause 或 MIT
-
-&lt;pre&gt;`{&apos;license&apos;: &apos;MIT&apos;}
-`&lt;/pre&gt;
-
-### author, contributors
-
-### files
-
-files 属性的值是一个数组, 内容是模块下文件名或文件夹名, 如果是文件夹名, 则文件夹下所有文件也会被包含.
-可以在模块根目录下创建一个 &apos;.npmignore&apos; 文件, 写在这个文件里的文件会被排除在 file 属性
-
-### main
-
-main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名为&apos;foo&apos;, package.json中&apos; main&apos; 属性指定为&apos;test.js&apos;, 则通过 require(foo)来使用模块的时候会滴啊用 test.js 脚本.
-他应该指向模块根目录下得一个文件, 默认为 index.js
-
-### bin
-
-很多模块有一个或多个需要配置到 PATH 路径下的可执行模块...
-
-### man
-
-制定一个或通过数组指定一些文件夹让 linux 下的 man 指令查找文档地址
-
-### directories
-
-### repository
-
-指定一个代码存放的地址
-
-&lt;pre&gt;`&apos;repository&apos;:
-{
-  &apos;type&apos;:&apos;git&apos;,
-  &apos;url&apos;:&apos;https://github.com/...&apos;
-}
-</code></pre><p>如果是 Github, 可以用缩写完成<br>‘repository’:’gist:…’`</p>
-<h3 id="scripts"><a href="#scripts" class="headerlink" title="scripts"></a>scripts</h3><p>scripts 属性是一个对象, 里面制定了项目的生命周期各个环节需要执行的命令, key 是生命周期中的时间, value 是要执行的命令<br>具体内容有 install, start, stop 等, 详情见<a href="https://docs.npmjs.com/misc/scripts" target="_blank" rel="external">npm/scripts</a></p>
-<h3 id="config"><a href="#config" class="headerlink" title="config"></a>config</h3><p>用来设置一些项目不怎么变化的项目配置, 如 port 等</p>
-<h3 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h3><p>dependencies 属性是一个对象, 配置依赖模块的模块列表, key 是模块名称, vlaue 是版本范围, 版本范围是一个字符, 可以被一个或多个空格分隔.<br>比如<br>```<br>‘dependencies’:<br>{<br>  ‘foo’:’1.0.0 - 2.0.0’<br>  ‘foo1’:’&gt;=1.0.0’<br>}</p>
-<h3 id="devDependencies"><a href="#devDependencies" class="headerlink" title="devDependencies"></a>devDependencies</h3><p>如果有人想下载并使用你的模块, 也许他们并不希望或需要下载一些你在开发过程中额外的测试或文档框架<br>这种情况下最好把这些依赖添加到 devDependencies 中, 这些模块会在 npm link 或者 npm install 的时候被安装, 也可以像其他 npm 配置一样被管理</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/e4-bd-bf-e7-94-a8-npm-e5-88-9b-e5-bb-ba-e6-96-b0-e5-b7-a5-e7-a8-8b/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/20/e4-bd-bf-e7-94-a8-npm-e5-88-9b-e5-bb-ba-e6-96-b0-e5-b7-a5-e7-a8-8b/" itemprop="url">
-                  使用 npm 创建新工程
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-20T03:33:29+08:00">
-                2016-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
-                    <span itemprop="name">workNote</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>创建一个工程目录, 并 cd 到目录中, 运行<br><code>$npm init</code><br>这个工具将引导你创建一个 package.json 文件, 他只覆盖了大多数一般的项目, 并尽量让默认内容全面.<br>运行<code>npm help json</code> 获取 package.json 中的各个字段的文档及其定义<br>后面可以用<br><code>npm install &amp;lt;pkg&amp;gt; --save</code><br>来安装一个包并将其存储为 package.json 文件中的一个依赖模块<br>任何时间按下^C 退出.<br>简单来说:<br><code>npm init</code> 创建或修改一个项目中的 package.json 文件<br>默认名称(显示在括号中)是当前文件夹的名字, 如果对于提示不输入任何字符并按下 Enter 键, npm 会将默认名称当做项目名称.<br>在完成提示内容后, npm init 将会给你一个即将创建的 package.json 文件的预览, 对于我们来说, 他看起来是这样的</p>
-<pre><code>{
-&quot;name&quot;:&quot;project-name&quot;,
-&quot;version&quot;:&quot;0.0.0&quot;,
-&quot;description&quot;:&quot;...&quot;,
-&quot;main&quot;:&quot;index.js&quot;,
-&quot;scripts&quot;:{
-  &quot;test&quot;:&quot;echo \&quot;Error:no test specified\&quot; &amp;amp;&amp;amp; exit 1&quot;
-},
-&quot;keywords&quot;:[&quot;npm&quot;,&quot;example&quot;],
-&quot;author&quot;:&quot;YourName&quot;,&quot;license&quot;:&quot;MIT&quot;
-}
-`&lt;/pre&gt;
-
-按下 Enter 进行确认, 你可以在后面随时修改, 通过编辑 package.json 或再次运行 npm init.
-npm init 永远也不会移除你放在 package.json 中的信息, 仅仅根据需求进行调整.
-
-### package.json
-
-一个项目的 package.json 文件担任下列角色
-- 他为 npm 提供一切信息
-- 他告诉 Node 怎样处理一个包
-- 他为人们查看项目提供一个进入点
-
-### 创建一个包进入点
-
-现在创建一个非常简单的脚本并将它存为 index.js
-
-&lt;pre&gt;`//index.js
-console.log(&quot;Hello, npm&quot;);
-`&lt;/pre&gt;
-
-我们可以直接运行脚本
-
-&lt;pre&gt;`$node index.js
-Hello, npm
-`&lt;/pre&gt;
-
-我们可以通过使用 require, 在其他的 Node 应用中应用这段脚本. 首先进入 Node REPL, 一个交互的命令行环境:
-
-&lt;pre&gt;`$node
-&amp;gt; require(&apos;./index.js&apos;)
-Hello, npm
-{}
-`&lt;/pre&gt;
-
-({}是 require 的返回值, 在这个例子中, 他是 index.js 的 exports 对象)
-Node 允许我们省略.js 扩展名, 因此我们可以简写为 require(&apos;,/index&apos;).
-如果我们在同一个 REPL 会话中再次运行 require, 我们将得到相同的返回值, 但是不会得到 console.log 输出, 因为 require 不会在同一个脚本中运行两次.
-./在./index 中很重要, 因为他告诉 Node 这个路径是当前文件夹的相对路径. 如果我们不显示给出绝对路径或相对路径, 而是直接给 index, Node 会在一系列文件夹中寻找匹配的模块.
-
-回顾一下, 在 package.json 文件夹中, &apos;main&apos;:&apos;index.js&apos; 的作用是什么?
-当你 require 一个包含指向 main 脚本(&apos;main&apos;:&apos;index.js&apos;)的 package.json 文件的文件夹时, Node 会认为你是在 require 这个脚本(&apos;index.js&apos;), 所以前面的代码可以简写为
-
-&lt;pre&gt;`require(./)
-`&lt;/pre&gt;
-
-现在我们可以使用 package.json 来完成上面的工作, 因为我们的脚本命名为 index.js, 他是一个文件夹的默认脚本
-
-### 第一个依赖模块
-
-使用下面的命令来快速搜索 npm registry
-`$npm search color`
-如果想要获得更多的信息, 可以跳转到 npmjs.org, 在&quot;最多依赖&quot;的列表中可以查看流行的库
-安装依赖模块
-`$npm install --save colors`
-这条指令会在本地文件夹中创建一个名为 node_modules 的文件夹并将 colors 下载到其中. `--save`将依赖模块自动加入到 package.json 文件中.
-
-&lt;pre&gt;`&quot;dependencies&quot;{
-  &quot;colors&quot;:&quot;~0.6.0-1&quot;
-}
-`&lt;/pre&gt;
-
-现在我们来重写 index.js 来使用我们的新库. colors 扩展了 String 的原型因此我们可以非常简洁的表达带有颜色的文本:
-
-&lt;pre&gt;`var colors = require(&apos;colors&apos;);
-console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
-</code></pre><p>运行 index.js 文件, 你将在原来的输出中获得一个彩色字符串</p>
-<h3 id="node-modules-的层级"><a href="#node-modules-的层级" class="headerlink" title="node_modules 的层级"></a>node_modules 的层级</h3><p>当不显示指定相对路径或绝对路径时, Node 首先查找本地的 ndoe_modules 文件夹, 当你使用 npm install 指令的时候这个文件夹被自动创建. 当 Node 发现 node_modules 下有一个叫做 colors 子目录时, Node 将他当做 require 的目标.<br><strong>查看 node_modules/colors/package.json, 可以找到’main’:’colors’ , 因此 require colors这个文件夹时 Node 会认为 require 了 colors.js 这个脚本</strong><br>然后从 require 函数中返回脚本中的 exports 对象.<br>如果找不到 colors 目录, 则会一直搜索到系统的根目录.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2438,7 +2626,7 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">158</span>
+                <span class="site-state-item-count">160</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

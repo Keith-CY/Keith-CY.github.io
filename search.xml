@@ -3,6 +3,24 @@
   
     
     <entry>
+      <title><![CDATA[webpackDevServer Proxy]]></title>
+      <url>/2017/04/27/webpackDevServer-Proxy/</url>
+      <content type="html"><![CDATA[<p><code>devServer.proxy</code>: <code>object</code></p>
+<p>Proxying some URLs can be useful when you have a separate API backend development server and you want to send API requests on the same domain.</p>
+<p>The dev-server makes use of the powerful <code>http-proxy-middleware</code> package.</p>
+<p>With a backend on <code>localhost:3000</code>, you can use this to enable proxying:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">proxy: &#123;</div><div class="line">  &apos;/api&apos;: &apos;http://localhost:3000&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>A request to <code>/api/users</code> will now proxy to the request to <code>http://localhost:3000/api/users</code></p>
+<p>If you don’t want <code>/api</code> to be passed along, we need to rewrite the path</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">proxy: &#123;</div><div class="line">  &apos;/api&apos;: &#123;</div><div class="line">    target: &apos;http://localhost:3000&apos;,</div><div class="line">    pathRewrite: &#123;</div><div class="line">      &apos;^/api&apos;: &apos;&apos;,</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>A backend server running on HTTPS with an invalid certificate will not be accepted by default. If you want to, modify config like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">proxy: &#123;</div><div class="line">  &apos;/api&apos;: &#123;</div><div class="line">    target: &apos;https://other-server.example.com&apos;,</div><div class="line">    secure: false,</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[notes in migrating from React-Router-3 to React-Router-4]]></title>
       <url>/2017/04/26/notes-in-migrating-from-React-Router-3-to-React-Router-4/</url>
       <content type="html"><![CDATA[<h1 id="HashRouter"><a href="#HashRouter" class="headerlink" title="HashRouter"></a>HashRouter</h1><p>Version 4 of React-Router seperate top level router element for the different history type. If you’re using version 4 you should be able to replace <code>&lt;Router hisotry={hashHistory}&gt;</code> with <code>&lt;HashRouter&gt;</code></p>

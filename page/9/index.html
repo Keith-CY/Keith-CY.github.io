@@ -287,6 +287,315 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/22/webpack-e5-bc-80-e5-8f-91-e5-92-8c-e9-83-a8-e7-bd-b2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/22/webpack-e5-bc-80-e5-8f-91-e5-92-8c-e9-83-a8-e7-bd-b2/" itemprop="url">
+                  Webpack 开发和部署
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-22T06:22:12+08:00">
+                2016-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/workNote/" itemprop="url" rel="index">
+                    <span itemprop="name">workNote</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Thanks to <a href="https://github.com/vikingmute/webpack-for-fools/blob/master/entries/chapter-2.md" target="_blank" rel="external">Webpack 傻瓜指南</a></p>
+<h3 id="启用-Source-Map"><a href="#启用-Source-Map" class="headerlink" title="启用 Source Map"></a>启用 Source Map</h3><p>在 webpack.config.js 中添加字段</p>
+<pre><code>devtool: &apos;eval-source-map&apos;,
+`&lt;/pre&gt;
+
+这样出错后会采用 sourceMap 直接显示出错位置
+
+### 配置 webpack-dev-server
+
+在 webpack.config.js 中添加字段
+
+&lt;pre&gt;`devServer: {
+  historyApiFallback: true,
+  hot: true,
+  inline: true,
+  progress: true,
+}
+`&lt;/pre&gt;
+
+### 使用 preLoaders 和 postLoaders
+
+preLoaders 在 loaders 之前执行, 总体顺序是 preLoader -&gt; loaders -&gt; postLoaders
+
+#### 安装 jshint
+
+&lt;pre&gt;`npm install --save-dev jshint-loader
+`&lt;/pre&gt;
+
+在 config 中配置
+
+&lt;pre&gt;`module:{
+  preloaders:[
+    {
+      test: /\.jsx$/,
+      loader:&apos;jshint-loader&apos;
+    }
+  ]
+}
+jshint:{
+  &apos;esnext&apos;:true
+}
+`&lt;/pre&gt;
+
+### 部署上线
+
+项目开发完成后需要部署上线, 此时应该创建一个新的 config, 因为部署上线使用的 webpack 不需要 dev-tools, dev-server, jshint 等
+
+复制现有的 config 文件, 命名为 webpack.production.config.js, 将里面与开发有关的东西删除, 在 package.json 中添加
+
+&lt;pre&gt;`&quot;scripts&quot;:{
+  &quot;build&quot;: &quot;webpack --progress --profile  --colors --config webpack.production.config.js&quot;
+},
+`&lt;/pre&gt;
+
+上线的时候运行
+
+&lt;pre&gt;`npm run build
+`&lt;/pre&gt;
+
+### 分离第三方库
+
+如果第三方库很多, 会导致最后 bundle 文件很大, 减慢加载速度, 因此需要把第三方库和 app 本身的代码分开
+
+#### 修改 entry 入口文件
+
+&lt;pre&gt;`entry:{
+  app: path.resolve(APP_PATH, &apos;index.js&apos;),
+  //添加要打包在 vendors 里面的库
+  vendors: [&apos;jquery&apos;, [moment]]
+},
+`&lt;/pre&gt;
+
+#### 添加 CommonsChunkPlugin
+
+&lt;pre&gt;`plugins: [
+  //使用 uglifyJs 压缩 js 代码
+  new webpack.optimize.UglifyJsPlugin({minimize: true}),
+  //把入口文件里的数组打包成 vendors.js
+  new webpack.optimize.CommonsChunkPlugin(&apos;vendors&apos;,&apos;vendors.js&apos;),
+  new HtmlWebpackPlugin({title: &apos;Welcome&apos;})
+]
+`&lt;/pre&gt;
+
+运行 build 后会生成 vendor.js
+
+### 生成多页面
+
+假设需求是生成两个页面, 一个叫 index.html, 需要引用 app.js 和 vendors.js 两个文件; 另一个是 mobile.html, 需要应用 mobie.js 和 vendor.js 这两个文件
+
+首先新建一个叫 mobile.js 的文件入口, 比 app.js 简单一些
+
+&lt;pre&gt;`import &apos;./main.scss&apos;;
+import $ from &apos;jquery&apos;;
+import &apos;imports?jQuery=jQuery!./plugin.js&apos;;
+
+$(document).ready(function(){
+  let app = document.createElement(&apos;div&apos;);
+  app.innerHTML = &apos;&amp;lt;h1&amp;gt;Hello World&amp;lt;/h1&amp;gt;&apos;;
+  document.body.appendChild(app);
+  $(&apos;h1&apos;).greenify();
+});
+`&lt;/pre&gt;
+
+在 config 修改入口文件和输出配置
+
+&lt;pre&gt;`entry:{
+  // 三个入口文件: app, mobile, vendors
+  app: path.resolve(APP_PATH, &apos;index.js&apos;),
+  mobile: path.resolve(APP_PATH, &apos;mobile.js&apos;),
+  vendors: [&apos;jquery&apos;,&apos;moment&apos;]
+},
+output:{
+   path: DIST_PATH,
+   filename: &apos;[name].js&apos;
+},
+`&lt;/pre&gt;
+
+为 html-webpack-plugin 设置模板, 并保存于 templates
+
+&lt;pre&gt;`// index.html
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;{%= o.htmlWebpackPlugin.options.title %}&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;h3&amp;gt;Welcome to Index&amp;lt;/h3&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+
+//mobile.html
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;{%= o.HtmlWebpackPlugin.options.title %}&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;h3&amp;gt;Welcome to Mobile&amp;lt;/h3&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+`&lt;/pre&gt;
+
+继续配置 config.js, 让 HtmlWebpackPlugin 可以生成多个文件
+
+&lt;pre&gt;`//Templates 的文件夹路径
+var TEM_PATH = path.resolve(ROOT_PATE, &apos;templates&apos;);
+...
+plugins:[
+  //创建两个 HtmlWebpackPlugin 的实例, 生成两个页面
+  new HtmlWebpackPlugin({
+    title: &apos;Hello World App&apos;,
+    template: path.resolve(TEM_PATH, &apos;index.html&apos;),
+    filename: &apos;index.html&apos;
+    //chunks 这个参数告诉插件要引用 chunks 中的那几个入口
+    chunks: [&apos;app&apos;,&apos;vendors&apos;],
+    //scripts 要插入的位置
+    inject: &apos;body&apos;
+  }),
+  new HtmlWebpackPlugin({
+    title: &apos;Hello Mobile App&apos;,
+    template: path.resolve(TEM_PATH, &apos;mobile.html&apos;),
+    filename: &apos;mobile.html&apos;,
+    chunks: [&apos;mobile&apos;,&apos;vendors&apos;],
+    inject: &apos;body&apos;
+  })
+]
+</code></pre><h3 id="生成-hash-名称的-script-来防止缓存"><a href="#生成-hash-名称的-script-来防止缓存" class="headerlink" title="生成 hash 名称的 script 来防止缓存"></a>生成 hash 名称的 script 来防止缓存</h3><p>webpack 基于 md5 可以生成 hash 名称<br>```<br>output:{<br>  path: DIST_Path,<br>  filename: ‘[name].[hash].js’<br>},</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2392,196 +2701,11 @@ ReactDOM.render(
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/array-from/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/20/array-from/" itemprop="url">
-                  Array.from()
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-20T05:53:45+08:00">
-                2016-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
-                    <span itemprop="name">workNote</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Array.from() 方法可以将一个类数组对象或可遍历对象转化为真正的数组.<br>在 ES6 中, Class 语法允许我们为内置类型(比如 Array) 和自定义类新建子类(比如叫 subArray), 这些子类也会继承父类的静态方法, 比如 subArray.from(), 调用该方法后会返回子类 subArray 一个实例, 而不是 Array 的实例.</p>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><pre><code>Array.from(arrayLike[, mapFn[, thisArg]])
-`&lt;/pre&gt;
-
-### 参数
-
-#### arrayLike
-
-想要转换成真实数组的类数组对象或可遍历对象
-
-#### manFn
-
-可选参数, 如果制定了该参数, 则最后生成的数组会经过 map 操作
-
-#### this.Arg
-
-可选参数, 执行 mapFn 时的 this 的值
-
-### 描述
-
-可以使用 Array.from()将下面的两种对象转换成数组
-- 类数组对象(拥有 length 属性和若干索引属性的任意对象)
-- 可遍历对象(可以迭代出其他对象, 比如有 Map 和 Set)
-
-Array.from(obj,mapFn,thisArg) 相当于 Array.from(obj).map(mapFn,thisArg)
-
-### 应用
-
-&lt;pre&gt;`var obj = {length:5}; // return {length:5}
-var arr =Array.from(obj); // namely Array.from({length:5}), return [undefined * 5]
-Array.isArray(arr); //return true
-var arr1 = Array.from(obj,(v,k) =&amp;gt; k); //return [0,1,2,3,4]
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2626,7 +2750,7 @@ var arr1 = Array.from(obj,(v,k) =&amp;gt; k); //return [0,1,2,3,4]
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">160</span>
+                <span class="site-state-item-count">161</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

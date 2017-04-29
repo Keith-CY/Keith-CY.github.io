@@ -287,6 +287,198 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/16/commonchunks-e6-8f-92-e4-bb-b6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/16/commonchunks-e6-8f-92-e4-bb-b6/" itemprop="url">
+                  CommonChunks 插件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-16T07:32:03+08:00">
+                2016-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>作用就是提取代码中的公共模块, 然后将公共模块打包到一个独立的文件中, 以便在其他的入口和模块中使用.</p>
+<pre><code>// in main.js
+var a = require(&apos;./a&apos;);
+a.sayHello();
+
+var b = require(&apos;./b&apos;);
+b.sayHello();
+
+var c = require(&apos;./c&apos;);
+c.sayHello()
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// in main2.js
+var a = require(&apos;./a&apos;);
+a.sayHello();
+
+var b = require(&apos;./b&apos;);
+b.sayHello();
+`&lt;/pre&gt;
+
+a, b, c 和之前一样, 只有一个 sayHello 方法.
+
+打包后看到`bundle.main.js` 和`bundle.main2.js` 中分别包含了 a, b, c 三个模块, 其中 a, b 是要使用`CommonChunksLoader` 提取出来的公共模块.
+
+### 配置 CommonChunksLoader
+
+&lt;pre&gt;`var webpack = require(&apos;webpack&apos;);
+module.exports = {
+  entry:{
+    main1: &apos;./main&apos;,
+    main2: &apos;./main2&apos;
+  },
+  output:{
+    filename: &apos;bundle.[name].js&apos;
+  },
+  plugins:[
+    new webpack.optimize.CommonsChunkPlugin(&apos;common.js&apos;,[&apos;main1&apos;,&apos;main2&apos;])
+  ]
+} ;
+`&lt;/pre&gt;
+
+第一行中, 添加 webpack 引用, 然后添加`plugins` 选项, 引用`webpack.optimize.CommonsChunkPlugin` 来提取公共模块, 参数`common.js` 表示公共模块的文件名, 后面的数组表示依赖这个模块的入口文件.
+
+重新打包后, 生成三个文件
+
+&lt;pre&gt;`bundle.main1.js,
+bundle.main2.js
+common.js
+</code></pre><p>其中 <code>bundle.main1.js</code> 只包含了<code>c</code>模块, <code>bundle.main2.js</code>则没包含任何模块.</p>
+<p>当然, 生成了<code>common.js</code> 还需要在 html 中进行引用, 而且要先于 main1, main2</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/16/webpack-e5-8f-91-e5-b8-83-e9-85-8d-e7-bd-ae/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2263,255 +2455,6 @@ url.resolve(&apos;http://example.com/one&apos;, &apos;/two&apos;) // &apos;http:
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/31/promise-in-es6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/31/promise-in-es6/" itemprop="url">
-                  Promise in ES6
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-31T07:00:29+08:00">
-                2016-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在 JavaScript 世界中, 所有代码都是单线程执行的</p>
-<p>异步执行可以可以用回调函数实现</p>
-<pre><code>function callback() {
-  console.log(&apos;Done&apos;);
-}
-console.log(&apos;before setTimeout()&apos;);
-setTimeout(callback, 1000);
-console.log(&apos;after setTimeout()&apos;);
-`&lt;/pre&gt;
-
-先看一个简单的 Promise 例子: 生成0-2之间的随机数, 如果小于1, 则等待一段时间后返回成功, 否则返回失败
-
-&lt;pre&gt;`function test(resolve, reject){
-  var timeOut = Math.random() * 2;
-  log(&apos;set timeout to: &apos; + timeOut + &apos; seconds.&apos;);
-  setTimeout(function(){
-    if(timeOut &amp;lt; 1) {
-      log(&apos;call resolve()...&apos;);
-      resolve(&apos;200 ok&apos;);
-    } else {
-      log(&apos;call reject()...&apos;);
-      reject(&apos;timeout in &apos; + timeOut + &apos; seconds&apos;);
-    }
-  }, timeOut * 1000)
-}
-`&lt;/pre&gt;
-
-这个`test()`函数有两个参数, 这两个参数都是函数, 如果执行成功, 我们将调用`resolve(&apos;200 ok)&apos;`, 如果执行失败, 我们将调用`reject(&apos;timeout in &apos; + timeOut + &apos; seconds.&apos;)`. 可以看出, `test()`函数只关心自己的逻辑, 并不关心具体的`resolve` 和`reject` 将如何处理.
-
-有了执行函数, 我们就可以用一个 Promise 对象来执行他, 并在将来某个时刻获得成功或失败的结果
-
-&lt;pre&gt;`var p1 = new Promsie(test);
-var p2 = p1.then(function(result){
-  console.log(&apos;成功: &apos; + result);
-});
-var p3 = p2.catch(function(err){
-  console.log(&apos;失败: &apos; + err);
-});
-`&lt;/pre&gt;
-
-变量`p1`是一个 Promise 对象, 他负责执行执行`test`函数, 由于`test`函数在内部是异步执行的, 当`test`函数执行到`resolve(&apos;ok 200&apos;)`时, 告诉 Promsie 对象执行
-
-&lt;pre&gt;`.then(function(result){ // result 是通过 test 传递给 resolve 的参数
-  console.log(&apos;成功: &apos; + result);
-});
-`&lt;/pre&gt;
-
-当`test`执行到`reject`的时候, 告诉 Promise 对象执行
-
-&lt;pre&gt;`.catch(function(err){ // err 是 test 传递给 reject 的参数
-  console.log(&apos;失败: &apos;+ err);
-});
-`&lt;/pre&gt;
-
-Promise 对象可以串联起来(因为都返回一个 Promise 对象)
-
-&lt;pre&gt;`new Promise(test).then(function(result){console.log(result)}).catch(function(err){console.log(err)});
-`&lt;/pre&gt;
-
-可见, Promise 最大的好处, 是在异步执行的流程中, 把执行代码和处理结果代码清晰地分离了.
-
-Promise 还可以做更多的事情, 比如有若干个异步任务, 需要先做任务1, 如果成功后再做任务2, 任何任务失败则不再继续并执行错误处理函数
-
-要串行执行这样的异步任务, 只需要链式调用
-
-&lt;pre&gt;`job1.then(job2).then(job3).catch(handleError);
-`&lt;/pre&gt;
-
-其中 job1, job2, job3 都是(或返回) Promise 对象
-
-&lt;pre&gt;`function job2(input){
-  return new Promise(function(resolve, reject){
-      ....
-    })
-}
-`&lt;/pre&gt;
-
-### 并行执行异步任务
-
-试想一个页面聊天任务, 我们需要从两个不同的 URL 分别获取用户的个人信息和好友列表, 这两个任务是可以并行执行的, 用`Promise.all()`实现如下:
-
-&lt;pre&gt;`var p1 = new Promise(function(resolve, reject){
-  setTimeout(resolve, 500, &apos;P1&apos;);
-});
-
-var p2 = new Promise(function(resolve, reject) {
-  setTimeout(resolve, 600, &apos;P2&apos;);
-});
-
-// 同时执行p1 和 p2, 并在他们都执行完毕后执行 then
-Promise.all([p1,p2]).then(function(results){
-  console.log(results); // 获得一个 Array: [&apos;P1&apos;, &apos;P2&apos;]
-});
-`&lt;/pre&gt;
-
-有时多个异步任务是为了容错, 比如同时向两个 URL 读取, 只需要获得先返回的结果, 这种情况下用`Promise.race()`实现:
-
-&lt;pre&gt;`var p1 = new Promise(function(resolve, reject){
-  setTimeout(resolve, 500, &apos;P1&apos;);
-});
-var p2 = new Promise(function(resolve, reject){
-  setTimeout(resolve, 600, &apos;P2&apos;);
-});
-
-Promise.race([p1,p2]).then(function(result){
-  console.log(result); // &apos;P1&apos;
-});
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2561,7 +2504,7 @@ Promise.race([p1,p2]).then(function(result){
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">161</span>
+                <span class="site-state-item-count">162</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

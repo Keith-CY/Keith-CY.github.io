@@ -287,6 +287,291 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/webpack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/20/webpack/" itemprop="url">
+                  Webpack
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-20T07:32:41+08:00">
+                2016-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
+                    <span itemprop="name">workNote</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Webpack 是一款模块加载兼打包工具, 能把各种资源, 例如 JS(X), coffee, css(sass/less), 图片等都作为模块来使用和处理</p>
+<p>可以直接使用 require 的形式来引入各模块, 即时他们可能需要经过编译, webpack 上有各种健全的加载器(loader)会处理这些事情.</p>
+<h3 id="Webpack-优势"><a href="#Webpack-优势" class="headerlink" title="Webpack 优势"></a>Webpack 优势</h3><ol>
+<li>webpack 是一 commonJS 的形式来书写脚本的, 但对 AMD/CMD 的支持也很全面, 方便就项目进行代码迁移</li>
+<li>能被模块化的不仅是 JS 了</li>
+<li>开发便捷, 能替代部分 grunt/gulp 工作, 比如打包, 压缩混淆, 图片转 base64等</li>
+<li>扩展性强, 插件机制完善, 特别支持 React 热拔插(react-hot-loader).</li>
+</ol>
+<h3 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h3><p>常规使用 npm 安装<br><code>$npm install -g webpack</code><br>如果是常规项目, 还是把依赖写入 package.json 更好</p>
+<pre><code>$npm init
+$npm install --save-dev webpack
+`&lt;/pre&gt;
+
+### 配置
+
+每个项目下都必须配置一个 webpack.config.js, 他的作用如同常规的 gulpfile.js, 就是一个配置项, 告诉 webpack 需要做什么
+
+比如:
+
+&lt;pre&gt;`var webpack = require(&apos;webpack&apos;);
+var commonsPlugin = new webpack.optimize.CommonsChunkPlugin(&apos;common.js&apos;);
+
+module.exports = {
+  //插件项
+  plugins: [commonsPlugin],
+
+  //页面入口文件配置
+  entry:{
+    index: &apos;./src/js/page/entry1.js&apos;
+  },
+
+  //文件输出配置
+  output:{
+    path: &apos;dist/js/page&apos;,
+    filename: &apos;[name].js&apos;
+  },
+
+  module:{
+    //加载器配置
+    loaders:[
+      {test: /\.css$/, loader: &apos;style-loader!css-loader&apos;},
+      {test: /\.js$/, loader: &apos;jsx-loader?harmony&apos;},
+      {test: /\.scss$/, loader: &apos;style!css!sass?sourceMap&apos;},
+      {test: /\.(png|jpg)$/, loader: &apos;url-loader?limit-8192&apos;}
+    ]
+  },
+};
+`&lt;/pre&gt;
+
+#### plugins 插件项
+
+这里使用了一个 CommonsChunkPlugin 的插件, 用于提取多个入口文件的公共部分, 然后生成一个 common.js 来访方便多页面之间的复用
+
+#### entry 是页面入口文件配置, output 是输出配置
+
+决定入口文件要生成什么名字的文件, 存放到哪里
+
+&lt;pre&gt;`{
+  entry: {
+    page1: &apos;./page1&apos;,
+    //支持数组, 将加载数组中的所有模块, 但一最后一个模块为输出
+    page2: [&apos;./entry1&apos;,&apos;./entry2&apos;]
+  },
+  output:{
+    path:&apos;dist/js/page&apos;,
+    filename: &apos;[name].bundle.js&apos;
+  }
+}
+`&lt;/pre&gt;
+
+这段代码最终会生成一个page1.bundle.js, 和一个page2.bundle.js, 并存放到./dist/page下
+
+#### module.loaders 是最关键的配置
+
+告诉 webpack 每一种文件都要用什么加载器来处理
+多个 loader 之间用&apos;!&apos;连接
+所有加载器都要通过 npm 来加载
+配置信息的参数&apos;?limit=8192&apos;表示将所有小于8kb的图片都转为 base64格式, 超过8kb 的图片用 url-loader 来处理
+
+### 运行 webpack
+
+`$webpack --display-error-details`
+后面的参数&apos;--display-error-details&apos; 是推荐加上的, 方便出错的时候能查阅更详细的信息
+其他主要参数有
+
+&lt;pre&gt;`$webpack --config XXX.js //使用另一份配置文件
+$webpack --watch //监听变动并自动打包
+$webpack -p //压缩混淆脚本, 这个很重要
+$webpack -d //生成 map 隐射文件, 告知哪些模块被最终打包到哪里
+`&lt;/pre&gt;
+
+### 模块引入
+
+#### HTML
+
+直接在页面&amp;lt;body&amp;gt;中引入 webpack 最终生成的页面脚本即可
+
+&lt;pre&gt;`&amp;lt;body&amp;gt;
+  &amp;lt;script scr = &apos;dist/js/page/common.js&apos;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script scr = &apos;dist/js/page/index.js&apos;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+`&lt;/pre&gt;
+
+可以看到连样式都不需要, 脚本执行的时候会动态生成&amp;lt;style&amp;gt;并注入 head
+
+#### JS
+
+各脚本模块可以直接用 commonJS 来书写, 并可以直接引入未经编译的模块, 比如 JSX, Sass, coffee 等(只要在 webpack.config.js 中配置好加载器)
+看一下编译前的页面入口文件(index.js)
+
+&lt;pre&gt;`require(&apos;../../css/reset.scss&apos;); //加载 Reset 模块
+require(&apos;../../css/allComponent.scss&apos;); //加载组件模块
+var React = require(&apos;react&apos;);
+var AppWrap = require(&apos;redux&apos;).createRedux;
+var Provider = require(&apos;redux/react&apos;).Provider;
+var stores = require(&apos;AppStore&apos;);
+
+var redux = createRedux(stores);
+var App = React.createClass({
+  render: function(){
+    return (
+      &amp;lt;Provider redux = {redux}&amp;gt;
+        {function() {return &amp;lt;AppWrap /&amp;gt;;}}
+      &amp;lt;/Provider&amp;gt;
+    );
+  }
+});
+
+ReactDOM.render(
+  &amp;lt;App /&amp;gt;,document.body
+);
+</code></pre><p>后续的都由 webpack 处理</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/array-from/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2003,215 +2288,6 @@ re.exec(str); // [&apos;456&apos;]
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/19/mac-os-e4-b8-8b-e5-89-8d-e7-ab-af-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83-e9-85-8d-e7-bd-ae/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/19/mac-os-e4-b8-8b-e5-89-8d-e7-ab-af-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83-e9-85-8d-e7-bd-ae/" itemprop="url">
-                  Mac OS 下前端开发环境配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-19T04:49:22+08:00">
-                2016-07-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
-                    <span itemprop="name">workNote</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="安装-homebrew"><a href="#安装-homebrew" class="headerlink" title="安装 homebrew"></a>安装 homebrew</h3><p>终端下执行<br><code>ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code></p>
-<h3 id="配置-iterm2"><a href="#配置-iterm2" class="headerlink" title="配置 iterm2"></a>配置 iterm2</h3><p>下载后下载配色 solarized, 然后下载 zsh 和 oh-my-zsh, 添加插件 git, osx, ruby, autojump</p>
-<h3 id="安装-Nginx"><a href="#安装-Nginx" class="headerlink" title="安装 Nginx"></a>安装 Nginx</h3><p>终端下执行<br><code>brew install nginx</code><br>安装完成后用浏览器打卡 <a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a>, 如果页面显示正常,则表示安装完成<br>nginx 有一下几个操作</p>
-<pre><code>  #打开 nginx
-  nginx
-  #nginx -s 重新加载配置|重启|停止|退出
-  nginx -s reload|reopen|stop|quit
-  #测试配置是否有语法错误
-  nginx -t
-`&lt;/pre&gt;
-
-Note: 如果执行不成功, 请使用 sudo 提权
-
-默认访问目录是
-`/usr/local/Cellar/nginx/1.10.0/html`
-
-nginx 的配置文件位置为:
-`/usr/local/etc/nginx/nginx.conf`
-
-#### 配置 nginx
-
-首先备份一下 nginx.conf ==&gt; nginx.conf.default
-修改server 部分为:
-
-&lt;pre&gt;`server
-  {
-    listen    8080;
-    server_name localhost;
-
-    location /{
-      root /Users/YourId/Documents; //项目目录
-      #index index.html index.htm;
-    }
-  }
-`&lt;/pre&gt;
-
-配置完成后启动 nginx 即可访问
-
-### 安装 mySQL
-
-终端执行
-`brew install mysql`
- 安装完成后默认没有密码, 修改密码
- ```
- mysql -uroot -p
- Enter password:
- mysql&gt;use mysql;
- mysql&gt; UPDATE user SET password=password(&quot;修改的密码&quot;) WHERE user=&apos;root&apos;;
-
-mysql 的操作命令
-
-&lt;pre&gt;`  #开启
-  mysql.server start
-  #结束
-  mysql.server stop
-</code></pre><p>配置文件位于<br><code>/usr/local/Cellar/mysql/5.6.28/my.cnf</code></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2261,7 +2337,7 @@ mysql 的操作命令
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">161</span>
+                <span class="site-state-item-count">162</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

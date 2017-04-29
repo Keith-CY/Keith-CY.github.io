@@ -287,6 +287,255 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/31/promise-in-es6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/31/promise-in-es6/" itemprop="url">
+                  Promise in ES6
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-31T07:00:29+08:00">
+                2016-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在 JavaScript 世界中, 所有代码都是单线程执行的</p>
+<p>异步执行可以可以用回调函数实现</p>
+<pre><code>function callback() {
+  console.log(&apos;Done&apos;);
+}
+console.log(&apos;before setTimeout()&apos;);
+setTimeout(callback, 1000);
+console.log(&apos;after setTimeout()&apos;);
+`&lt;/pre&gt;
+
+先看一个简单的 Promise 例子: 生成0-2之间的随机数, 如果小于1, 则等待一段时间后返回成功, 否则返回失败
+
+&lt;pre&gt;`function test(resolve, reject){
+  var timeOut = Math.random() * 2;
+  log(&apos;set timeout to: &apos; + timeOut + &apos; seconds.&apos;);
+  setTimeout(function(){
+    if(timeOut &amp;lt; 1) {
+      log(&apos;call resolve()...&apos;);
+      resolve(&apos;200 ok&apos;);
+    } else {
+      log(&apos;call reject()...&apos;);
+      reject(&apos;timeout in &apos; + timeOut + &apos; seconds&apos;);
+    }
+  }, timeOut * 1000)
+}
+`&lt;/pre&gt;
+
+这个`test()`函数有两个参数, 这两个参数都是函数, 如果执行成功, 我们将调用`resolve(&apos;200 ok)&apos;`, 如果执行失败, 我们将调用`reject(&apos;timeout in &apos; + timeOut + &apos; seconds.&apos;)`. 可以看出, `test()`函数只关心自己的逻辑, 并不关心具体的`resolve` 和`reject` 将如何处理.
+
+有了执行函数, 我们就可以用一个 Promise 对象来执行他, 并在将来某个时刻获得成功或失败的结果
+
+&lt;pre&gt;`var p1 = new Promsie(test);
+var p2 = p1.then(function(result){
+  console.log(&apos;成功: &apos; + result);
+});
+var p3 = p2.catch(function(err){
+  console.log(&apos;失败: &apos; + err);
+});
+`&lt;/pre&gt;
+
+变量`p1`是一个 Promise 对象, 他负责执行执行`test`函数, 由于`test`函数在内部是异步执行的, 当`test`函数执行到`resolve(&apos;ok 200&apos;)`时, 告诉 Promsie 对象执行
+
+&lt;pre&gt;`.then(function(result){ // result 是通过 test 传递给 resolve 的参数
+  console.log(&apos;成功: &apos; + result);
+});
+`&lt;/pre&gt;
+
+当`test`执行到`reject`的时候, 告诉 Promise 对象执行
+
+&lt;pre&gt;`.catch(function(err){ // err 是 test 传递给 reject 的参数
+  console.log(&apos;失败: &apos;+ err);
+});
+`&lt;/pre&gt;
+
+Promise 对象可以串联起来(因为都返回一个 Promise 对象)
+
+&lt;pre&gt;`new Promise(test).then(function(result){console.log(result)}).catch(function(err){console.log(err)});
+`&lt;/pre&gt;
+
+可见, Promise 最大的好处, 是在异步执行的流程中, 把执行代码和处理结果代码清晰地分离了.
+
+Promise 还可以做更多的事情, 比如有若干个异步任务, 需要先做任务1, 如果成功后再做任务2, 任何任务失败则不再继续并执行错误处理函数
+
+要串行执行这样的异步任务, 只需要链式调用
+
+&lt;pre&gt;`job1.then(job2).then(job3).catch(handleError);
+`&lt;/pre&gt;
+
+其中 job1, job2, job3 都是(或返回) Promise 对象
+
+&lt;pre&gt;`function job2(input){
+  return new Promise(function(resolve, reject){
+      ....
+    })
+}
+`&lt;/pre&gt;
+
+### 并行执行异步任务
+
+试想一个页面聊天任务, 我们需要从两个不同的 URL 分别获取用户的个人信息和好友列表, 这两个任务是可以并行执行的, 用`Promise.all()`实现如下:
+
+&lt;pre&gt;`var p1 = new Promise(function(resolve, reject){
+  setTimeout(resolve, 500, &apos;P1&apos;);
+});
+
+var p2 = new Promise(function(resolve, reject) {
+  setTimeout(resolve, 600, &apos;P2&apos;);
+});
+
+// 同时执行p1 和 p2, 并在他们都执行完毕后执行 then
+Promise.all([p1,p2]).then(function(results){
+  console.log(results); // 获得一个 Array: [&apos;P1&apos;, &apos;P2&apos;]
+});
+`&lt;/pre&gt;
+
+有时多个异步任务是为了容错, 比如同时向两个 URL 读取, 只需要获得先返回的结果, 这种情况下用`Promise.race()`实现:
+
+&lt;pre&gt;`var p1 = new Promise(function(resolve, reject){
+  setTimeout(resolve, 500, &apos;P1&apos;);
+});
+var p2 = new Promise(function(resolve, reject){
+  setTimeout(resolve, 600, &apos;P2&apos;);
+});
+
+Promise.race([p1,p2]).then(function(result){
+  console.log(result); // &apos;P1&apos;
+});
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/31/co-module/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2065,257 +2314,6 @@ function innerLi_s(){
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/25/commonjs-e8-a7-84-e8-8c-83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/25/commonjs-e8-a7-84-e8-8c-83/" itemprop="url">
-                  CommonJS 规范
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-25T05:08:26+08:00">
-                2016-07-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>概述<br>CommonJS 是服务器端模块的规范, Node.js 采用了这个规范</p>
-<p>根据 CommonJS 规范, 一个单独的文件就是一个模块</p>
-<p>加载模块使用 require 方法, 该方法读取一个文件并执行, 最后返回文件内部的 exports 对象.</p>
-<pre><code>// example.js
-
-console.log(&apos;evaluating example.js&apos;);
-
-var invisible = function(){
-  console.log(&apos;invisible&apos;);
-}
-
-exports.message = &apos;h1&apos;;
-
-exports.say = function(){
-  console.log(message)
-}
-`&lt;/pre&gt;
-
-使用 require 方法, 加载 example.js 模块
-
-&lt;pre&gt;`var example = require(&apos;./example.js&apos;);
-`&lt;/pre&gt;
-
-这时变量 example 就对应模块中 exports 对象, 可以通过这个对象应用模块中提供的各种方法.
-
-&lt;pre&gt;`{
-  message: &apos;h1&apos;,
-  say: [Function]
-}
-`&lt;/pre&gt;
-
-require 方法默认读取 js 文件, 所以可以省略 .js 扩展名
-
-&lt;pre&gt;`var example = require(&apos;./example&apos;)
-`&lt;/pre&gt;
-
-js 文件名前需要加上路径, 可以是相对路径, 也可以是绝对路径. 如果省略路径, node.js 会认为添加一个核心模块, 或者已经安装在本地 node_modules 目录中的模块. 如果加载的是一个目录, node.js 会首先寻找该目录中的 package.json 文件, 加载该文件 main 属性指定的模块, 否则就寻找该目录下的 index.js 文件
-
-定义一个最简单的模块
-
-&lt;pre&gt;`exports.add = function(a,b){return a+b};
-`&lt;/pre&gt;
-
-//add.js
-为 exports 对象添加一个 add 方法,
-
-&lt;pre&gt;`var addition = require(&apos;./add&apos;);
-addition.add(1,2); //3
-`&lt;/pre&gt;
-
-稍复杂的例子
-
-&lt;pre&gt;`//foobar.js
-function foobar(){
-  this.foo = function(){
-    console.log(&apos;hello foo&apos;)
-  };
-
-  this.bar = function(){
-    console.log(&apos;hello bar&apos;)
-  };
-}
-exports.foobar = foobar;
-`&lt;/pre&gt;
-
-调用
-
-&lt;pre&gt;`var foobar = require(&apos;./foobar&apos;).foobar, test = new foobar();
-test.bar(); //&apos;hello bar&apos;
-`&lt;/pre&gt;
-
-有时不需要 exports 返回一个对象, 而仅需要返回一个函数, 就写成 module.exports
-
-&lt;pre&gt;`module.exports = function(){
-  console.log(&apos;hello world&apos;)
-}
-`&lt;/pre&gt;
-
-### AMD 规范与 CommonJS 规范的兼容性
-
-CommonJS 规范加载模块是同步的, 也就是说, 只有加载完成, 才能执行后面的操作. AMD 规范则是非同步加载模块, 允许指定回调函数. 由于 Node.js 主要用于服务器编程, 模块文件一般都已经存在于本地硬盘, 所以加载起来比较快, 不需要考虑非同步加载的方式, 所以 CommonJS 的规范比较适用. 但是, 如果是浏览器环境, 要从服务器端加载模块, 这时就必须采用非同步模式, 因此浏览器端一般采用 AMD 规范.
-
-AMD 规范适用 define 方法定义模块
-
-&lt;pre&gt;`define([&apos;package/lib&apos;, function(lib){
-  function foo(){
-    lib.log(&apos;hello world!&apos;);
-  }
-
-  return {
-    foo:foo
-  };
-}])
-`&lt;/pre&gt;
-
-AMD 规范允许输出的模块兼容 CommonJS 规范,在这时 define 方法需要写成如下格式
-
-&lt;pre&gt;`define(function(require, exports, module)
-  var someModule = require(&apos;someModule&apos;);
-  var anotherModule = require(&apos;anotherModule&apos;);
-
-  someModule.doTheAwesoem();
-  anotherModule.doMoreAwesome();
-
-  exports.asplode = function(){
-    someModule.doTheAwesoem();
-    anotherModule.doMoreAwesome();
-  };
-);
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2365,7 +2363,7 @@ AMD 规范允许输出的模块兼容 CommonJS 规范,在这时 define 方法需
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">161</span>
+                <span class="site-state-item-count">162</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

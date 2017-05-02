@@ -287,6 +287,231 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/28/e5-aa-92-e4-bd-93-e6-9f-a5-e8-af-a2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/05/28/e5-aa-92-e4-bd-93-e6-9f-a5-e8-af-a2/" itemprop="url">
+                  媒体查询
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-28T08:51:36+08:00">
+                2016-05-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p><strong>媒体查询</strong>包括一个<strong>媒体类型</strong>和至少一个<strong>媒体属性</strong>, 这些<strong>媒体属性</strong>会被解析成真或假.</p>
+<p>当媒体查询为真时, 相关的样式表或样式规则就会按照正常的级联规则被应用.</p>
+<p>即使媒体查询的结果为假, <code>&amp;lt;link&amp;gt;</code>标签上带有媒体查询的样式表仍然会被下载.</p>
+<h2 id="逻辑操作符"><a href="#逻辑操作符" class="headerlink" title="逻辑操作符"></a>逻辑操作符</h2><p>操作符 not, and 和 only, 可以用来构建复杂的媒体查询</p>
+<p>逗号分隔符相当于 or 操作符, 其中一个为真, 则媒体查询结果为真</p>
+<p>一个基本的媒体查询, 即一个媒体属性与默认指定的 all 媒体类型, 可能是这样子:</p>
+<pre><code>@media (min-width: 700px) {...}
+`&lt;/pre&gt;
+
+如果要添加横屏限制
+
+&lt;pre&gt;`@media (min-width: 700px) and (orientation: landscape) {...}
+`&lt;/pre&gt;
+
+### not
+
+not 关键字应用于整个媒体查询, 如
+
+&lt;pre&gt;`@media not all and (monochrome){...} 等价于
+@media not (all and (monochrome)) {...}
+`&lt;/pre&gt;
+
+在逗号媒体查询列表中, not 仅否定他所在的 item.
+
+## 媒体属性
+
+大多数媒体属性都带有&quot; min-&quot; 和&quot; max-&quot;前缀
+
+### Color
+</code></pre><ul>
+<li>值: <code>&amp;lt;color&amp;gt;</code></li>
+<li>媒体: <code>visual</code></li>
+<li><p>是否接受 min/max 前缀: 是</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>向所有能显示颜色的设备应用样式表</p>
+<p><pre><code>@media all and (color) {...}</code></pre></p>
+<h3 id="Aspect-ratio"><a href="#Aspect-ratio" class="headerlink" title="Aspect-ratio"></a>Aspect-ratio</h3></li>
+<li><p>值: <code>&amp;lt;ratio&amp;gt;</code></p>
+</li>
+<li>媒体: <code>visual, tactile</code></li>
+<li><p>是否接受min/max 前缀: 是</p>
+<p>宽高比以”宽/高”表示</p>
+<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><p>向<strong>显示区域</strong>宽高比至少1:1的设备应用样式表</p>
+<p><pre><code>@media screen and (min-aspect-ratio: 1/1){...}</code></pre></p>
+<h3 id="Device-aspect-ratio"><a href="#Device-aspect-ratio" class="headerlink" title="Device-aspect-ratio"></a>Device-aspect-ratio</h3></li>
+<li><p>值: <code>&amp;lt;ratio&amp;gt;</code></p>
+</li>
+<li>媒体: <code>visual, tactile</code></li>
+<li><p>是否接受min/max 前缀: 是</p>
+<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h4><p>为宽屏设备应用样式表</p>
+<p><pre><code>@media screen and (device-aspect-ratio:16/9), screen and (device-aspect-ratio:16/10){...}</code></pre></p>
+<h3 id="Device-height"><a href="#Device-height" class="headerlink" title="Device-height"></a>Device-height</h3></li>
+<li><p>值: <code>&amp;lt;length&amp;gt;</code></p>
+</li>
+<li>媒体: <code>visual, tactile</code></li>
+<li><p>是否接受 min/max 前缀: 是</p>
+<p>描述输出设备的高度(整个屏幕或页的高度, 而不是渲染窗口的高度)</p>
+<h4 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h4><p>向显示在最大宽度800px 的屏幕上的文档应用样式表</p>
+<p><pre>`&lt;link rel=”stylesheet” media=”screen and (max-device-height: 799px)” /&gt;</pre></p>
+</li>
+</ul>
+<h3 id="Device-width"><a href="#Device-width" class="headerlink" title="Device-width"></a>Device-width</h3><ul>
+<li>值: <code>&amp;lt;length&amp;gt;</code></li>
+<li>媒体: <code>visual, tactile</code></li>
+<li>是否接受 min/max 前缀: 是</li>
+</ul>
+<p>描述输出设备的宽度</p>
+<h3 id="Grid"><a href="#Grid" class="headerlink" title="Grid"></a>Grid</h3><ul>
+<li>值: <code>&amp;lt;integer&amp;gt;</code></li>
+<li>媒体: all</li>
+<li>是否接受 min/max 前缀: 否</li>
+<li>判断输出设备是网格设备还是位图设备. 如果是网格设备(例如电传打字机中断或只能显示一种字形的电话), 该值为1, 否则为0</li>
+</ul>
+<h3 id="Height"><a href="#Height" class="headerlink" title="Height"></a>Height</h3><ul>
+<li>值: <code>&amp;lt;length&amp;gt;</code></li>
+<li>媒体: <code>visual, tactile</code></li>
+<li>是否接受 min/max 前缀: 是</li>
+</ul>
+<p>height 描述输出设备的渲染区域高度</p>
+<h3 id="Monochrome"><a href="#Monochrome" class="headerlink" title="Monochrome"></a>Monochrome</h3><h3 id="Orientation"><a href="#Orientation" class="headerlink" title="Orientation"></a>Orientation</h3><ul>
+<li>值: <code>&amp;lt;landscape | portrait&amp;gt;</code></li>
+<li>媒体: <code>visual</code></li>
+<li>是否接受 min/max 前缀: 否</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/28/e5-ad-a6-e4-b9-a0-css-e5-b8-83-e5-b1-80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2125,191 +2350,6 @@ snackbarContainer.MaterialSnackbar.showSnackbar(data);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/26/mdl-loading/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/05/26/mdl-loading/" itemprop="url">
-                  MDL-Loading
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-05-26T09:15:07+08:00">
-                2016-05-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Defaut-Progress-Bar"><a href="#Defaut-Progress-Bar" class="headerlink" title="Defaut Progress Bar"></a>Defaut Progress Bar</h3><pre><code>&amp;lt;!-- Simple MDL Progress Bar --&amp;gt;
-    &amp;lt;div class=&quot;mdl-progress mdl-js-progress&quot; id=&quot;p1&quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;script&amp;gt;
-        document.querySelector(&apos;#p1&apos;).addEventListener(&apos;mdl-componentupgraded&apos;, function(){
-            this.MaterialProgress.setProgress(44);
-        })
-    &amp;lt;/script&amp;gt;
-`&lt;/pre&gt;
-
-### Intedeterminate Progress Bar
-
-&lt;!-- MDL Progress Bar with Indeterminate Progress --&gt;
-
-&lt;div id=&quot;p2&quot; class=&quot;mdl-progress mdl-js-progress mdl-progress__indeterminate&quot;&gt;&lt;/div&gt;
-
-&lt;pre&gt;`&amp;lt;!-- MDL Progress Bar with Indeterminate Progress --&amp;gt;
-&amp;lt;div id=&quot;p2&quot; class=&quot;mdl-progress mdl-js-progress mdl-progress__indeterminate&quot;&amp;gt;&amp;lt;/div&amp;gt;
-`&lt;/pre&gt;
-
-### Buffering Progress Bar
-
-&lt;pre&gt;`    &amp;lt;!-- MDL Progress Bar with Buffering --&amp;gt;
-    &amp;lt;div class=&quot;mdl-progress mdl-js-progress&quot; id=&quot;p1&quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;script&amp;gt;
-        document.querySelector(&apos;#p1&apos;).addEventListener(&apos;mdl-componentupgraded&apos;, function(){
-            this.MaterialProgress.setProgress(33);
-            this.MaterialProgress.setBuffer(66);
-        })
-    &amp;lt;/script&amp;gt;
-`&lt;/pre&gt;
-
-### Default Spinner
-
-&lt;div class=&quot;mdl-spinner mdl-js-spinner is-active&quot;&gt;&lt;/div&gt;
-
-&lt;pre&gt;`&amp;lt;div class=&quot;mdl-spinner mdl-js-spinner is-active&quot;&amp;gt;&amp;lt;/div&amp;gt;
-`&lt;/pre&gt;
-
-### Single Color Spinner
-
-&lt;div class=&quot;mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active&quot;&gt;&lt;/div&gt;
-
-&lt;pre&gt;`&amp;lt;div class=&quot;mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active&quot;&amp;gt;&amp;lt;/div&amp;gt;
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2359,7 +2399,7 @@ snackbarContainer.MaterialSnackbar.showSnackbar(data);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">162</span>
+                <span class="site-state-item-count">163</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -287,6 +287,272 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/20/baisc-usage-of-redux-observable/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/20/baisc-usage-of-redux-observable/" itemprop="url">
+                  Baisc Usage of Redux-Observable
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-20T05:53:35+08:00">
+                2017-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="First-of-All"><a href="#First-of-All" class="headerlink" title="First of All"></a>First of All</h2><h3 id="createEpicMiddleware-rootEpic"><a href="#createEpicMiddleware-rootEpic" class="headerlink" title="createEpicMiddleware(rootEpic)"></a><code>createEpicMiddleware(rootEpic)</code></h3><p><code>createEpicMiddleware</code> is used to create an instance of the actual redux-observable middleware, and you should provide a single, root Epic</p>
+<h4 id="Arguments"><a href="#Arguments" class="headerlink" title="Arguments"></a>Arguments</h4><ol>
+<li><code>rootEpic: Epic</code>: The root Epic<p></p></li>
+<li><code>[options: Object]</code>: The optional configuration.</li>
+</ol>
+<ul>
+<li><p><code>dependencies</code>: If given, it will be injected as the 3rd argument to all Epics,</p>
+</li>
+<li><p><code>adapter</code>: An adapter object which can transform the input/output streams provided to your epics, Usually used to adapt a stream library other than RxJS v5, like adapter-rxjs-v4 or adapter-most Options:</p>
+<pre><code>*   `input: ActionsObservable =&amp;gt; Any`: Transforms the input stream of actions, `ActionsObservable` that is passed to your root Epic(transformation takes place before it is passed to the root Epix)
+
+*   `output: any =&amp;gt; Observable`: Transforms the return value of root Epic(transform takes place after the root epic returned it)
+</code></pre></li>
+</ul>
+<h4 id="Returns"><a href="#Returns" class="headerlink" title="Returns"></a>Returns</h4><p></p><p><code>MiddlewareAPI</code>: An instance of the redux-observable middleware</p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><pre><code>import { createStore, applyMiddleware, compose } from &apos;redux&apos;
+import { createEpicMiddleware } from &apos;redux-observable&apos;
+import { rootEpic, rootRotuer } from &apos;./modules/root&apos;
+
+const epicMiddleware = createEpicMiddleware(rootEpic)
+
+export default function configureStore () {
+  const store = createStore(
+    rootRotuer,
+    applyMiddleware(epicMiddleware)
+  )
+  return store
+}
+`&lt;/pre&gt;
+
+### `combineEpics(...epic)`
+
+`combineEpics` allows you to take multiple epics and combine them into a single one
+
+#### Arguments
+
+`...epics: Epic[]`: The epics to combine
+
+#### Return
+
+`(Epic)`: An Epic that merges the output of every Epic provided and passes along the `ActionObservable` and redux store as arguments
+
+### Example
+
+&lt;pre&gt;`import { combineEpics } from &apos;redux-observable&apos;
+import pingEpic from &apos;./ping&apos;
+import fetchUserEpic from &apos;./fetchUser&apos;
+
+export default combineEpics(
+  pingEpic,
+  fetchUser
+)
+`&lt;/pre&gt;
+
+### `EpicMiddleware`
+
+An instance of the redux-observable middleware
+
+To create it, pass your root Epic to `createEpicMiddleware`
+
+`replaceEpic(nextEpic)`: Replaces the epic currently by the middleware, it is an advanced API. You might need this if your app implement code splitting and you want to load some of the epics dynamically or you&apos;re using hot reloading.
+
+### Create Epic
+
+&lt;pre&gt;`const pingEpic = action$ =&amp;gt; action$.ofType(&apos;PING&apos;).mapTo({type: &apos;PONG&apos;})
+`&lt;/pre&gt;
+
+### Cancellation
+
+&lt;pre&gt;`import { ajax } from &apos;rxjs/observable/dom/ajax&apos;
+
+const fetchUserEpic = action$ =&amp;gt; action$.ofType(&apos;FETCH_USER&apos;).mergeMap(
+  action =&amp;gt; ajax.getJSON(`/api/user/${action.payload}`)
+    .map(res =&amp;gt; fetchUserFulfilled(res))
+    .takeUntil(action$.ofType(&apos;FETCH_USER_CANCELLED&apos;))
+)
+`&lt;/pre&gt;
+
+### Handling Error
+
+&lt;pre&gt;`import { ajax } from &apos;rxjs/observable/dom/ajax&apos;
+
+const fetchUserEpic = action$ =&amp;gt; action.ofType(&apos;FETCH_USER&apos;).mergeMap(
+  action =&amp;gt; ajax.getJSON(`/api/users/${action.payload}`)
+  .map(res =&amp;gt; fetchUserFulfilled(res))
+  .catch(err =&amp;gt; Observable.of({
+    type: &apos;FETCH_USER_REJECTED&apos;,
+    payload: err.xhr.response,
+    error: true,
+  }))
+)
+`&lt;/pre&gt;
+
+### dependencies Injecting
+
+&lt;pre&gt;`import { createEpicMiddleware, combineEpics } from &apos;redux-observable&apos;
+import { ajax } from &apos;rxjs/observable/dom/ajax&apos;
+import rootEpic from &apos;./somewhere&apos;
+
+const epicMiddleware = createEpicMiddleware(rootEpic, {
+  dependencies: { getJSON: ajax.getJSON }
+})
+
+const fetchUserEpic= (action$, store, { getJSON }) =&amp;gt; action$.ofType(&apos;FETCH_USER&apos;).mergeMap(
+  (action) =&amp;gt; getJSON(`/api/users/${action.payload}`)
+    .map(res =&amp;gt; ({
+      type: &apos;FETCH_USER_REJECTED&apos;,
+      payload: res
+    }))
+)
+`&lt;/pre&gt;
+
+### Adding New Epics Asynchronously/Lazily
+
+&lt;pre&gt;`import { BehaviorSubject } from &apos;rxjs/BehaviorSubject&apos;
+import { combineEpics } from &apos;redux-observable&apos;
+
+const epic$ = new BehaviorSubject(combineEpics(epic1, epic2))
+const rootEpic = (action$, store) =&amp;gt; epic$.mergeMap(epic =&amp;gt; epic(action$, store))
+
+// sometime later ... add another Epic, keeping the state of the old ones...
+epic$.next(asyncEpic1)
+// and again later add another
+epic$.next(asyncEpic2)
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/27/functor-e5-87-bd-e5-ad-90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2199,188 +2465,6 @@ module.exports = {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/08/web-e5-9d-90-e6-a0-87-e6-95-b4-e7-90-86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/08/web-e5-9d-90-e6-a0-87-e6-95-b4-e7-90-86/" itemprop="url">
-                  Web 坐标整理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-08T04:39:26+08:00">
-                2016-12-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="坐标分类"><a href="#坐标分类" class="headerlink" title="坐标分类"></a>坐标分类</h3><ol>
-<li>文档坐标<p></p></li>
-<li>窗口坐标</li>
-</ol>
-<h3 id="scroll"><a href="#scroll" class="headerlink" title="scroll"></a>scroll</h3><p>Element.scrollTop: 设置或获得一个元素距离他容器顶部的像素距离, 当一个元素的容器没有产生垂直方向的滚动条, 则他的 scrollTop 的值默认为0</p>
-<p>获得滚动距离<br>var intElementScrollTop = someElement.scrollTop;</p>
-<p>scrollTop可以被设置为任何整数, 但是一下情况会报错:<br>1. 如果一个元素不能被滚动(没有溢出容器或本身不可滚动)的时候设置其 scrollTop 为 0;</p>
-<ol>
-<li><p>设置 scrollTop 的值小于 0, scrollTop 被设为 0</p>
-</li>
-<li><p>如果设置了超出这个容器可以滚动的值, scrollTop 会被设为最大值</p>
-</li>
-</ol>
-<blockquote>
-<p></p><p>其实就是溢出距离</p>
-</blockquote>
-<p><img src="https://developer.mozilla.org/@api/deki/files/842/=ScrollTop.png" alt=""></p>
-<p>Element.scrollHeight: 计量元素内容高度的只读属性, 包括 overflow 样式属性导致的视图中不可见内容</p>
-<p>没有垂直滚动条的情况下, scrollHeight 值与元素视图填充所有内容所需要的最小值 clientHeight 相同, 包括元素的 padding, 但不包括 margin</p>
-<blockquote>
-<p>其实就是溢出元素的本身高度</p>
-</blockquote>
-<p>!()[<a href="https://developer.mozilla.org/@api/deki/files/840/=ScrollHeight.png" target="_blank" rel="external">https://developer.mozilla.org/@api/deki/files/840/=ScrollHeight.png</a>]</p>
-<h4 id="判断元素是否滚动到底部"><a href="#判断元素是否滚动到底部" class="headerlink" title="判断元素是否滚动到底部"></a>判断元素是否滚动到底部</h4><p><code>element.scrollHeight - element.scrollTop === element.clientHeight</code></p>
-<h3 id="clientTop"><a href="#clientTop" class="headerlink" title="clientTop"></a>clientTop</h3><p>Element.clientTop: 一个元素顶部边框的宽度, 不包括顶部外边距或内边距, 只读属性</p>
-<p>clientHeight 可以通过 CSS height + CSS padding - 水平滚动条高度 来计算</p>
-<blockquote>
-<p>其实就是可视区域高度</p>
-</blockquote>
-<p>mouseEvent.clientX: 只读属性, 事件发生时应用客户端区域的水平坐标, 与页面无关</p>
-<p>mouseEvent.x 是 mouseEvent.clientX 的别名</p>
-<h3 id="window"><a href="#window" class="headerlink" title="window"></a>window</h3><p>window.innerHeight: 浏览器窗口的视口( viewport ) 高度, 如果存在滚动条, 则要包括在内, 只读属性</p>
-<p>window.outerHeight: 整个浏览器窗口的高度</p>
-<p><img src="https://developer.mozilla.org/@api/deki/files/213/=FirefoxInnerVsOuterHeight2.png" alt=""></p>
-<h3 id="offset"><a href="#offset" class="headerlink" title="offset"></a>offset</h3><p>mouseEvent.offsetX: read-only property provides the offset in the X coordinate of the mouse pointer between that event and the padding edge of the target node</p>
-<h3 id="page"><a href="#page" class="headerlink" title="page"></a>page</h3><p>event.PageX: read-only property returns the horizontal coordinate of the event relative to the whole document</p>
-<blockquote>
-<p>文档坐标</p>
-</blockquote>
-<h3 id="screen"><a href="#screen" class="headerlink" title="screen"></a>screen</h3><p>mouseEvent.screenX: read-only property provides the horizontal coordinate of the mouse pointer in the global(screen) coordinate.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2430,7 +2514,7 @@ module.exports = {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">162</span>
+                <span class="site-state-item-count">163</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

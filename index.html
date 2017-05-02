@@ -287,6 +287,163 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/02/detail-of-node-cluster/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/02/detail-of-node-cluster/" itemprop="url">
+                  未命名
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-02T09:33:21+08:00">
+                2017-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>(<code>(</code>(<code>(</code>(<code>(</code>(<code>(</code>(<code>(</code>(<code>(</code>(<code>(</code>— title: detail of node cluster date: 2017-05-02 09:33:21</p>
+<h1 id="tags"><a href="#tags" class="headerlink" title="tags:"></a>tags:</h1><h2 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h2><p>A single instance of Node.js runs in a single tread. To take advantage of multi-core systems the user will sometimes want to launch a cluster of Node.js processes to handle the load.</p>
+<p>The cluster module allows you to easily create child processes that all share <strong>server port</strong>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>)</div><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</div><div class="line"><span class="keyword">const</span> numCPUs = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus().length</div><div class="line"></div><div class="line"><span class="keyword">if</span> (cluster.isMaster) &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Master <span class="subst">$&#123;process.pid&#125;</span> is running`</span>)</div><div class="line"></div><div class="line">  <span class="comment">// Fork workers</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; numCPUs; i++) &#123;</div><div class="line">    cluster.fork()</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  cluster.on(<span class="string">'exit'</span>, (worker, code, signal) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`worker <span class="subst">$&#123;worker.process.pid&#125;</span> died`</span>)</div><div class="line">  &#125;)</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">  <span class="comment">// Workers can share any TCP connection</span></div><div class="line">  <span class="comment">// In this case it is an HTTP Server</span></div><div class="line"></div><div class="line">  http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</div><div class="line">    res.writeHead(<span class="number">200</span>)</div><div class="line">    res.end(<span class="string">'hello world\n'</span>)</div><div class="line">  &#125;).listen(<span class="number">8000</span>)</div><div class="line"></div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Worker <span class="subst">$&#123;process.pid&#125;</span> started`</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Running Node.js will now share port 8000 between the workers.</p>
+<h2 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works"></a>How it works</h2><p>The workder processes are spawned using the <code>child_process.fort()</code> method, so that they can communicate with the parent via IPC and pass server handles back and forth.</p>
+<p>The cluster module supports two methods of distributing incoming connections.</p>
+<p>The first one (and the default one on all platform except Windows), is the <strong>round-robin</strong> approch, where the master process listens on a port, accepts new connections and distributes them across the workers in a round-robin fashion, with some built-in smarts to avoid overloading a worker process.</p>
+<p>The second approach is where the master process <strong>creates the listen socket and sends it to interested workers</strong>. The workers then accept incoming connection directly.</p>
+<p>The second approach should, in theory, give the best performance. In practice however, distribution tends to be <strong>very unbalanced due to operating system scheduler vagaries</strong>. Loads have been observed where over 70% of all connections ended up in just two process, out of a total of eight.</p>
+<p>Because <code>server.listen()</code> hands off most of the worker to the master process, there are three case where the behavior between a normal Node.js process and a cluster worker differs:</p>
+<blockquote>
+<p><code>server.listen({fd: 7})</code> Because the message is passed to the master, file descriptor 7 <strong>in the parent</strong> will be listened on, and the handle passed to the worker, rather than listening to the worker’s idea of what the number 7 file descriptor reference. (the fd will be used up sooner)</p>
+<p><code>server.listen(handle)</code> Listening on handles explicitly wil cause the worker to use the supplied handle, rather than talk to the master process. If the worker already has the handle, then it’s presumed that you know what you are doing.</p>
+<p><code>server.listen(0)</code> Normally, this will cause servers to listen on a random port. However, in a cluster, each worker will receive the same ‘random’ port each time they do <code>listen(0)</code>. In essence, the port is random the first time, but predicatable thereafter. If you want to listen on a unique port, generate a port number based on the cluster worker ID.</p>
+</blockquote>
+<p>There is no routing logic in Node.js, or in your program, and no shared state between the workers. Therefore, it is important to design your program such that it does not rely on heavily on in-memory data object for things like sessions and login.</p>
+<p>Because workers are all separate processes, they can be killed or re-spawned depending on your program’s needs, without affecting other workers. As long as there are some workers still alive, the server will continue to accept connections. If no workers are alive, existing connections will be dropped and new connections will be refused. Node.js does not automatically manage the number of worker for you, however. It is yoru responsibility to manage the worker pool for your application’s needs.</p>
+<h2 id="Class-worker"><a href="#Class-worker" class="headerlink" title="Class: worker"></a>Class: worker</h2><p>A Worder Object contains all public information and method about a worker. In the master it can be obtained using <code>cluster.workers</code>. In a worker it can be obtained using <code>cluster.worker</code></p>
+<h3 id="Event-‘disconnect’"><a href="#Event-‘disconnect’" class="headerlink" title="Event: ‘disconnect’"></a>Event: ‘disconnect’</h3><p>Similar to the <code>cluster.on(&#39;disconnect&#39;)</code> event, but specific to this worker.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cluster.fork().on(<span class="string">'disconnect'</span>, () =&gt; &#123;</div><div class="line">  <span class="comment">// Worker has disconnected</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Event-‘error’"><a href="#Event-‘error’" class="headerlink" title="Event: ‘error’"></a>Event: ‘error’</h3><p>This event is the same as the one provided by <code>child_process.fork()</code></p>
+<p>In a worker you can alse use <code>process.on(&#39;error&#39;)</code></p>
+<h3 id="Event-‘exit’"><a href="#Event-‘exit’" class="headerlink" title="Event: ‘exit’"></a>Event: ‘exit’</h3><blockquote>
+<p><code>code</code></p>
+<number> the exit code, if it exited Normally</number>
+
+<p><code>signal</code></p>
+<string> the name of the signal(e.g. <strong>SIGHUP</strong>) that caused the process to be killed.</string>
+
+</blockquote>
+<p>Similar to the <code>cluster.on(&#39;exit&#39;)</code> event, but specific to this worker</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> worker = cluster.fork()</div><div class="line">worker.on(<span class="string">'exit'</span>, (code, signal) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (signal) &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`worker was killed by signal: <span class="subst">$&#123;signal&#125;</span>`</span>)</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (code !== <span class="number">0</span>) &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`worker exited with error code: <span class="subst">$&#123;code&#125;</span>`</span>)</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'worker success'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Event-‘listening’"><a href="#Event-‘listening’" class="headerlink" title="Event: ‘listening’"></a>Event: ‘listening’</h3><blockquote>
+<p><code>address</code></p>
+<object><br>  <p><br></p><br>  <p>Similar to the <code>cluster.on(‘listening’)</code> event, but specific to this worker.</p><br>  <pre><br><br>  <code class="lang-javascript">cluster.fork().on(‘listening’, (address) =&gt; {<br>  // Worker is listening<br>})<br></code><br></pre><br>  <p>It is not emitted in the worker</p><br>  <h4 id="event-message-">Event: ‘message’</h4><br>  <blockquote><br>  <p><code>message</code> <object><br>  <p><br></p><br>  <p><code>handle</code> <undefined> | <object><br>  <p></p><br>  <p>Similar to the <code>cluster.on(‘message’)</code> event, but specific to this worker. In a worker you can also use <code>process.on(‘message’)</code></p><br>  <p>As an example, here is a cluster that keeps count of the number of requests in the master process using the message system:</p><br>  <pre><code class="lang-javascript">const cluster = require(‘cluster’)<br>const http = require(‘http’)<br><br>if (cluster.isMaster) {<br><br>  let numReqs = 0<br><br>  setInterval(() =&gt; {<br>    console.log(<code>numReqs = ${numReqs}</code>)<br>  }, 1000)<br><br>  // Count requests<br>  function messageHandler(msg) {<br>    if (msg.cmd &amp;&amp; msg.cmd === ‘notifyRequest’) {<br>      numReqs++<br>    }<br>  }<br><br>  // Start workers and listen for messages containing notifyRequest<br><br>  const numCPUs = require(‘os’).cpus().length<br><br>  for (let i = 0; i &lt; numCPUs; i++) {<br>    cluster.fork()<br>  }<br><br>  for (const id in cluster.workers) {<br>    cluster.workers[id].on(‘message’, messageHandler)<br>  }<br><br>} else {<br>  // Worker processes have a http server<br>  http.Server((req, res) =&gt; {<br>    res.writeHead(200)<br>    res.end(‘hello world’)<br>    process.send({ cmd: ‘notifyRequest’ })<br>  }).listen(8000)<br>}<br></code></pre><br>  <h4 id="event-online-">Event: ‘online’</h4><br>  <p>Similar to the <code>cluster.on(‘online’)</code> event, but specific to this worker</p><br>  <pre><code class="lang-javascript">cluster.fork().on(‘online’, () =&gt; {<br>  // Worker is online<br>})<br></code></pre><br>  <p>It is not emitted in the worker</p><br>  <h4 id="worker-disconnect-">worker.disconnect()</h4><br>  <blockquote><p>Return: <worker> A reference to <code>worker</code></worker></p></blockquote><br>  <p>In a worker, this function will close all server, wait for the <code>close</code> event on those servers, and disconnect the IPC channel.</p><br>  <p>In the master, an internal message is sent to the worker causing it to call <code>.disconnect()</code> on itself</p><br>  <p>Cause <code>.exitedAfterDisconnect</code> to be set.</p><br>  <p>Note that after a server is closed, it will no longer accept new connections, but connections may be accepted by any other listening worker. Existing connections will be allowed to close as usual. When no more connections exist, see <code>server.close()</code>, the IPC channel to the worker will close allowing it to die gracefully.</p><br>  <p>Note that in a worker, <code>process.disconnect</code> exists, but it is not this function.</p><br>  <p>Because long living server connections may block workers from disconnecting, it may be useful to send a message, so application specific actions may be taken to close them. It also may be useful to implement a timeout, killing a worker if the <code>disconnect</code> event has not been emiited after some time.</p><br>  <pre><code class="lang-javascript">if (cluster.isMaster) {<br>  const worker = cluster.fork()<br>  let timeout<br><br>  worker.on(‘listening’, (address) =&gt; {<br>    worker.send(‘shutdown’)<br>    worker.disconnect()<br>    timeout = setTimeout(() =&gt; {<br>      worker.kill()<br>    }, 2000);<br>  })<br><br>  worker.on(‘disconnect’, () =&gt; {<br>    clearTimeout(timeout)<br>  })<br>} else if (cluster.isWorker){<br>  const net = require(‘net’)<br>  const server = net.createServer((socket) =&gt; {<br>    // connections never end<br>  })<br>  server.listen(8000)<br><br>  process.on(‘messaage’, (msg) =&gt; {<br>    if (msg === ‘shutdown’) {<br>      // initiate graceful close of any connections to server<br>    }<br>  })<br>}<br></code></pre><br>  <h4 id="worker-exitedafterdisconnect">worker.exitedAfterDisconnect</h4><br>  <blockquote><boolean><br></boolean></blockquote><br>  <p>Set by calling <code>.kill()</code> or <code>.disconnect()</code>. Until then, it is <code>undefined</code></p><br>  <p>The boolean <code>worker.exitedAfterDisconnect</code> lets you distinguish between voluntary and accidental exit, the master may choose not to respawn a worker based on this value.</p><br>  <pre><code class="lang-javascript">cluster.on(‘exit’, (worker, code, signal) =&gt; {<br>  if (worker.exitedAfterDisconnect === true) {<br>    console.log(‘Oh, it was just voluntary - no need to worry’)<br>  }<br>})<br><br>// kill worker<br>worker.kill()<br></code></pre><br>  <h4 id="worker-id">worker.id</h4><br>  <blockquote><number><br></number></blockquote><br>  <p>Each new worker is given its own unique id, this id is stored in the <code>id</code></p><br>  <p>While a worker is alive, this is the key that indixes it in cluster.workers.</p><br>  <h4 id="worker-isconnected-">worker.isConnected()</h4><br>  <p>This function returns <code>true</code> if the worker is connected to its master via its IPC channel. <code>false</code> otherwise. A worker is connected to its master after it’s been created. It is disconnected after the <code>disconnect</code> event is emitted.</p><br>  <h4 id="worker-isdead-">worker.isDead()</h4><br>  <p>This function returns <code>true</code> if the worker’s process has terminated (either because of exiting or being signaled). Otherwise, it returns <code>false</code></p><br>  <h4 id="worker-kill-signal-sigterm-">worker.kill([signal=’SIGTERM’])</h4><br>  <blockquote><p><code>signal</code> <string> Name of the kill signal to send to the worker process.</string></p></blockquote><br>  <p>This function will kill the worker. In the master it does this by disconnecting the <code>worker.process</code> and once disconnected, killing with <code>signal</code>. In the worker, it does it by disconnecting the channel and exiting with code <code>0</code></p><br>  <p>Causes <code>.exitedAfterDisconnect</code> ot be set</p><br>  <p>This method is aliased as <code>worker.destroy()</code> for backwords compatibility.</p><br>  <p>Note that ina worker, <code>process.kill()</code> exists, but it is not the function.</p><br>  <h4 id="worker-process">worker.process</h4><br>  <blockquote><childprocess><br></childprocess></blockquote><br>  <p>All Workers are created using <code>child_process.fork()</code>, the returned object from this function is stored as <code>.process</code>. In a worker, the global <code>process</code> is stored</p><br>  <p>Note that the workers will call <code>process.exit(0)</code> if the <code>disconnect</code> event occurs on <code>process</code> and <code>.exitedAfterDisconnect</code> is not <code>true</code>. This protects against accidental disconnection.</p><br>  <h4 id="worker-send-message-sendhandle-callback-">worker.send(message[, sendHandle, [callback]])</h4><br>  <blockquote><p><code>message</code> <object><br>  <p><br></p><br>  <p><code>sendHandle</code> <handle><br></handle></p><br>  <p><code>callback</code> <function><br></function></p><br>  <p>Send a message to a worker or master, optinally with a handle.</p><br>  <p>In the master this sends a message to a specific worker. It is identical to <code>ChildProcess.send()</code></p><br>  <p>In a worker this sends a message to the master. It is identical to <code>process.send()</code></p><br>  <p>This example will echo back all messages from the master</p><br>  <pre><br><br>  <code class="lang-javascript">if (cluster.isMaster) {<br>  const worker = cluster.fork()<br>  worker.send(‘hi there’)<br>} else if (cluster.isWorker) {<br>  process.on(‘message’, (msg) =&gt; {<br>    process.send(msg)<br>  })<br>}<br></code><br></pre><br>  <h4 id="event-disconnect-">Event: ‘disconnect’</h4><br>  <blockquote><br>  <p><code>worker</code> <cluster.worker><br></cluster.worker></p><br></blockquote><br>  <p>Emitted after the worker IPC channel has disconnected. This can occur when a worker exits gracefully, is killed, or is disconnected manually(such as with worker.disconnected())</p><br>  <p>There may be a delay between the <code>disconnect</code> and <code>exit</code> events. These events can be used to detect if the process is stuck in a cleanup or if there are long-living connections.</p><br>  <pre><br><br>  <code class="lang-javascript">cluster.on(‘disconnect’, (worker) =&gt; {<br>  console.log(<code>The worker #${worker.id} has disconnected</code>)<br>})<br></code><br></pre><br>  <h4 id="event-exit-">Event: ‘exit’</h4><br>  <blockquote><br>  <p><code>worker</code> <cluster.worker><br></cluster.worker></p><br>  <p><code>code</code> <number> the exit code, if it exited normally</number></p><br>  <p><code>signal</code> <string> the name of the signal (e.g. ‘SIGHUP’) that caused the process to be killed.</string></p><br></blockquote><br>  <p>When any of the workers die the cluster module will emit the ‘exit’ events</p><br>  <p>This can be used to restart the worker by calling <code>.fork()</code> again.</p><br>  <pre><br><br>  <code class="lang-javascript">cluster.on(‘exit’, (worker, code, signal) =&gt; {<br>  console.log(‘worker %d died (%s), restarting…’, worker.process.pid, signal || code)<br>  cluster.fork()<br>})<br></code><br></pre><br>  <h4 id="event-fork-">Event: ‘fork’</h4><br>  <blockquote><br>  <p><code>worker</code> <cluster.worker><br></cluster.worker></p><br></blockquote><br>  <p>When a new worker is forked the cluster module will emit a <code>fork</code> event. This can be used to log worker activity, and create your own timeout.</p><br>  <pre><br><br>  <code class="lang-javascript">const timeouts = []<br>function errorMsg () {<br>  console.error(‘Something must be wrong with the connection…’)<br>}<br><br>cluster.on(‘fork’, (worker) =&gt; {<br>  timeouts[worker.id] = setTimeout(errorMsg, 2000)<br>})<br><br>cluster.on(‘listening’, (worker, address) =&gt; {<br>  clearTimeout(timeouts[worker.id])<br>})<br><br>cluster.on(‘exit’, (worker, code, signal) =&gt; {<br>  clearTimeout(timeouts[worker.id])<br>})<br></code><br></pre><br>  <h4 id="event-listening-">Event: ‘listening’</h4><br>  <blockquote><br>  <p><code>worker</code> <cluster.worker><br></cluster.worker></p><br>  <p><code>address</code> <object><br>  <p><br></p><br>  <p>After calling <code>listen()</code> from  a worker. when the <code>listening</code> event it emitted on the server, a <code>listening</code> event will also be emitted on <code>cluster</code> in the master</p><br>  <p>The event handler is executed with two arguments, the <code>worker</code> contains the worker object and the <code>address</code> object contains the following connection properties: <code>address</code>, <code>port</code> and <code>addressType</code>. This is very useful if the worker is listening on more than one address.</p><br>  <pre><br><br>  <code class="lang-javascript">cluster.on(‘listening’, (worker, address) =&gt; {<br>  console.log(<code>A worker is now connected to ${address.address}: ${address.port}</code>)<br>})<br></code><br></pre><br>  <p>The <code>addressType</code> is one of:</p><br>  <ul><br>  <li><code>4</code>: (TCPv4)</li><br>  <li><code>6</code>: (TCPv6)</li><br>  <li><code>-1</code>: (unix domain socket)</li><br>  <li><code>“udp4”</code> or <code>“udp6”</code> (UDP v4 or v6)</li><br></ul><br>  <h4 id="event-message-">Event: ‘message’</h4><br>  <blockquote><br>  <p><code>worker</code> <cluster.worker><br></cluster.worker></p><br>  <p><code>message</code> <object><br>  <p><br></p><br>  <p><code>handle</code> <undefined> | <object><br>  <p></p><br>  <p>Emitted when the cluster master receives a message from any worker.</p><br>  <h4 id="event-online-">Event: ‘online’</h4><br>  <blockquote><p><code>worker</code> <cluster.worker><br></cluster.worker></p></blockquote><br>  <p>After forking a new worker, the worker should respond with an online message. When the master receives an online message it will emit this event. The difference between <code>fork</code> and <code>online</code> is that fork is emitted when the master forks a worker and <code>online</code> is emitted when the worker is running.</p><br>  <h4 id="event-setup-">Event: ‘setup’</h4><br>  <blockquote><p><code>settings</code> <object><br>  <p><br></p><br>  <p>Emitted every time <code>.setupMaster()</code> is called.</p><br>  <p>The <code>settings</code> object is the <code>cluster.settings</code> object at the time <code>.setupMaster()</code> was called and is advisory only. since multiple calls to <code>.setupMaster()</code> can be made in a single tick.</p><br>  <p>If accuracy is important, use <code>cluster.settings</code></p><br>  <h4 id="cluster-disconnect-callback-">cluster.disconnect([callback])</h4><br>  <p><code>callback</code> called when <strong>all</strong> workers are disconnected and handles are closed Calls <code>.disconnect()</code> on each worker in <code>cluster.workers</code></p><br>  <p>When they are disconnected all internal handles will be closed, allowing the master process to die gracefully if no other event is waiting.</p><br>  <p>The method takes an optional callback argument which will be called when finished.</p><br>  <p>This can only be called from the master process.</p><br>  <h4 id="cluster-fork-env-">cluster.fork([env])</h4><br>  <blockquote><br>  <p><code>env</code> <object> Key/Value pairs to add to worker process environment<p><br></p><p>return <cluster.worker><br></cluster.worker></p><p>Spawn a new worker process.</p><p>This can only be called from the master process.</p><h4 id="cluster-ismaster">cluster.isMaster</h4><blockquote><br>  <boolean><br></boolean><br></blockquote><p>True if the process is a master. This is determined by the <code>process.env.NODE_UNIQUE_ID</code>. If <code>process.env.NODE_UNIQUE_ID</code> is undefined, then <code>.isMaster</code> is <code>true</code></p><h4 id="cluster-isworker">cluster.isWorker</h4><blockquote><br>  <boolean><br></boolean><br></blockquote><p>True if the process is not a master (it is the negation of <code>cluster.isMaster</code>)</p><h4 id="cluster-schedulingpolicy">cluster.schedulingPolicy</h4><p>The scheduling policy, either <code>cluster.SCHED_RR</code> for round-robin or <code>cluster.SCHED_NONE</code> to leave it to the operating system. This is a global setting and effectively frozen once you spawn the first worker or call cluster <code>cluster.setupMaster()</code>, whatever comes first.</p><p><code>SCHED_RR</code> is the default on all operating systems except Windows. Windows will change to <code>SCHED_RR</code> once libuv is able to effectively distribute IOCP handles without incurring a large performance hit.</p><p><code>cluster.schedulingPolicy</code> can also be set through the <code>NODE_CLUSTER_SCHED_POLICY</code> environment variable. Valid values are <code>‘rr’</code> and <code>‘none’</code></p><h4 id="cluster-settings">cluster.settings</h4><blockquote><br>  <p><object><br>  <p><br></p><br>  <ul><br>  <li><code>execArgv</code></li><br>  <li><code>exec</code></li><br>  <li><code>args</code></li><br>  <li><code>silent</code></li><br>  <li><code>stdio</code></li><br>  <li><code>uid</code></li><br>  <li><code>gid</code></li><br></ul><br>  <h4 id="cluster-setupmaster-settings-">cluster.setupMaster([settings])</h4><br>  <blockquote><br>  <p><code>settings</code></p><br>  <ul><li><code>exec</code></li><li><code>args</code></li><li><code>silent</code></li><li><code>stdio</code></li></ul><br></blockquote><br>  <pre><br><br>  <code class="lang-javascript">const cluster = require(‘cluster’)<br>cluster.setupMaster({<br>  exec: ‘worker.js’,<br>  args: [‘–use’, ‘https’],<br>  silent: true,<br>})<br><br>cluster.fork() // https worker<br></code><br></pre><br>  <h4 id="cluster-worker">cluster.worker</h4><br>  <blockquote><br>  <object><br>  <p>A reference to the current worker object. Not available in the master process.</p><br>  <pre><br><br>  <code class="lang-javascript">const cluster = require(‘cluster’)<br><br>if (cluster.isMaster) {<br>  console.log(‘I am master’)<br>  cluster.fork()<br>  cluster.fork()<br>} else if (cluster.isWorker) {<br>  console.log(<code>I am worker #${cluster.worker.id}</code>)<br>}<br></code><br></pre><br>  <h4 id="cluster-workers">cluster.workers</h4><br>  <blockquote><br>  <object><br>  <p>A hash that stores the active worker objects, keyed by <code>id</code> field. Makes it easy to loop through all the workers. It is only available in the master process.</p><br>  <p>A worker is removed from <code>cluster.workers</code> after the worker has disconnected <strong>and</strong> exit. <strong>The order between two events cannot be determined in advance</strong>. However it is guaranteed that the removal from the cluster.workers list happens before last <code>disconnect</code> or <code>exit</code> event is emitted.</p><br>  <pre><br><br>  <code class="lang-javascript">// Go through all workers<br>function eachWorker(callback) {<br>  for (const id in cluster.workers) {<br>    callback(cluster.worker[id])<br>  }<br>}<br><br>eachWorker((worker) =&gt; {<br>  worker.send(‘big announcement to all workers’)<br>})<br></code><br></pre><br>  <p>Should you wish to reference a worker over a communication channel, using the worker’s unique id is the easiest way to find the worker.</p><br>  <pre><br><br>  <code class="lang-javascript">socket.on(‘data’, (id) =&gt; {<br>  const worker = cluster.workers[id]<br>})<br></code><br></pre><br></object><br></blockquote><br></object><br></blockquote><br></object></p><br></blockquote></object></p><br></blockquote><br></object></p></blockquote><br></object></undefined></p><br></object></p><br></blockquote><br></object></p><br></blockquote><br></object></p></blockquote><br></object></undefined></p><br></object></p><br></blockquote><br></object>
+</blockquote>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/29/api-of-axios/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1653,272 +1810,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/20/baisc-usage-of-redux-observable/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/20/baisc-usage-of-redux-observable/" itemprop="url">
-                  Baisc Usage of Redux-Observable
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-20T05:53:35+08:00">
-                2017-03-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="First-of-All"><a href="#First-of-All" class="headerlink" title="First of All"></a>First of All</h2><h3 id="createEpicMiddleware-rootEpic"><a href="#createEpicMiddleware-rootEpic" class="headerlink" title="createEpicMiddleware(rootEpic)"></a><code>createEpicMiddleware(rootEpic)</code></h3><p><code>createEpicMiddleware</code> is used to create an instance of the actual redux-observable middleware, and you should provide a single, root Epic</p>
-<h4 id="Arguments"><a href="#Arguments" class="headerlink" title="Arguments"></a>Arguments</h4><ol>
-<li><code>rootEpic: Epic</code>: The root Epic<p></p></li>
-<li><code>[options: Object]</code>: The optional configuration.</li>
-</ol>
-<ul>
-<li><p><code>dependencies</code>: If given, it will be injected as the 3rd argument to all Epics,</p>
-</li>
-<li><p><code>adapter</code>: An adapter object which can transform the input/output streams provided to your epics, Usually used to adapt a stream library other than RxJS v5, like adapter-rxjs-v4 or adapter-most Options:</p>
-<pre><code>*   `input: ActionsObservable =&amp;gt; Any`: Transforms the input stream of actions, `ActionsObservable` that is passed to your root Epic(transformation takes place before it is passed to the root Epix)
-
-*   `output: any =&amp;gt; Observable`: Transforms the return value of root Epic(transform takes place after the root epic returned it)
-</code></pre></li>
-</ul>
-<h4 id="Returns"><a href="#Returns" class="headerlink" title="Returns"></a>Returns</h4><p></p><p><code>MiddlewareAPI</code>: An instance of the redux-observable middleware</p>
-<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><pre><code>import { createStore, applyMiddleware, compose } from &apos;redux&apos;
-import { createEpicMiddleware } from &apos;redux-observable&apos;
-import { rootEpic, rootRotuer } from &apos;./modules/root&apos;
-
-const epicMiddleware = createEpicMiddleware(rootEpic)
-
-export default function configureStore () {
-  const store = createStore(
-    rootRotuer,
-    applyMiddleware(epicMiddleware)
-  )
-  return store
-}
-`&lt;/pre&gt;
-
-### `combineEpics(...epic)`
-
-`combineEpics` allows you to take multiple epics and combine them into a single one
-
-#### Arguments
-
-`...epics: Epic[]`: The epics to combine
-
-#### Return
-
-`(Epic)`: An Epic that merges the output of every Epic provided and passes along the `ActionObservable` and redux store as arguments
-
-### Example
-
-&lt;pre&gt;`import { combineEpics } from &apos;redux-observable&apos;
-import pingEpic from &apos;./ping&apos;
-import fetchUserEpic from &apos;./fetchUser&apos;
-
-export default combineEpics(
-  pingEpic,
-  fetchUser
-)
-`&lt;/pre&gt;
-
-### `EpicMiddleware`
-
-An instance of the redux-observable middleware
-
-To create it, pass your root Epic to `createEpicMiddleware`
-
-`replaceEpic(nextEpic)`: Replaces the epic currently by the middleware, it is an advanced API. You might need this if your app implement code splitting and you want to load some of the epics dynamically or you&apos;re using hot reloading.
-
-### Create Epic
-
-&lt;pre&gt;`const pingEpic = action$ =&amp;gt; action$.ofType(&apos;PING&apos;).mapTo({type: &apos;PONG&apos;})
-`&lt;/pre&gt;
-
-### Cancellation
-
-&lt;pre&gt;`import { ajax } from &apos;rxjs/observable/dom/ajax&apos;
-
-const fetchUserEpic = action$ =&amp;gt; action$.ofType(&apos;FETCH_USER&apos;).mergeMap(
-  action =&amp;gt; ajax.getJSON(`/api/user/${action.payload}`)
-    .map(res =&amp;gt; fetchUserFulfilled(res))
-    .takeUntil(action$.ofType(&apos;FETCH_USER_CANCELLED&apos;))
-)
-`&lt;/pre&gt;
-
-### Handling Error
-
-&lt;pre&gt;`import { ajax } from &apos;rxjs/observable/dom/ajax&apos;
-
-const fetchUserEpic = action$ =&amp;gt; action.ofType(&apos;FETCH_USER&apos;).mergeMap(
-  action =&amp;gt; ajax.getJSON(`/api/users/${action.payload}`)
-  .map(res =&amp;gt; fetchUserFulfilled(res))
-  .catch(err =&amp;gt; Observable.of({
-    type: &apos;FETCH_USER_REJECTED&apos;,
-    payload: err.xhr.response,
-    error: true,
-  }))
-)
-`&lt;/pre&gt;
-
-### dependencies Injecting
-
-&lt;pre&gt;`import { createEpicMiddleware, combineEpics } from &apos;redux-observable&apos;
-import { ajax } from &apos;rxjs/observable/dom/ajax&apos;
-import rootEpic from &apos;./somewhere&apos;
-
-const epicMiddleware = createEpicMiddleware(rootEpic, {
-  dependencies: { getJSON: ajax.getJSON }
-})
-
-const fetchUserEpic= (action$, store, { getJSON }) =&amp;gt; action$.ofType(&apos;FETCH_USER&apos;).mergeMap(
-  (action) =&amp;gt; getJSON(`/api/users/${action.payload}`)
-    .map(res =&amp;gt; ({
-      type: &apos;FETCH_USER_REJECTED&apos;,
-      payload: res
-    }))
-)
-`&lt;/pre&gt;
-
-### Adding New Epics Asynchronously/Lazily
-
-&lt;pre&gt;`import { BehaviorSubject } from &apos;rxjs/BehaviorSubject&apos;
-import { combineEpics } from &apos;redux-observable&apos;
-
-const epic$ = new BehaviorSubject(combineEpics(epic1, epic2))
-const rootEpic = (action$, store) =&amp;gt; epic$.mergeMap(epic =&amp;gt; epic(action$, store))
-
-// sometime later ... add another Epic, keeping the state of the old ones...
-epic$.next(asyncEpic1)
-// and again later add another
-epic$.next(asyncEpic2)
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1968,7 +1859,7 @@ epic$.next(asyncEpic2)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">162</span>
+                <span class="site-state-item-count">163</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

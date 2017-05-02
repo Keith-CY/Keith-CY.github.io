@@ -287,6 +287,297 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/15/gulp-e8-83-bd-e5-a4-9f-e8-a7-a3-e5-86-b3-e9-82-a3-e4-ba-9b-e9-97-ae-e9-a2-98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/15/gulp-e8-83-bd-e5-a4-9f-e8-a7-a3-e5-86-b3-e9-82-a3-e4-ba-9b-e9-97-ae-e9-a2-98/" itemprop="url">
+                  Gulp 能够解决哪些问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-15T05:57:53+08:00">
+                2016-07-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>通常一个前端构建流程包括:</p>
+<ul>
+<li>文件清理: gulp-clear</li>
+<li>文件拷贝: gulp-copy</li>
+<li>文件转换: gulp-webpack</li>
+<li>文件合并: gulp-concat</li>
+<li>文件压缩: gulp-minify</li>
+<li>文件服务: gulp-connect</li>
+<li>文件监控: gulp-watch</li>
+<li>css 相关:<ul>
+<li>less, sass 转换(gulp-less, gulp-sass)</li>
+<li>css 自动添加前缀(gulp-autoprefixer)</li>
+</ul>
+</li>
+<li>js 相关:<ul>
+<li>jslint(gulp-jshint)</li>
+</ul>
+</li>
+<li>html 转换<ul>
+<li>html 模板(gulp-jade, gulp-ejs)</li>
+<li>html prettify</li>
+<li>html validator</li>
+<li>html min</li>
+</ul>
+</li>
+</ul>
+<p>Gulp 通过定义<code>gulpfile.js</code>配置文件的方式定义流程, gulp.js 会通过调用 Node.js 来执行流程.</p>
+<h3 id="引入插件"><a href="#引入插件" class="headerlink" title="引入插件"></a>引入插件</h3><pre><code>var gulp = require(&quot;gulp&quot;), ...
+`&lt;/pre&gt;
+
+### 设定路径
+
+&lt;pre&gt;`var paths = {
+  styles:{
+    src: &quot;src/styles/**/*.less&quot;,
+    dest: &quot;assets/styles/&quot;
+  },
+  scripts:{
+    src: &quot;src/scripts/**/*.js&quot;,
+    dest: &quot;assets/scripts/&quot;
+  }
+};
+`&lt;/pre&gt;
+
+### 设定任务
+
+&lt;pre&gt;`gulp.task(&quot;taskName&quot;, function(){
+  gulp.src(paths.styles.src)
+      .pipe(task())
+      .pipe(gulp.dest(paths.styles.dest));
+});
+`&lt;/pre&gt;
+
+一个 gulpfile.js 文件只是一个 Node 程序, 在 gulpfile 中可以使用任何 npm 中的模块或者其他 Node.js
+并非所有的任务都是基于流, 例如删除文件
+
+&lt;pre&gt;`function clean(){
+  //del 也可以和 gulp.src 一样基于模式匹配的文件路径定义方式
+  return del([&quot;assets&quot;]);
+}
+`&lt;/pre&gt;
+
+如果要控制 task 顺序, 可以通过回调函数实现
+gulp.task(taskName, function(fn){})
+现在新增加了串行和并行 API
+- gulp.parallel: 并行执行
+- gulp.series: 串行执行
+e.g.
+
+&lt;pre&gt;`gulp.task(&quot;one&quot;, function(done){
+  //do stuff
+  done(); //回调函数
+})
+gulp.task(&quot;two&quot;, function(done){
+  //do stuff
+  done();
+});
+//并行执行任务, 执行完后可以添加回调函数
+gulp.task(&quot;parallelTask&quot;, gulp.parallel(&quot;one&quot;, &quot;two&quot;, function(done){
+  done();
+}));
+//串行任务
+gulp.task(&quot;seriesTask&quot;, gulp.series(&quot;one&quot;, &quot;two&quot;, function(done){
+  done();
+}));
+`&lt;/pre&gt;
+
+### 前端常用插件
+</code></pre><ul>
+<li>gulp-sass: 编译 SASS</li>
+<li>browser-sync: 保持多浏览器, 多设备同步</li>
+<li>gulp-imagemin: 压制 png/jpg/git/svg 图片</li>
+<li>gulp-minify-css: 压缩 CSS</li>
+<li>gulp-rename</li>
+<li>gulp-concat: 合并 JS</li>
+<li>gulp-uglify: 压缩 JS</li>
+<li>gulp-autoprefixer: 添加前缀</li>
+<li>gulp-css-spriter: 生成雪碧图</li>
+<li>gulp-htmlmin</li>
+<li><p>gulp-server-livereload</p>
+<h3 id="拥有live-reloading的服务器"><a href="#拥有live-reloading的服务器" class="headerlink" title="拥有live-reloading的服务器"></a>拥有live-reloading的服务器</h3><p>使用 BrowserSync 和 gulp, 你可以轻松创建一个开发服务器, 然后同一个WiFi 中的任何设备都可以方便访问.<br>BrowserSync 同时集成了 live-reload, 所以不需要做另外的配置.</p>
+<p>首先安装模块<br><code>npm install brower-sync --save-dev</code><br>假设目前目录结构为</p>
+<pre>`gulpfile.js
+app/
+    styles/
+            main.css
+        scripts/
+            main.js
+        index.html
+`</pre>
+
+<p>配置 gulpfile.js, 将 app 目录中的文件加入到服务器中, 并且所有的浏览器会在文件发生变化后自动刷新</p>
+<pre>`var gulp = requrie("gulp");
+var browserSync = require("browser-sync").create();
+var reload = browerSync.reload;
+
+//监视文件改动并重新载入
+gulp.task("browser-sync", function(){
+    browserSync.init({
+            server:{
+                    baseDir: 'app'
+                }
+        });
+
+        gulp.watch(['*.html', 'styles/**/*.css', 'scripts/**/*.js'], {cwd: 'app'}, browserSync.reload);
+});
+`</pre>
+
+<h3 id="CSS-预处理"><a href="#CSS-预处理" class="headerlink" title="CSS 预处理"></a>CSS 预处理</h3><p>指定浏览器无需刷新即可重载 CSS<br>假设目录如上</p>
+<p><pre>`var gulp = require(“gulp”);<br>var sass = require(“gulp-ruby-sass”);<br>var browserSync = require(“browser-sync”).create();</pre></p>
+<p>gulp.task(“sass”, function(){</p>
+<pre><code>return sass(&quot;styles/**/*.scss&quot;)
+             .pipe(gulp.dest(&quot;app/css&quot;)
+                     .pipe(reload({stream:true}));
+</code></pre><p>{);<br>/*<br>gulp.task(“sass”, function(){</p>
+<pre><code>gulp.src(&quot;styles/**/*.scss&quot;)
+    .pipe(sass({outputstyle: &apos;compressed&apos;}).on(&apos;error&apos;,sass.logError))
+    .pipe(gulp.dest(&quot;app/css&quot;);
+</code></pre><p>});<br>*/<br>gulp.task(“browser-sync”, [“sass”], function(){</p>
+<pre><code>browserSync({
+        server: {
+                baseDir: &quot;app&quot;;
+            }
+    });
+    gulp.watch(&quot;app/styles/**/*.scss&quot;, [&quot;sass&quot;], browserSync.reload);
+</code></pre><p>});</p>
+</li>
+</ul>
+<p>设置<code>tunnel: true</code> 来使用一个公开的 URL 来访问本地站点</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/15/e9-ab-98-e6-80-a7-e8-83-bd-css/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2020,211 +2311,6 @@ filter: url(resource.svg#c1)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/23/box-shadow-e5-b0-8f-e7-94-a8-e6-b3-95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/23/box-shadow-e5-b0-8f-e7-94-a8-e6-b3-95/" itemprop="url">
-                  box-shadow小用法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-23T02:04:43+08:00">
-                2016-06-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="box-shadow-常规用法"><a href="#box-shadow-常规用法" class="headerlink" title="box-shadow 常规用法"></a>box-shadow 常规用法</h2><h3 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h3><p><code>box-shadow</code> 属性向边框添加一个或多个阴影;</p>
-<p><code>box-shadow: (inset) x-offset, y-offset, blur, spread color;</code></p>
-<h3 id="模拟多边框"><a href="#模拟多边框" class="headerlink" title="模拟多边框"></a>模拟多边框</h3><pre><code>div{
-  width: 100px;
-  height: 100px;
-  margin: 100px;
-  border:5px solid ;
-  box-shadow: inset 0 0 0 5px #ccc,
-    0 0 0 5px #333;
-}
-`&lt;/pre&gt;
-
-要注意: box-shadow 毕竟不是实际边框, 不占据实际空间, 也不属于 `box-sizing`范围
-
-### 模拟半透明遮罩层
-
-&lt;pre&gt;`#foo{
-  width:200px;
-  height:200px;
-  background:#FFF;
-  box-shadow:0 0 0 1920px rgba(0,0,0,.5);
-}
-`&lt;/pre&gt;
-
-### 多重 box-shadow 绘制简图案
-
-&lt;pre&gt;`&amp;lt;div class=&quot;bg&quot;&amp;gt;
-  &amp;lt;div class=&quot;cloud&quot;&amp;gt;&amp;lt;/div&amp;gt;
-&amp;lt;/div&amp;gt;
-
-.bg{
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  background-color: #00bcd4;
-}
-.cloud{
-  width: 50px;
-  height: 50px;
-  margin: 20px auto;
-  background-color: #FFF;
-  border-radius:50%;
-  box-shadow:80px 10px 0 10px #FFF,
-    50px 0 0 20px #FFF, 10px -10px #FFF, -10px 10px 0 10px #FFF;
-}
-`&lt;/pre&gt;
-
-### 多重 shadow 实现立体感
-
-&lt;pre&gt;`&amp;lt;div&amp;gt;Solid&amp;lt;/div&amp;gt;
-
-div{
-  width: 200px;
-  line-height: 68px;
-  font-size: 48px;
-  text-align: center;
-  color:rgba(0,0,0,.3);
-  text-shadow: 1px 1px 0 rgba(0,0,0,.55),
-    2px 1.5px 0 rgba(0,0,0,.25),
-    3px 2px 0 rgba(0,0,0,.2),
-    4px 2.5px 0 rgba(0,0,0,.15),
-    5px 3px 0 rgba(0,0,0,.1);
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2274,7 +2360,7 @@ div{
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">162</span>
+                <span class="site-state-item-count">163</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

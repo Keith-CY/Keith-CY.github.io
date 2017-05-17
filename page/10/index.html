@@ -287,6 +287,414 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/react-e9-a1-b6-e5-b1-82-api/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/21/react-e9-a1-b6-e5-b1-82-api/" itemprop="url">
+                  React 顶层 API
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-21T03:01:17+08:00">
+                2016-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
+                    <span itemprop="name">workNote</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="React-createClass-obj"><a href="#React-createClass-obj" class="headerlink" title="React.createClass(obj)"></a>React.createClass(obj)</h3><p>创建一个 ReactClass(组件类), 参数是一个对象且必须有 render 属性. 该方法必须返回一个封闭的容器或 null/false(表示不渲染)</p>
+<p>在该方法中, 所有的 this 都会在最终调用的时候绑定到创建的组件的构造器上.</p>
+<h3 id="React-createElement-TYPE-string-ReactClass-PROPS-CHILDREN-ReactElement"><a href="#React-createElement-TYPE-string-ReactClass-PROPS-CHILDREN-ReactElement" class="headerlink" title="React.createElement(TYPE(string|ReactClass)[, PROPS[, CHILDREN(ReactElement)]])"></a>React.createElement(TYPE(string|ReactClass)[, PROPS[, CHILDREN(ReactElement)]])</h3><p>创建一个指定类型的 React 元素(要区分 ReactClass(通性) 和 ReactElement( 个性) 和 Virtual DOM(实例), 通过 ReactClass 创建 ReactElement, 然后实例化成 Virtual DOM: 比如 ButtonComponent 是 Class, 而&lt;ButtonCompoennt /&gt;则是 Element, 最后通过 ReactDOM.render() 生成Virtual DOM)<br>第三个参数 Children 可以是人一个书的 React 元素</p>
+<pre><code>React.createElement(&apos;div&apos;, null, 
+  React.createElement(&apos;p&apos;, null, 
+    React.createElement(Component, {a:1})
+  )
+)
+`&lt;/pre&gt;
+
+### React.cloneElement(TYPE(ReactElement)[, PROPS(object)[, CHILDREN(ReactElement)]])
+
+克隆并返回一个新的 ReactElement(内部子元素也会随之克隆), 新返回的元素会保留就元素的 props, ref, key, 也会集成新的 props( 如果第二个参数不为 null)
+
+&lt;pre&gt;`var Hello = React.createClass({
+  render: function(){
+    var span = &amp;lt;span a = &apos;1&apos;&amp;gt;Span&amp;lt;/span&amp;gt;;
+    var newSpan = React.cloneElement(span,{b:&apos;2&apos;}, &amp;lt;em&amp;gt;EM&amp;lt;/em&amp;gt;);
+    console.log(newSpan.props);
+    return &amp;lt;div&amp;gt;Hello {span},{newSpan}&amp;lt;/div&amp;gt;;
+  }
+});
+`&lt;/pre&gt;
+
+注意 createElement的第一个参数必须是字符串或者 ReactClass, 而 cloneElement 的第一个参数只能是 ReactClass
+
+### React.createFactory(TYPE(string|ReactElement))
+
+返回一个某种类型的 ReactElement 工厂函数, 可以利用返回的函数来创建一个 ReactElement( 配置 props 和 children)
+
+&lt;pre&gt;`var Component = React.createClass({
+  render:function(){
+    return this.props.a == 1? &amp;lt;p&amp;gt;123&amp;lt;/p&amp;gt; : null;
+  }
+});
+
+var p = React.createFactory(Component),
+    ReactElementP = p{{a:1}},
+    div = React.createFactory(&apos;div&apos;),
+    ReactElementDiv = div(null, ReactElementP);
+
+React.render(
+  ReactElementDiv, document.body
+);
+`&lt;/pre&gt;
+
+### React.render(REACTELEMENT(ReactElement), CONTAINER(DOMElement)[, CALLBACK(function)])
+
+渲染一个 ReactElement 到 container 指定的 DOM 中, 并返回一个到该组件的引用. 如果提供了可选的回调函数, 则该函数会在组件渲染或更新之后调用
+
+如果我们希望在组件外部可以获得组件内部(能通过 this 访问)的东西, 可以将 React.render 的返回值赋予一个变量, 在后续的调用中访问变量即可.
+
+### React.unmountComponentAtNode(CONTAINER(DOMElement)
+
+从 container 指定的 DOM 中移除已经加载的 ReactElement, 清楚相应的事件处理器和 state, 如果在 container 中没有存在的组件, 则不作处理
+如果组件清除成功, 则返回 true
+
+### React.renderToString(REACTELEMENT(ReactElement))
+
+React 为服务端提供的一个方法, 可以直接输出 ReactElement 为 HTML 字符串, 将这些标记发送(比如 res.write(HTMLString))给客户端, 可以获得更快的页面加载速度, 并有利于搜索引擎的抓取
+
+&lt;pre&gt;`var com = &amp;lt;Component /&amp;gt;
+comHTML = React.renderToString(com) //HTMLString
+`&lt;/pre&gt;
+
+### React.renderToStaticMarkup
+
+类似于 React.renderToString, 但只生成纯粹的 HTML 标记字符串, 不会包含类似 dta-reactid 之类的 React 属性, 从而节约字节数
+
+### React.initializeTouchs(ShouldUserTouch(boolean))
+
+开启或关闭 React 的触摸事件机制, 传入参数 true 使 React 响应 Touch 事件
+
+### React.Chilren
+
+#### React.Children.map(obj children, function[, object context])
+
+遍历子元素, 映射为一个新的子元素集合
+
+&lt;pre&gt;`var Component = React.createClass({
+  render: function(){
+    return (
+      &amp;lt;ul&amp;gt;
+        {React.Children.map{
+          this.props.children, function(){
+            return &amp;lt;li&amp;gt;{child}&amp;lt;/li&amp;gt;
+            }
+          }
+        }
+      &amp;lt;/ul&amp;gt;
+    )
+  }
+})
+</code></pre><h4 id="React-Children-forEach-obj-children-function-obj-context"><a href="#React-Children-forEach-obj-children-function-obj-context" class="headerlink" title="React.Children.forEach(obj children, function[, obj context])"></a>React.Children.forEach(obj children, function[, obj context])</h4><p>遍历子元素, 对每个子元素执行回调, 但不会返回一个新的集合</p>
+<h4 id="React-Children-count-obj-children"><a href="#React-Children-count-obj-children" class="headerlink" title="React.Children.count(obj children)"></a>React.Children.count(obj children)</h4><p>返回子元素总个数</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/updating-with-react-render/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/20/updating-with-react-render/" itemprop="url">
+                  Updating with React.render
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-20T12:32:44+08:00">
+                2016-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
+                    <span itemprop="name">workNote</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="What-does-React-render-do"><a href="#What-does-React-render-do" class="headerlink" title="What does React.render do"></a>What does React.render do</h3><ol>
+<li>First, validate the inputs</li>
+<li>If there was no previous component, render as a new component</li>
+<li>Otherwise, compare the next component to the previous component using <strong>“shouldCUpdateComponent”</strong></li>
+<li>If <strong>“shouldUpdateComponent”</strong> is true, update the component using ReactComponent.updateComponent. Otherwise, unmount and continue to render as a new component</li>
+</ol>
+<p><code>React.render</code> gives you a declarative way to use React’s update flow at the top level, similar to how re-rendering works inside a component. Many times, however, you can create a wrapper component so that you only have a single <code>React.render</code> call. This allows you to keep the logic inside components, which may be cleaner.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/react-e7-bb-84-e4-bb-b6-e7-94-9f-e5-91-bd-e5-91-a8-e6-9c-9f/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1886,339 +2294,6 @@ var f3 = results[2];
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/19/macos-e4-b8-8b-e5-ae-9e-e7-8e-b0tree-e6-8c-87-e4-bb-a4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/19/macos-e4-b8-8b-e5-ae-9e-e7-8e-b0tree-e6-8c-87-e4-bb-a4/" itemprop="url">
-                  Mac OS 下 实现 tree 指令
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-19T08:41:21+08:00">
-                2016-07-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
-                    <span itemprop="name">workNote</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>先安装 zsh<br>进入<code>~/.zshrc</code>, 添加<br><code>alias tree=&quot;find . -print | sed -e &#39;s;[^/]*/;|____;g;s;____|; |;g&#39;&quot;</code><br>回到目录, 执行<br><code>source .zshrc</code> 令修改立即生效<br>可以使用<code>tree</code>指令生成文档树</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/19/regexp-in-js/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/19/regexp-in-js/" itemprop="url">
-                  RegExp in JS
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-19T07:53:26+08:00">
-                2016-07-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
-                    <span itemprop="name">workNote</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Literal"><a href="#Literal" class="headerlink" title="Literal"></a>Literal</h3><p><code>/patter/attributes</code></p>
-<h3 id="new-RegExp"><a href="#new-RegExp" class="headerlink" title="new RegExp"></a>new RegExp</h3><p><code>new RegExp(pattern, attribtues)</code></p>
-<h3 id="pattern"><a href="#pattern" class="headerlink" title="pattern"></a>pattern</h3><h3 id="RegExp-Attribtues"><a href="#RegExp-Attribtues" class="headerlink" title="RegExp Attribtues"></a>RegExp Attribtues</h3><ul>
-<li>g: global</li>
-<li>i: ignoreCase</li>
-<li>m: multi-lines</li>
-<li>source: literal text</li>
-<li>lastIndex: mark the index where to start next match</li>
-</ul>
-<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><pre><code>var re = new RegExp(&apos;^[0-9]+$&apos;,&apos;g&apos;);
-console.log(re.source); //^[0-9]+$
-`&lt;/pre&gt;
-
-&lt;pre&gt;`var re = new RegExp(&apos;\\d{3}&apos;,&apos;g&apos;);
-var str = &apos;123a456b&apos;;
-console.log(re.lastIndex); // 0
-re.exec(str); //return [&apos;123&apos;]
-console.log(re.lastIndex); // 3
-re.exec(str); // [&apos;456&apos;]
-console.log(re.lastIndex); //7
-re.exec(str);
-console.log(re.lastIndex) // 0, reset to 0 if exceed.
-re.lastIndex = 3; //Set Start Index
-re.exec(str); // [&apos;456&apos;]
-</code></pre><h3 id="RegExp-Methods"><a href="#RegExp-Methods" class="headerlink" title="RegExp Methods"></a>RegExp Methods</h3><p>re.compile(re) //execute RegExp in scripts<br>re.exec(str) //return an Array including String, or null.<br>re.test(str) =&gt; true/false</p>
-<h3 id="String-Methods"><a href="#String-Methods" class="headerlink" title="String Methods"></a>String Methods</h3><p>str.search(re,subStr)<br>str.match(re) =&gt; Array including String<br>str.replace(re,str) =&gt; new String<br>str.split(re)</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2268,7 +2343,7 @@ re.exec(str); // [&apos;456&apos;]
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">163</span>
+                <span class="site-state-item-count">165</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

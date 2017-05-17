@@ -287,6 +287,249 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/20/Usage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/20/Usage/" itemprop="url">
+                  Usage
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-20T23:47:12+08:00">
+                2017-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/17/用-javascript-实现选中粘贴/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/17/用-javascript-实现选中粘贴/" itemprop="url">
+                  用 javascript 实现选中粘贴
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-17T01:27:41+08:00">
+                2017-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>为了对付单位愚蠢的每日工作总结的要求, 写了一个小脚本来导出任务管理器里的内容到剪贴板, 于是接触了一下纯 javascript 实现复制到剪贴板功能</p>
+<p>代码先行贴出</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"><span class="meta">    'use strict'</span>;</div><div class="line">    <span class="keyword">if</span> (<span class="string">'your_url'</span>)&#123;</div><div class="line">        <span class="keyword">var</span> issueList = <span class="built_in">document</span>.querySelectorAll(<span class="string">'.issue-list li'</span>);</div><div class="line">        <span class="keyword">var</span> taskList = [];</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>, len = issueList.length; i &lt; len; i++)&#123;</div><div class="line">            <span class="keyword">var</span> key = issueList[i].getAttribute(<span class="string">'data-key'</span>);</div><div class="line">            <span class="keyword">var</span> title = issueList[i].getAttribute(<span class="string">'title'</span>);</div><div class="line">            <span class="keyword">var</span> task = <span class="string">'已完成: '</span>+key+<span class="string">'-'</span>+title;</div><div class="line">            taskList.push(task);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">var</span> text = taskList.join(<span class="string">'\n'</span>);</div><div class="line">        <span class="keyword">var</span> clipboard = <span class="built_in">document</span>.createElement(<span class="string">'textarea'</span>);</div><div class="line">        clipboard.style.width = <span class="string">'100%'</span>;</div><div class="line">        clipboard.style.height = <span class="string">'300px'</span>;</div><div class="line">        clipboard.value = text;</div><div class="line">        <span class="keyword">var</span> listPanel = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'list-panel'</span>)[<span class="number">0</span>];</div><div class="line">        listPanel.appendChild(clipboard);</div><div class="line">        <span class="keyword">var</span> today = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</div><div class="line">        today.style.width = <span class="string">'100%'</span>;</div><div class="line">        today.innerText = <span class="string">'Today'</span>;</div><div class="line">        listPanel.appendChild(today);</div><div class="line">        today.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="built_in">window</span>.location.href = <span class="string">'url_to_today'</span>;</div><div class="line">        &#125;);</div><div class="line">        <span class="keyword">var</span> button = <span class="built_in">document</span>.createElement(<span class="string">'button'</span>);</div><div class="line">        button.style.width = <span class="string">'100%'</span>;</div><div class="line">        button.innerText = <span class="string">'copy to clipboard'</span>;</div><div class="line">        listPanel.appendChild(button);</div><div class="line">        button.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">          clipboard.select();</div><div class="line">          <span class="built_in">document</span>.execCommand(<span class="string">'copy'</span>);</div><div class="line">          clipboard.blur();</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;)()</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/03/20/baisc-usage-of-redux-observable/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2071,400 +2314,6 @@ module.exports = {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/" itemprop="url">
-                  webpack 2 起步
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-29T07:25:10+08:00">
-                2017-01-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>虽然和 webpack1 一样, 还是过一遍</p>
-<h3 id="创建一个-bundle"><a href="#创建一个-bundle" class="headerlink" title="创建一个 bundle"></a>创建一个 bundle</h3><pre><code>mkdir webpack-demo &amp;amp;&amp;amp; webpack-demo
-
-npm init -y
-
-yarn add --dev webpack@beta
-
-yarn add lodash
-`&lt;/pre&gt;
-
-#### 创建 app/index.js
-
-&lt;pre&gt;`// app/index.js
-import _ from &apos;lodash&apos;
-function component () {
-  let element = document.createElement(&apos;div&apos;);
-
-// use lodash
-  element.innerHtml = _.join([&apos;Hello&apos;, &apos;webpack&apos;], &apos; &apos;)
-
-  return element
-}
-
-document.body.appendChild(component())
-`&lt;/pre&gt;
-
-#### 创建 index.html
-
-&lt;pre&gt;`&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;title&amp;gt;webpack 2 demo&amp;lt;/title&amp;gt;
-  &amp;lt;/head&amp;gt;
-  &amp;lt;body&amp;gt;
-    &amp;lt;script src=&quot;public/bundle.js&quot;&amp;gt;&amp;gt;/script&amp;gt;
-  &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-`&lt;/pre&gt;
-
-#### 创建打包后文件
-
-&lt;pre&gt;`./node_modules/.bin/webpack app/index.js public/bundle.js
-`&lt;/pre&gt;
-
-webpack 会自动处理包的依赖关系
-
-### 添加配置文件
-
-&lt;pre&gt;`var path = require(&apos;path&apos;)
-
-module.exports = {
-  entry: &apos;./app/index.js&apos;,
-  output: {
-    path: path.resolve(__dirname, &apos;public&apos;),
-    filename: &apos;bundle.js&apos;
-  }
-}
-`&lt;/pre&gt;
-
-通过 webpack 命令行进行打包
-
-&lt;pre&gt;`webpack --config webpack.config.js
-`&lt;/pre&gt;
-
-`webpack` 会默认执行名为 `webpack.config.js` 的配置文件, 因此仅输入`webpack` 即可进行打包
-
-### 通过 yarn 执行打包
-
-在 `yarn init` 生成的 `package.json` 中添加
-
-&lt;pre&gt;`{
-  ...
-  &quot;scripts&quot;: {
-    &quot;build&quot;: &quot;webpack&quot;
-  }
-  ...
-}
-</code></pre><p>即可将<code>webpack</code>指令添加进 yarn 的快捷方式, 此时执行 <code>yarn build</code> 即可打包</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/18/stacking-context-e6-88-90-e5-9b-a0-e5-8f-8a-e7-89-b9-e6-80-a7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/18/stacking-context-e6-88-90-e5-9b-a0-e5-8f-8a-e7-89-b9-e6-80-a7/" itemprop="url">
-                  Stacking Context 成因及特性
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-18T09:18:57+08:00">
-                2017-01-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="会形成Stacking-Context-的元素"><a href="#会形成Stacking-Context-的元素" class="headerlink" title="会形成Stacking Context 的元素"></a>会形成Stacking Context 的元素</h3><ul>
-<li>root 元素( html )<p></p></li>
-<li><p>position 不是 static 且 z-index 不是 auto 的元素</p>
-</li>
-<li><p>flex item 且 z-index 不是 auto 的元素</p>
-</li>
-<li><p>opacity 小于 1 的元素</p>
-</li>
-<li><p>transform 不是 none 的元素</p>
-</li>
-<li><p>mix-blend-mode 不是 normal 的元素</p>
-</li>
-<li><p>filter 不是 none 的元素</p>
-</li>
-<li><p>isolation 为 isolate 的元素</p>
-</li>
-<li><p>mobile webkit 和 chrome 22+ 上的 fixed 元素</p>
-</li>
-<li><p>在 will-change 属性上指定值为上述任意属性的元素</p>
-</li>
-<li><p>指定 -webkit-overflow-scrolling 为 touch 的元素</p>
-</li>
-</ul>
-<h3 id="Stacking-Context-的特性"><a href="#Stacking-Context-的特性" class="headerlink" title="Stacking Context 的特性"></a>Stacking Context 的特性</h3><ul>
-<li><p>stacking context 可以嵌套</p>
-</li>
-<li><p>每个 Stacking context 相对于兄弟元素都是完全独立的, 其内部规则不会影响到外部</p>
-</li>
-<li><p>每个 stacking context 元素都会被父级 stacking context 视为一个 stacking 规则</p>
-</li>
-</ul>
-<p></p><p>为已经定位的元素( absolute 或 relative) 指定 z-index 可以改变其 parent stacking context 中 z 的偏移量</p>
-<p>一个值得注意的坑: 如果一个元素不是通过absolute 或 relative 实现 stacking context, 那么他的 z-index 为 0 , 仅高于 auto, 且无法改变.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2514,7 +2363,7 @@ module.exports = {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">163</span>
+                <span class="site-state-item-count">165</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

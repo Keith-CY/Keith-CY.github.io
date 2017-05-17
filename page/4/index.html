@@ -287,6 +287,488 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/" itemprop="url">
+                  编写 Koa 中间件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T03:23:36+08:00">
+                2016-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Koa middlewares are simple function which return a <code>GeneratorFunction</code>, and accept another (middleware). When the middleware is run by an “upstream” middleware, it must manually <code>yield</code> to the “downstream” middleware.</p>
+<p>For example if you wanted to track how long it takes for a request to propagate through Koa by adding an <code>x-Response-Time</code> header field the middleware would look like the following:</p>
+<pre><code>function *responseTime(next){
+  var start = new Date;
+  yield next;
+  var ms = new Date - start;
+  this.set(&quot;X-Response-Time&quot;, ms+&quot;ms&quot;);
+}
+app.use(responseTime);
+`&lt;/pre&gt;
+
+Here is another way to write the same thing, inline:
+
+&lt;pre&gt;`app.use(function *(next){
+  var start = new Date;
+  yield next;
+  var ms = new Date - start;
+  this.set(&quot;X-Response-Time&quot;, ms+&quot;ms&quot;);
+});
+`&lt;/pre&gt;
+
+### 中间件最佳实践
+
+Imcluding Middleware accepting options, named middleware for debugging, among others
+
+#### 中间件选项
+
+When creating public middleware it&apos;s useful to conform to the convention of wrapping the middleware in a function that accepts options, allowing users to extend functionality. Even if your middleware accepts no options, this is still a good idea to keep things uniform.
+
+Here our contrived `logger` middleware accepts a `format` string for customization, and returns the middleware itself:
+
+&lt;pre&gt;`function logger(format){
+  format = format || &quot;:method\&quot;:url\&quot;&quot;;
+  return function*(next){
+    var str = format.replace(&quot;:method&quot;, this.method).replace(&quot;:url&quot;, this.url);
+    console.log(str);
+    yield next;
+  }
+}
+`&lt;/pre&gt;
+
+app.use(logger());
+app.use(logger(&quot;:method:url&quot;))
+
+&lt;pre&gt;`
+### 命名中间件
+Naming middlewares is optional, however it&apos;s useful for debugging purpose to assign a name
+`&lt;/pre&gt;
+
+function logger(format){
+  return function *logger(next){
+    // ...
+  }
+}
+
+&lt;pre&gt;`### 结合多个中间件
+Sometimes you want to &quot;compose&quot; multiple middleware into a single middleware for easy re-use or exporting. To do so, you may chain them together with `.call(this, next)`, then return another function that yields the chain
+</code></pre><p>function _random(next) {<br>  if (‘/random’ == this.path) {<br>    this.body = Math.floor(Math.random()_10);<br>  } else {<br>    yield next;<br>  }<br>};</p>
+<p>function *backwards(next) {<br>  if (‘/backwards’ == this.path) {<br>    this.body = ‘sdrawkcab’;<br>  } else {<br>    yield next;<br>  }<br>}</p>
+<p>function *pi(next) {<br>  if (‘/pi’ == this.path) {<br>    this.body = String(Math.PI);<br>  } else {<br>    yield next;<br>  }<br>}</p>
+<p>function *all(next) {<br>  yield random.call(this, backwards.call(this, pi.call(this, next)));<br>}</p>
+<p>app.use(all);<br>```</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/koa-e4-bd-bf-e7-94-a8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/19/koa-e4-bd-bf-e7-94-a8/" itemprop="url">
+                  koa 使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T03:02:51+08:00">
+                2016-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>Koa 当前需要 node 0.11.x 并开启 –harmony(或– harmony-generators), 因为他依赖于 ES6的 generator 特性<br><code>node --harmony my-koa-app.js</code></p>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>Koa 应用是一个包含中间件 generator 方法数组的对象. 当请求到来时, 这些方法会以 stack-slice 的顺序执行.</p>
+<p>Koa 的一大设计理念是, 通过其他底层中间件层提供高级”语法糖”, 而不是 Koa, 大大提高了框架的互操作性和健壮性, 并让中间件开发变得有趣.</p>
+<p>简单例子</p>
+<pre><code>var koa = require(&quot;koa&quot;);
+var app = koa();
+app.use(function*(){
+  this.body = &quot;Hello World&quot;;
+});
+app.listen(3000);
+`&lt;/pre&gt;
+
+**注**: 与普通 function 不同, generator function 以 function* 的形式声明.
+
+### 编写级联代码
+
+koa 中间件以一种更加传统的方式级联.
+
+以往的 Node 开发中, 级联是通过回调实现的, 用户友好度上有欠缺
+
+Koa 借助 generator 实现了中间件架构
+
+Koa 的执行代码的形式不再是简单的将控制权依次移交给一个又一个方法直到结束, 而是像一个回形针, 用户请求中间件, 遇到 yield next 关键字的时候, 会被传递给下游中间件(downstream), 在 yield next 捕获不到 downstream 的时候, 逆序返回执行代码(upstream)(yield next 后面的代码)
+
+&lt;pre&gt;`var koa = require(&quot;koa&quot;);
+var app = koa();
+
+// x-response-time
+
+app.use(function* (next){
+  var start = new Date;
+  yield next;
+  var ms = new Date - start;
+  this.set(&quot;X-Response-Time&quot;, ms+&quot;ms&quot;);
+})
+
+// logger
+app.use(function* (next){
+  var start = new Date;
+  yield next;
+  var ms = new Date - start;
+  console.log(&quot;%s %s - %s&quot;, this.method, this.url, ms)
+});
+
+// response
+app.use(function* (){
+  this.body = &quot;Hello World&quot;;
+});
+
+app.listen(3000);
+`&lt;/pre&gt;
+
+### 应用配置
+
+应用配置是 app 实例的属性, 目前支持以下配置:
+- app.name 应用名
+- app.env 执行环境, 默认是`NODE_ENV`或者`development`字符串
+- app.proxy, 当该属性为 true 时, `proxy header` 参数会被添加到信任列表中
+
+### app.listen(...)
+
+一个 Koa 应用跟 HTTP Server 不是1-to-1关系, 一个或多个 Koa应用可以被加载到一块, 组成一个更大的包含一个 HTTP server 的应用
+
+该方法创建并返回一个 http server, 并支持传递固定参数
+
+&lt;pre&gt;`var koa = require(&quot;koa&quot;)
+var app = koa()
+app.listen(3000)
+`&lt;/pre&gt;
+
+方法 app.listen(...)是一个语法糖, 等价于
+
+&lt;pre&gt;`var http = require(&quot;http&quot;)
+var koa = require(&quot;koa&quot;)
+var app = koa()
+http.createServer(app.callback()).listen(3000)
+`&lt;/pre&gt;
+
+这意味着可以在多个端口使用同一个 app
+
+&lt;pre&gt;`http.createServer(app.callback()).listen(3000)
+http.createServer(app.callback()).listen(3001)
+`&lt;/pre&gt;
+
+### app.callback()
+
+返回一个回调方法能用于 http.createServer()来处理请求, 也可以将这个回调函数挂载到 Connect/Express 应用上
+
+### app.use(function)
+
+将给定的 function 当做中间件加载到应用中
+
+### app.keys=
+
+设置 Cookie 签名密钥
+
+### 错误处理
+
+除非应用执行环境(NODE_ENV)被配置为&quot;test&quot;, Koa 都会将所有错误信息输出到 stderr, 如果想自定义错误处理逻辑, 可以定义一个&quot;错误事件&quot;来坚挺 Koa App 中的错误:
+
+&lt;pre&gt;`app.on(&quot;error&quot;,function(err){
+  log.error(&quot;server error&quot;, err);
+})
+`&lt;/pre&gt;
+
+当 req/res 周期中出现任何错误且无法响应客户端时, koa 会把 Context(上下文)实例作为第二个参数传递给 error 事件:
+
+&lt;pre&gt;`app.on(&quot;error&quot;, function(err, ctx){
+  log.error(&quot;server error&quot;, err, ctx)
+})
+`&lt;/pre&gt;
+
+### 上下文
+
+Koa 的 Context 把 node 的 request 和 response 对象封装在一个单独对象, 并提供许多开发 web 应用和 APIs 有用的方法. 那些 HTTP Server 开发中使用非常频繁操作, 直接在 Koa 里实现, 而不是放在更高层次的框架, 这样中间件就不需要重复实现这些通用的功能.
+
+每个请求会创建自己的 Context 实例, 在中间件中作为 receiver 引用, 或通过 this 标示引用:
+
+&lt;pre&gt;`app.use(function* (){
+  this; // is the Context
+  this.request; // is a koa Request
+  this.response; // is a koa Response
+})
+</code></pre><p>Context 的许多访问器和方法直接委托为他们的 ctx.request 或 ctx.response 的等价方法, 用于访问方便, 是完全相同的, 比如 ctx.type 和 ctx.length 委托与 response 对象, ctx.path 和 ctx.method 委托与 request.</p>
+<h3 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h3><p>Koa Request 对象是 node 普通 request 对象之上的抽象, 提供了日常 Http Server 中更多有用的功能</p>
+<h4 id="API"><a href="#API" class="headerlink" title="API"></a>API</h4><ul>
+<li>request.header</li>
+<li>request.headers: req.header 的别名</li>
+<li>request.method: 请求方法</li>
+<li>request.method=: 设置请求方法, 实现中间件的时候非常有用</li>
+<li>request.length: 将请求的 Content-length 返回为数字, 或 undefined</li>
+<li>request.url: 获取请求 URL</li>
+<li>request.url=: 设置请求 URL<br>…</li>
+</ul>
+<h3 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h3><p>Koa Response 对象是 node 普通 response 对象之上的抽象, 提供了日常 Http Server 中有用的功能</p>
+<h4 id="API-1"><a href="#API-1" class="headerlink" title="API"></a>API</h4><p>….</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/18/xtemplate-e6-a8-a1-e6-9d-bf-e8-af-ad-e6-b3-95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1946,595 +2428,6 @@ AppRegistry.registerComponent(&quot;Project&quot;, () =&amp;gt; SimpleList)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/05/e7-bc-96-e5-86-99-e6-b5-8b-e8-af-95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/05/e7-bc-96-e5-86-99-e6-b5-8b-e8-af-95/" itemprop="url">
-                  编写测试
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-05T07:21:37+08:00">
-                2016-09-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h3><p>使用 Mocha 作为测试引擎<br>注意因为是在 node 环境下运行, 所以不能访问 DOM</p>
-<pre><code>npm install --save-dev mocha
-`&lt;/pre&gt;
-
-若想要结合 Babel 使用, 需要在 package.json 的 script 中加入一段
-
-&lt;pre&gt;`{
-  &quot;scripts&quot;: {
-    ...
-    &quot;test&quot;: &quot;mocha --compilers js:babel/register --recursive&quot;,
-    &quot;test:watch&quot;: &quot;npm test -- --watch&quot;
-  }
-}
-`&lt;/pre&gt;
-
-### Action Creators
-
-Redux 里的 action creators 会返回普通对象, 在测试 action creators 的时候我们要测试的不仅是调用了正确的action creators, 还有是否返回了正确的 action
-
-实例
-
-&lt;pre&gt;`export function addTodo(text){
-  return {
-    type: &apos;ADD_TODO&apos;,
-    text
-  };
-}
-`&lt;/pre&gt;
-
-可以这样测试
-
-&lt;pre&gt;`import expect form &apos;expect&apos;
-import * as actions from &apos;../../actions/TodoActions&apos;;
-import * as types from &apos;../../constants/ActionTypes&apos;;
-
-describe(&apos;actions&apos;, () =&amp;gt; {
-  it(&apos;should create an action to add a todo&apos;, () =&amp;gt; {
-    const text = &apos;Finish docs&apos;;
-    const expectedAction = {
-      type: &apos;ADD_TODO&apos;,
-      text
-    };
-
-    expect(actions.addTodo(text)).toEqual(&apos;expectedAction&apos;);
-  })
-})
-`&lt;/pre&gt;
-
-### 异步 Action Creators
-
-对于使用Redux Thunk 或其他 middleware 的异步 Action Creator, 最好完全模拟 Redux Store 来测试.
-
-可以使用 applyMiddleware() 和一个 mock store, 与可以用 nock 来模拟 HTTP 请求
-
-实例:
-
-&lt;pre&gt;`function fetchTodosRequest () {
-  return {
-    type: FETCH_TODOS_REQUEST
-  }
-}
-
-function fetchTodosSuccess(body) {
-  return {
-    type: FETCH_TODOS_SUCCESS,
-    body
-  }
-}
-
-function fetchTodosFailure(ex) {
-  return {
-    type: FETCH_TODOS_FAILURE,
-    ex
-  }
-}
-
-export function fetchTodo () {
-  return dispatch =&amp;gt; {
-    dispatch(fetchTodosRequest())
-    return fetch(&apos;http://example.com/todos&apos;)
-      .then(res =&amp;gt; res.json())
-      .then(json =&amp;gt; dispatch(fetchTodosSuccess(json.body)))
-      .catch(ex =&amp;gt; dispatch(fetchTodosFailure(ex)))
-  }
-}
-`&lt;/pre&gt;
-
-可以这样测试
-
-&lt;pre&gt;`import expect from &apos;expect&apos;
-import { applyMiddleware } from &apos;redux&apos;
-import thunk from &apos;redux-thunk&apos;
-import * as actions from &apos;../../actions/counter&apos;
-import * as types from &apos;../../constants/ActionTypes&apos;
-import nock from &apos;nock&apos;
-
-const middleware = [thunk]
-
-/**
- * 使用中间件模拟 Redux Store
- */
-
-function mockStore = (getState, expectedActions, done){
-  if(!Array.isArray(expectedActions)){
-    throw new Error(&apos;expectedActions should be an array of expected actions.&apos;)
-  }
-  if( typeof done !== &apos;undefined&apos; &amp;amp;&amp;amp; typeof done !== &apos;function&apos;){
-    throw new Error(&apos;done should either be undefined or function&apos;)
-  }
-
-  function mockStoreWithoutmiddleware(){
-    return {
-      getState(){
-        return typeof getState === &apos;function&apos; ? 
-        getState():
-        getState
-      },
-
-      dispatch(action){
-        const expectedAction = expectedActions.shift()
-
-        try {
-          expect(action).toEqual(expectedAction)
-          if(done&amp;amp;&amp;amp;!expectedActions.length){
-            done()
-          }
-          return action
-        } catch (e) {
-          done(e)
-        }
-      }
-    }
-  }
-
-  const mockStoreWithMiddleware = applyMiddleware(
-    ...middlewares
-  )(mockStoreWithoutMiddleware)
-
-  return mockStoreWithMiddleware()
-}
-
-describe(&apos;async actions&apos;, () =&amp;gt; {
-  afterEach(() =&amp;gt; {
-    nock.clearAll()
-  }) 
-
-  it(&apos;creates FETCH_TODOS_SUCCESS when fetching todos has been done&apos;, (done) =&amp;gt; {
-    nock(&apos;http://example.com&apos;)
-      .get(&apos;./todos&apos;)
-      .reply(200, {todos: [&apos;do something&apos;]})
-
-    const expectedActions = [
-      {type: types.FETCH_TODOS_REQUEST},
-      {type: types.FETCH_TODOS_SUCCESS, body: { todos: [&apos;do something&apos;]}}
-    ]
-    const store = mockStore({todos: []}, expectedActions, done) 
-    store.dispatch(actions.fetchTodos())
-  })
-})
-`&lt;/pre&gt;
-
-### Reducers 测试
-
-Reducer 把 action 应用到当前 state, 并返回新的 state
-
-&lt;pre&gt;`import { ADD_TODO } from &apos;../constants/ActionTypes&apos;;
-
-const initialState = [
-  {
-    text: &apos;Use Redux&apos;,
-    completed: false,
-    id: 0
-  }
-]
-
-export default function todos(state = initialState, action) {
-  switch(action.type) {
-    case ADD_TODO: return [
-      {
-        id: state.reduce((maxID, todo) =&amp;gt; Math.max(todo.id, maxId), -1) + 1, 
-        completed: false,
-        text: action.text
-      },
-      ...state
-    ]
-    default: return state
-  }
-}
-`&lt;/pre&gt;
-
-可以这样测试:
-
-&lt;pre&gt;`import expect from &apos;expect&apos;
-import reducer from &apos;../../reducers/todos&apos;
-import * as types from &apos;../../constants/ActionTypes&apos;
-
-describe(&apos;todos reducer&apos;, () =&amp;gt; {
-  it(&apos;should return the initial state&apos;, () =&amp;gt; {
-    expect(reducer(undefined, {})).toEqual([
-      {
-        text: &apos;Use Redux&apos;,
-        completed: false,
-        id: 0
-      }
-    ])
-  })
-
-  it(&apos;should handle ADD_TODO&apos;, () =&amp;gt; {
-    expect(
-      reducer([],{
-        type: types.ADD_TODO,
-        text: &apos;Run the test&apos;
-      })
-    ).toEqual(
-      [
-        {
-          text: &apos;Run the test&apos;,
-          completed: false,
-          id: 0
-        }
-      ]
-    )
-
-    expect(
-      reducer([
-        {
-          text: &apos;Use Redux&apos;,
-          completed: false,
-          id:0
-        }
-      ], {
-        type: types.ADD_TODO,
-        text: &apos;Run the test&apos;
-      })
-    ).toEqual([
-      {
-        text: &apos;Run the test&apos;,
-        completed: false, 
-        id: 1
-      },
-      {
-        text: &apos;Use Redux&apos;,
-        completed: false,
-        id: 0
-      }
-    ])
-  })
-})
-`&lt;/pre&gt;
-
-### 测试 Components
-
-React Components 的优点是, 一般都很小, 并且依赖于 props, 因此测试起来很容易.
-
-首先安装 React Test Utilities
-
-&lt;pre&gt;`npm install --save-dev react-addons-test-utils
-`&lt;/pre&gt;
-
-要测试 components 我们要创建一个叫`setup()` 的辅助方法, 用来把模拟过的( stubbed ) 回调函数当做 props 传入, 然后使用 React 浅渲染来渲染组建, 这样可以依据`是否调用了回调函数`的断言来写独立的测试
-
-&lt;pre&gt;`import React, { PropTypes, Component } from &apos;react&apos;
-import TodoTextInput from &apos;./TodoTextInput&apos;
-
-class Header extends Component {
-  handleSave(text){
-    if(text.length !==0){
-      this.props.addTodo(text)
-    }
-  }
-  render(){
-    return(
-      &amp;lt;header&amp;gt;
-        &amp;lt;h1&amp;gt;todos&amp;lt;/h1&amp;gt;
-        &amp;lt;TodoTextInput newTodo = {true} onSave ={this.handleSave.bind(this)} placeholder = &apos;what needs to be done?&apos; /&amp;gt;
-      &amp;lt;/header&amp;gt;
-    )
-  }
-}
-
-Header.propTypes = {
-  addTodo: PropTypes.func.isRequired
-}
-
-export default Header
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/04/redux-promise/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/04/redux-promise/" itemprop="url">
-                  Redux-Promise
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-04T13:36:46+08:00">
-                2016-09-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <pre><code>npm install --save redux-promise
-`&lt;/pre&gt;
-
-&lt;pre&gt;`import promiseMiddleWare from &apos;redux-promise&apos;
-`&lt;/pre&gt;
-
-The default export is a middleware function. If it receives a promise, it will dispatch the resolved value of the promise.
-
-It will not dispatch anything if the promise rejects.
-
-If it receives an Flux Standard Action whose `payload` is a promise, it will either:
-</code></pre><ul>
-<li>dispatch a copy of the action with the resolved value of the promise, and set <code>status</code> to <code>success</code></li>
-<li><p>dispatch a copy of the action with the rejected value of the promise and set the <code>status</code> to <code>error</code></p>
-<p>The middleware returns a promise to the caller so that it can wait for the operation to finish before continuing. This is especially useful for server-side rendering. If you find that a promise is not being returned, ensure that all middleware before it in the chain is also returning its <code>next()</code> call to the caller.</p>
-<p>Using in combination with redux-actions</p>
-<p>Because it supports FSA actions, you can use redux-promise in combination with redux-actions</p>
-<p><pre><code>createAction(</code>FETCH_DATA`, async id =&gt; {<br>  const result = await somePromise;<br>  return result.someValue<br>});</pre></p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2584,7 +2477,7 @@ If it receives an Flux Standard Action whose `payload` is a promise, it will eit
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">163</span>
+                <span class="site-state-item-count">165</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

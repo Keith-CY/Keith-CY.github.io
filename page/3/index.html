@@ -287,6 +287,400 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/" itemprop="url">
+                  webpack 2 起步
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-29T07:25:10+08:00">
+                2017-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>虽然和 webpack1 一样, 还是过一遍</p>
+<h3 id="创建一个-bundle"><a href="#创建一个-bundle" class="headerlink" title="创建一个 bundle"></a>创建一个 bundle</h3><pre><code>mkdir webpack-demo &amp;amp;&amp;amp; webpack-demo
+
+npm init -y
+
+yarn add --dev webpack@beta
+
+yarn add lodash
+`&lt;/pre&gt;
+
+#### 创建 app/index.js
+
+&lt;pre&gt;`// app/index.js
+import _ from &apos;lodash&apos;
+function component () {
+  let element = document.createElement(&apos;div&apos;);
+
+// use lodash
+  element.innerHtml = _.join([&apos;Hello&apos;, &apos;webpack&apos;], &apos; &apos;)
+
+  return element
+}
+
+document.body.appendChild(component())
+`&lt;/pre&gt;
+
+#### 创建 index.html
+
+&lt;pre&gt;`&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;webpack 2 demo&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;script src=&quot;public/bundle.js&quot;&amp;gt;&amp;gt;/script&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+`&lt;/pre&gt;
+
+#### 创建打包后文件
+
+&lt;pre&gt;`./node_modules/.bin/webpack app/index.js public/bundle.js
+`&lt;/pre&gt;
+
+webpack 会自动处理包的依赖关系
+
+### 添加配置文件
+
+&lt;pre&gt;`var path = require(&apos;path&apos;)
+
+module.exports = {
+  entry: &apos;./app/index.js&apos;,
+  output: {
+    path: path.resolve(__dirname, &apos;public&apos;),
+    filename: &apos;bundle.js&apos;
+  }
+}
+`&lt;/pre&gt;
+
+通过 webpack 命令行进行打包
+
+&lt;pre&gt;`webpack --config webpack.config.js
+`&lt;/pre&gt;
+
+`webpack` 会默认执行名为 `webpack.config.js` 的配置文件, 因此仅输入`webpack` 即可进行打包
+
+### 通过 yarn 执行打包
+
+在 `yarn init` 生成的 `package.json` 中添加
+
+&lt;pre&gt;`{
+  ...
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;webpack&quot;
+  }
+  ...
+}
+</code></pre><p>即可将<code>webpack</code>指令添加进 yarn 的快捷方式, 此时执行 <code>yarn build</code> 即可打包</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/18/stacking-context-e6-88-90-e5-9b-a0-e5-8f-8a-e7-89-b9-e6-80-a7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/18/stacking-context-e6-88-90-e5-9b-a0-e5-8f-8a-e7-89-b9-e6-80-a7/" itemprop="url">
+                  Stacking Context 成因及特性
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-18T09:18:57+08:00">
+                2017-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="会形成Stacking-Context-的元素"><a href="#会形成Stacking-Context-的元素" class="headerlink" title="会形成Stacking Context 的元素"></a>会形成Stacking Context 的元素</h3><ul>
+<li>root 元素( html )<p></p></li>
+<li><p>position 不是 static 且 z-index 不是 auto 的元素</p>
+</li>
+<li><p>flex item 且 z-index 不是 auto 的元素</p>
+</li>
+<li><p>opacity 小于 1 的元素</p>
+</li>
+<li><p>transform 不是 none 的元素</p>
+</li>
+<li><p>mix-blend-mode 不是 normal 的元素</p>
+</li>
+<li><p>filter 不是 none 的元素</p>
+</li>
+<li><p>isolation 为 isolate 的元素</p>
+</li>
+<li><p>mobile webkit 和 chrome 22+ 上的 fixed 元素</p>
+</li>
+<li><p>在 will-change 属性上指定值为上述任意属性的元素</p>
+</li>
+<li><p>指定 -webkit-overflow-scrolling 为 touch 的元素</p>
+</li>
+</ul>
+<h3 id="Stacking-Context-的特性"><a href="#Stacking-Context-的特性" class="headerlink" title="Stacking Context 的特性"></a>Stacking Context 的特性</h3><ul>
+<li><p>stacking context 可以嵌套</p>
+</li>
+<li><p>每个 Stacking context 相对于兄弟元素都是完全独立的, 其内部规则不会影响到外部</p>
+</li>
+<li><p>每个 stacking context 元素都会被父级 stacking context 视为一个 stacking 规则</p>
+</li>
+</ul>
+<p></p><p>为已经定位的元素( absolute 或 relative) 指定 z-index 可以改变其 parent stacking context 中 z 的偏移量</p>
+<p>一个值得注意的坑: 如果一个元素不是通过absolute 或 relative 实现 stacking context, 那么他的 z-index 为 0 , 仅高于 auto, 且无法改变.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/08/web-e5-9d-90-e6-a0-87-e6-95-b4-e7-90-86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1733,488 +2127,6 @@ api.get(&quot;/foo&quot;, showFoo).get(&quot;/bar&quot;, showBar).post(&quot;/fo
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/" itemprop="url">
-                  编写 Koa 中间件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T03:23:36+08:00">
-                2016-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Koa middlewares are simple function which return a <code>GeneratorFunction</code>, and accept another (middleware). When the middleware is run by an “upstream” middleware, it must manually <code>yield</code> to the “downstream” middleware.</p>
-<p>For example if you wanted to track how long it takes for a request to propagate through Koa by adding an <code>x-Response-Time</code> header field the middleware would look like the following:</p>
-<pre><code>function *responseTime(next){
-  var start = new Date;
-  yield next;
-  var ms = new Date - start;
-  this.set(&quot;X-Response-Time&quot;, ms+&quot;ms&quot;);
-}
-app.use(responseTime);
-`&lt;/pre&gt;
-
-Here is another way to write the same thing, inline:
-
-&lt;pre&gt;`app.use(function *(next){
-  var start = new Date;
-  yield next;
-  var ms = new Date - start;
-  this.set(&quot;X-Response-Time&quot;, ms+&quot;ms&quot;);
-});
-`&lt;/pre&gt;
-
-### 中间件最佳实践
-
-Imcluding Middleware accepting options, named middleware for debugging, among others
-
-#### 中间件选项
-
-When creating public middleware it&apos;s useful to conform to the convention of wrapping the middleware in a function that accepts options, allowing users to extend functionality. Even if your middleware accepts no options, this is still a good idea to keep things uniform.
-
-Here our contrived `logger` middleware accepts a `format` string for customization, and returns the middleware itself:
-
-&lt;pre&gt;`function logger(format){
-  format = format || &quot;:method\&quot;:url\&quot;&quot;;
-  return function*(next){
-    var str = format.replace(&quot;:method&quot;, this.method).replace(&quot;:url&quot;, this.url);
-    console.log(str);
-    yield next;
-  }
-}
-`&lt;/pre&gt;
-
-app.use(logger());
-app.use(logger(&quot;:method:url&quot;))
-
-&lt;pre&gt;`
-### 命名中间件
-Naming middlewares is optional, however it&apos;s useful for debugging purpose to assign a name
-`&lt;/pre&gt;
-
-function logger(format){
-  return function *logger(next){
-    // ...
-  }
-}
-
-&lt;pre&gt;`### 结合多个中间件
-Sometimes you want to &quot;compose&quot; multiple middleware into a single middleware for easy re-use or exporting. To do so, you may chain them together with `.call(this, next)`, then return another function that yields the chain
-</code></pre><p>function _random(next) {<br>  if (‘/random’ == this.path) {<br>    this.body = Math.floor(Math.random()_10);<br>  } else {<br>    yield next;<br>  }<br>};</p>
-<p>function *backwards(next) {<br>  if (‘/backwards’ == this.path) {<br>    this.body = ‘sdrawkcab’;<br>  } else {<br>    yield next;<br>  }<br>}</p>
-<p>function *pi(next) {<br>  if (‘/pi’ == this.path) {<br>    this.body = String(Math.PI);<br>  } else {<br>    yield next;<br>  }<br>}</p>
-<p>function *all(next) {<br>  yield random.call(this, backwards.call(this, pi.call(this, next)));<br>}</p>
-<p>app.use(all);<br>```</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/koa-e4-bd-bf-e7-94-a8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/19/koa-e4-bd-bf-e7-94-a8/" itemprop="url">
-                  koa 使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T03:02:51+08:00">
-                2016-09-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>Koa 当前需要 node 0.11.x 并开启 –harmony(或– harmony-generators), 因为他依赖于 ES6的 generator 特性<br><code>node --harmony my-koa-app.js</code></p>
-<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>Koa 应用是一个包含中间件 generator 方法数组的对象. 当请求到来时, 这些方法会以 stack-slice 的顺序执行.</p>
-<p>Koa 的一大设计理念是, 通过其他底层中间件层提供高级”语法糖”, 而不是 Koa, 大大提高了框架的互操作性和健壮性, 并让中间件开发变得有趣.</p>
-<p>简单例子</p>
-<pre><code>var koa = require(&quot;koa&quot;);
-var app = koa();
-app.use(function*(){
-  this.body = &quot;Hello World&quot;;
-});
-app.listen(3000);
-`&lt;/pre&gt;
-
-**注**: 与普通 function 不同, generator function 以 function* 的形式声明.
-
-### 编写级联代码
-
-koa 中间件以一种更加传统的方式级联.
-
-以往的 Node 开发中, 级联是通过回调实现的, 用户友好度上有欠缺
-
-Koa 借助 generator 实现了中间件架构
-
-Koa 的执行代码的形式不再是简单的将控制权依次移交给一个又一个方法直到结束, 而是像一个回形针, 用户请求中间件, 遇到 yield next 关键字的时候, 会被传递给下游中间件(downstream), 在 yield next 捕获不到 downstream 的时候, 逆序返回执行代码(upstream)(yield next 后面的代码)
-
-&lt;pre&gt;`var koa = require(&quot;koa&quot;);
-var app = koa();
-
-// x-response-time
-
-app.use(function* (next){
-  var start = new Date;
-  yield next;
-  var ms = new Date - start;
-  this.set(&quot;X-Response-Time&quot;, ms+&quot;ms&quot;);
-})
-
-// logger
-app.use(function* (next){
-  var start = new Date;
-  yield next;
-  var ms = new Date - start;
-  console.log(&quot;%s %s - %s&quot;, this.method, this.url, ms)
-});
-
-// response
-app.use(function* (){
-  this.body = &quot;Hello World&quot;;
-});
-
-app.listen(3000);
-`&lt;/pre&gt;
-
-### 应用配置
-
-应用配置是 app 实例的属性, 目前支持以下配置:
-- app.name 应用名
-- app.env 执行环境, 默认是`NODE_ENV`或者`development`字符串
-- app.proxy, 当该属性为 true 时, `proxy header` 参数会被添加到信任列表中
-
-### app.listen(...)
-
-一个 Koa 应用跟 HTTP Server 不是1-to-1关系, 一个或多个 Koa应用可以被加载到一块, 组成一个更大的包含一个 HTTP server 的应用
-
-该方法创建并返回一个 http server, 并支持传递固定参数
-
-&lt;pre&gt;`var koa = require(&quot;koa&quot;)
-var app = koa()
-app.listen(3000)
-`&lt;/pre&gt;
-
-方法 app.listen(...)是一个语法糖, 等价于
-
-&lt;pre&gt;`var http = require(&quot;http&quot;)
-var koa = require(&quot;koa&quot;)
-var app = koa()
-http.createServer(app.callback()).listen(3000)
-`&lt;/pre&gt;
-
-这意味着可以在多个端口使用同一个 app
-
-&lt;pre&gt;`http.createServer(app.callback()).listen(3000)
-http.createServer(app.callback()).listen(3001)
-`&lt;/pre&gt;
-
-### app.callback()
-
-返回一个回调方法能用于 http.createServer()来处理请求, 也可以将这个回调函数挂载到 Connect/Express 应用上
-
-### app.use(function)
-
-将给定的 function 当做中间件加载到应用中
-
-### app.keys=
-
-设置 Cookie 签名密钥
-
-### 错误处理
-
-除非应用执行环境(NODE_ENV)被配置为&quot;test&quot;, Koa 都会将所有错误信息输出到 stderr, 如果想自定义错误处理逻辑, 可以定义一个&quot;错误事件&quot;来坚挺 Koa App 中的错误:
-
-&lt;pre&gt;`app.on(&quot;error&quot;,function(err){
-  log.error(&quot;server error&quot;, err);
-})
-`&lt;/pre&gt;
-
-当 req/res 周期中出现任何错误且无法响应客户端时, koa 会把 Context(上下文)实例作为第二个参数传递给 error 事件:
-
-&lt;pre&gt;`app.on(&quot;error&quot;, function(err, ctx){
-  log.error(&quot;server error&quot;, err, ctx)
-})
-`&lt;/pre&gt;
-
-### 上下文
-
-Koa 的 Context 把 node 的 request 和 response 对象封装在一个单独对象, 并提供许多开发 web 应用和 APIs 有用的方法. 那些 HTTP Server 开发中使用非常频繁操作, 直接在 Koa 里实现, 而不是放在更高层次的框架, 这样中间件就不需要重复实现这些通用的功能.
-
-每个请求会创建自己的 Context 实例, 在中间件中作为 receiver 引用, 或通过 this 标示引用:
-
-&lt;pre&gt;`app.use(function* (){
-  this; // is the Context
-  this.request; // is a koa Request
-  this.response; // is a koa Response
-})
-</code></pre><p>Context 的许多访问器和方法直接委托为他们的 ctx.request 或 ctx.response 的等价方法, 用于访问方便, 是完全相同的, 比如 ctx.type 和 ctx.length 委托与 response 对象, ctx.path 和 ctx.method 委托与 request.</p>
-<h3 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h3><p>Koa Request 对象是 node 普通 request 对象之上的抽象, 提供了日常 Http Server 中更多有用的功能</p>
-<h4 id="API"><a href="#API" class="headerlink" title="API"></a>API</h4><ul>
-<li>request.header</li>
-<li>request.headers: req.header 的别名</li>
-<li>request.method: 请求方法</li>
-<li>request.method=: 设置请求方法, 实现中间件的时候非常有用</li>
-<li>request.length: 将请求的 Content-length 返回为数字, 或 undefined</li>
-<li>request.url: 获取请求 URL</li>
-<li>request.url=: 设置请求 URL<br>…</li>
-</ul>
-<h3 id="响应"><a href="#响应" class="headerlink" title="响应"></a>响应</h3><p>Koa Response 对象是 node 普通 response 对象之上的抽象, 提供了日常 Http Server 中有用的功能</p>
-<h4 id="API-1"><a href="#API-1" class="headerlink" title="API"></a>API</h4><p>….</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2264,7 +2176,7 @@ Koa 的 Context 把 node 的 request 和 response 对象封装在一个单独对
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">163</span>
+                <span class="site-state-item-count">165</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

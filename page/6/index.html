@@ -287,6 +287,204 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/26/node-js-e4-b9-8b-path-e6-a8-a1-e5-9d-97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/26/node-js-e4-b9-8b-path-e6-a8-a1-e5-9d-97/" itemprop="url">
+                  Node.js 之 path 模块
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-26T06:57:53+08:00">
+                2016-08-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>path模块用于规范化路径连接和解析路径.</p>
+<p>path的功能包括不仅限于:</p>
+<ul>
+<li>规范化路径</li>
+<li>连接路径</li>
+<li>路径解析</li>
+<li>查找两个绝对路径的相对关系</li>
+<li>提取路径的组成部分</li>
+</ul>
+<h3 id="规范化路径-path-normalize-p"><a href="#规范化路径-path-normalize-p" class="headerlink" title="规范化路径 path.normalize(p)"></a>规范化路径 path.normalize(p)</h3><p>path 模块中的 normalize(p) 用来规范化路径, 可用于处理路径中的 <code>//</code>, <code>..</code>, <code>.</code>等.</p>
+<pre><code>var path = require(&apos;path&apos;);
+path.normalize(&apos;./foo/bar//baz/asfd/que/..&apos;);
+// 处理后
+&apos;foo/bar/baz/asfd&apos;
+`&lt;/pre&gt;
+
+### 连接路径 path.join([path1][, path2][, ...])
+
+将任意个路径字符串连接, 同时也会对路径进行规范化
+
+&lt;pre&gt;`var path = require(&apos;path&apos;);
+//合法的字符串连接
+path.join(&apos;./foo&apos;, &apos;bar&apos;, &apos;baz/asdf&apos;, &apos;quux&apos;, &apos;..&apos;)
+// 连接后
+&apos;foo/bar/baz/asfd&apos;
+
+// 不合法的字符串将抛出异常
+path.join(&apos;foo&apos;,{}, bar) =&amp;gt; TypeError: Arguments to path.join must be strings
+`&lt;/pre&gt;
+
+### 路径解析 path.resolve([from...], to)
+
+path.resolve 方法可以将多个路径解析为一个规范化的绝对路径, 其处理方法类似于对这些路径逐一进行 cd 操作, 与 cd 操作不同的是, 这引起路径可以是文件, 而且可不必实际存在, 仅是字符串操作
+
+&lt;pre&gt;`path.resolve(&apos;foo/bar&apos;,&apos;/tmp/file/&apos;,&apos;..&apos;,&apos;a/../subfile&apos;)
+`&lt;/pre&gt;
+
+相当于
+
+&lt;pre&gt;`cd foo/bar
+cd /temp/file/
+cd ..
+cd a/../subfile
+`&lt;/pre&gt;
+
+如果解析的不是绝对路径, path.resolve() 会将当前工作目录加到解析结果前
+
+&lt;pre&gt;`path.resolve(&apos;wooroot&apos;,&apos;bar&apos;,&apos;./baz&apos;)
+// 当前工作路径是/home/node, 则输出结果是
+&apos;/home/node/wooroot/bar/baz&apos;
+`&lt;/pre&gt;
+
+### 查找两个绝对路径之间的相对关系 path.relative(from, to)
+
+&lt;pre&gt;`path.relative(&apos;/Users/node/demo&apos;, &apos;/Users/node&apos;) =&amp;gt; &apos;..&apos;
+</code></pre><h3 id="提取路径的组成部分-path-dirname-p-path-basename-p-ext-path-extname-p"><a href="#提取路径的组成部分-path-dirname-p-path-basename-p-ext-path-extname-p" class="headerlink" title="提取路径的组成部分 path.dirname(p), path.basename(p[,ext]), path.extname(p)"></a>提取路径的组成部分 path.dirname(p), path.basename(p[,ext]), path.extname(p)</h3><p>path.dirname =&gt; 文件路径中的目录部分<br>path.basename =&gt; 文件路径中的文件部分<br>path.extname =&gt; 文件路径中的文件扩展名</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/26/react-router-documents/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2959,274 +3157,6 @@ ESLint comes with a large number of rules, you can modify which rules your proje
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/20/e9-83-a8-e7-bd-b2react-redux-e7-9a-84-web-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/20/e9-83-a8-e7-bd-b2react-redux-e7-9a-84-web-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83/" itemprop="url">
-                  部署React + Redux 的 Web 开发环境
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-20T16:27:34+08:00">
-                2016-08-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>好的部署需要做到两点:<br>1. 性能优化: 包括代码执行速度, 页面载入速度<br>2. 自动化: 减少重复工作</p>
-<p>使用 React+Redux 的时候往往会用到其调试工具 Redux DevTools, 在手动配置 DevTools 时需要针对 Store 和 Component 进行一些配置, 然而这些都是为了方便调试的, 生产环境下我们不希望加入这些东西, 所以建议从代码上隔离 development 和 production 环境:</p>
-<pre><code>containers/
-  Root.js
-  Root.dev.js
-  Root.prod.js
-  ...
-
-store/
-  index.js
-  store.dev.js
-  store.prod.js
-`&lt;/pre&gt;
-
-同时采用单独的入口文件, 比如上面的 containers/Root.js, 按需要加载不同环境的代码
-
-&lt;pre&gt;`if (process.env.NODE_ENV === &apos;production&apos;){
-  module.exports = require(&apos;./Root.prod&apos;);
-} else {
-  module.exports = require(&apos;./Root.dev&apos;);
-}
-`&lt;/pre&gt;
-
-有一个细节需要注意: ES6 语法不支持在 if 中书写 import 语句, 所以这里采用了 CommonJS 的模块引入方法 require.
-
-另一个需要注意的地方是按需要 import, 否则可能在打包的时候引入不必要的代码
-
-使用 webpack 进行打包工作
-
-&lt;pre&gt;`webpack --config webpack.config.prod.js --progress
-`&lt;/pre&gt;
-
-注意要为不同的环境准备不同的 webpack 配置文件. 比如 `webpack.config.dev.js` 和 `webpack.config.prod.js` . 看一下比较关键的配置选项
-
-### devtools
-
-启用 source-map, 这样 webpack 会生成两个包
-- bundle.js
-- bundle.js.map
-把用于定位源码的 source map 分离出去, 减少 bundle.js 的体积
-
-source-map 只会在浏览器 devtools 激活时加载, 并不会影响正常页面的饿加载速度.
-
-### plugins
-
-&lt;pre&gt;`plugins:[
-  new webpack.optimize.UglifyJsPlugin({
-    compress:{
-      warning: false
-    }
-  }),
-  new webpack.optimize.DedupePlugin(),
-  new webpack.optimize.OccurenceOrderPlugin()
-]
-`&lt;/pre&gt;
-
-### 不要忽视 NODE_ENV
-
-NODE_ENV 其实就是一个环境变量, 在 Node 中 可以通过`process.env.NODE_ENV`获取, 目前大家汪汪用这个变量区分当前是 development 还是 production.
-
-通过 webpack 的 DefinePlugin 设置环境变量:
-
-&lt;pre&gt;`plugins:[
-  ...
-  new webpack.DefinePlugin({
-    &apos;process.env.NODE_ENV&apos;: JSON.stingify(&apos;production&apos;)
-  })
-]
-
-### 添加 hash
-前端公认的 Best Practice 就是给资源打上 hash 标签, 这对缓存静态资源很有用
-
-1\. 给 bundle.js 添加 hash 标签
-`&lt;/pre&gt;
-
-output{
-  path: ...
-  filename: &apos;bundle.[hash].js&apos;
-}
-
-&lt;pre&gt;`使用 html-webpack-plugin 这个插件自动生成带有
-`&lt;/pre&gt;
-
-&amp;lt;script src=&apos;bundle.[hash].js&gt;&amp;lt;/script&gt;&apos;的 html 文件
-
-&lt;pre&gt;`配置如下:
-`&lt;/pre&gt;
-
-plugins:[
-  ...
-  new HtmlWebpackPlugin({
-    title:&apos;html title&apos;,
-    template:&apos;./template.html&apos;,
-    favicon: &apos;./static/images/logo.ico&apos;
-  })
-]
-
-&lt;pre&gt;`配置 template.html
-`&lt;/pre&gt;
-
-&lt;!DOCTYPE html&gt;
-&amp;lt;html&gt;
-&amp;lt;head&gt;
-  &lt;meta charset=&quot;utf-8&quot;&gt;
-  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
-&amp;lt;/head&gt;
-&amp;lt;body&gt;
-
-&lt;div id=&quot;react-container&quot;&gt;&lt;/div&gt;
-
-&amp;lt;/body&gt;
-&amp;lt;/html&gt;
-
-&lt;pre&gt;`
-如果需要在 React Component 中添加图片, 建议采用
-`&lt;/pre&gt;
-
-import LOGO.png from &apos;./static/images/logo.png&apos;
-&amp;lt;img src={LOGO.png} alt=&quot;&quot; /&gt;
-
-&lt;pre&gt;`使用 import 或 require 可以让 webpack 对图片进行打包
-
-使用 file-loader 可以对图片添加 hash 标签然后返回相应的 URL
-</code></pre><p>module:{<br>  loaders:[<br>    {<br>      test: /&#46;(png|jpg),<br>      loader:”file?name=[hash].[ext]”<br>    }<br>  ]<br>}<br>```</p>
-<h3 id="引入-CSS"><a href="#引入-CSS" class="headerlink" title="引入 CSS"></a>引入 CSS</h3><p>可以直接在 js 文件中 <code>require(&#39;./foo.css&#39;)</code>, 然后使用 style-loader 和 css-loader 进行处理, 最终效果是将 css 嵌入到 HTML 的 style 标签中, 这样就不需要使用 hash</p>
-<p>CSS 较大的话, 可以考虑使用 extract-text-webpack-plugin 插件将 CSS 合并后独立为一个文件, 并自定在页面加载的时候添加 link 标签</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3276,7 +3206,7 @@ import LOGO.png from &apos;./static/images/logo.png&apos;
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">165</span>
+                <span class="site-state-item-count">166</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -287,6 +287,177 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/27/css-e5-8a-a8-e7-94-bb-e4-b9-8b-e7-a1-ac-e4-bb-b6-e5-8a-a0-e9-80-9f/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/27/css-e5-8a-a8-e7-94-bb-e4-b9-8b-e7-a1-ac-e4-bb-b6-e5-8a-a0-e9-80-9f/" itemprop="url">
+                  CSS 动画之硬件加速
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-27T06:20:35+08:00">
+                2016-07-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="触发硬件加速的-CSS-属性"><a href="#触发硬件加速的-CSS-属性" class="headerlink" title="触发硬件加速的 CSS 属性"></a>触发硬件加速的 CSS 属性</h3><ul>
+<li>transform</li>
+<li>opacity</li>
+<li>filter</li>
+</ul>
+<h3 id="硬件加速的工作原理"><a href="#硬件加速的工作原理" class="headerlink" title="硬件加速的工作原理"></a>硬件加速的工作原理</h3><p>浏览器解析得到 DOM 树后, 与 CSS 形成渲染树, 渲染树上有大量的渲染元素, 每一个渲染元素都被分到一个图层中, 每个图层被加载到 GPU 形成渲染文理.</p>
+<p>然而, transform 等 CSS 属性不会触发 GPU 的 repaint, 这些使用 transform 属性的图层都会有独立合成器进行处理.</p>
+<p>比如某个元素具有 transform 属性, 那么会为他创建一个新的复合图层, 可以被 GPU 直接用来执行 transform 操作.</p>
+<p>一般浏览器会在以下几种情况下创建一个独立的复合图层: </p>
+<ul>
+<li>3D 或 transform</li>
+<li><code>&amp;lt;video</code> 和<code>&amp;lt;canvas&amp;gt;</code>标签</li>
+<li>CSS Filters</li>
+<li>元素覆盖时(比如 z-index)</li>
+</ul>
+<p>3D 和 2D 的transform 区别在于, 浏览器在页面渲染前为 3D 动画创建独立的复合图层, 而在<strong>运行期间</strong>为 2D 动画创建独立复合图层. 2D transform 在动画开始和结束的时候依旧出现了初始化和删除的 repaint.</p>
+<h3 id="强制使用-GPU-渲染"><a href="#强制使用-GPU-渲染" class="headerlink" title="强制使用 GPU 渲染"></a>强制使用 GPU 渲染</h3><p>为了避免 2D transform 动画的两次 repaint, 我们可以硬编码一些样式来解决这个问题</p>
+<pre><code>.solution1{
+  transform: translateZ(0);
+}
+
+.solution2{
+  transform: rotateZ(360deg)
+}
+</code></pre><p>这段代码让浏览器执行3Dtransform, 进而创建一个独立的复合涂层</p>
+<h3 id="硬件加速缺点"><a href="#硬件加速缺点" class="headerlink" title="硬件加速缺点"></a>硬件加速缺点</h3><ol>
+<li>内存, 如果 GPU 加载了大量文理, 容易发生内存问题</li>
+<li>使用 GUP 渲染会影响字体的抗锯齿效果, 因为 GPU 和 CPU 渲染机制不同. 即使最终硬件加速停止了, 文本还是会在动画期间显得模糊.</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/26/e7-94-9f-e6-88-90-e5-99-a8-function/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2439,164 +2610,6 @@ var inputValue = input.value;
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/component-api/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/21/component-api/" itemprop="url">
-                  Component API
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-21T03:32:05+08:00">
-                2016-07-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
-                    <span itemprop="name">workNote</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="setState-nextState-obj-callback-function"><a href="#setState-nextState-obj-callback-function" class="headerlink" title="setState(nextState(obj)[, callback(function)])"></a>setState(nextState(obj)[, callback(function)])</h3><p>设置 nextState 的某个键值, 然后下一次 EventLoop 的时候 this.state 会被更新<br><strong>注意</strong>, setState 方法中的回调函数在组件重新渲染后才被调用</p>
-<h3 id="replaceState-nextState-obj-callback-function"><a href="#replaceState-nextState-obj-callback-function" class="headerlink" title="replaceState(nextState(obj)[, callback(function)])"></a>replaceState(nextState(obj)[, callback(function)])</h3><p>类似于 setState(), 但是会删除已存在的 state 键, 相当于重新初始化State</p>
-<h3 id="forceUpdate-callback-function"><a href="#forceUpdate-callback-function" class="headerlink" title="forceUpdate([callback(function)])"></a>forceUpdate([callback(function)])</h3><p>强制渲染组件<br><strong>注意</strong>该方法的回调函数也是在组件重新渲染完成后调用</p>
-<h3 id="getDOMNode"><a href="#getDOMNode" class="headerlink" title="getDOMNode()"></a>getDOMNode()</h3><p>返回组件所处的 DOM 元素</p>
-<h3 id="isMounted"><a href="#isMounted" class="headerlink" title="isMounted()"></a>isMounted()</h3><p>返回一个 Boolean 值, 如果组件加载到了 DOM, isMount() 返回 true.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2646,7 +2659,7 @@ var inputValue = input.value;
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">165</span>
+                <span class="site-state-item-count">166</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

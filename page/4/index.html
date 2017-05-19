@@ -287,6 +287,208 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/koa-router/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/19/koa-router/" itemprop="url">
+                  koa-router
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-19T04:35:48+08:00">
+                2016-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ul>
+<li>Express 式路由使用<code>app.get</code>, <code>app.put</code>, <code>app.post</code> 等</li>
+<li>Named URL parameters and regexp captures</li>
+<li>String or regular expression route matching</li>
+<li>Named Routes with URL generation</li>
+<li>Responds to <code>OPTIONS</code> request with allowed methods</li>
+<li>Support for <code>405 Method Not Allowed</code> and <code>501 Not Implemented</code></li>
+<li>Multiple route middleware</li>
+<li>Multiple routers</li>
+</ul>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre><code>npm install koa-router
+`&lt;/pre&gt;
+
+### 使用
+
+&lt;pre&gt;`var koa = require(&quot;koa&quot;),
+    router = require(&quot;koa-router&quot;),
+    app = koa();
+
+app.use(router(app))
+`&lt;/pre&gt;
+
+After the router has been initialized you can register routes:
+
+&lt;pre&gt;`app.get(&quot;/users/:id&quot;, function*(next){
+  var user = yield User.findOne(this.params.id);
+  this.body = user;
+});
+`&lt;/pre&gt;
+
+### 多路由
+
+You can use multiple routers and sets of routes by omitting the `app` argument. For example, separate routes for two versions of an API:
+
+&lt;pre&gt;`var koa = require(&quot;koa&quot;),
+    mount = require(&quot;mount&quot;),
+    Router = require(&quot;koa-router&quot;);
+
+var app = koa();
+
+var APIv1 = new Router();
+var APIv2 = new Router();
+
+APIv1.get(&quot;/sign-in&quot;, function*(){
+  // ...
+})
+APIv2.get(&quot;/sign-in&quot;, function*(){
+  // ...
+})
+
+app.use(mount(&quot;/v1&quot;, APIv1.middleware())).use(mount(&quot;/v2&quot;, APIv2.middleware()));
+`&lt;/pre&gt;
+
+### 链
+
+The http methods(get, post, etc) return their `Router` instance, so routes can be chained as you&apos;re used to with express:
+
+&lt;pre&gt;`var api = new Router();
+
+api.get(&quot;/foo&quot;, showFoo).get(&quot;/bar&quot;, showBar).post(&quot;/foo&quot;, createFoo)
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2284,150 +2486,6 @@ AppRegistry.registerComponent(&quot;Project&quot;, () =&amp;gt; SimpleList)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/06/redux-form-e7-9a-84-e6-b7-b1-e5-9d-91-e6-85-a2-e6-85-a2-e7-a7-af-e7-b4-af/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/06/redux-form-e7-9a-84-e6-b7-b1-e5-9d-91-e6-85-a2-e6-85-a2-e7-a7-af-e7-b4-af/" itemprop="url">
-                  Redux-Form 的深坑...慢慢积累
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-06T09:56:38+08:00">
-                2016-09-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>如果 Field 无法输入, 注意 state 是否是 immutable 的, 如果是, 则需要</p>
-<pre><code>import { Field, reduxForm } from &apos;redux-form/immutable&apos;
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2477,7 +2535,7 @@ AppRegistry.registerComponent(&quot;Project&quot;, () =&amp;gt; SimpleList)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">165</span>
+                <span class="site-state-item-count">166</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

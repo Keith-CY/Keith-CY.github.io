@@ -287,6 +287,356 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/18/usage-of-grid-in-css/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/18/usage-of-grid-in-css/" itemprop="url">
+                  usage of grid in css
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-18T15:14:56+08:00">
+                2017-05-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank" rel="external">origin</a></p>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>CSS Grid Layout (aka ‘Grid’), is a two-dimensional grid-based layout system that aims to do nothing less than completely change the way we design grid-based user interfaces.</p>
+<h1 id="Terminology"><a href="#Terminology" class="headerlink" title="Terminology"></a>Terminology</h1><h2 id="Grid-Container"><a href="#Grid-Container" class="headerlink" title="Grid Container"></a>Grid Container</h2><p>The element on which <code>display: grid</code> is applied. It’s the direct parent of all the grid items. In this example <code>container</code> is the grid container.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item item-1"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item item-2"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item item-3"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="Grid-Item"><a href="#Grid-Item" class="headerlink" title="Grid Item"></a>Grid Item</h2><p>The children (e.g. <strong>direct</strong> descendants) of the grid container. Here the <code>item</code> elements are grid items, but <code>sub-item</code> isn’t.</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"sub-item"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"item"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="Grid-Line"><a href="#Grid-Line" class="headerlink" title="Grid Line"></a>Grid Line</h2><p>The dividing lines that make up the structure of the grid. They can be either vertical(<code>column grid line</code>) or horizontal(<code>row grid line</code>) and reside on either side of a row or column. Here the yellow line is an example of a column grid line.</p>
+<p><img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-line.png" alt=""></p>
+<h2 id="Grid-Track"><a href="#Grid-Track" class="headerlink" title="Grid Track"></a>Grid Track</h2><p>The space between two adjacent grid lines. You can think of them like the columns or rows of the grid. Here’s the grid track between second and third row grid lines.</p>
+<p><img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-track.png" alt=""></p>
+<h2 id="Grid-Cell"><a href="#Grid-Cell" class="headerlink" title="Grid Cell"></a>Grid Cell</h2><p>The space between two adjacent row and two adjacent column lines. It’s a single ‘unit’ of the grid. Here’s the grid cell between row grid lines 1 and line2, and column grid lines 2 and 3.</p>
+<h2 id="Grid-Area"><a href="#Grid-Area" class="headerlink" title="Grid Area"></a>Grid Area</h2><p>The total space surrounded by four grid lines. A grid area may be comprised of any number of grid cells. Here’s the grid area between row and grid lines 1 and 3, and column grid lines 1 and 3.</p>
+<p><img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-area.png" alt=""></p>
+<h1 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h1><h2 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h2><ul>
+<li><p>display</p>
+<ul>
+<li><p>grid: generates a <strong>block-level</strong> grid</p>
+</li>
+<li><p>inline-grid: generates an inline level grid</p>
+</li>
+<li><p>subgrid: if your grid container is itself a grid item(i.e. nested grids), you can use this property to indicate that you want the sizes of its rows/columns to be taken from its parent rather than specifying its own.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line"> <span class="attribute">display</span>: grid | inline-grid | subgrid;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>column</code>, <code>float</code>, <code>clear</code> and <code>vertical-align</code> have no effect on a grid container</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>grid-template-rows &amp; grid-template-columns</p>
+<ul>
+<li><p><track-size>: can be a length, a percentage, or a function of the free space in the grid(using the <code>fr</code> unit)</track-size></p>
+</li>
+<li><p><line-name>: an arbitrary name of your choosing</line-name></p>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line">  <span class="attribute">grid-template-columns</span>: &lt;track-size&gt; | [&lt;line-name&gt;] &lt;track-size&gt;;</div><div class="line">  <span class="attribute">grid-template-rows</span>: &lt;track-size&gt; | &lt;line-name&gt; &lt;track-size&gt;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>A line can have more than one name, seperated by spcae.</p>
+</blockquote>
+<p>You can use <code>repeat()</code> notation to streamline things:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(3, 20px [col-start]) <span class="number">5%</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>The <code>fr</code> unit allows you to set the size of a track as a fraction of the free space of the grid container.</p>
+<p>The free space is calculated <strong>after</strong> any non-flexible items.</p>
+</li>
+<li><p>grid-template-areas:</p>
+<ul>
+<li><p><grid-area-name>: the name of a grid area specified with <code>grid-area</code></grid-area-name></p>
+</li>
+<li><p><code>.</code>: a period signifies an empty grid cell.</p>
+</li>
+<li><p>none: no grid areas are defined.</p>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line">  <span class="attribute">grid-template-areas</span>: &lt;grid-area-name&gt; | . | none;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.item-a</span> &#123;</div><div class="line">  <span class="attribute">grid-area</span>: header;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.item-b</span> &#123;</div><div class="line">  <span class="attribute">grid-area</span>: main;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.item-c</span> &#123;</div><div class="line">  <span class="attribute">grid-area</span>: sidebar;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.item-d</span> &#123;</div><div class="line">  <span class="attribute">grid-area</span>: footer;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="built_in">repeat</span>(4, 50px);</div><div class="line">  <span class="attribute">grid-template-rows</span>: auto;</div><div class="line">  <span class="attribute">grid-template-areas</span>:</div><div class="line">    <span class="string">'header header header header'</span></div><div class="line">    <span class="string">'main main . sidebar'</span></div><div class="line">    <span class="string">'footer footer footer footer'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-template-areas.png" alt=""></p>
+</li>
+<li><p>grid-template: a shorthand for setting <code>grid-template-rows</code>, <code>grid-template-columns</code> and <code>grid-template-areas</code> in a single decalration.</p>
+<ul>
+<li><p>none: sets all three properties to their initial values</p>
+</li>
+<li><p>subgrid: sets <code>grid-template-rows</code>, <code>grid-template-columns</code> to <code>subgrid</code>, and <code>grid-template-areas</code> to its initial value.</p>
+</li>
+<li><p><grid-template-rows>/<grid-template-columns>: sets <code>grid-template-rows</code> and <code>grid-template-columns</code> to the specified values, respectively, and sets <code>grid-template-areas</code> to <code>none</code></grid-template-columns></grid-template-rows></p>
+</li>
+</ul>
+</li>
+<li><p>grid-column-gap &amp; grid-column-gap: Specifies the size of the grid lines. You can think of it like setting the width of the gutters between the columns/rows.</p>
+<ul>
+<li><line-size>: a length value</line-size></li>
+</ul>
+</li>
+<li><p>grid-gap: a shorthand for <code>grid-row-gap</code> and <code>grid-column-gap</code></p>
+</li>
+<li><p>justify-items: Aligns the content inside a grid item along with the <em>row</em> axis</p>
+<ul>
+<li><p>start: aligns the content to the left end of the grid area</p>
+</li>
+<li><p>end: aligns the content to the right end of the grid area</p>
+</li>
+<li><p>center: aligns the content in the center of the grid area</p>
+</li>
+<li><p>stretch: fills the whole width of the grid area(this is the default)</p>
+</li>
+</ul>
+<blockquote>
+<p>This behavior can also be set on individual grid items via the <code>justify-self</code> property</p>
+</blockquote>
+</li>
+<li><p>align-items: aligns the content inside a grid item along the <em>column</em> axis. This value applies to all grid items inside the container.</p>
+<ul>
+<li><p>start: aligns the content to the top of the grid area</p>
+</li>
+<li><p>end: aligns the content to the bottom of the grid area</p>
+</li>
+<li><p>center: aligns the content in the center of the grid area</p>
+</li>
+<li><p>stretch: fills the whole height of the grid area(this is the default)</p>
+</li>
+</ul>
+<blockquote>
+<p>This behavior can also be set on individual grid items via the <code>align-self</code> properties.</p>
+</blockquote>
+</li>
+<li><p>justify-content: Sometimes the total size of your grid might be less than the size of its grid container. This could happen if all of your grid items are sized with non-flexible units like <code>px</code>. In this case you can set the alignment of the grid within the grid container. This property aligns the grid along the <em>row</em> axis.</p>
+<ul>
+<li><p>start: aligns the grid to the left end of the grid container</p>
+</li>
+<li><p>end</p>
+</li>
+<li><p>center</p>
+</li>
+<li><p>stretch: <strong>resize</strong> the grid items to allow the grid to fill the full width of the grid container.</p>
+</li>
+<li><p>space-around: places an even amount of space between each grid item, with half-sized spaces on the far ends.</p>
+</li>
+<li><p>space-between: places an event amount of space between each grid item, with no space at the far ends.</p>
+</li>
+<li><p>space-evenly: places an even amount of space between each grid item, including the far ends</p>
+</li>
+</ul>
+</li>
+<li><p>align-content:</p>
+<ul>
+<li><p>start</p>
+</li>
+<li><p>end</p>
+</li>
+<li><p>center</p>
+</li>
+<li><p>stretch</p>
+</li>
+<li><p>space-around</p>
+</li>
+<li><p>space-between</p>
+</li>
+<li><p>space-evenly</p>
+</li>
+</ul>
+</li>
+<li><p>grid-auto-columns &amp; grid-auto-rows:</p>
+<ul>
+<li><track-size>: can be a length, a percentage, or a fraction of the free space in the grid(using the <code>fr</code> unit)</track-size></li>
+</ul>
+<p>To illustrate how implicit grid tracks get created, think about this:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line">  <span class="attribute">grid-template-columns</span>: <span class="number">60px</span> <span class="number">60px</span>;</div><div class="line">  <span class="attribute">grid-template-rows</span>: <span class="number">90px</span> <span class="number">90px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This creates a 2 x 2 grid</p>
+<p><img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/grid-auto.png" alt=""></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.item-a</span> &#123;</div><div class="line">  <span class="attribute">grid-row</span>: <span class="number">2</span>/<span class="number">3</span>;</div><div class="line">  <span class="attribute">grid-column</span>: <span class="number">1</span>/<span class="number">2</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.item-b</span> &#123;</div><div class="line">  <span class="attribute">grid-row</span>: <span class="number">2</span>/<span class="number">3</span>;</div><div class="line">  <span class="attribute">grid-column</span>: <span class="number">5</span>/<span class="number">6</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/implicit-tracks.png" alt=""></p>
+<p>We told <code>.item-b</code> to start on column line 5 and end at column line 6, <em>but we never defined a column 5 or 6</em>.</p>
+<p>Because we referenced lines that don’t exist, implicit track with widths of 0 are created to fill in the gap.</p>
+<p>We can use <code>grid-auto-column</code> and <code>grid-auto-row</code> to specify the widths of these implicit tracks:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.container</span> &#123;</div><div class="line">  <span class="attribute">grid-auto-columns</span>: <span class="number">60px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="https://cdn.css-tricks.com/wp-content/uploads/2016/03/implicit-tracks-with-widths.png" alt=""></p>
+</li>
+<li><p>grid-auto-flow: If you have grid items that you don’t explicitly place on the grid, the <em>auto-placement algorithm</em> kicks in to automatically place the items. This properties controls how the auto-placement algorithm works.</p>
+<ul>
+<li><p>row: tells the auto-placement algorithm to fill in each row in turn. adding new rows as necessary.</p>
+</li>
+<li><p>column: tells the auto-placement algorithm to fill in each column in turn, adding new columns as necessary.</p>
+</li>
+<li><p>dense: tells the auto-placement algorithm to attempt to fill in holes earlier in the grid if smaller items come up later.</p>
+</li>
+</ul>
+<blockquote>
+<p><code>dense</code> might cause your items to appear out of order</p>
+</blockquote>
+</li>
+<li><p>grid: a shorthand for setting all of the following properties in a single declaration:</p>
+<ul>
+<li><code>grid-template-rows</code>, <code>grid-template-columns</code>, <code>grid-template-areas</code>, <code>grid-auto-rows</code>, <code>grid-auto-columns</code>, <code>grid-auto-flow</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="Items"><a href="#Items" class="headerlink" title="Items"></a>Items</h2><ul>
+<li><p>grid-column-start &amp; grid-column-end &amp; grid-row-start &amp; grid-row-end</p>
+<ul>
+<li><p>determines a grid item’s location within the grid by referring to specific grid line.</p>
+</li>
+<li><line></line>: can be number to refer to a numbered grid line, or a name to refer to a named grid line
+</li>
+<li><p>span</p>
+<number>: the item will span across the provided number of grid tracks</number>
+</li>
+<li><p>span</p>
+<name>: the item will span across until it hits the next line with the provided name</name>
+</li>
+<li><p>auto</p>
+</li>
+</ul>
+</li>
+<li><p>grid-column &amp; grid-row: shorthand for <code>grid-column-start</code> + <code>grid-column-end</code> and <code>grid-row-start</code> + <code>grid-row-end</code>, respectively.</p>
+<ul>
+<li><start-value> / <end-value><br></end-value></start-value></li>
+</ul>
+</li>
+<li><p>grid-area: gives an item a name so that it can be referenced by a template created with the <code>grid-template-areas</code> property. Alternatively, this property can be used as an even shorter shorthand for <code>grid-row-start</code> + <code>grid-column-start</code> + <code>grid-row-end</code> + <code>grid-column-end</code>.</p>
+<ul>
+<li><name>: a name of your choosing</name>
+</li>
+<li><p><row-start> / <column-start> / <row-end> / <column-end><br></column-end></row-end></column-start></row-start></p>
+</li>
+</ul>
+</li>
+<li><p>justify-self: aligns the content inside a grid item along the row axis. This value applies to the content inside a single item.</p>
+<ul>
+<li><p>start</p>
+</li>
+<li><p>end</p>
+</li>
+<li><p>center</p>
+</li>
+<li><p>stretch</p>
+</li>
+</ul>
+</li>
+<li><p>align-self: aligns the content inside a grid item along the column axis. This value applies to the content inside a single grid item.</p>
+<ul>
+<li><p>start</p>
+</li>
+<li><p>end</p>
+</li>
+<li><p>center</p>
+</li>
+<li><p>stretch</p>
+</li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/17/simple-usage-of-scp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -375,7 +725,8 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Compression</span></div><div class="line">scp -Cpv source_file_name username@destination_host:destination_folder</div></pre></td></tr></table></figure>
 <h1 id="Specify-specific-port-to-use-with-SCP"><a href="#Specify-specific-port-to-use-with-SCP" class="headerlink" title="Specify specific port to use with SCP"></a>Specify specific port to use with SCP</h1><p>Usually SCP is using port 22 as a default port. But for security reason, you may change the port into another port.</p>
 <p>Use <code>-P</code> (uppercase) to specify the port.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp -P 2212 source_file_name username@destination_host:destination_folder</div></pre></td></tr></table></figure>
+<p><code>`bash
+scp -P 2212 source_file_name username@destination_host:destination_folder</code></p>
 
           
         
@@ -1720,127 +2071,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/20/AVA-Usage/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/20/AVA-Usage/" itemprop="url">
-                  AVA Usage
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-20T23:50:43+08:00">
-                2017-04-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="测试语法"><a href="#测试语法" class="headerlink" title="测试语法"></a>测试语法</h1><p>``` import test from ‘ava’</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1890,7 +2120,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">165</span>
+                <span class="site-state-item-count">166</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

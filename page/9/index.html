@@ -287,6 +287,214 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/31/javascript-generator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/31/javascript-generator/" itemprop="url">
+                  JavaScript Generator
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-31T05:36:49+08:00">
+                2016-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>作用迭代器</p>
+<pre><code>function* argumentsGenerator() {
+  for (let i = 0; i &amp;lt; arguments.length; i++) {
+    yield arguments[i];
+  }
+}
+`&lt;/pre&gt;
+
+我们希望迭代传入的每个实参
+
+&lt;pre&gt;`var argumentsIterator = argumentsGenerator(&apos;a&apos;,&apos;b&apos;,&apos;c&apos;,&apos;d&apos;);
+
+// Prints &quot;a,b,c,d&quot;
+console.log(
+  argumentsIterator.next().value,
+  argumentsIterator.next().value,
+  argumentsIterator.next().value,
+  argumentsIterator.next().value
+)
+`&lt;/pre&gt;
+
+我们可以简单的理解
+- Generator 其实是生成 Iterator 的方法, argumentsGenerator 被称为 GeneratorFunction, 也有一些人把 GeneratorFunction 的返回值称为一个 Generator
+- yield 可以中断 GeneratorFunction 的运行, 而在 next() 时恢复运行
+- 返回的 Iterator 上, 有 next 成员方法, 能够返回迭代值. 其中 value 属性包含了实际返回值, done 属性为布尔值, 标记迭代器是否完成迭代, 要注意的是, 在 done: true 后继续运行 next 方法会产生异常.
+
+完整的 ES 实现中, for-of 循环正式为了快速迭代一个 Iterator
+
+&lt;pre&gt;`for (let value of argumetnsIterator) {
+  console.log(value);
+}
+`&lt;/pre&gt;
+
+可以利用 yield* 语法, 将 yield 操作代理到另一个 Generator
+
+&lt;pre&gt;`let delegatedIterator = (function*() {
+  yield &apos;Hello!&apos;;
+  yield &apos;Bye!&apos;;
+})();
+
+let delegatingIterator = (function*() {
+  yield &apos;Greetings!&apos;;
+  yield* delegatedIterator;
+  yield &apos;Ok, bye!&apos;;
+})();
+
+// Prints &quot;Greetings!&quot;, &quot;Hello&quot;, &quot;Bye!&quot;, &quot;Ok, bye!&quot;
+for (let value of delegatingIterator) {
+  console.log(value);
+}
+</code></pre><h3 id="用作流程控制"><a href="#用作流程控制" class="headerlink" title="用作流程控制"></a>用作流程控制</h3><p>co 已经将此特性封装的非常完美</p>
+<p>Generator 之所以可以用来控制代码流程, 就是通过 yield 来将两个或多个 Generator 的执行路径相互切换, 这种切换是语句级别的, 而不是函数级调用. 其本质是 CPS 变换.</p>
+<p>这里补充 yield 的若干行为:</p>
+<ul>
+<li>next 方法接收一个参数, 传入的参数是 yield 表达式的返回值: 即 yield 既可以产生数值,  也可以接收数值</li>
+<li>throw 方法会抛出一个异常, 并终止迭代</li>
+<li>GeneratorFunction 的 return 语句相当于一个 yield</li>
+</ul>
+<h4 id="将异步”变为”同步"><a href="#将异步”变为”同步" class="headerlink" title="将异步”变为”同步"></a>将异步”变为”同步</h4><p>假设我们希望有如下语法:</p>
+<ul>
+<li>suspend 传入一个 GeneratorFunction</li>
+<li>suspend 返回一个简单函数, 接收一个 node 风格的回调函数</li>
+<li>所有的异步调用都通过 yield, 看起来像同步调用</li>
+<li>给定一个特殊的回调, 让保证异步调用的返回值作为 yield 的返回值, 并让脚本继续</li>
+<li>GeneratorFunction 的返回值和执行过程的错误都会传入全局的回调函数</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/30/generator-101/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2209,427 +2417,6 @@ plugins:[
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/" itemprop="url">
-                  webpack简明指南
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-21T10:10:30+08:00">
-                2016-07-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Thanks to <a href="https://github.com/vikingmute/webpack-for-fools/blob/master/entries/chapter-1.md" target="_blank" rel="external">Webpack 傻瓜式指南</a></p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre><code>npm install -g webpack
-`&lt;/pre&gt;
-
-### 建立项目
-
-&lt;pre&gt;`mkdir webpack
-cd webpack
-npm init
-touch .gitignore
-`&lt;/pre&gt;
-
-#### 项目结构
-
-&lt;pre&gt;`project
-|
-|---app
-|    |
-|    |---index.js
-|    |---sub.js
-|
-|---package.json
-|
-|---webpack.config.js
-`&lt;/pre&gt;
-
-&lt;pre&gt;`//sub.js
-function generateText(){
-  var element = document.createElement(&apos;h2&apos;);
-  element.innerHTML = &quot;Hello, I&apos;m h2&quot;;
-  return element;
-}
-module.exports = generateText;
-`&lt;/pre&gt;
-
-&lt;pre&gt;`//index.js
-var sub = require(&apos;./sub&apos;);
-var app = document.createElement(&apos;div&apos;);
-app.innerHTML = &quot;&amp;lt;h1&amp;gt;Hello, I&apos;m h1&quot;;
-app.appendChild(sub())
-`&lt;/pre&gt;
-
-### 配置 Webpack
-
-目的是将两个 js 根据依赖关系合并, 然后在 dist 目录创建一个 index.html 并引用合并后的 js.
-
-这里安装一个 plugin, 可以快速生成 HTML
-
-&lt;pre&gt;`npm install --save-dev html-webpack-plugin
-`&lt;/pre&gt;
-
-修改 webpack.config.js
-
-&lt;pre&gt;`var path = require(&apos;path&apos;);
-var HtmlWebpackPlugin = require(&apos;html-webpack-plugin&apos;);
-//定义文件夹路径
-var ROOT_PATH = path.resolve(__dirname);
-var APP_PATH = path.resolve(ROOT_PATH, &apos;app&apos;);
-var DIST_PATH = path.resolve(ROOT_PATH, &apos;dist&apos;);
-
-module.exports = {
-  //项目文件夹, 可以直接用文件夹名, 默认寻找 index.js
-  entry: APP_PATH,
-  output: {
-    path: DIST_PATH,
-    filename: &apos;bundle.js&apos;
-  },
-  //添加插件, 自动生成 html
-  plugins: [
-    new HtmlWebpackPlugin({title: &apos;Hello World App&apos;})
-  ]
-};
-`&lt;/pre&gt;
-
-然后在项目目录运行
-
-&lt;pre&gt;`webpack
-`&lt;/pre&gt;
-
-可以看到 html 已经引用了 bundle.js
-
-### 配置 webpack-dev-server
-
-用于自动刷新浏览器
-
-安装webpack-dev-server
-
-&lt;pre&gt;`npm install -g webpack-dev-server
-`&lt;/pre&gt;
-
-修改 webpack.config.js
-
-&lt;pre&gt;`module.exports = {
-  ...
-  devServer: {
-    historyApiFallback: true,
-    hot: true,
-        inline: true,
-    progress: true,
-  },
-  ...
-}
-
-`&lt;/pre&gt;
-
-修改 package.json
-
-&lt;pre&gt;`...
-&quot;scripts&quot;: {
-  &quot;start&quot;: &quot;webpack-dev-server --hot --inline&quot;
-},
-...
-`&lt;/pre&gt;
-
-在项目目录执行
-
-&lt;pre&gt;`npm start
-`&lt;/pre&gt;
-
-登录 http://localhost:8080
-
-### 添加 CSS 样式
-
-css-loader 会遍历 css 文件, style-loader 会把样式插入到&amp;lt;style&amp;gt;
-
-&lt;pre&gt;`npm install -save-dev css-loader style-laoder
-`&lt;/pre&gt;
-
-修改 webpack.config.js
-
-&lt;pre&gt;`...
-module:{
-  loaders: [
-    {
-      test: /\.css$/,
-      loaders: [&apos;style&apos;,&apos;css&apos;],
-      include: APP_PATH
-    }
-  ]
-}
-...
-`&lt;/pre&gt;
-
-注意 loaders 的书写方式, 从右向左执行
-
-添加样式文件 app/main.css
-
-&lt;pre&gt;`h1 {
-  color: red;
-}
-`&lt;/pre&gt;
-
-在入口文件&quot;index.js&quot; 中引用
-
-&lt;pre&gt;`require(&apos;./main.css&apos;)
-`&lt;/pre&gt;
-
-### 使用 sass
-
-这里需要 sass-loader 和 node-sass 一起解析文件
-
-&lt;pre&gt;`npm install --save-dev sass-loader node-sass
-`&lt;/pre&gt;
-
-修改 webpack.config.js
-
-&lt;pre&gt;`//先删除 css 规则
-{
-  test: /\.scss$/,
-  loaders: [&apos;style&apos;,&apos;css&apos;,&apos;sass&apos;],
-  include: APP_PATH
-},
-`&lt;/pre&gt;
-
-添加两个 sass 文件 app/variables.scss 和 app/main.scss
-
-&lt;pre&gt;`//variables.scss
-$red: red;
-`&lt;/pre&gt;
-
-&lt;pre&gt;`//main.scss
-@import &apos;./variables.scss&apos;;
-h1{
-  color: $red;
-}
-`&lt;/pre&gt;
-
-在入口文件 index.js 中引用
-
-&lt;pre&gt;`require(&apos;./main.scss&apos;);
-`&lt;/pre&gt;
-
-### 处理图片
-
-&lt;pre&gt;`npm install --save-dev url-loader
-`&lt;/pre&gt;
-
-配置webpack.config.js
-
-&lt;pre&gt;`{
-  test: /\.(png|jpg)$/,
-  loader: &apos;url?limit=8192&apos;
-}
-`&lt;/pre&gt;
-
-注意, Limit参数制定了小于 8M 的图片会被转为 base64 编码, 可以减轻网络请求.
-
-&lt;pre&gt;`@import &apos;./variabels.scss&apos;
-h1 {
-  color: $red;
-  background-image: url(&apos;./imgs/avatar.jpg&apos;);
-}
-`&lt;/pre&gt;
-
-### 添加第三方库
-
-&lt;pre&gt;`npm install --save-dev jquery moment
-`&lt;/pre&gt;
-
-修改 index.js
-
-&lt;pre&gt;`var sub = require(&apos;./sub&apos;);
-require(&apos;./main.scss&apos;);
-var $ = require(&apos;jquery&apos;);
-var moment = require(&apos;moment&apos;);
-var app = document.createElement(&apos;div&apos;);
-app.innerHTML = &apos;&amp;lt;h1&amp;gt;Hello, h1&apos;;
-document.body.append(app);
-app.appendChild(sub());
-$(&apos;body&apos;).append(&apos;&amp;lt;p&amp;gt;Inserted By Jquery. Now is &apos; + moment().format() + &apos;&amp;lt;/p&amp;gt;&apos;);
-`&lt;/pre&gt;
-
-### 添加 ES6 支持
-
-安装 loader
-
-&lt;pre&gt;`npm install -save-dev babel-loader babel-preset-es2015
-`&lt;/pre&gt;
-
-配置 webpack.config.js
-
-&lt;pre&gt;`...
-{
-  test: /\.jsx$/,
-  loaders: babel,
-  include: APP_PATH,
-  query:{
-    presets: [&apos;es2015&apos;]
-  }
-}
-...
-`&lt;/pre&gt;
-
-es2015 这个参数是 babel 的 plugin, 可以支持最新的 ES6 的特性
-
-现在可以 js 文件改为 ES6 风格
-
-&lt;pre&gt;`//sub.js
-export default function(){
-  var element = document.createElement(&apos;h2&apos;);
-  element.innerHTML = &apos;This is h2&apos;;
-  return element;
-}
-`&lt;/pre&gt;
-
-&lt;pre&gt;`//index.js
-import &apos;./main.scss&apos;;
-import generateText from &apos;./sub&apos;;
-import $ from &apos;jquery&apos;;
-import moment from &apos;moment&apos;;
-
-let app = document.createElement(&apos;div&apos;);
-const myPromise = Promise.resolve(42);
-myPromise.then((number) =&amp;gt; {
-  $(&apos;body&apos;).append(&apos;&amp;lt;p&amp;gt;Promise result is &apos; + number + &apos;now is &apos; + moment().format() + &apos;&amp;lt;/p&amp;gt;&apos;);
-});
-app.innerHTML = &apos;&amp;lt;h1&amp;gt;This is h1&apos;;
-document.body.appendChild(app);
-app.appendChild(generateText());
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2679,7 +2466,7 @@ app.appendChild(generateText());
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">169</span>
+                <span class="site-state-item-count">170</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

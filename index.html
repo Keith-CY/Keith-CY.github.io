@@ -287,6 +287,143 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/21/babel-polyfill-or-babel-runtime/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/05/21/babel-polyfill-or-babel-runtime/" itemprop="url">
+                  babel-polyfill or babel-runtime
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-21T21:38:07+08:00">
+                2017-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>The <code>babel-polyfill</code> and <code>babel-runtime</code> modules are sued to serve the same function in two different ways. Both modules ultimately serve to emulate an ES6 environment.</p>
+<p>Both <code>babel-polyfill</code> and <code>babel-runtime</code> emulate an ES6 environment with two things:</p>
+<ul>
+<li><p>a slew of polyfills as provided by <code>core-js</code></p>
+</li>
+<li><p>complete generator runtime</p>
+</li>
+</ul>
+<p><code>babel-polyfill</code> accomplishes this task by assigning methods on the global or on native type prototypes which means that once required, as far as the javascript runtime you’re using is concerned, ES6 methods and object simply exist. If you were to require <code>babel-polyfill</code> in a script run under <strong>node v0.1.0</strong> – a runtime which does not natively support the <code>Promise</code> API – your script would then have access to the <code>Promise</code> object. As far as you are concerned, you’re suddenly using an environment that support the <code>Promise</code> object.</p>
+<p><code>babel-runtime</code> does something very similar, but in a way that does not pollute native object prototypes or the global namespace. Instead, <code>babel-runtime</code> is a module that you can list as a dependency of your application like any other module, which polyfills ES6 methods. In other words and continuing the example from above, while you may not have the <code>Promise</code> object available to you, you now have the same functionality available to you from <code>require(&#39;babel-runtime/core-js/promise&#39;)</code>. By itself, this is useful but inconvenient. Fortunately, <code>babel-runtime</code> is not intended to be used by itself. Rather, <code>babel-runtime</code> is intended to be paired with the transform – <code>babel-plugin-transform-runtime</code> – which will automatically rewrite your code such that you can write your code using the <code>Promise</code> API and it will be transformed to use the Promise-like object exported by <code>babel-runtime</code></p>
+<p><code>babel-polyfill</code> offers you the conveniences of gloablly defined objects without having to transform your code further. However, as with anything that mutates a global, this can introduce collision between versions, etc.</p>
+<p><code>babel-runtime</code>, on the other hand, will not suffer from collision as everything is name-spcaed. Since the module will be defined in your package.json, it can be versioned like everything else. The tradeoff, however, is that a transform can only do so much. The runtime remaps methods according to a definitions map. Anecdotally, this has covered each of my use-cases but there may be an obscure method or two which is not remapped. There are also certain cases where your intent is ambiguous. In such cases, the transform won’t know exactly what to do.</p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>To summarize, with the general case for Babel 6, there are two main steps you’ll need to perform:</p>
+<ul>
+<li>Provide your code with an emulated ES6 environment by either requiring <code>babel-polyfill</code> or requiring the <code>babel-runtime</code> module plus the <code>babel-plugin-transform-runtime</code> transform:</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// for babel-polyfill, either add:</span></div><div class="line"><span class="built_in">require</span>(<span class="string">'babel-polyfill'</span>)</div><div class="line"></div><div class="line"><span class="comment">// for babel-runtime, install the module, then use the babel-plugin-transform-runtime transform by including it in your .babelrc file.</span></div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/21/Deep-in-Runtime-Transform/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1748,140 +1885,6 @@ scp -P 2212 source_file_name username@destination_host:destination_folder</code>
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/26/notes-in-migrating-from-React-Router-3-to-React-Router-4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/26/notes-in-migrating-from-React-Router-3-to-React-Router-4/" itemprop="url">
-                  notes in migrating from React-Router-3 to React-Router-4
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-26T10:39:13+08:00">
-                2017-04-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="HashRouter"><a href="#HashRouter" class="headerlink" title="HashRouter"></a>HashRouter</h1><p>Version 4 of React-Router seperate top level router element for the different history type. If you’re using version 4 you should be able to replace <code>&lt;Router hisotry={hashHistory}&gt;</code> with <code>&lt;HashRouter&gt;</code></p>
-<h1 id="Multiple-Routes-at-same-URL"><a href="#Multiple-Routes-at-same-URL" class="headerlink" title="Multiple Routes at same URL"></a>Multiple Routes at same URL</h1><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">import React from 'react'</div><div class="line">import &#123;</div><div class="line">  BrowserRouter as Router,</div><div class="line">  Route,</div><div class="line">  Link,</div><div class="line">&#125; from 'react-router-dom'</div><div class="line"></div><div class="line">// Each logical 'route' has two components, one for the sidebar and one for the main area. We want to render both of them in different places when the path matches the current URL.</div><div class="line"></div><div class="line">const routes = [</div><div class="line">  &#123;</div><div class="line">    path: '/',</div><div class="line">    exact: true,</div><div class="line">    sidebar: () =&gt; &lt;div&gt;Home&lt;/div&gt;,</div><div class="line">    main: () =&gt; &lt;h2&gt;Home&lt;/h2&gt;,</div><div class="line">  &#125;, &#123;</div><div class="line">    path: '/bubblegum',</div><div class="line">    sidebar: () =&gt; &lt;div&gt;bubblegum&lt;/div&gt;,</div><div class="line">    main: () =&gt; &lt;h2&gt;BubbleGum&lt;/div&gt;,</div><div class="line">  &#125;, &#123;</div><div class="line">    path: '/shoelaces',</div><div class="line">    sidebar: () =&gt; &lt;div&gt;shoelaces&lt;/div&gt;,</div><div class="line">    main: () =&gt; &lt;h2&gt;ShoeLaces&lt;/h2&gt;,</div><div class="line">  &#125;,</div><div class="line">]</div><div class="line"></div><div class="line">const sidebarExample = () =&gt; (</div><div class="line">  &lt;Router&gt;</div><div class="line">    &lt;div style=&#123;&#123; display: 'flex' &#125;&#125;&gt;</div><div class="line">      // sidebar</div><div class="line">      &lt;div style=&#123;&#123;</div><div class="line">        padding: '10px',</div><div class="line">        width: '40%',</div><div class="line">        background: '#f0f0f0',</div><div class="line">        &#125;&#125;</div><div class="line">      &gt;</div><div class="line">        &lt;ul&gt;</div><div class="line">          &lt;li&gt;&lt;Link to='/'&gt;Home&lt;/Link&gt;&lt;/li&gt;</div><div class="line">          &lt;li&gt;&lt;Link to='/bubblegum'&gt;Bubblegum&lt;/Link&gt;&lt;/li&gt;</div><div class="line">          &lt;li&gt;&lt;Link to='/shoelaces'&gt;ShoeLaces&lt;/Link&gt;&lt;/li&gt;</div><div class="line">        &lt;/ul&gt;</div><div class="line"></div><div class="line">        &#123;routes.map((route, index) =&gt; (</div><div class="line">          // You can render a &lt;Router&gt; in as many places as you want in your app, it will render along with any other &lt;Router&gt;s that also match the URL.</div><div class="line">          // So a sidebar or breadcrumbs or anything else that requires you to render multiple things in multiple places at the same URL is nothing more than multiple &lt;Routes&gt;s</div><div class="line"></div><div class="line">          &lt;Route</div><div class="line">            key=&#123;index&#125;</div><div class="line">            path=&#123;route.path&#125;</div><div class="line">            exact=&#123;route.exact&#125;</div><div class="line">            component=&#123;route.sidebar&#125;</div><div class="line">          /&gt;</div><div class="line">        ))&#125;</div><div class="line">      &lt;/div&gt;</div><div class="line"></div><div class="line">      // main</div><div class="line">      &lt;div style=&#123;&#123; flex: 1, padding: '30px' &#125;&#125;&gt;</div><div class="line">        &#123;routes.map((route, index) =&gt; (</div><div class="line">          // Render more &lt;Route&gt;s with the same paths as above, but different components this time.</div><div class="line">          &lt;Route</div><div class="line">            key=&#123;index&#125;</div><div class="line">            path=&#123;route.path&#125;</div><div class="line">            exact=&#123;route.exact&#125;</div><div class="line">            component=&#123;route.main&#125;</div><div class="line">          /&gt;</div><div class="line">        ))&#125;</div><div class="line">      &lt;/div&gt;</div><div class="line"></div><div class="line">    &lt;/div&gt;</div><div class="line">  &lt;/Router&gt;</div><div class="line">)</div><div class="line">export default sidebarExample</div></pre></td></tr></table></figure>
-<h1 id="Animated-Transitions"><a href="#Animated-Transitions" class="headerlink" title="Animated Transitions"></a>Animated Transitions</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"><span class="keyword">import</span> ReactCSSTransitionGroup <span class="keyword">from</span> <span class="string">'react-addons-css-transition-group'</span></div><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  BrowserRouter <span class="keyword">as</span> Router,</div><div class="line">  Route,</div><div class="line">  Link,</div><div class="line">  Redirect,</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'react-rotuer-dom'</span></div><div class="line"></div><div class="line"><span class="comment">// you'll need this CSS somewhere</span></div><div class="line"><span class="comment">// .fade-enter &#123;</span></div><div class="line"><span class="comment">//   opacity: 0;</span></div><div class="line"><span class="comment">//   z-index: 1;</span></div><div class="line"><span class="comment">// &#125;</span></div><div class="line"><span class="comment">// .fade-enter.face-enter-active &#123;</span></div><div class="line"><span class="comment">//   opacity: 1;</span></div><div class="line"><span class="comment">//   transition: opacity 250ms ease-in;</span></div><div class="line"><span class="comment">// &#125;</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> AnimationExample = <span class="function"><span class="params">()</span> =&gt;</span> (</div><div class="line">  &lt;Router&gt;</div><div class="line">    &lt;Route render=&#123;(&#123; location &#125;) =&gt; (</div><div class="line">      &lt;div style=&#123;style.fill&#125;&gt;</div><div class="line">        &lt;Route exact path='/' render=&#123;() =&gt; (</div><div class="line">          &lt;Redirect to='/10/20/50' /&gt;</div><div class="line">        )&#125;/&gt;</div><div class="line">        &lt;ul style=&#123;style.nav&#125;&gt;</div><div class="line">          &lt;NavLink to='/10/90/50'&gt;Red&lt;/NavLink&gt;</div><div class="line">          &lt;NavLink to='/120/100/40'&gt;Green&lt;/NavLink&gt;</div><div class="line">          &lt;NavLink to='/200/100/40'&gt;Blue&lt;/NavLink&gt;</div><div class="line">          &lt;NavLink to='/310/100/50'&gt;Pink&lt;/NavLink&gt;</div><div class="line">        &lt;/ul&gt;</div><div class="line"></div><div class="line">        &lt;div style=&#123;style.content&#125;&gt;</div><div class="line">          &lt;ReactCSSTransitionGroup</div><div class="line">            transitionName='fade'</div><div class="line">            transitionEnterTimeout=&#123;300&#125;</div><div class="line">            transitionLeaveTimeout=&#123;300&#125;</div><div class="line">          &gt;</div><div class="line">            // no different than other usage of ReactCSSTransitionGroup, just make sure to pass `location` to `Route` so it can match the old location as it animate out</div><div class="line">            &lt;Route</div><div class="line">              location=&#123;loaction&#125;</div><div class="line">              key=&#123;location.key&#125;</div><div class="line">              path="/:h/:s/:l"</div><div class="line">              component=&#123;HSL&#125;</div><div class="line">            /&gt;</div><div class="line">          &lt;/ReactCSSTransitionGroup&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    )&#125;/&gt;</div><div class="line">  &lt;/Router&gt;</div><div class="line">)</div><div class="line"></div><div class="line">const NavLink = (props) =&gt; (</div><div class="line">  &lt;li&gt;&lt;Link &#123;...props&#125; style=&#123;&#123;color: 'inherit'&#125;&#125; /&gt;&lt;/li&gt;</div><div class="line">)</div><div class="line"></div><div class="line">const HSL = (&#123; match: &#123; params &#125;&#125;) =&gt; (</div><div class="line">  &lt;div style=&#123;&#123;</div><div class="line">    ...style.fill,</div><div class="line">    ...style.hsl,</div><div class="line">    background: `hsl($&#123;params.h&#125;%, $&#123;params.s&#125;%, $&#123;params.l&#125;%)`</div><div class="line">  &#125;&#125;&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">)</div><div class="line"></div><div class="line">export default AnimationExample</div></pre></td></tr></table></figure>
-<h1 id="Route-Config"><a href="#Route-Config" class="headerlink" title="Route Config"></a>Route Config</h1><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line">import React from 'react'</div><div class="line">import &#123;</div><div class="line">  BrowserRouter as Router,</div><div class="line">  Route,</div><div class="line">  Link,</div><div class="line">&#125; from 'react-router-dom'</div><div class="line"></div><div class="line">// Some folks find value in a centralized route config. A route config is just data. React is great at mapping data into component, and &lt;Route&gt; is a component.</div><div class="line"></div><div class="line">// first our route component</div><div class="line"></div><div class="line">const Main = () =&gt; &lt;h2&gt;Main&lt;/h2&gt;</div><div class="line"></div><div class="line">const Sandwiches = () =&gt; &lt;h2&gt;Sandwiches&lt;/h2&gt;</div><div class="line"></div><div class="line">const Tacos = (&#123; routes &#125;) =&gt; (</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;h2&gt;Tacos&lt;/h2&gt;</div><div class="line">    &lt;ul&gt;</div><div class="line">      &lt;li&gt;&lt;Link to='/tacos/bus'&gt;Bus&lt;/Link&gt;&lt;/li&gt;</div><div class="line">      &lt;li&gt;&lt;Link to='/tacos/cart'&gt;Cart&lt;/Link&gt;&lt;/li&gt;</div><div class="line">    &lt;/ul&gt;</div><div class="line"></div><div class="line">    &#123;routes.map((route, index) =&gt; (</div><div class="line">      &lt;RouteWithSubRoutes key=&#123;index&#125; &#123;...route&#125;/&gt;</div><div class="line">    ))&#125;</div><div class="line">  &lt;/div&gt;</div><div class="line">)</div><div class="line"></div><div class="line">const Bus = () =&gt; &lt;div&gt;Bus&lt;/div&gt;</div><div class="line">const Cart = () =&gt; &lt;div&gt;Cart&lt;/div&gt;</div><div class="line"></div><div class="line">// then our route config</div><div class="line"></div><div class="line">const routes = [</div><div class="line">  &#123;</div><div class="line">    path: '/sandwiches',</div><div class="line">    component: sandwiches,</div><div class="line">  &#125;, &#123;</div><div class="line">    path: '/tacos',</div><div class="line">    component: Tacos,</div><div class="line">    routes: [</div><div class="line">      &#123;</div><div class="line">        path: '/tacos/bus',</div><div class="line">        component: Bus,</div><div class="line">      &#125;, &#123;</div><div class="line">        path: '/tacos/cart',</div><div class="line">        component: Cart,</div><div class="line">      &#125;,</div><div class="line">    ],</div><div class="line">  &#125;,</div><div class="line">]</div><div class="line"></div><div class="line">// wrap &lt;Route&gt; and use this everywhere instead, then when sub routes are added to any route it'll work</div><div class="line"></div><div class="line">const RouteWithSubRoutes = (route) =&gt; (</div><div class="line">  &lt;Route path=&#123;route.path&#125; render=&#123;props =&gt; (</div><div class="line">    // pass the sub-routes down to keep nesting</div><div class="line">    &lt;route.component &#123;...props&#125; routes=&#123;route.routes&#125; /&gt;</div><div class="line">  )&#125;/&gt;</div><div class="line">)</div><div class="line"></div><div class="line">const RouteConfigExample = () =&gt; (</div><div class="line">  &lt;Router&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;ul&gt;</div><div class="line">        &lt;li&gt;&lt;Link to='/tacos'&gt;Tacos&lt;/Link&gt;&lt;/li&gt;</div><div class="line">        &lt;li&gt;&lt;Link to='/sandwiches'&gt;Sandwiches&lt;/Link&gt;&lt;/li&gt;</div><div class="line">      &lt;/ul&gt;</div><div class="line">      &#123;routes.map((route, index) =&gt; (</div><div class="line">        &lt;RouteWithSubRoutes key=&#123;index&#125; &#123;...route&#125; /&gt;</div><div class="line">      ))&#125;</div><div class="line">    &lt;/div&gt;</div><div class="line">  &lt;/Router&gt;</div><div class="line">)</div><div class="line"></div><div class="line">export default RouteConfigExample</div></pre></td></tr></table></figure>
-<h1 id="Redux-Integration"><a href="#Redux-Integration" class="headerlink" title="Redux Integration"></a>Redux Integration</h1><p>Generally, React Router and Redux work just fine together. Occasionally though, an app have a component that doesn’t update when the location changes (child route or active nav links don’t update)</p>
-<p>This happens if:</p>
-<blockquote>
-<p>The component is connected to redux via <code>connect()(Comp)</code> The component is <em>not</em> a “route component”, meaning it is not rendered like so: <code>&lt;Route component={SomeConnectedThing}/&gt;</code></p>
-</blockquote>
-<p>The problem is that Redux implements <code>shouldComponentUpdate</code> and there’s no indication that anything has changed if it isn’t receiving props from the router. This is straightforward to fix. Find where you connect your component and wrap it in <code>withRouter</code></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; withRouter &#125; <span class="keyword">from</span> <span class="string">'react-router-dom'</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> withRouter(connect(mapStateToProps)(Comp))</div></pre></td></tr></table></figure>
-<h1 id="Code-Splitting"><a href="#Code-Splitting" class="headerlink" title="Code Splitting"></a>Code Splitting</h1><p>One great feature of the web is that we don’t have to make our visitors download the entire app before they can use it. You can think of code spliting as incrementally downloading the app. While there are other tools for the job, react-router use <code>webpack</code> and the <code>bundle loader</code>.</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">import loadSomething from 'bundle-loader?lazy!./Something'</div><div class="line"></div><div class="line">&lt;Bundle load=&#123;loadSomething&#125;&gt;</div><div class="line">  &#123;(mod) =&gt; (</div><div class="line">    // do something w/ the module</div><div class="line">  )&#125;</div><div class="line">&lt;/Bundle&gt;</div><div class="line"></div><div class="line">&lt;Bundle load=&#123;loadSomething&#125;&gt;</div><div class="line">  &#123;</div><div class="line">    (Comp) =&gt; Comp</div><div class="line">    ? &lt;Comp/&gt;</div><div class="line">    : &lt;Loading/&gt;</div><div class="line">  &#125;</div><div class="line">&lt;/Bundle&gt;</div><div class="line"></div><div class="line">import React, &#123; Component &#125; from 'react'</div><div class="line"></div><div class="line">class Bundle extends Component &#123;</div><div class="line">  state = &#123;</div><div class="line">    // short for 'module' but that's a keyword in js. so 'mod'</div><div class="line">    mod: null,</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  componentWillMount () &#123;</div><div class="line">    this.load(this.props)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  componentWillReceiveProps (nextProps) &#123;</div><div class="line">    if (nextProps.load !== this.props.load) &#123;</div><div class="line">      this.load(nextProps)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  load (props) &#123;</div><div class="line">    this.setState(&#123;</div><div class="line">      mod: null,</div><div class="line">    &#125;)</div><div class="line">    props.load((mod) =&gt; &#123;</div><div class="line">      this.setState(&#123;</div><div class="line">        // handle both es imports and cjs</div><div class="line">        mod: mod.default ? mod.default : mod</div><div class="line">      &#125;)</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render () &#123;</div><div class="line">    return this.props.children(this.state.mod)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default Bundle</div><div class="line"></div><div class="line"></div><div class="line">&lt;Bundle load=&#123;() =&gt; import('./something')&#125;&gt;</div><div class="line">  &#123;(mod) =&gt; ()&#125;</div><div class="line">&lt;/Bundle&gt;</div></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> loadAbout <span class="keyword">from</span> <span class="string">'bundle-load?lazy!./loadAbout'</span></div><div class="line"><span class="keyword">import</span> loadDashboard <span class="keyword">from</span> <span class="string">'bundle-loader?lazy!./loadDashboard'</span></div><div class="line"></div><div class="line"><span class="comment">// components load their module for initial visit</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> About = <span class="function"><span class="params">()</span> =&gt;</span> (</div><div class="line">  &lt;Bundle load=&#123;loadAbout&#125;&gt;</div><div class="line">    &#123;(About) =&gt; &lt;About /&gt;&#125;</div><div class="line">  &lt;/Bundle&gt;</div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">const</span> Dashboard = <span class="function"><span class="params">()</span> =&gt;</span> (</div><div class="line">  &lt;Bundle load=&#123;loadDashboard&#125;&gt;</div><div class="line">    &#123;(Dashboard) =&gt; &lt;Dashboard /&gt;&#125;</div><div class="line">  &lt;/Bundle&gt;</div><div class="line">)</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  componentDidMount () &#123;</div><div class="line">    <span class="comment">// preload the rest</span></div><div class="line">    loadAbout( <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125; )</div><div class="line">    loadDashboard( <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125; )</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render () &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;h1&gt;Welcome&lt;/h1&gt;</div><div class="line">        &lt;Route path='/about' component=&#123;About&#125; /&gt;</div><div class="line">        &lt;Route path='/dashbaord' component=&#123;Dashboard&#125; /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">ReactDOM.render(&lt;App /&gt;, document.preloadTheRestOfTheApp)</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1931,7 +1934,7 @@ scp -P 2212 source_file_name username@destination_host:destination_folder</code>
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">169</span>
+                <span class="site-state-item-count">170</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

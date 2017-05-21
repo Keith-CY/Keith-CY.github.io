@@ -287,6 +287,404 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/24/redux-apis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/24/redux-apis/" itemprop="url">
+                  Redux APIs
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-24T12:17:39+08:00">
+                2016-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Compose-…funcs"><a href="#Compose-…funcs" class="headerlink" title="Compose(…funcs)"></a>Compose(…funcs)</h3><pre><code>/**
+ * compose(f,h,g)(...args) =&amp;gt; f(g(h(...args)))
+ * 使用了 reduceRight, 从右开始执行
+ * @param {多个函数, 逗号隔开}
+ * @return {函数}
+ */
+
+export default function compose(...funcs){
+  if(funcs.length === 0){
+    return arg =&amp;gt; arg
+  }
+
+  if(funcs.length === 1){
+    return funcs[0]
+  }
+
+  const last = funcs[funcs.length - 1]
+  const rest = funcs.slice(0,-1)
+  return (...args) =&amp;gt; rest.reduceRight((composed, f) =&amp;gt; f(composed), last(...args))
+}
+`&lt;/pre&gt;
+
+关键在于 reduceRight 可以传入初值
+
+### createStore(reducer, [initialState])
+
+&lt;pre&gt;`import isPlainObject from &apos;lodash/isPlainObject&apos;
+import $$observable from &apos;symbol-observable&apos;
+
+export var ActionTypes = {
+  INIT: &apos;@@redux/INIT&apos;
+}
+
+export default function createStore(reducer, preloadState, enhancer){
+  var currentReducer = reducer
+  var currentState = preloadState
+  var currentListeners = []
+  var nextListeners = currentListeners
+  var isDispatching = false
+}
+
+function ensureCanMutateNextListeners(){
+  if(nextListeners === currentListeners){
+    nextListeners = currentListeners.slice()
+  }
+}
+
+function getState(){
+  return currentState
+}
+
+function subscribe(listener){
+  if(typeof listener !== &apos;function&apos;){
+    throw new Error(&apos;Expected listener to be a function&apos;)
+  }
+
+  var isSubscribed = true
+
+  ensureCanmutateNextListener()
+  nextListeners.push(listener)
+
+  return function ubsubscribe(){
+    if(!isSubscribe){
+      return
+    }
+    isSubscribe = false
+
+    ensureCanMutateNextListeners()
+    var index = nextListeners.indexOf(listener)
+    nextListeners.splice(index,1)
+  }
+}
+
+function dispatch(action){
+  if(isPlainObecjt(action)){
+    throw new Error(&apos;Action must be plain objects &apos; + &apos;Use custom middleware for async action&apos;)
+  }
+
+  if(typeof action.type === &apos;undefined&apos;){
+    throw new Error(&apos;Actions may not have an undefined &quot;type&quot; property. &apos; + &apos;Have you misspelled a constant?&apos;)
+  }
+
+  if(isDispatching){
+    throw new Error(&apos;Reducers may not dispatch actions.&apos;)
+  }
+
+  try{
+    isDispatching = true
+    currentState = currentReducer(currentState, action)
+  } finally {
+    isDispatching = false
+  }
+
+  var listeners = currentListeners = nextListeners
+
+  for(var i = 0; i&amp;lt; listeners.length, i++){
+    listeners[i]()
+  }
+
+  return action
+}
+
+function replaceReducer(nextReducer){
+  if(typeof nextReducer !== &apos;function&apos;){
+    throw new Error(&apos;Expected the nextReducer to be a function&apos;)
+  }
+
+  currentReducer = nextReducer
+  dispatch({type:ActionTYpes.INIT})
+}
+
+### combineReudcers(reducers)
+
+`&lt;/pre&gt;
+
+import { combineReducers } from &apos;redux&apos;
+import counterReducer from &apos;./counterReducer&apos;
+import todosReducer from &apos;./todosReducer&apos;
+
+const rootReducer = combineReducers({
+  counter: counterReducer,   // &amp;lt;--- 键名是 state 中的属性, 键值是对应 reducer 函数名
+
+  todos: todosReducer
+})
+export default rootReducer
+
+&lt;pre&gt;`
+如果提高需求
+`&lt;/pre&gt;
+
+state
+  ├── counter: 0
+  ├── todo
+        ├── optTime: []
+        ├── todoList: [] # 这其实就是原来的 todos！
+
+&lt;pre&gt;`
+对应的 reducers 是:
+`&lt;/pre&gt;
+
+reducers/
+   ├── index.js &amp;lt;-------------- combineReducers (生成 rootReducer)
+   ├── counterReducer.js
+   ├── todoReducers/ &amp;lt;--------- combineReducers
+           ├── index.js
+           ├── optTimeReducer.js
+           ├── todoListReducer.js
+
+&lt;pre&gt;`
+`&lt;/pre&gt;
+
+/*  reducers/index.js */
+import { combineReducers } from &apos;redux&apos;
+import counterReducer from &apos;./counterReducer&apos;
+import todosReducers from &apos;./todosReducer&apos;
+
+const rootReducer = combineReducers({
+  counter: counterReducer,
+  todos: todosReducers
+})
+
+export default rootReducer
+
+=================================================
+
+/* reducers/todosReducers/index.js */
+
+import { combineReducers } from &apos;redux&apos;
+import optTimeReducer from &apos;./optTimeReducer&apos;
+import todoListReducer from &apos;./todoListReducer&apos;
+
+const todosReducers = combineReducers({
+  optTime: optTimeReducer,
+  todoList: todoListReducer
+})
+
+export default todosReducers
+
+&lt;pre&gt;`
+无论 dispatch 哪个 action 都会流通**所有** reducer, 但是由于 reducer 是纯函数, 效率还是会提高.
+
+### BindActionCreator
+
+### applyMiddlware(...middlewares)
+
+先要理解 Middleware, enhancer
+
+Redux 引入中间件机制是为了在 dispatch 前后进行处理
+
+`&lt;/pre&gt;
+
+const printStateMiddleware = ({getState}) =&gt; next =&gt; action =&gt; {
+  console.log(&apos;...&apos;)
+  let returnValue = next(action)
+  console.log(&apos;...&apos;)
+  return returnValue
+}
+
+&lt;pre&gt;`
+实际上最内层
+`&lt;/pre&gt;
+
+function printStateMiddleware(middlewareAPI){ //中间件内可以使用的 API, 如 getState 与 dispatch
+   return function(dispatch){ // 传入原 dispatch 的引用
+    return function(action){
+      console.log(...)
+      var returnValue = dispatch(action)  //  执行 dispatch 行为, dispatch(action) 返回的还是 action
+      console.log(...)
+      return returnValue // 传给下一个中间件的 action
+    }
+   }
+}
+
+&lt;pre&gt;`
+### Store Enhancer
+
+说白了 Store Enhancer 是对生成 store 的 API 的改造, 与 middleware 的最大区别是 middlewere 不修改 store 的 API
+
+改造 store 的 API 就要从 createStore 入口
+
+Redux 的 applyMiddleware 就是一个 Enhancer
+
+`&lt;/pre&gt;
+
+import compose from &apos;./compose&apos; // 作用就是层层包裹
+
+// 传入中间件
+export default function applyMiddleware(...middlewares){
+  // 传入 createStore
+  return function(createStore){
+    // 返回一个函数签名和 createStore 一样的函数, 即返回一个增强版的 createStore
+    return function(reducer, preloadState, enhancer){
+      // 用原 createStore 先生成一个 store, 包含 getState, dispatch, subscribe, replaceReducer 四个 API
+      var store = creataStore(reducer, preloadState, enhancer)
+
+&lt;pre&gt;`  var dispatch = store.dispatch //  生成指向原 dispatch的引用
+  var chain = [] // 存储中间件的数组
+
+  //提供给中间件的 API 其实就是 store 的 API
+  var middlewareAPI = {
+    getState: store.getStore,
+    dispatch: (action) =&amp;gt; dispatch(action)
+  }
+
+  // 给中间件添加 API
+  chain = middlewares.map(middleware =&amp;gt; middleware(middlewareAPI))
+
+  // 串联中间件, 添加中间件的起点 store.dispatch, 返回经过修饰的 dispatch
+  dispatch = compose(...middlewares)(store.dispatch)
+
+  return{
+    ...store, // store 中保留的原 API
+     dispatch  // 用新的 dispatch 覆盖原 dispatch   
+  }
+}
+</code></pre><p>}<br>}<br>```<br><a href="https://cnodejs.org/topic/57bd23ee1d27b9113348a546" target="_blank" rel="external">参考</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/23/middleware/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2395,210 +2793,11 @@ common.js
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/16/webpack-e5-8f-91-e5-b8-83-e9-85-8d-e7-bd-ae/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/16/webpack-e5-8f-91-e5-b8-83-e9-85-8d-e7-bd-ae/" itemprop="url">
-                  webpack 发布配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-16T05:00:34+08:00">
-                2016-08-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="单文件模式"><a href="#单文件模式" class="headerlink" title="单文件模式"></a>单文件模式</h3><pre><code>// 新建 webpack.production.config.js
-// in package.json
-&quot;deploy&quot;:&quot;NODE_EVN=production webpack -p -config webpack.production.config.js&quot;
-// in web.production.config.js
-// 和开发环境不同之处在于入口和出口. 相应的在 HTML 和 JS 源也要进行修改
-
-var path = require(&apos;path&apos;)
-var node_modules_dir = path.resolve(__dirname, &apos;node_modules&apos;)
-
-module.exports = {
-  entry:[
-    &apos;babel-polyfill&apos;,
-    path.resolve(__dirname, &apos;app/main.js&apos;)
-  ],
-  output:{
-    path: path.resolve(__dirname, &apos;build&apos;),
-    filename: &apos;app.js&apos;
-  },
-  module:{
-    loaders:[
-      {
-        ...
-      }
-    ]
-  }
-}
-`&lt;/pre&gt;
-
-### 多文件模式
-
-库最好不要打包, 因为一般库都不会改动, 所以 load 一次就够了.
-
-对库进行分离
-
-&lt;pre&gt;`// in webpack.production.config.js
-var path = require(&apos;path&apos;)
-var webpack = require(&apos;webpack&apos;)
-var node_modules_dir = path.resolve(__dirname, &apos;node_modules&apos;)
-
-module.exports = {
-  entry:{
-    app: [path.resolve(__dirname, &apos;app/main.js&apos;)],
-    react: [&apos;babel-polyfill&apos;,&apos;react&apos;,&apos;react-dom&apos;]
-  },
-  output:{
-    path: path.resolve(__dirname, &apos;build&apos;),
-    filename: &apos;app.js&apos;
-  },
-  module:{
-    loaders:[
-      ...
-    ]
-  },
-  plugins:[
-    new webpack.optimize.CommonsChunkPlugin(&apos;react&apos;,&apos;react.js&apos;)
-  ]
-}
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2643,7 +2842,7 @@ module.exports = {
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">170</span>
+                <span class="site-state-item-count">171</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

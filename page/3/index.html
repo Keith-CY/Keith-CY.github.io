@@ -287,6 +287,177 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/22/throttle-e5-87-bd-e6-95-b0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/22/throttle-e5-87-bd-e6-95-b0/" itemprop="url">
+                  Throttle 函数
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-22T05:53:41+08:00">
+                2017-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>function throttle (fn, threshold, scope) {
+  threshold || threshold = 250
+  var last, timer
+  return function () {
+    var ctx = scope || this
+    var now = +new Date()
+    var args = arguments
+    if (last &amp;amp;&amp;amp; now - last - threshold &amp;lt; 0) {
+      // hold on it
+      clearTimeout(timer)
+      timer = setTimeout(function () {
+        last = now
+        fn.apply(ctx, args)
+      }, threshold)
+    } else {
+      last = now
+      fn.apply(ctx, args)
+    }
+  }
+}
+`&lt;/pre&gt;
+
+&lt;pre&gt;`Elm.addEventListener(&apos;click&apos;, throttle(function(event){
+  // ...
+}, 1000))
+</code></pre><p>假设第一次执行 throttle(fn0), fn0会立即执行, 并记录 throttle 开启的时间last</p>
+<p>第二次执行, 假设为 throttle(fn1), 如果距离 now 未超出时限 threshold, 则开启定时器, threshold 后执行 fn1, 并设置 last</p>
+<p>如果在开启定时器后, threshold 时限内执行 throttle(fn2) 则用于执行 fn1 的定时器会被清空, 开启 fn2 的定时器, 并设置 last</p>
+<p>简而言之, 执行 throttle 的时候, 如果上一次的定时器未被执行, 则会被清除, 并重新开始计时</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/22/debounce-e5-87-bd-e6-95-b0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2232,232 +2403,11 @@ module.exports = {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/06/usage-of-redux-action-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/11/06/usage-of-redux-action-2/" itemprop="url">
-                  Usage of Redux-Action
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-06T09:42:50+08:00">
-                2016-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h3><p><code>createAction(type, payloadCreator = Identity, ?metaCreator)</code></p>
-<pre><code>import { createAction } from &apos;redux-action&apos;
-`&lt;/pre&gt;
-
-Wraps an action creator so that its return value is the payload of a Flux Standard Action. If no payload creator is passed, or if it&apos;s not a function, the identity function is used.
-
-### Example
-
-&lt;pre&gt;`let increment = createAction(&apos;INCREMENT&apos;, amount =&amp;gt; amount);
-// same as 
-increment = createAction(&apos;INCREMENT&apos;);
-
-expect(increment(42)).to.deep.equal({
-  type:&apos;INCREMENT&apos;,
-  payload: 42,
-});
-`&lt;/pre&gt;
-
-If the payload is an instance of an Error Object, redux-actions will automatically set `action.error` to true.
-
-### Example
-
-&lt;pre&gt;`const increment = createAction(&apos;INCREMENT&apos;);
-
-const error = new TypeError(&apos;not a number&apos;);
-expect(increment(error)).to.deep.equal({
-  type: &apos;INCREMENT&apos;,
-  payload: error,
-  error: true,
-})
-`&lt;/pre&gt;
-
-`createAction` also return its `type` when used as type in `handleAction` or `handleActions`
-
-### Example
-
-&lt;pre&gt;`const increment = createAction(&apos;INCREMENT&apos;)
-
-// as parameter in handleAction:
-
-handleAction(increment, {
-  next(state, action){...},
-  throw(state, action) {...},
-});
-
-const reducer = handleActions({
-  [increment]: (state, action) =&amp;gt; ({
-    counter: state.counter + action.payload
-  })
-})
-`&lt;/pre&gt;
-
-### createActions(?actionsMap, ?...identityActions)
-
-&lt;pre&gt;`import { createActions } from from &apos;redux-actions&apos;
-`&lt;/pre&gt;
-
-Returns an object mapping action types to action creator. The keys of this object are camel-cased from the keys in `actionsMap` and the string literals of `identityActions` the values are the action creators.
-
-### combineActions(...actionTypes)
-
-Combine any number of action types or action creators, `actionTypes` is a list of positional arguments which can be action type strings, symbols, or action creators.
-
-This allows you to reduce multiple distinct actions with the same reducers.
-
-&lt;pre&gt;`const { increment, decrement } = createActions({
-  INCREMENT: amount =&amp;gt; ({amount}),
-  DECREMENT: amount =&amp;gt; ({amount: -amount}),
-}) 
-
-const reducer = handleAction(combineActions(increment, decrement), {
-  next: (state, { payload: { amount }}) =&amp;gt; ({ ...state, counter: state.counter + amount}),
-  throw: state =&amp;gt; ({ ...state, counter: 0}),
-}, { counter: 10 })
-
-expect(reducer(undefined, increment(1)).to.deep.equal({ counter: 11 }))
-expect(reducer(undefined, decrement(1)).to.deep.equal({ counter: 9 }))
-expect(reducer(undefined, increment(new Error)).to.deep.equal({ counter: 0 }))
-expect(reducer(undefined, decrement(new Error)).to.deep.equal({ counter: 0 }))
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2502,7 +2452,7 @@ expect(reducer(undefined, decrement(new Error)).to.deep.equal({ counter: 0 }))
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">170</span>
+                <span class="site-state-item-count">171</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

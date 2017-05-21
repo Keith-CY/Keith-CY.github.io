@@ -3,6 +3,91 @@
   
     
     <entry>
+      <title><![CDATA[new babel preset - env]]></title>
+      <url>/2017/05/21/new-babel-preset-env/</url>
+      <content type="html"><![CDATA[<p><code>babel-preset-env</code> is a new preset which let you specify an environment and automatically enables the necessary plugins.</p>
+<p>At the moment, several presets let you determine what features Babel should support:</p>
+<ul>
+<li><p><code>babel-preset-es2015</code>, <code>babel-preset-es2016</code>, etc: incrementally support various versions of ECMAScript. <code>babel-preset-es2015</code> transpiles what’s new in ES6 to ES5, <code>babel-preset-es2016</code> transpiles what’s new in ES7 to ES6.</p>
+</li>
+<li><p><code>babel-preset-latest</code>: supports all features that are either part of an ECMAScript version or at stage 4.</p>
+</li>
+</ul>
+<p>The problem with these presets is that they often do too much. For example, most modern browsers support ES6 generator. Yet if you use <code>babel-preset-es2015</code>, generator functions will always be transpiled to complex ES5 code.</p>
+<p><code>babel-preset-env</code> works like <code>babel-preset-latest</code>, but it lets you specify an environment and only transpiles features that are missing in that environment.</p>
+<p>Note that you need to install and enable plugins and/or presets for experimental features(that are not part of <code>babel-preset-latest</code>)</p>
+<p>On the plus side, you don’t need <code>es2015</code> presets anymore.</p>
+<h1 id="Browsers"><a href="#Browsers" class="headerlink" title="Browsers"></a>Browsers</h1><p>For browsers you have the option to specify either:</p>
+<ul>
+<li><p>Browsers via <code>browserslist</code> query syntax</p>
+<ul>
+<li><p>Support the last two versions of browsers and IE 7+</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="string">"babel"</span>: &#123;</div><div class="line">  <span class="string">"presets"</span>: [</div><div class="line">    [</div><div class="line">      <span class="string">"env"</span>,</div><div class="line">      &#123;</div><div class="line">        <span class="string">"targets"</span>: &#123;</div><div class="line">          <span class="string">"browsers"</span>: [<span class="string">"last 2 versions"</span>, <span class="string">"ie &gt;= 7"</span>]</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Support browsers that have more than 5% market share</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"targets"</span>: &#123;</div><div class="line">  <span class="string">"browsers"</span>: <span class="string">"&gt; 5%"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Fixed versions of browsers:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"targets"</span>: &#123;</div><div class="line">  <span class="string">"chrome"</span>: <span class="number">56</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h1><p>If you compile your code for Node.js on the fly via Babel, <code>babel-preset-env</code> is especially useful, because it react to the currently running version of Node.js if you set the target <code>node</code> to <code>current</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="string">"babel"</span>: &#123;</div><div class="line">  <span class="string">"presets"</span>: [</div><div class="line">    [</div><div class="line">      <span class="string">"env"</span>,</div><div class="line">      &#123;</div><div class="line">        <span class="string">"target"</span>: &#123;</div><div class="line">          <span class="string">"targets"</span>: &#123;</div><div class="line">            <span class="string">"node"</span>: <span class="string">"current"</span></div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="Additional-Options-for-babel-preset-env"><a href="#Additional-Options-for-babel-preset-env" class="headerlink" title="Additional Options for babel-preset-env"></a>Additional Options for <code>babel-preset-env</code></h1><h2 id="modules-string-default-‘commonjs’"><a href="#modules-string-default-‘commonjs’" class="headerlink" title="modules(string, default: ‘commonjs’)"></a>modules(string, default: ‘commonjs’)</h2><p>This options lets you configure to which module format ES6 modules are transpiled:</p>
+<ul>
+<li><p>Transpile to popular module formats: ‘amd’, ‘commonjs’, ‘systemjs’, ‘umd’</p>
+</li>
+<li><p>Don’t transpile: false</p>
+</li>
+</ul>
+<h2 id="include-exclude-Array-of-strings-default"><a href="#include-exclude-Array-of-strings-default" class="headerlink" title="include, exclude (Array of strings, default [])"></a>include, exclude (Array of strings, default [])</h2><ul>
+<li><p>include: always enables certain plugins</p>
+</li>
+<li><p>exclude: prevents certain plugins from being enabled</p>
+</li>
+</ul>
+<h2 id="useBuiltIns-boolean-default-false"><a href="#useBuiltIns-boolean-default-false" class="headerlink" title="useBuiltIns (boolean, default: false)"></a>useBuiltIns (boolean, default: false)</h2><p>Babel comes with a polyfill for new functionality in standard library. <code>babel-preset-env</code> can optionally import only those parts of the polyfill that are needed on the specified platforms:</p>
+<p>There are two ways of using the polyfill:</p>
+<ul>
+<li><p><code>core-js</code> polyfills ES5, ES6+ as needed</p>
+<ul>
+<li><p>install polyfill: <code>yarn add core-js</code></p>
+</li>
+<li><p>activate polyfill: <code>import &#39;core-js&#39;</code></p>
+</li>
+</ul>
+</li>
+<li><p><code>babel-polyfill</code>: polyfills <code>core-js</code> and regenerator runtime(to emulate generators on ES5)</p>
+<ul>
+<li><p>install polyfill: <code>yarn add babel-polyfill</code></p>
+</li>
+<li><p>activate polyfill: <code>import &#39;babel-polyfill&#39;</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>Either of the two import statements is transpiled to an environment-specific sequence of more fine-grained imports:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="string">"core-js/modules/es7.string.pad-start"</span>;</div><div class="line"><span class="keyword">import</span> <span class="string">"core-js/modules/es7.string.pad-end"</span>;</div><div class="line"><span class="keyword">import</span> <span class="string">"core-js/modules/web.timers"</span>;</div><div class="line"><span class="keyword">import</span> <span class="string">"core-js/modules/web.immediate"</span>;</div><div class="line"><span class="keyword">import</span> <span class="string">"core-js/modules/web.dom.iterable"</span>;</div></pre></td></tr></table></figure>
+<h2 id="debug-boolean-default-false"><a href="#debug-boolean-default-false" class="headerlink" title="debug (boolean, default: false)"></a>debug (boolean, default: false)</h2><p>Logs the following information via <code>console.log()</code></p>
+<ul>
+<li><p>Targeted environments</p>
+</li>
+<li><p>Enabled transformers</p>
+</li>
+<li><p>Enabled plugins</p>
+</li>
+<li><p>Enabled polyfills</p>
+</li>
+</ul>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><p>```json { “presets”: [ [“env”, { “targets”: { “safari”: 10 }, “modules”: false, “useBuiltIns”: true, “debug”: true }] ] }</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[babel-polyfill or babel-runtime]]></title>
       <url>/2017/05/21/babel-polyfill-or-babel-runtime/</url>
       <content type="html"><![CDATA[<p>The <code>babel-polyfill</code> and <code>babel-runtime</code> modules are sued to serve the same function in two different ways. Both modules ultimately serve to emulate an ES6 environment.</p>

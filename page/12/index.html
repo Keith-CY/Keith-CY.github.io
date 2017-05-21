@@ -287,6 +287,208 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/18/component-children/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/18/component-children/" itemprop="url">
+                  Component Children
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-18T17:14:19+08:00">
+                2016-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
+                    <span itemprop="name">workNote</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><code>this.props.children</code></p>
+<p>Children allow you to pass components as data to other components, just like any other prop you use. The special thing about children is that React provides support through its <em>ReactElement API</em> and JSX. XML children translate perfectly to React children.</p>
+<pre><code>var MyDiv = React.createClass({
+  render: function(){
+      return &amp;lt;div&amp;gt;{this.props.children}&amp;lt;/div&amp;gt;
+}
+});
+
+ReactDOM.render(
+  &amp;lt;MyDiv&amp;gt;
+      &amp;lt;span&amp;gt;Hello&amp;lt;/span&amp;gt;
+      &amp;lt;span&amp;gt;World&amp;lt;/span&amp;gt;
+  &amp;lt;/MyDiv&amp;gt;,
+  node  
+);
+`&lt;/pre&gt;
+
+### this.props.children
+
+If you look at the **JSX** transform, you&apos;ll find that XML children are appended as arguments to the _React.createElement_ call.
+ Most often, your component will render content and include the children in the _render_ output. This is a great way to create UI components, like cards, headers, and buttons.
+
+Occasionally, you may want to interact with the children, maybe mutating or separating them. Be careful here and remember to treat **this.props.children** as an **opaque data structure**. Instead of working with **this.props.children** directly, use the **React.Children** utilities to work with children.
+
+&lt;pre&gt;`var ListComponent = React.createClasss({
+  render: function(){
+      var children = React.Children.map(
+        this.props.children,
+        function(child){
+            return &amp;lt;li&amp;gt;{child}&amp;lt;li&amp;gt;
+        }
+    );
+    return &amp;lt;ul&amp;gt;{children}&amp;lt;/ul&amp;gt;;
+  }
+  });
+
+  var middleChildren = [
+  &amp;lt;strong key=&apos;2&apos;&amp;gt;Child 2&amp;lt;/strong&amp;gt;,
+  &amp;lt;a href=&apos;#&apos; key=&apos;3&apos;&amp;gt;Child 3&amp;lt;/a&amp;gt;
+  ];
+
+  ReactDOM.render(
+  &amp;lt;ListComponent&amp;gt;
+    &amp;lt;span&amp;gt;Child 1&amp;lt;/span&amp;gt;
+    {middleChildren}
+    &amp;lt;em&amp;gt;Child 4&amp;lt;/em&amp;gt;
+  &amp;lt;/ListComponent&amp;gt;,
+  document.body
+);
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/18/node/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1941,176 +2143,11 @@ gulp.task("browser-sync", function(){
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/15/bfc-e5-9f-ba-e6-9c-ac-e6-a6-82-e5-bf-b5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/15/bfc-e5-9f-ba-e6-9c-ac-e6-a6-82-e5-bf-b5/" itemprop="url">
-                  BFC 基本概念
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-15T04:04:36+08:00">
-                2016-07-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Box-CSS-布局的基本单位"><a href="#Box-CSS-布局的基本单位" class="headerlink" title="Box: CSS 布局的基本单位"></a>Box: CSS 布局的基本单位</h3><p>Box 是 CSS 布局的对象, 和基本单位, 直观点来说, 就是一个页面是由很多个 Box 组成的. 元素的类型和 display 属性, 决定了这个 Box 的类型. 不同类型的 Box, 会参与不同的 Formatting Context(一个决定如何渲染文档的容器), 因此 Box 内的元素会以不同方式渲染.<br>盒子的类型:</p>
-<ul>
-<li>block-level: <code>display:block</code>的 block, list-item, table 元素会形成 block-level box, 并参与 Block formatting context.</li>
-<li>inline-level box: <code>display:inline</code>的 inline-block, inline-table 元素会形成 inline-level box, 并参与 inline formatting context;</li>
-<li>run-in box: CSS3才有, 略;</li>
-</ul>
-<h3 id="Formatting-Context"><a href="#Formatting-Context" class="headerlink" title="Formatting Context"></a>Formatting Context</h3><p>Formatting Context 是 W3C CSS2.1规范中的一个概念, 是页面中的一块渲染区域, 并有一套渲染规则, 决定了其子元素如何定位, 以及其他元素的关系和相互作用. 最常见的的 Formatting Context 有 Block Formatting Context(BFC) 和 Inline Formatting Context(IFC).<br>CSS2.1中只有 BFC 和 IFC, 在 CSS3中添加了 GFC 和 FFC</p>
-<h3 id="BFC-的定义"><a href="#BFC-的定义" class="headerlink" title="BFC 的定义"></a>BFC 的定义</h3><p>BFC 直译为”块级格式上下文”, 是一个独立的渲染区域, 只有 Block-level Box 可以参与, 他规定了内部的 Block-level Box 如何布局, 并且与这个区域外部毫不相干.</p>
-<h4 id="BFC-布局规则"><a href="#BFC-布局规则" class="headerlink" title="BFC 布局规则"></a>BFC 布局规则</h4><ul>
-<li>内部的 Box 会在垂直方向依次排列</li>
-<li>Box 垂直方向的距离由 margin 决定, 属于同一个 BFC 的两个相邻的 Box 的 margin 会发生坍塌</li>
-<li>BFC 内部不会发生 float box 重叠</li>
-<li>BFC 就是页面上的一个隔离的独立容器, 容器内的子元素不会影响到外部的元素, 反之亦然</li>
-<li>计算 BFC 高度的时候, <strong>浮动元素也参与计算</strong>(使用 border 消除父元素坍塌的原理)</li>
-<li>BFC 内部每一个 Box 的左外边缘(margin-left)会碰触容器的左边缘(border-left)(如果是从右向左的格式, 则是碰触右边缘)</li>
-</ul>
-<h4 id="BFC-的通俗理解"><a href="#BFC-的通俗理解" class="headerlink" title="BFC 的通俗理解"></a>BFC 的通俗理解</h4><p>BFC 容器是一个独立的箱子, 里面的元素的布局不受外部元素影响.<br>我们往往利用这个特性来消除浮动元素对其他非浮动的兄弟元素及其子元素带来的影响.<br>并且在一个 BFC 容器中, 块盒和行盒都会沿其父元素的边框排列</p>
-<h4 id="BFC-成因"><a href="#BFC-成因" class="headerlink" title="BFC 成因"></a>BFC 成因</h4><ul>
-<li>float 属性不为 None;</li>
-<li>position 为 Absolute 或 Fixed</li>
-<li>display 为 inline-block, table-cell, table-caption, flex, inline-flex</li>
-<li>overflow 不是 visible</li>
-</ul>
-<h4 id="BFC-的作用与原理"><a href="#BFC-的作用与原理" class="headerlink" title="BFC 的作用与原理"></a>BFC 的作用与原理</h4><h5 id="自适应两栏布局"><a href="#自适应两栏布局" class="headerlink" title="自适应两栏布局"></a>自适应两栏布局</h5>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2155,7 +2192,7 @@ gulp.task("browser-sync", function(){
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">170</span>
+                <span class="site-state-item-count">171</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -3,6 +3,63 @@
   
     
     <entry>
+      <title><![CDATA[Deep in Runtime-Transform]]></title>
+      <url>/2017/05/21/Deep-in-Runtime-Transform/</url>
+      <content type="html"><![CDATA[<p>This plugin is recommended in a <strong>library/tool</strong></p>
+<blockquote>
+<p>Note: Instance methods such as <code>&#39;foobar&#39;.includes(&#39;foo&#39;)</code> will not work since that would require modification of existing built-ins(Use <code>babel-polyfill</code> for that)</p>
+</blockquote>
+<p>Babel uses very small helpers for common functions such as <code>_extend</code>. By default this will be added to every file that requires it. This duplication is sometimes unnecessary, especially when your application is spread out over multiple files.</p>
+<p>This is where the <code>transform-runtime</code> plugin comes in: all of the helpers will reference the module <code>babel-runtime</code> to avoid duplication across your compiled output. The runtime will be compiled into your build.</p>
+<p>Another purpose of this transformer is to create a sandboxed environment for your code. If you use <code>babel-polyfill</code> and the built-ins it provides such as <code>Promise</code>, <code>Set</code> and <code>Map</code>, those will pollute the global scope. While this might be ok for an app or a command line tool, it becomes a problem if your code is a library which you intend to publish for other to use or if you can’t exactly control the environment in which your code will run.</p>
+<p>The transformer will alias these built-ins to <code>core-js</code> so you can use them seamlessly without having to require the polyfill.</p>
+<h1 id="Prod-and-Dev"><a href="#Prod-and-Dev" class="headerlink" title="Prod and Dev"></a>Prod and Dev</h1><p>In most cases, you should install <code>babel-plugin-transform-runtime</code> as a development dependency, and <code>babel-runtime</code> as a production dependency.</p>
+<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h1><p>I prefer to use <code>.babelrc</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;plugins&quot;: [</div><div class="line">    [&quot;transform-runtime&quot;, &#123;</div><div class="line">      &quot;helpers&quot;: false,</div><div class="line">      &quot;polyfill&quot;: false,</div><div class="line">      &quot;regenerator&quot;: true,</div><div class="line">      &quot;moduleName&quot;: &quot;babel-runtime&quot;</div><div class="line">    &#125;]</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>There the options are referred.</p>
+<ul>
+<li>helpers: boolean, default to <code>true</code></li>
+</ul>
+<p>Toggles whether or not inlined babel helpers (<code>classCallCheck</code>, <code>extends</code>, etc) are replaced with calls to <code>moduleName</code>.</p>
+<ul>
+<li>polyfill: boolean, default to be <code>true</code></li>
+</ul>
+<p>Toggles whether or not new built-ins(<code>Promise</code>, <code>Set</code>, <code>Map</code>, etc) are transformed to use a non-global polluting polyfill.</p>
+<ul>
+<li>renegerator: boolean, default to <code>true</code></li>
+</ul>
+<p>Toggles whether or not generator functions are transforms to use a regenerator runtime that does not pollute the global scope.</p>
+<ul>
+<li>moduleName: string, default to <code>babel-runtime</code></li>
+</ul>
+<p>Set the name/path of the module used when importing helpers.</p>
+<p>Example:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"moduleName"</span>: <span class="string">"flavortown/runtime"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> extends <span class="keyword">from</span> <span class="string">'flavortown/runtime/helpers/extend'</span></div></pre></td></tr></table></figure>
+<h1 id="Technical-Details"><a href="#Technical-Details" class="headerlink" title="Technical Details"></a>Technical Details</h1><p>The <code>runtime</code> transformer plugin does three things:</p>
+<ul>
+<li><p>Automatically requires <code>babel-runtime/renegerator</code> when you use generator/async functions;</p>
+</li>
+<li><p>Automatically requires <code>babel-runtime/core-js</code> and maps ES6 static methods and built-ins;</p>
+</li>
+<li><p>Removes the inline Babel helpers and uses the module <code>babel-runtime/helpers</code> instead.</p>
+</li>
+</ul>
+<p>You can use built-ins such as <code>Promise</code>, <code>Set</code>, <code>Symbol</code>, etc., as well as use all the Babel features taht require a polyfill seamlessly, without global pollution, making it extremely suitable for libraries.</p>
+<h2 id="Regenerator-aliasing"><a href="#Regenerator-aliasing" class="headerlink" title="Regenerator aliasing"></a>Regenerator aliasing</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> * <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>the following is generated</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> _marked = [foo].map(regeneratorRuntime.mark)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> regeneratorRuntime.wrap(<span class="function"><span class="keyword">function</span> <span class="title">foo$</span>(<span class="params">_context</span>) </span>&#123;</div><div class="line">    <span class="keyword">while</span> (<span class="number">1</span>) <span class="keyword">switch</span> (_context_prev = _context.next) &#123;</div><div class="line">      <span class="keyword">case</span> <span class="number">0</span>:</div><div class="line">      <span class="keyword">case</span> <span class="string">'end'</span>:</div><div class="line">        <span class="keyword">return</span> _context.stop()</div><div class="line">    &#125;</div><div class="line">  &#125;, _marked[<span class="number">0</span>], <span class="keyword">this</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This isn’t ideal as then you have to include the regenerator runtime which pollutes the global scope.</p>
+<p>Instead what the <code>runtime</code> transformer does it compile that to:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> _regenerator = <span class="built_in">require</span>(<span class="string">'babel-runtime/regenerator'</span>)</div><div class="line"><span class="keyword">var</span> _regenerator2 = _interopRequireDefault(_regenerator)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">_interopRequireDefault</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> obj &amp;&amp; obj.__esModule ? obj : &#123; <span class="attr">default</span>: obj &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> _marked = [foo].map(_regenerator2.default.mark)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> regeneratorRuntime.wrap(<span class="function"><span class="keyword">function</span> <span class="title">foo$</span>(<span class="params">_context</span>) </span>&#123;</div><div class="line">    <span class="keyword">while</span> (<span class="number">1</span>) <span class="keyword">switch</span> (_context_prev = _context.next) &#123;</div><div class="line">      <span class="keyword">case</span> <span class="string">'0'</span>:</div><div class="line">      <span class="keyword">case</span> <span class="string">'end'</span>:</div><div class="line">        <span class="keyword">return</span> _context.stop()</div><div class="line">    &#125;</div><div class="line">  &#125;, _marked[<span class="number">0</span>], <span class="keyword">this</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This means that you can use the regenerator runtime without polluting your current environment.</p>
+<p>The same actions with Core-js Aliasing and Helper Aliasing.</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[More Faster React Functional Component]]></title>
       <url>/2017/05/21/More-Faster-React-Functional-Component/</url>
       <content type="html"><![CDATA[<p><a href="https://medium.com/missive-app/45-faster-react-functional-components-now-3509a668e69f" target="_blank" rel="external">origin</a></p>
@@ -10345,9 +10402,9 @@ gulp.task("browser-sync", function(){
         
         <tags>
             
-            <tag> CSS3 </tag>
-            
             <tag> Trick </tag>
+            
+            <tag> CSS3 </tag>
             
         </tags>
         
@@ -10411,9 +10468,9 @@ gulp.task("browser-sync", function(){
         
         <tags>
             
-            <tag> CSS3 </tag>
-            
             <tag> Trick </tag>
+            
+            <tag> CSS3 </tag>
             
         </tags>
         
@@ -10981,9 +11038,9 @@ div{
         
         <tags>
             
-            <tag> CSS3 </tag>
-            
             <tag> Trick </tag>
+            
+            <tag> CSS3 </tag>
             
         </tags>
         
@@ -11362,9 +11419,9 @@ div{
         
         <tags>
             
-            <tag> CSS3 </tag>
-            
             <tag> jQuery </tag>
+            
+            <tag> CSS3 </tag>
             
         </tags>
         

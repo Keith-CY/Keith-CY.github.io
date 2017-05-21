@@ -287,6 +287,337 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/" itemprop="url">
+                  babel-polyfill 入门
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-04T06:28:06+08:00">
+                2017-02-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>yarn add babel-polyfill
+
+import &apos;babel-polyfill&apos;
+`&lt;/pre&gt;
+
+babel-polyfill 提供了全局访问 API, 如 Promise, Set 以及 Map, 但是 polyfill 提供的 api 可能会污染到全局作用域, 特别在你把代码导报为第三方库给其他人用时, 或者你无法控制代码运行环境时, 都可能存在问题
+
+`babel` 提供了 `transform-runtime` 插件来解决此问题, `transform-runtime` 提供一个沙盒机制来组织全局变量的污染
+
+&gt; 需要注意, transform-runtime 依赖于 babel-runtime
+
+&lt;pre&gt;`# transform-runtime 只应用于开发环境
+yarn add --dev babel-plugin-transform-runtime 
+
+# 其依赖包 babel-runtime 需要打包到生产环境
+yarn add babel-runtime
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// .babelrc
+{
+  &quot;plugins&quot;: [&quot;transform-runtime&quot;]
+}
+
+or
+
+{
+  &quot;plugins&quot;: [
+    [&quot;transform&quot;, {
+      &quot;helpers&quot;: false,
+      &quot;polyfill&quot;: false,
+      &quot;regenerator&quot;: true,
+      &quot;moduleName&quot;: &quot;babel-runtime&quot;,
+      }]
+  ]
+}
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/01/e8-a7-a3-e5-86-b3-commonschunkplugin-e7-9a-84-hash-e5-8f-98-e5-8c-96-e9-97-ae-e9-a2-98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/01/e8-a7-a3-e5-86-b3-commonschunkplugin-e7-9a-84-hash-e5-8f-98-e5-8c-96-e9-97-ae-e9-a2-98/" itemprop="url">
+                  解决 CommonsChunkPlugin 的 hash 变化问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-01T17:32:28+08:00">
+                2017-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="原文"><a href="#原文" class="headerlink" title="原文:"></a>原文:</h3><blockquote>
+<p>Manifest File<br>  But, if we change application code and run webpack again, we see that the hash for the vendor file changes. Even though we achieved separate bundles for vendor and main bundles, we see that the vendor bundle changes when the application code changes. This means that we still don’t reap the benefits of browser caching because the hash for vendor file changes on every build and the browser will have to reload the file.</p>
+<p>  The issue here is that on every build, webpack generates some webpack runtime code, which helps webpack do it’s job. When there is a single bundle, the runtime code resides in it. But when multiple bundles are generated, the runtime code is extracted into the common module, here the vendor file.</p>
+</blockquote>
+<p>To prevent this, we need extract out the runtime into a separate manifest file. Even though we are creating another bundle, the overhead is offset by the long term caching benefits that we obtain on the vendor file.</p>
+<h3 id="非翻译"><a href="#非翻译" class="headerlink" title="非翻译:"></a>非翻译:</h3><p>每次打包时 vendor 文件的 hash 也会变化的原因在于, webpack 打包时必定会产生 runtime code.</p>
+<p>当我们需要打包出 vendor.js 的时候, 尽管公共代码没有变化, 但是 webpack 会生成新的 runtime code 并注入 vendor.js, 导致其 hash 变化.</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h3><p>将 vendor.js 中的 runtime code 单独打包出来, 这样只有 bundle.js 和 runtime code 的 hash 会变化, vendor.js 的代码不会变化.</p>
+<h3 id="具体做法"><a href="#具体做法" class="headerlink" title="具体做法:"></a>具体做法:</h3><pre><code>new webpack.optimize.CommonsChunkPlugin({
+  name: [&apos;vendor&apos;, &apos;manifest&apos;],
+}
+</code></pre><p>这样就可以把 runtime code 打包进 manifest.js, 此后该类操作不会改变 vendor.js 的 hash 了</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2154,334 +2485,6 @@ Promise 构造器接受一个函数作为参数, 传入两个回调函数resolve
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/27/javascript-e4-ba-8b-e4-bb-b6-e4-b8-8e-e6-80-a7-e8-83-bd/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/27/javascript-e4-ba-8b-e4-bb-b6-e4-b8-8e-e6-80-a7-e8-83-bd/" itemprop="url">
-                  JavaScript 事件与性能
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-27T16:23:11+08:00">
-                2016-09-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>事件处理程序本质上是一种函数, 是一种对象, 存放在内存中, 设置大量的事件处理程序会使内存中的对象变多, Web 程序的性能会变得越来越差.</p>
-<p>为了更好利用事件处理程序, 出现了<strong>事件委托</strong>, 用来提升性能</p>
-<h3 id="事件委托"><a href="#事件委托" class="headerlink" title="事件委托"></a>事件委托</h3><p>Event Delegate: 把若干个子节点上的相同事件的处理函数绑定到父节点, 从父节点统一处理子节点冒泡上来的事件, 这种技术叫做事件委托.</p>
-<p>举例:</p>
-<pre><code>&amp;lt;ul id=&apos;parent-list&apos;&amp;gt;
-    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
-    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
-    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
-    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
-&amp;lt;/ul&amp;gt;
-`&lt;/pre&gt;
-
-通过父节点监听冒泡事件可以处理子节点上的对应事件
-
-&lt;pre&gt;`var parentList = document.getElementById(&apos;parent-list&apos;);
-parentList.addEventListener(&apos;click&apos;, function(){
-  var target = event.target; // li
-  if(target.nodeName.toLowerCase() === &apos;li&apos;){
-    alert(target.firstChild.nodeValue);
-  }
-}, false)
-</code></pre><p>因为事件委托依赖事件冒泡机制, 所以并不是所有事件都可以委托</p>
-<p>最适合的事件: click, mousedown, mouseup, keydown, keyup, keypress</p>
-<h3 id="移除事件处理程序"><a href="#移除事件处理程序" class="headerlink" title="移除事件处理程序"></a>移除事件处理程序</h3><p>每当将事件处理程序制定给元素时, 运行中的浏览器代码与支持页面交互的 Js 代码之间就会建立一个连接, 这种连接越多, 页面执行越慢</p>
-<p>如果使用完后不再使用的事件处理程序, 应当释放掉<br>```</p>
-<p><button id="button">Submit</button><br>var button = document.getElementById(‘button’);<br>button.onclick = function(){<br>  button.onclick = null;<br>  event.target.firstChild.nodeValue = “Submitting”<br>}</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/27/javascript-e5-81-9c-e6-ad-a2-e5-86-92-e6-b3-a1-e5-92-8c-e9-98-bb-e6-ad-a2-e6-b5-8f-e8-a7-88-e5-99-a8-e9-bb-98-e8-ae-a4-e8-a1-8c-e4-b8-ba/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/27/javascript-e5-81-9c-e6-ad-a2-e5-86-92-e6-b3-a1-e5-92-8c-e9-98-bb-e6-ad-a2-e6-b5-8f-e8-a7-88-e5-99-a8-e9-bb-98-e8-ae-a4-e8-a1-8c-e4-b8-ba/" itemprop="url">
-                  JavaScript 停止冒泡和阻止浏览器默认行为
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-27T15:25:00+08:00">
-                2016-09-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="事件兼容"><a href="#事件兼容" class="headerlink" title="事件兼容"></a>事件兼容</h3><pre><code>function myFn(e){
-  var evt = e ? e:window.event
-}
-`&lt;/pre&gt;
-
-### JS 停止冒泡
-
-&lt;pre&gt;`function myFn(e){
-  window.event ? window.event.cancelBubble = true : e.stopPropagation();
-}
-`&lt;/pre&gt;
-
-### JS 阻止默认行为
-
-&lt;pre&gt;`function myFn(e){
-  window.event ? window.event.returnValue = false : e.preventDefault();
-}
-</code></pre><h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>event 表示事件的状态, 例如, event.target 是触发事件的对象</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2531,7 +2534,7 @@ parentList.addEventListener(&apos;click&apos;, function(){
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">168</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

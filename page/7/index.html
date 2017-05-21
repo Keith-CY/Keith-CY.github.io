@@ -287,6 +287,393 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/22/configuring-eslint/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/22/configuring-eslint/" itemprop="url">
+                  Configuring ESLint
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-22T02:27:49+08:00">
+                2016-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <ol>
+<li>Configuration Comments - use JS comments to embed configuration information directly into a file.<p></p></li>
+<li>Configuration Files - use a JS, JSON, or YAML file to specify configuration information for an entire directory and all of its subdirectories. This can be in the form of an <code>.eslintrc</code> file or an <code>eslintConfig</code> field in a <code>package.json</code> file, both of which ESLint will look for and reed automatically, or you can specify a configuration file on the command line.</li>
+</ol>
+<h3 id="Specifying-Parser-Options"><a href="#Specifying-Parser-Options" class="headerlink" title="Specifying Parser Options"></a>Specifying Parser Options</h3><p></p><p>ESLint allows you to specify the JS language options you want to support. By Default, ESLint support only ES5 syntax. You can override that setting to enable support for ES6 and 7 as well as JSX by using parser options.</p>
+<p>Parser options are set in your <code>.eslintrc</code> file by using the <code>parserOptions</code> property. The available options are:</p>
+<ul>
+<li><code>ecmaVersion</code> - set to 3, 5(default), 6 or 7 to specify the version of ECMAScript you want to use.</li>
+<li><code>sourceType</code> - set to <code>&quot;script&quot;</code> (default) or <code>&quot;module&quot;</code> if your code is in ECMAScript modules.</li>
+<li><p><code>emcaFeatures</code> - an object indicating which additional language features you’d like to use:</p>
+<pre><code>*   `globalReturn` - allow `return` statements in the global scope.
+</code></pre><ul>
+<li><code>impliedStrict</code> - enable global <code>strict mode</code> (if <code>ecmaVersion</code> is 5 or greater)</li>
+<li><code>jsx</code>: enable <code>JSX</code></li>
+<li><code>experimentalObjectRestSpread</code> - enable support for the experimental <code>object rest/spread properties</code></li>
+</ul>
+</li>
+</ul>
+<p>An example:</p>
+<pre><code>{
+  &quot;parserOptions&quot;:{
+    &quot;emcaVersion&quot;: 6,
+    &quot;sourceType&quot;: &quot;module&quot;,
+    &quot;ecmaFeatures&quot;: {
+      &quot;jsx&quot;: true
+    }
+  },
+  &quot;rules&quot;:{
+    &quot;semi&quot;: 2
+  }
+}
+`&lt;/pre&gt;
+
+### Specifying Parser
+
+By Default, ESLint uses `Espree` as its parser. You can optionally specify that a different parser should be used in your configuration file so long as the parser meets the following requirements:
+</code></pre><ul>
+<li>It must be an npm module installled locally;</li>
+<li>It must have an Esprima-compatible interface</li>
+<li><p>It must produce Esprima-compatible AST and token objects.</p>
+<h3 id="Specifying-ENV"><a href="#Specifying-ENV" class="headerlink" title="Specifying ENV"></a>Specifying ENV</h3></li>
+<li><p>browser</p>
+</li>
+<li>node</li>
+<li>commonjs</li>
+<li>es6</li>
+<li><p>mocha</p>
+<pre>`{
+  "env":{
+    "browser": true,
+    "node": true
+  }
+}
+
+### Configuring Rules
+
+ESLint comes with a large number of rules, you can modify which rules your project use either using configuration comments or configuration files. To change a rules setting, you must set the rule ID equal to one of these values: 
+
+- `"off"` or `0` to turn rule off.
+- `"warn"` or `1` to turn the rule as a warning(doesn't affect exit code)
+- `"error"` or `2` to turn the rule on as an error(exit code is 1 when triggered)
+
+### Demo
+
+`</pre>
+
+<p>npm install -g eslint</p>
+<p><pre>`</pre></p>
+</li>
+</ul>
+<p>eslint –init<br><code>``
+生成</code>.eslintrc.js`</p>
+<p>但是这个文件最好手动生成</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/21/js-e5-bc-80-e5-8f-91-e5-b7-a5-e5-85-b7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/21/js-e5-bc-80-e5-8f-91-e5-b7-a5-e5-85-b7/" itemprop="url">
+                  JS 开发工具
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-21T07:12:50+08:00">
+                2016-08-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>开发工具是让开发人员工作更轻松的一些软件, 传统上包括集成开发环境, 代码检查工具, 编译器, 调试工具和性能测试工具</p>
+<p>但是 JS 是一种动态语言, 伴随他动态本质而来的是对更多运行时开发者工具的需求.</p>
+<h4 id="Quick-List"><a href="#Quick-List" class="headerlink" title="Quick List"></a>Quick List</h4><ul>
+<li>Atom &amp; Atom-ternjs</li>
+<li>Chrome DevTools</li>
+<li>PageSpeed Insights</li>
+<li>BrowserSycn</li>
+<li>TraceGL</li>
+<li>ironNode</li>
+<li>ESLint</li>
+<li>Babel</li>
+<li>React</li>
+<li>Webpack + Hot Module Replacement</li>
+<li>Redux + Redux DevTools</li>
+</ul>
+<p>关于工具, 主要是编辑器和运行时环境(比如浏览器)</p>
+<p>主要用 Atom, 需要 atom-ternjs 来开启 JavaScript 智能识别</p>
+<p>很多很棒的 <a href="https://medium.com/@satya164/supercharged-javascript-development-in-atom-ea034e22eabc#.a2b8sthbw" target="_blank" rel="external">Atom 插件</a></p>
+<p>调试器: Chrome DevTools, 注意其 flame charts 和 dominators view 功能</p>
+<p>性能审查: <a href="https://www.youtube.com/watch?list=PLOU2XLYxmsILKwwASNS0xgfcmakbK_8JZ&amp;v=bDUDuQy3R7Y" target="_blank" rel="external">PageSpeed Insights</a></p>
+<p>BrowserSync是一款测试响应式布局非常好用的工具, 可以一次模拟多种浏览器(电脑, 平板, 手机)<br>可以监视文件, 并在文件修改的时候自动重载同步刷新浏览器, 像滚动, 点击, 表单交互等动作也会跨设别同步.</p>
+<p><a href="https://www.youtube.com/watch?v=heNWfzc7ufQ" target="_blank" rel="external">视频链接</a></p>
+<p>TraceGL 是一种运行时调试工具, 可以让你在软件中的方法实时调用时观察他们, 而不是手动逐步跟踪代码</p>
+<p><a href="https://www.youtube.com/watch?v=heNWfzc7ufQ" target="_blank" rel="external">视频链接</a></p>
+<p>代码检查: ESLint 可配置性特别强, 每一个选项都可以设置开启或禁用, 甚至给他们添加参数. 可以创建自己的规则, 支持插件</p>
+<p>Babel 是一种编译器, 可以让现在的 JS 代码使用 ES6+ 尚未支持的特性, JSX 等, 工作原理是讲代码转换为等价的 ES5.</p>
+<p><a href="https://medium.com/javascript-scene/how-to-use-es6-for-isomorphic-javascript-apps-2a9c3abe5ea2" target="_blank" rel="external">文章链接</a></p>
+<p>Webpack 会将模块和以来打包成针对浏览器的静态资源, 他支持大量有趣的特性, 比如模块热拔插, 可以让当前浏览器中的代码在你修改文件的时候自动更新, 而不用刷新页面. 模块热拔插</p>
+<p><a href="https://github.com/cloverfield-tools/universal-react-boilerplate" target="_blank" rel="external">参考资料</a></p>
+<p>React: 不算开发者工具</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/20/e9-83-a8-e7-bd-b2react-redux-e7-9a-84-web-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1893,348 +2280,6 @@ entry: [
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/02/react-ajax/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/02/react-ajax/" itemprop="url">
-                  React Ajax
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-02T09:04:45+08:00">
-                2016-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>组件的数据来源, 通常是通过 AJAX 请求从服务器获取, 可以使用 <code>componentDidMount</code> 方法设置 AJAX 请求, 等到请求成功, 再用<code>this.setState()</code>方法重新渲染 UI.</p>
-<pre><code>var UserGist = React.createClass({
-  getInitialState(){
-    return {
-      userName: &apos;&apos;,
-      lastGistUrl: &apos;&apos;
-    }
-  },
-
-  componentDidMounted(){
-    $.get(this.props.source, function(result){
-      var lastGist = result[0];
-      if(this.isMouted()){
-        this.setState({
-          userName: lastGist.owner.login,
-          lastGistUrl: lastGist.html_url
-        });
-      }
-    }.bind(this));
-  },
-
-  render(){
-    return (
-      &amp;lt;div&amp;gt;
-        {this.state.userName}&apos;s last Gist is 
-        &amp;lt;a href={this.state.lastGistUrl}&amp;gt;here&amp;lt;/a&amp;gt;
-      &amp;lt;/div&amp;gt;
-    );
-  }
-});
-
-React.render(
-  &amp;lt;UserGist source= &apos;....&apos; /&amp;gt;, document.body
-)
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/02/react-e8-a1-a8-e5-8d-95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/02/react-e8-a1-a8-e5-8d-95/" itemprop="url">
-                  React 表单
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-02T08:58:50+08:00">
-                2016-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>用户在表单输入的内容, 属于用户与组件的互动, 要用<code>this.setState()</code>修改</p>
-<pre><code>var Input = React.cr而奥特Class({
-  getInitialState(){
-    return {
-      value: &apos;Hello&apos;
-    };
-  },
-
-  handleChange(event){
-    this.setState({
-      value: event.target.value;
-    })
-  },
-
-  render(){
-    return(
-      &amp;lt;div&amp;gt;&amp;lt;input type=&apos;text&apos; onChange={this.handleChange} value = {this.state.value} /&amp;gt;&amp;lt;p&amp;gt;{this.state.value}&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;
-    );
-  }
-});
-
-ReactDOM.render(
-  &amp;lt;Input /&amp;gt;, document.body
-);
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2284,7 +2329,7 @@ ReactDOM.render(
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">168</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

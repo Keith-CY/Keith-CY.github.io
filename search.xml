@@ -3,6 +3,40 @@
   
     
     <entry>
+      <title><![CDATA[More Faster React Functional Component]]></title>
+      <url>/2017/05/21/More-Faster-React-Functional-Component/</url>
+      <content type="html"><![CDATA[<p><a href="https://medium.com/missive-app/45-faster-react-functional-components-now-3509a668e69f" target="_blank" rel="external">origin</a></p>
+<p>An basic <code>Avatar</code> Component:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Avatar</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  render () &#123;</div><div class="line">    <span class="keyword">return</span> &lt;img src=&#123;this.props.url&#125; /&gt;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>And its functional component style is:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Avatar = <span class="function">(<span class="params">&#123; url &#125;</span>) =&gt;</span> &lt;img src=&#123;url&#125; /&gt;</div></pre></td></tr></table></figure>
+<p>As you can see, it’s just a simple js function returning an element.</p>
+<p>React still does a lot of stuff on functional components that, by nature, will never be used.</p>
+<p>But we can skip React internals for these functional component.</p>
+<p>They are just plain JavaScritp functions, which means we can call it in the render function.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">ReactDOM.render(</div><div class="line">  &lt;div&gt;</div><div class="line">    &#123;Avatar(&#123; url: avatarUrl &#125;)&#125;</div><div class="line">    &lt;div&gt;&#123;commentBody&#125;&lt;/div&gt;</div><div class="line">  &lt;/div&gt;,</div><div class="line">  mountNode,</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>As we know, the traditional usage:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Avatar url=&#123;avatarUrl&#125; /&gt;</div></pre></td></tr></table></figure>
+<p>will be compiled into</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">React.createElement(Avatar, &#123; <span class="attr">url</span>: avatarUrl &#125;)</div></pre></td></tr></table></figure>
+<p>It will cost a lifecycle of a React Component.</p>
+<p>But with direct calling of plain JavaScritp Function, all these consumption can be eliminated.</p>
+<p>By the way, <code>transform-react-inline-elements</code> does the same as a bebel transform, so there’s no need to change the source code.</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[css shorthand collection]]></title>
+      <url>/2017/05/19/css-shorthand-collection/</url>
+      <content type="html"><![CDATA[<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">body</span> &#123;</div><div class="line">  <span class="attribute">background</span>:</div><div class="line">    <span class="built_in">url</span>(...) <span class="comment">/* image */</span></div><div class="line">    top center / <span class="number">200px</span> <span class="number">200px</span> <span class="comment">/* position / size */</span></div><div class="line">    no-repeat <span class="comment">/* repeat */</span></div><div class="line">    fixed <span class="comment">/* attachment */</span></div><div class="line">    padding-box <span class="comment">/* origin */</span></div><div class="line">    content-box <span class="comment">/* clip */</span></div><div class="line">    red; <span class="comment">/* color */</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[usage of grid in css]]></title>
       <url>/2017/05/18/usage-of-grid-in-css/</url>
       <content type="html"><![CDATA[<p><a href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank" rel="external">origin</a></p>

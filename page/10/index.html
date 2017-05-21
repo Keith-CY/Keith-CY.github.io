@@ -287,6 +287,465 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/webpack-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/21/webpack-2/" itemprop="url">
+                  Webpack
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-21T06:58:43+08:00">
+                2016-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Use-webpack-in-a-project"><a href="#Use-webpack-in-a-project" class="headerlink" title="Use webpack in a project"></a>Use webpack in a project</h3><p>It’s best to have webpack <strong>as a dependency</strong> in your project, through this you can choose a local webpack version and will not be forced to use the single global one.<br>Add a <code>package.json</code> configuration file or <code>npm</code> with:</p>
+<pre><code>$ npm init
+`&lt;/pre&gt;
+
+The answers to the question are not so important if you don&apos;t want to publish your project to npm.
+
+Install and add `webpack` to the `package.json` with:
+
+&lt;pre&gt;`$ npm install --save-dev webpack
+`&lt;/pre&gt;
+
+### Create a modular JavaScript Project
+
+Let&apos;s create some modules in JavaScript, using the CommonJS syntax:
+
+#### cat.js
+
+&lt;pre&gt;`var cats = [&apos;dave&apos;,&apos;henry&apos;,&apos;martha&apos;];
+module.exports = cats;
+`&lt;/pre&gt;
+
+#### app.js(Entry Point)
+
+&lt;pre&gt;`var cats = require(&apos;cats.js&apos;);
+console.log(cats);
+`&lt;/pre&gt;
+
+The **Entry Point** is where your application will start, and where webpack will start tracking dependencies between modules.
+
+Give webpack the entry point(app.js) and specify an output file(app.bundle.js):
+
+&lt;pre&gt;`webpack ./app.js app.bundle.js
+`&lt;/pre&gt;
+
+webpack will read and analyze the entry point and its dependencies(including transitive dependencies). Then it will bundle them into `app.bundle.js`.
+
+Now your bundle is ready to run. Run `node app.bundle.js` and marvel in your abundance of cats.
+
+To gain full access to webpack&apos;s flexibility, we need to create a &quot;configuration file&quot;
+
+### Project Structure
+
+We will put the source files in **src**, and bundled files in **dist**.
+The final project structure will look like this:
+![](https://raw.githubusercontent.com/dtinth/webpack-docs-images/2459637650502958669ea6b11bf49dc0b3b083ae/usage/project-structure.png)
+</code></pre><ol>
+<li><p>Create <code>webpack.config.js</code></p>
+<pre>`module.exports = {
+  entry: './src/app.js',
+  output: {
+    path: './dist',
+    filename: '[name].bundle.js'
+  }
+};
+`</pre>
+
+<p>A webpack configuration file is a CommonJS-Style module. So you can run any kind of code here, as long as a configuration object is exported out of its module.</p>
+</li>
+<li><p>Using loaders<br>Webpack only supports JavaScript modules natively, but most people will be using a transpiler for ES2015, CoffeeScript, TypeScript, etc. They can be used in webpack by using <strong>loaders</strong>.<br>Loaders are special modules webpack uses to ‘load’ other modules(written in another language) into JavaScript(that webpack understands).</p>
+<p>using <code>babel-loader</code><br>1. Install Babel and the presets:</p>
+<pre>`npm install --save-dev babel-loader
+`</pre>
+</li>
+<li><p>Configure Babel to use there presets by add <code>.babelrc</code></p>
+<pre>`{'presets':['es2015']}
+`</pre>
+</li>
+<li><p>Modify <code>webpack.config.js</code> to process all <code>.js</code> files using <code>babel-loader</code>.</p>
+<pre>`module.exports = {
+  entry: './src/app.js',
+  output: {
+    path: './dist',
+    filename: '[name].bundle.js'
+  },
+  module: {
+    loaders: [
+      {test: /\.js$/,exclude: /node_modules/, loader: 'babel-loader',}
+    ]
+  }
+}
+`</pre>
+
+<p>We are excluding <code>node_modules</code> here because otherwise all external libraries will also go through Babel, slowing down compilation.<br>4. Install the libraries you want to use</p>
+<pre>`npm install --save jquery babel-polyfill
+`</pre>
+
+<p>We are using <code>--save</code> instead of <code>--save-dev</code> this time, as there libraries will be used in runtime. <code>-dev</code> means the libraries only used during development.</p>
+</li>
+<li><p>Edit <code>src/app.js</code></p>
+<p><pre>`import ‘babel-polyfill’;<br> import cats from ‘./cats’;<br> import $ from ‘jquery’;</pre></p>
+<p> $(‘&lt;h1&gt;Cats&lt;/h1&gt;’).appendTo(‘body’);<br> const ul = $(‘&lt;ul&gt;&lt;/ul&gt;’).appendTo(‘body’);<br> for (const cat of cats) {</p>
+<pre><code>$(&apos;&amp;lt;li&amp;gt;&amp;lt;/li&amp;gt;&apos;).text(cat).appendTo(ul);
+</code></pre><p> }</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">    6\. Using Plugins</div><div class="line">    An example would be minifying your file so that the client can load if faster. This can be done with **plugins**. We&apos;ll add the uglify plugin to our configuration:</div><div class="line"></div><div class="line">const webwebpack = require(&apos;webpack&apos;);</div><div class="line">module.exports = &#123;</div><div class="line">  entry: &apos;./src/app.js&apos;,</div><div class="line">  output: &#123;</div><div class="line">    path: &apos;./dist&apos;,</div><div class="line">    filename: &apos;[name].bundle.js&apos;</div><div class="line">  &#125;,</div><div class="line">  module: &#123;</div><div class="line">    loaders: [</div><div class="line">      &#123;test: /&amp;#46;jsx?$/, exclude: /node_modules/,loader: &apos;babel-loader&apos;&#125;</div><div class="line">    ]</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">plugins: [</div><div class="line">    new webpack.optimize.UglifyJsPlugin(&#123;</div><div class="line">      compress: &#123;</div><div class="line">        warning:false,</div><div class="line">      &#125;,</div><div class="line">      output: &#123;</div><div class="line">        comments: false,</div><div class="line">      &#125;,</div><div class="line">      &#125;),</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>The Uglify plugin is included with webpack so you don’t need to add additional modules, but this may not always be the case.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/refs-to-components/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/07/21/refs-to-components/" itemprop="url">
+                  Refs to Components
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-21T04:51:03+08:00">
+                2016-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
+                    <span itemprop="name">workNote</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>The DOM returned from render() is virtual, so called Virtual DOM, and we can get any factual input(value) from a virtual object, such as access to value from a <input> component.</p>
+<h3 id="The-ref-returned-from-ReactDOM-render"><a href="#The-ref-returned-from-ReactDOM-render" class="headerlink" title="The ref returned from ReactDOM.render"></a>The ref returned from ReactDOM.render</h3><p>ReactDOM.render() will return a reference to your component’s <strong>backing instance</strong>(or null for stateless components)</p>
+<p><code>var myComponent = ReactDOM.render(&amp;lt;MyComponent /&amp;gt;, myContainer)</code></p>
+<p>However, that the JSX doesn’t return a component. It’s just a <strong>ReactElement</strong>: a lightweight representation that tells React what the mounted component should look like.</p>
+<pre><code>var myComponentElement = &amp;lt;MyComponent title = &apos;title&apos;/&amp;gt;; //This is just a ReactElement
+`&lt;/pre&gt;
+
+&lt;pre&gt;`var myComponentInstance = ReactDOM.render(myComponent, myContainer); //a Virtual DOM
+`&lt;/pre&gt;
+
+### The ref Callback Attribute
+
+React supports a special attribute that you can attach to any component. The &apos;ref&apos; attribute ca be a callback function, and this callback will be executed **immediately after the component is mounted**. The referenced component will be passed in as a parameter, and the callback function may use the component immediately, or save the reference for future use.
+
+It&apos;s as simple as adding a `ref` attribute to anything returned from render:
+
+&lt;pre&gt;`render: function(){
+  return (
+    &amp;lt;TextInput ref={function(input){
+      if(input != nill){
+        input.focus();
+      }
+    }} /&amp;gt;
+  );
+},
+`&lt;/pre&gt;
+
+or use ES6 arrow funciton:
+
+&lt;pre&gt;`render: function(){
+  return &amp;lt;TextInput ref={(c) =&amp;gt; this._input = c} /&amp;gt;;
+},
+componentDidMount: function{
+  this._input.focus();
+}
+`&lt;/pre&gt;
+
+### The ref String Attribute
+
+React also supports using a string as a ref prop on any component.
+Add `ref` attribute to component so you can access to them via `this.refs`
+</code></pre><ol>
+<li><p>Assign a <code>ref</code> attribute to anything returned from <code>render</code> such as:</p>
+<pre>`&lt;input ref='myInput'&gt;
+`</pre>
+</li>
+<li><p>In some other code, access the <strong>backing instance</strong> via <code>this.refs</code> as in</p>
+<pre>`var input = this.refs.myInput;
+var inputValue = input.value;
+`</pre>
+
+<h3 id="A-Complete-Example"><a href="#A-Complete-Example" class="headerlink" title="A Complete Example"></a>A Complete Example</h3><p><pre>`var MyComponent = React.createClass({<br>  handleClick: function(){</pre></p>
+<pre><code>if(this.myTextInput != null){
+  this.myTextInput.focus()
+}
+</code></pre><p>  },<br>  render: function(){</p>
+<pre><code>return(
+  &amp;lt;div&amp;gt;
+    &amp;lt;input type=&apos;text&apos; ref={(ref) =&amp;gt; this.myTextInput = ref} /&amp;gt;
+    &amp;lt;input type=&apos;button&apos; value=&apos;Focus the text input&apos; onClick = {this.handleClick} /&amp;gt;
+  &amp;lt;/div&amp;gt;
+);
+</code></pre><p>  }<br>});</p>
+<p>ReactDOM.render(&lt;MyComponent /&gt;, document.getElementById(‘example’));</p>
+</li>
+</ol>
+<p>Note: <code>ref</code> will be destroyed as component unmounted.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/21/component-api/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1930,358 +2389,6 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/displaytable-cell/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/20/displaytable-cell/" itemprop="url">
-                  display:table-cell
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-20T02:07:14+08:00">
-                2016-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
-                    <span itemprop="name">workNote</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="display-table-cell-属性简述"><a href="#display-table-cell-属性简述" class="headerlink" title="display:table-cell 属性简述"></a>display:table-cell 属性简述</h3><p><code>display:table-cell</code> 属性让标签元素鞥一表格单元格的形式呈现, 类似于 td 标签.<br><code>table-cell</code>与<code>float</code>, <code>position:absolute</code> 不兼容.<br><code>table-cell</code>元素可以设置 width, height, padding, 但是不能设置 margin, 和 td 标签一致.</p>
-<h3 id="display-table-cell-与大小不固定元素的垂直居中"><a href="#display-table-cell-与大小不固定元素的垂直居中" class="headerlink" title="display:table-cell 与大小不固定元素的垂直居中"></a>display:table-cell 与大小不固定元素的垂直居中</h3><h3 id="display-table-cell-与两栏自适应布局"><a href="#display-table-cell-与两栏自适应布局" class="headerlink" title="display:table-cell 与两栏自适应布局"></a>display:table-cell 与两栏自适应布局</h3><h3 id="display-table-cell-等高布局"><a href="#display-table-cell-等高布局" class="headerlink" title="display:table-cell 等高布局"></a>display:table-cell 等高布局</h3><p>table 表格中的单元格最大的特点之一就是同一行列表元素都是登高的, 所以等高布局可以借助 table-cell 实现.<br><strong>匿名表格元素创建规则</strong>:CSS2中创建表格元素, 其依赖元素(比如 tr 之于 td, table 之于 tr) 会被模拟出来, 从而使得表格模型能够正常工作. 所有的表格元素都会自动在自身周围生成需要的匿名 table 对象, 使其符合 table/inline-table, table-row, table-cell 的三层嵌套关系.<br>要实现等高布局, 所有的 table-cell 元素一定要留一个用来包裹的标签, CSS 代码如下:<br>```<br>.list_row{display:table-row}<br>.list_cell{display:table-cell;width:30%,padding:1.6%; background-color:#F5F5F5;}<br>.list_center{background-color:#F0F3F9;}//用于和旁边的 cell 区分</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/19/javascript-e7-9a-84-e9-97-ad-e5-8c-85/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/07/19/javascript-e7-9a-84-e9-97-ad-e5-8c-85/" itemprop="url">
-                  JavaScript 的闭包
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-19T10:31:00+08:00">
-                2016-07-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/workNote/" itemprop="url" rel="index">
-                    <span itemprop="name">workNote</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>通常情况下, 求和函数的定义是这样的</p>
-<pre><code>function sum(arr){
-  return arr.reduce(function(x,y){
-    return x+y;
-  });
-}
-sum([1,2,3,4,5]); //15
-`&lt;/pre&gt;
-
-但是, 如果不需要立刻求和, 而是在后面的代码中根据需要进行计算, 可以选择返回一个保存了参数的求和函数
-
-&lt;pre&gt;`function lazy_sum(arr){
-  var sum = function(){
-    return arr.reduce(function(x,y){
-      return x+y;
-    });
-  }
-  return sum;
-}
-`&lt;/pre&gt;
-
-当我们调用`f = lazy_sum()`时会返回保存了参数 arr 的 sum 函数, 直到通过 f()调用 sum 函数前都不会进行求和运算, 可以节约资源.
-
-**需要注意的一点**是每一次调用 lazy_sum() 都会返回一个新的函数, 彼此相互独立, 各自占用内存空间
-同时要注意, 尽管每次生成并返回的都是新的 sum 函数, 但是 lazy_sum() 的局部变量是通用的, 可参考**类方法**与**实例**的关系, 这是使用闭包的目的之一
-
-**更要注意**:
-
-&lt;pre&gt;`function count(){
-  var arr = [];
-  for(var i = 1; i&amp;lt;=3; i++){
-    arr.push(function(){
-        return i*i;
-      });
-  }
-  return arr;
-}
-
-var results = count();
-var f1 = results[0];
-var f2 = results[1];
-var f3 = results[2];
-</code></pre><p>在这个例子中, f1(), f2(), f3()的返回值都是16, 原因在于:<br>每一次循环都向 arr 推入一个(function(){})(i), 但都没有计算, 三次循环后 i 变成了4, 所以f1, f2, f3的函数接受的局部变量的值都是4.<br>由此可知闭包保留的是变量, 而不是变量的值.<br>如果一定要引用循环变量, 记得创建一个变量用于保存现场</p>
-<p><strong>闭包可以用于实现装饰器</strong></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2331,7 +2438,7 @@ var f3 = results[2];
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">168</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

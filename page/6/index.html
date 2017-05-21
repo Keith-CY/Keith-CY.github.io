@@ -287,6 +287,348 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/26/e5-a2-9e-e5-bc-ba-e9-a1-b5-e9-9d-a2-e6-b8-b2-e6-9f-93-e6-80-a7-e8-83-bd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/26/e5-a2-9e-e5-bc-ba-e9-a1-b5-e9-9d-a2-e6-b8-b2-e6-9f-93-e6-80-a7-e8-83-bd/" itemprop="url">
+                  增强页面渲染性能
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-26T15:51:22+08:00">
+                2016-08-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="3D-transform-启用-GPU-加速"><a href="#3D-transform-启用-GPU-加速" class="headerlink" title="3D transform 启用 GPU 加速"></a>3D transform 启用 GPU 加速</h3><p>例如 transform3D, scaleZ 等可以开启浏览器硬件加速</p>
+<p>实际上并不需要 Z 轴的动画</p>
+<h3 id="will-change"><a href="#will-change" class="headerlink" title="will-change"></a>will-change</h3><p>当我们的某些行为触发页面进行大面积绘制的时候, 浏览器往往是没有准备的, 只能被动使用 CPU 去计算与重绘. 而<code>will-change</code>会在真正行为触发之前通知浏览器, 以开启 GPU 准备重绘.</p>
+<p>该属性语法:</p>
+<pre><code>will-change: auto;
+will-change: scroll-position;
+will-change: contents;
+will-change: trasnform; // or some
+will-change: opacity; // or some
+will-change: left,top; // or some
+
+will-change:inherit;
+will-change:initial;
+will-change: unset;
+`&lt;/pre&gt;
+
+其中 auto 是用来重置的
+
+scroll-position 是通知滚动
+
+contents 是通知内容动画
+
+### 注意事项
+
+`will-change` 虽然可以加速, 但一定要适度使用. 频繁使用 GPU 显然会导致性能(电量)消耗
+
+不要直接写在默认状态中, 因为`will-change`会一直挂着:
+
+&lt;pre&gt;`.will-change{
+  will-change: transform;
+  transition: transform .3s;
+}
+.will-change:hover{
+  transform: scale(1.5);
+}
+`&lt;/pre&gt;
+
+可以让父元素 hover 的时候声明`will-change`, 这样, 移出的时候回自动`remove`, 触发返回基本上是有效元素范围
+
+&lt;pre&gt;`.will-change-parent:hover .will-change{
+  will-change:transform;
+}
+.will-change{
+  transition:transform .3s
+}
+.will-change:hover{
+  transform:scale(1.5)
+}
+</code></pre><p>如果使用 JS 添加<code>will-change</code>一定要及时 remove</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/26/clip-path-polygon-e5-9b-be-e5-bd-a2-e6-9e-84-e5-bb-ba/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/26/clip-path-polygon-e5-9b-be-e5-bd-a2-e6-9e-84-e5-bb-ba/" itemprop="url">
+                  clip-path, polygon 图形构建
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-26T15:20:04+08:00">
+                2016-08-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>clip-path 的前身是 SVG, 支持二维坐标</p>
+<p>polygon 的作用是根据二维点坐标, 依次连线, 最后闭合形成遮罩区域</p>
+<p>clip-path:polygon 生成三角形的过程非常简单</p>
+<pre><code>.path{
+  clip-path: polygon(5px, 10px, 16px, 3px, 16px, 17px);
+}
+</code></pre><p>polygon 对点的数目没有限制, 所以可以生成各种几何图案</p>
+<p>clip-path 还可以用 transition 过渡或者 animation 动画, 很好的弥补了 CSS3 的 transform 变换的不足</p>
+<p>polygon 动画有一个重要前提, 那就是坐标的数目在变化前后必须一样. 这样就浏览器就能实现连续动画.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/26/node-js-e4-b9-8b-path-e6-a8-a1-e5-9d-97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2770,393 +3112,6 @@ const mapDispatchToProps = (dispatch,ownProps) =&amp;gt; {
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/22/configuring-eslint/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/22/configuring-eslint/" itemprop="url">
-                  Configuring ESLint
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-22T02:27:49+08:00">
-                2016-08-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>Configuration Comments - use JS comments to embed configuration information directly into a file.<p></p></li>
-<li>Configuration Files - use a JS, JSON, or YAML file to specify configuration information for an entire directory and all of its subdirectories. This can be in the form of an <code>.eslintrc</code> file or an <code>eslintConfig</code> field in a <code>package.json</code> file, both of which ESLint will look for and reed automatically, or you can specify a configuration file on the command line.</li>
-</ol>
-<h3 id="Specifying-Parser-Options"><a href="#Specifying-Parser-Options" class="headerlink" title="Specifying Parser Options"></a>Specifying Parser Options</h3><p></p><p>ESLint allows you to specify the JS language options you want to support. By Default, ESLint support only ES5 syntax. You can override that setting to enable support for ES6 and 7 as well as JSX by using parser options.</p>
-<p>Parser options are set in your <code>.eslintrc</code> file by using the <code>parserOptions</code> property. The available options are:</p>
-<ul>
-<li><code>ecmaVersion</code> - set to 3, 5(default), 6 or 7 to specify the version of ECMAScript you want to use.</li>
-<li><code>sourceType</code> - set to <code>&quot;script&quot;</code> (default) or <code>&quot;module&quot;</code> if your code is in ECMAScript modules.</li>
-<li><p><code>emcaFeatures</code> - an object indicating which additional language features you’d like to use:</p>
-<pre><code>*   `globalReturn` - allow `return` statements in the global scope.
-</code></pre><ul>
-<li><code>impliedStrict</code> - enable global <code>strict mode</code> (if <code>ecmaVersion</code> is 5 or greater)</li>
-<li><code>jsx</code>: enable <code>JSX</code></li>
-<li><code>experimentalObjectRestSpread</code> - enable support for the experimental <code>object rest/spread properties</code></li>
-</ul>
-</li>
-</ul>
-<p>An example:</p>
-<pre><code>{
-  &quot;parserOptions&quot;:{
-    &quot;emcaVersion&quot;: 6,
-    &quot;sourceType&quot;: &quot;module&quot;,
-    &quot;ecmaFeatures&quot;: {
-      &quot;jsx&quot;: true
-    }
-  },
-  &quot;rules&quot;:{
-    &quot;semi&quot;: 2
-  }
-}
-`&lt;/pre&gt;
-
-### Specifying Parser
-
-By Default, ESLint uses `Espree` as its parser. You can optionally specify that a different parser should be used in your configuration file so long as the parser meets the following requirements:
-</code></pre><ul>
-<li>It must be an npm module installled locally;</li>
-<li>It must have an Esprima-compatible interface</li>
-<li><p>It must produce Esprima-compatible AST and token objects.</p>
-<h3 id="Specifying-ENV"><a href="#Specifying-ENV" class="headerlink" title="Specifying ENV"></a>Specifying ENV</h3></li>
-<li><p>browser</p>
-</li>
-<li>node</li>
-<li>commonjs</li>
-<li>es6</li>
-<li><p>mocha</p>
-<pre>`{
-  "env":{
-    "browser": true,
-    "node": true
-  }
-}
-
-### Configuring Rules
-
-ESLint comes with a large number of rules, you can modify which rules your project use either using configuration comments or configuration files. To change a rules setting, you must set the rule ID equal to one of these values: 
-
-- `"off"` or `0` to turn rule off.
-- `"warn"` or `1` to turn the rule as a warning(doesn't affect exit code)
-- `"error"` or `2` to turn the rule on as an error(exit code is 1 when triggered)
-
-### Demo
-
-`</pre>
-
-<p>npm install -g eslint</p>
-<p><pre>`</pre></p>
-</li>
-</ul>
-<p>eslint –init<br><code>``
-生成</code>.eslintrc.js`</p>
-<p>但是这个文件最好手动生成</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/21/js-e5-bc-80-e5-8f-91-e5-b7-a5-e5-85-b7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/21/js-e5-bc-80-e5-8f-91-e5-b7-a5-e5-85-b7/" itemprop="url">
-                  JS 开发工具
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-21T07:12:50+08:00">
-                2016-08-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>开发工具是让开发人员工作更轻松的一些软件, 传统上包括集成开发环境, 代码检查工具, 编译器, 调试工具和性能测试工具</p>
-<p>但是 JS 是一种动态语言, 伴随他动态本质而来的是对更多运行时开发者工具的需求.</p>
-<h4 id="Quick-List"><a href="#Quick-List" class="headerlink" title="Quick List"></a>Quick List</h4><ul>
-<li>Atom &amp; Atom-ternjs</li>
-<li>Chrome DevTools</li>
-<li>PageSpeed Insights</li>
-<li>BrowserSycn</li>
-<li>TraceGL</li>
-<li>ironNode</li>
-<li>ESLint</li>
-<li>Babel</li>
-<li>React</li>
-<li>Webpack + Hot Module Replacement</li>
-<li>Redux + Redux DevTools</li>
-</ul>
-<p>关于工具, 主要是编辑器和运行时环境(比如浏览器)</p>
-<p>主要用 Atom, 需要 atom-ternjs 来开启 JavaScript 智能识别</p>
-<p>很多很棒的 <a href="https://medium.com/@satya164/supercharged-javascript-development-in-atom-ea034e22eabc#.a2b8sthbw" target="_blank" rel="external">Atom 插件</a></p>
-<p>调试器: Chrome DevTools, 注意其 flame charts 和 dominators view 功能</p>
-<p>性能审查: <a href="https://www.youtube.com/watch?list=PLOU2XLYxmsILKwwASNS0xgfcmakbK_8JZ&amp;v=bDUDuQy3R7Y" target="_blank" rel="external">PageSpeed Insights</a></p>
-<p>BrowserSync是一款测试响应式布局非常好用的工具, 可以一次模拟多种浏览器(电脑, 平板, 手机)<br>可以监视文件, 并在文件修改的时候自动重载同步刷新浏览器, 像滚动, 点击, 表单交互等动作也会跨设别同步.</p>
-<p><a href="https://www.youtube.com/watch?v=heNWfzc7ufQ" target="_blank" rel="external">视频链接</a></p>
-<p>TraceGL 是一种运行时调试工具, 可以让你在软件中的方法实时调用时观察他们, 而不是手动逐步跟踪代码</p>
-<p><a href="https://www.youtube.com/watch?v=heNWfzc7ufQ" target="_blank" rel="external">视频链接</a></p>
-<p>代码检查: ESLint 可配置性特别强, 每一个选项都可以设置开启或禁用, 甚至给他们添加参数. 可以创建自己的规则, 支持插件</p>
-<p>Babel 是一种编译器, 可以让现在的 JS 代码使用 ES6+ 尚未支持的特性, JSX 等, 工作原理是讲代码转换为等价的 ES5.</p>
-<p><a href="https://medium.com/javascript-scene/how-to-use-es6-for-isomorphic-javascript-apps-2a9c3abe5ea2" target="_blank" rel="external">文章链接</a></p>
-<p>Webpack 会将模块和以来打包成针对浏览器的静态资源, 他支持大量有趣的特性, 比如模块热拔插, 可以让当前浏览器中的代码在你修改文件的时候自动更新, 而不用刷新页面. 模块热拔插</p>
-<p><a href="https://github.com/cloverfield-tools/universal-react-boilerplate" target="_blank" rel="external">参考资料</a></p>
-<p>React: 不算开发者工具</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -3206,7 +3161,7 @@ ESLint comes with a large number of rules, you can modify which rules your proje
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">168</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -287,6 +287,334 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/27/javascript-e4-ba-8b-e4-bb-b6-e4-b8-8e-e6-80-a7-e8-83-bd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/27/javascript-e4-ba-8b-e4-bb-b6-e4-b8-8e-e6-80-a7-e8-83-bd/" itemprop="url">
+                  JavaScript 事件与性能
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-27T16:23:11+08:00">
+                2016-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>事件处理程序本质上是一种函数, 是一种对象, 存放在内存中, 设置大量的事件处理程序会使内存中的对象变多, Web 程序的性能会变得越来越差.</p>
+<p>为了更好利用事件处理程序, 出现了<strong>事件委托</strong>, 用来提升性能</p>
+<h3 id="事件委托"><a href="#事件委托" class="headerlink" title="事件委托"></a>事件委托</h3><p>Event Delegate: 把若干个子节点上的相同事件的处理函数绑定到父节点, 从父节点统一处理子节点冒泡上来的事件, 这种技术叫做事件委托.</p>
+<p>举例:</p>
+<pre><code>&amp;lt;ul id=&apos;parent-list&apos;&amp;gt;
+    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
+    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
+    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
+    &amp;lt;li id=&apos;list-1&apos;&amp;gt;List 1&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+`&lt;/pre&gt;
+
+通过父节点监听冒泡事件可以处理子节点上的对应事件
+
+&lt;pre&gt;`var parentList = document.getElementById(&apos;parent-list&apos;);
+parentList.addEventListener(&apos;click&apos;, function(){
+  var target = event.target; // li
+  if(target.nodeName.toLowerCase() === &apos;li&apos;){
+    alert(target.firstChild.nodeValue);
+  }
+}, false)
+</code></pre><p>因为事件委托依赖事件冒泡机制, 所以并不是所有事件都可以委托</p>
+<p>最适合的事件: click, mousedown, mouseup, keydown, keyup, keypress</p>
+<h3 id="移除事件处理程序"><a href="#移除事件处理程序" class="headerlink" title="移除事件处理程序"></a>移除事件处理程序</h3><p>每当将事件处理程序制定给元素时, 运行中的浏览器代码与支持页面交互的 Js 代码之间就会建立一个连接, 这种连接越多, 页面执行越慢</p>
+<p>如果使用完后不再使用的事件处理程序, 应当释放掉<br>```</p>
+<p><button id="button">Submit</button><br>var button = document.getElementById(‘button’);<br>button.onclick = function(){<br>  button.onclick = null;<br>  event.target.firstChild.nodeValue = “Submitting”<br>}</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/27/javascript-e5-81-9c-e6-ad-a2-e5-86-92-e6-b3-a1-e5-92-8c-e9-98-bb-e6-ad-a2-e6-b5-8f-e8-a7-88-e5-99-a8-e9-bb-98-e8-ae-a4-e8-a1-8c-e4-b8-ba/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chen Yu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="EzCook">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/09/27/javascript-e5-81-9c-e6-ad-a2-e5-86-92-e6-b3-a1-e5-92-8c-e9-98-bb-e6-ad-a2-e6-b5-8f-e8-a7-88-e5-99-a8-e9-bb-98-e8-ae-a4-e8-a1-8c-e4-b8-ba/" itemprop="url">
+                  JavaScript 停止冒泡和阻止浏览器默认行为
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-27T15:25:00+08:00">
+                2016-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/note/" itemprop="url" rel="index">
+                    <span itemprop="name">note</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="事件兼容"><a href="#事件兼容" class="headerlink" title="事件兼容"></a>事件兼容</h3><pre><code>function myFn(e){
+  var evt = e ? e:window.event
+}
+`&lt;/pre&gt;
+
+### JS 停止冒泡
+
+&lt;pre&gt;`function myFn(e){
+  window.event ? window.event.cancelBubble = true : e.stopPropagation();
+}
+`&lt;/pre&gt;
+
+### JS 阻止默认行为
+
+&lt;pre&gt;`function myFn(e){
+  window.event ? window.event.returnValue = false : e.preventDefault();
+}
+</code></pre><h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>event 表示事件的状态, 例如, event.target 是触发事件的对象</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/19/koa-router/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2167,325 +2495,6 @@ AppRegistry.registerComponent(&quot;Project&quot;, () =&amp;gt; SimpleList)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/08/e6-b5-8b-e8-af-95-e5-b0-8f-e6-8a-80-e5-b7-a7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/08/e6-b5-8b-e8-af-95-e5-b0-8f-e6-8a-80-e5-b7-a7/" itemprop="url">
-                  测试小技巧
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-08T10:00:52+08:00">
-                2016-09-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>每一个测试都要引入 expect, 可以创建一个<code>test_helper.js</code><br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> import &#123; expect &#125; from &apos;expect&apos;</div><div class="line"> import sinon from &apos;sinon&apos;</div><div class="line"></div><div class="line">global.expect = expect</div><div class="line"> global.sinon = sinon</div><div class="line"> `然后在`mocha.opt`中添加`</div><div class="line"> --require ./test/test_helper.js</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/07/command-line-cheat-sheet/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chen Yu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="EzCook">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/09/07/command-line-cheat-sheet/" itemprop="url">
-                  Command Line Cheat Sheet
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-07T03:02:48+08:00">
-                2016-09-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/note/" itemprop="url" rel="index">
-                    <span itemprop="name">note</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Directories"><a href="#Directories" class="headerlink" title="Directories"></a>Directories</h3><p>pwd: print working directory</p>
-<p>cd &lt;directory&gt;: change directory to &lt;directory&gt;</p>
-<p>cd ..: change directory to parent one</p>
-<p>ls: list directory  contents</p>
-<p>ls -la: list detailed directory contents, including hidden files</p>
-<p>mkdir &lt;directory&gt;: create new directory named &lt;directory&gt;</p>
-<h3 id="Output"><a href="#Output" class="headerlink" title="Output"></a>Output</h3><p>cat &lt;file&gt;: output the contents of &lt;file&gt;</p>
-<p>less &lt;file&gt;: output the contents of &lt;file&gt; using the less command(which supports paginations etc.)</p>
-<p>head &lt;file&gt;: output the first 10 lines of &lt;file&gt;</p>
-<p>&lt;cmd&gt; &lt;file&gt;: impose &lt;cmd&gt; on &lt;file&gt;</p>
-<p>clear: clear the command line window</p>
-<h3 id="Files"><a href="#Files" class="headerlink" title="Files"></a>Files</h3><p>rm &lt;file&gt;: delete &lt;file&gt;</p>
-<p>rm -r &lt;directory&gt;: clear contents of &lt;directory&gt;</p>
-<p>rm -f &lt;file&gt;: force-delete &lt;file&gt;</p>
-<p>rm -rf &lt;directory&gt;: force clear &lt;directory&gt;</p>
-<p>mv &lt;file-old&gt; &lt;file-new&gt;: rename &lt;file-old&gt;</p>
-<p>mv &lt;file&gt; &lt;directory&gt;: move file to &lt;directory&gt;</p>
-<p>cp &lt;file&gt; &lt;directory&gt;: copy &lt;file&gt; to &lt;directory&gt;</p>
-<p>cp -r &lt;directory1&gt; &lt;directory2&gt;:  copy whole &lt;directory1&gt; to &lt;directory2&gt;(overwrit)</p>
-<p>touch &lt;file&gt;: Update file or create file</p>
-<h3 id="Permissions"><a href="#Permissions" class="headerlink" title="Permissions"></a>Permissions</h3><p>chmod 755 &lt;file&gt;: change permission of &lt;file&gt; to 755</p>
-<p>chmod -R 600 &lt;directory&gt;: change permission of &lt;directory&gt; and its content to 600</p>
-<p>chown &lt;user&gt;:&lt;group&gt; &lt;file&gt;: Change ownership of &lt;file&gt; to &lt;user&gt; and &lt;group&gt;</p>
-<h3 id="Search"><a href="#Search" class="headerlink" title="Search"></a>Search</h3><p>find &lt;dir&gt; -name ‘&lt;file&gt;’: find all files named &lt;file&gt; inside &lt;dir&gt;(support regex)</p>
-<p>grep ‘&lt;text&gt;’ &lt;file&gt;: output all occurrence of &lt;text&gt; inside &lt;file&gt;(add -i for case-insensitivity)</p>
-<p>grep -rl ‘text’ &lt;dir&gt;: search for all files container &lt;text&gt; inside &lt;dir&gt;</p>
-<h3 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h3><p>ping &lt;host&gt;: ping &lt;host&gt; and display status</p>
-<p>whois &lt;domain&gt;: output whois information for &lt;domain&gt;</p>
-<p>curl -O &lt;url/to/file&gt;: download &lt;file&gt;(via HTTP[S] or FTP)</p>
-<p>ssh &lt;username&gt;@&lt;host&gt;: establish an SSH connection to &lt;host&gt; with user &lt;username&gt;</p>
-<p>scp &lt;file&gt; &lt;user&gt;@&lt;host&gt;:/remote/path: Copy &lt;file&gt; to a remote &lt;host&gt;</p>
-<h3 id="Processes"><a href="#Processes" class="headerlink" title="Processes"></a>Processes</h3><p>ps ax: output currently running process</p>
-<p>top: display live information about currently running processes</p>
-<p>kill &lt;pid&gt;: Quit process with ID</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2535,7 +2544,7 @@ AppRegistry.registerComponent(&quot;Project&quot;, () =&amp;gt; SimpleList)
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">166</span>
+                <span class="site-state-item-count">168</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

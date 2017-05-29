@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.4 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            浏览器同源政策及其规避方法 | 
+        
+        EzCook
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Chen Yu">
+    <meta name="description" content="null">
+    <meta name="keywords" content="null,AJAX">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="EzCook">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="浏览器同源政策及其规避方法 | EzCook">
+    <meta property="og:description" content="null">
+    <meta property="og:article:tag" content="AJAX"> 
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#目的"><span class="post-toc-number">2.</span> <span class="post-toc-text">目的</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#限制范围"><span class="post-toc-number">3.</span> <span class="post-toc-text">限制范围</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Cookie"><span class="post-toc-number">4.</span> <span class="post-toc-text">Cookie</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#LocalStorage"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">LocalStorage</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#AJAX"><span class="post-toc-number">5.</span> <span class="post-toc-text">AJAX</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#JSONP"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">JSONP</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#WebSocket"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">WebSocket</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CORS"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">CORS</span></a></li></ol></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                浏览器同源政策及其规避方法
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Chen Yu</strong>
+        <span>Aug 02, 2016</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/AJAX/">AJAX</a>
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=浏览器同源政策及其规避方法&url=http://yoursite.com//2016/08/02/e6-b5-8f-e8-a7-88-e5-99-a8-e5-90-8c-e6-ba-90-e6-94-bf-e7-ad-96-e5-8f-8a-e5-85-b6-e8-a7-84-e9-81-bf-e6-96-b9-e6-b3-95/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                شارك على Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=浏览器同源政策及其规避方法&url=http://yoursite.com//2016/08/02/e6-b5-8f-e8-a7-88-e5-99-a8-e5-90-8c-e6-ba-90-e6-94-bf-e7-ad-96-e5-8f-8a-e5-85-b6-e8-a7-84-e9-81-bf-e6-96-b9-e6-b3-95/index.html&via=Chen Yu" target="_blank">
+            <li class="mdl-menu__item">
+                شارك على Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2016/08/02/e6-b5-8f-e8-a7-88-e5-99-a8-e5-90-8c-e6-ba-90-e6-94-bf-e7-ad-96-e5-8f-8a-e5-85-b6-e8-a7-84-e9-81-bf-e6-96-b9-e6-b3-95/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                شارك على Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2016/08/02/e6-b5-8f-e8-a7-88-e5-99-a8-e5-90-8c-e6-ba-90-e6-94-bf-e7-ad-96-e5-8f-8a-e5-85-b6-e8-a7-84-e9-81-bf-e6-96-b9-e6-b3-95/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                شارك على Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <p>浏览器安全的基石是”同源政策”(same-origin policy).</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>所谓”同源”, 是指三个”相同”.</p>
+<ul>
+<li>协议相同: <code>http:\\</code></li>
+<li>域名相同: <code>www.example.com</code> 与 <code>example.com</code> 不同</li>
+<li>端口相同</li>
+</ul>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>同源政策的目的是为了保证用户信息安全, 防止恶意的网络窃取数据</p>
+<h3 id="限制范围"><a href="#限制范围" class="headerlink" title="限制范围"></a>限制范围</h3><p>如果非同源, 共有三种行为受到限制</p>
+<ul>
+<li>Cookie, LocalStorage 和 IndexDB 无法读取</li>
+<li>DOM 无法获得</li>
+<li>AJAX 请求无法发送</li>
+</ul>
+<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><p>Cookie 是服务器写入浏览器的一小段信息, 只有同源的网站才能共享. 但是两个网页一级域名相同, 只有二级域名不同, 浏览器允许通过设置 <code>document.domain</code> 共享 Cookie.</p>
+<p>举例来说, A 网页是 <code>http://w1.example.com/a.html</code>, B 网页是 <code>http://w2.example.com/b.html</code>, 那么只要设置相同的 <code>document.domain</code>, 这两个网页可以共享 Cookie.</p>
+<pre><code>document.domain = &apos;example.com&apos;;
+`&lt;/pre&gt;
+
+现在 A 网页通过脚本设置一个 Cookie
+
+&lt;pre&gt;`document.cookie = &apos;test1=hello&apos;;
+`&lt;/pre&gt;
+
+B 网页就可以读取这个 Cookie
+
+&lt;pre&gt;`var allCookie = document.cookie;
+`&lt;/pre&gt;
+
+注意, 这种方法只适用于 Cookie 和 iframe 窗口, LocalStorage 和 IndexDB 无法通过这种方法, 规避同源政策.
+
+另外, 服务器也可以在设置 Cookie 的时候指定 Cookie 所属域名为一级域名, 比如 `.example.com`
+
+&lt;pre&gt;`Set-Cookie: key=value; domain=.example.com; path=/
+`&lt;/pre&gt;
+
+这样的话, 二级域名和三级域名不用做任何设置就可以读取这个 Cookie
+
+### iframe
+
+如果两个网页不同源, 就无法拿到对方的 DOM, 典型的例子就是`iframe`窗口和`window.open` 方法打开的窗口, 他们与父窗口无法通信.
+
+如果两个窗口一级域名相同, 只是二级域名不同, 那么设置`document.domain`也可以规避同源政策, 实现 DOM 获取.
+
+### 完全不同源的网站
+
+#### 片段识别符(fragment identifier)
+
+片段识别符值得是 URL 中`#` 后的部分, 也就是 hash.
+
+如果只是改变片段识别符, 页面不会重新刷新
+
+父窗口可以把信息写入子窗口的片段识别符
+
+&lt;pre&gt;`var src = originURL + &apos;#&apos; + data;
+document.getElementById(&apos;myFrame&apos;).src = src;
+`&lt;/pre&gt;
+
+子窗口通过监听 `hashchange` 事件得到通知
+
+&lt;pre&gt;`window.onhashchange = checkMessage;
+
+function checkMessage(){
+  var message = window.location.hash;
+  // ...
+}
+`&lt;/pre&gt;
+
+同样子窗口也可以改变父窗口的片段识别符
+
+&lt;pre&gt;`parent.location.href = target + &quot;#&quot; + hash;
+`&lt;/pre&gt;
+
+#### window.name
+
+浏览器窗口有 `window.name` 属性, 这个属性的最大特点是, 无论是否同源, 只要在同一个窗口里, 前一个网页设置这个属性后, 后一个网页可以读取他
+
+父窗口先打开一个子窗口, 载入一个不同源的网站, 该网页将写入 `widnow.name` 属性
+
+&lt;pre&gt;`window.name = data;
+`&lt;/pre&gt;
+
+接着, 子窗口跳回一个与主窗口同域的网址
+
+&lt;pre&gt;`location = &apos;http:parent.url.com/xxx.html&apos;
+`&lt;/pre&gt;
+
+然后主窗口就可以读取子窗口的 `window.name` 属性了
+
+&lt;pre&gt;`var data = document.getElementById(&apos;myFrame&apos;).contentWindow.name;
+`&lt;/pre&gt;
+
+这种方法的优点是 `window.name` 容量大, 缺点是必须监听子窗口的 `window.name` 属性的变化, 影响性能.
+
+#### window.postMessage
+
+以上信息都属于破解, HTML5 为了解决这个问题, 引入一个全新的 API: 跨文档通信 API(Cross-document messaging)
+
+这个 API 为 `window` 对象新增一个 `window.postMessage` 方法, 允许跨窗口通信, 不论两个窗口是否同源.
+
+举例来说, 父窗口 `http://aaa.com` 向子窗口 `http://bbb.com` 发消息, 调用 `postMessage` 方法就可以了
+
+&lt;pre&gt;`var popup = window.open(&apos;http://bbb.com&apos;, &apos;title&apos;);
+popup.postMessage(&apos;Hello World&apos;, &apos;http://bbb.com&apos;);
+`&lt;/pre&gt;
+
+`postMessage` 方法的第一个参数是要传递的 Message, 第二个参数是接受信息的窗口的源(origin), 即`协议+域名+端口`, 也可以设置为`*`, 表示不限制域名, 向所有窗口发送.
+
+子窗口向父窗口发送消息的写法类似
+
+&lt;pre&gt;`window.opener.postMessage(&apos;Hello World&apos;, &apos;http://aaa.com&apos;);
+`&lt;/pre&gt;
+
+通过`message`事件监听对象消息
+
+&lt;pre&gt;`window.addEventListener(&apos;message&apos;, function(e){
+console.log(e.data);
+}, false);
+`&lt;/pre&gt;
+
+`message` 事件的事件对象 `event` , 提供一下三个属性
+</code></pre><ul>
+<li><code>event.source</code>: 发送信息的窗口, 子窗口通过 <code>event.source</code> 引用父窗口然后发送消息<pre>`window.addEventListener('message', receiveMessage);
+function receiveMessage(event){
+event.source.postMessage('Hello Opener', '*');
+}
+`</pre></li>
+<li>‘event.origin’: 发送信息的网址(‘<a href="http://aaa.com" target="_blank" rel="external">http://aaa.com</a>‘), 可以过滤不是指定来源的信息<pre>`window.addEventListener('message', receiveMessage);
+function receiveMessage(event){
+if (event.origin != 'http://aaa.com') return;
+if (event.data === 'Hello World') {
+  event.source.postMessage('Hello', event.origin);
+} else {
+  console.log(event.data);
+}
+}
+`</pre></li>
+<li><p>‘event.data’: 信息内容</p><p></p>
+<h4 id="LocalStorage"><a href="#LocalStorage" class="headerlink" title="LocalStorage"></a>LocalStorage</h4><p></p><p>通过 <code>window.postMessage</code> 读写其他窗口的 <code>LocalStorage</code> 也是可能的</p>
+<p>例: 主窗口写入 <code>iframe</code> 子窗口的 <code>localStorage</code></p>
+<pre>`window.onmessage = function(event){
+  if(event.origin !== 'http://bbb.com') return;
+  var payload = JSON.parse(event.data);
+  localStorage.setItem(payload.key, JSON.stringify(payload.data));
+};
+`</pre>
+
+<p>上面代码中, 子窗口将父窗口发送的消息写入自己的 <code>localStorage</code></p>
+<p>父窗口发送消息的代码如下:</p>
+<pre>`var win = document.getElementByTagName('iframe')[0].contentWindow;
+var obj = { name: 'Jack' };
+win.postMessage(JSON.stringify({key: 'storage', data: obj}), 'http://bbb.com');
+`</pre>
+
+<p>加强版子窗口接收消息的代码</p>
+<pre>`window.onmessage = function(e) {
+  if (e.origin !== 'http://bbb.com') return;
+  var payload = JSON.parse(e.data);
+  switch(payload.method) {
+    case 'set': localStorage.setItem(payload.key, JSON.stringify(parload.data));
+                break;
+    case 'get': var parent = window.parent;
+                var data = localStorage.getItem(payload.key);
+                parent.postMessage(data, 'http://aaa.com');
+                break;
+    case 'remove': localStorage.removeItem(payload.key);
+                   break;
+  }
+};
+`</pre>
+
+<p>加强版的父窗口消息发送代码</p>
+<pre>`var win = document.getElementByTagName('iframe')[0].contentWindow;
+var obj = { name: 'Jack' };
+// 存入对象
+win.postMessage(JSON.stringify(key: 'storage', method: 'set', data: obj), 'http://bbb.com');
+// 读取对象
+win.postMessage(JSON.stringify(key: 'storage', method: 'get',), '*');
+window.onmessage = function(e){
+  if(e.origin !== 'http://bbb.com') return;
+  // 'Jack'
+  console.log(JSON.parse(e.data).name);
+};
+`</pre>
+
+<h3 id="AJAX"><a href="#AJAX" class="headerlink" title="AJAX"></a>AJAX</h3><p>同源政策规定, AJAX 请求只能发给同源的网址, 否则会报错</p>
+<p>除了假设服务器代理, 有三中方法规避这个限制</p>
+<h4 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h4><p>JSONP 是服务器与客户端跨源通信的常用方法, 最大特点是简单实用, 老式浏览器全部支持, 服务器改造非常小.</p>
+<p>基本思想是, 网页通过添加一个<code>&amp;lt;script&amp;gt;</code>元素, 向服务器请求 JSON 数据,在何种做法不受同源政策限制. 服务器接收请求后, 将数据放在一个指定名字的回调函数里传回来.</p>
+<p>首先, 网页动态插入<code>&amp;lt;script&amp;gt;</code>元素, 由它向跨源网址发出请求.</p>
+<pre>`function addScriptTag(src) {
+  var script = document.createElement('script');
+  script.setAttribute('type', 'text/javascript');
+  script.src = src;
+  document.body.appendChild(script);
+}
+window.onload = function(){
+  addScritpTag('http://example.com/ip?callback=foo');
+}
+
+function foo(data){
+  console.log("Your public IP address is: " + data.ip);
+};
+`</pre>
+
+<p>上面的代码通过动态添加<code>&amp;lt;script&amp;gt;</code>元素, 向服务器<code>example.com</code>发出请求. 注意, 该请求的查询字符串有一个<code>callback</code> 参数, 用来指定回调函数的名字, 这对 JSONP 是必须的.</p>
+<p>服务器接收到这个请求后, 会将数据放在回调函数的参数位置返回.</p>
+<pre>`foo({
+  'ip': '8.8.8.8'
+});
+`</pre>
+
+<p>由于<code>&amp;lt;script&amp;gt;</code>元素请求的脚本, 直接作为代码运行, 这时只要浏览器定义了<code>foo</code>函数, 该函数就会立即调用. 作为参数的 JSON 数据会被视为 JavaScript 对象, 而不是字符串, 因此避免了使用<code>JSON.parse</code>的步骤</p>
+<h4 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h4><p>WebSocket 是一种通信协议, 使用<code>ws://</code>(非加密)和<code>wss://</code>(加密)作为协议前缀.</p>
+<p>该协议不实行同源政策, 只要服务器支持, 就可以与他进行夸源通信.</p>
+<p>下面是一个例子, 浏览器发出的 WebSocket 请求的头信息:</p>
+<p><pre>`GET /chat HTTP/1.1<br>Host: server.example.com<br>Upgrade: websocket<br>Connection: Upgrade<br>Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==<br>Sec-WebSocket-Protocol: chat, superchat<br>Sec-WebSocket-Version: 13<br>Origin: <a href="http://example.com" target="_blank" rel="external">http://example.com</a></pre></p>
+</li>
+</ul>
+<p>上面代码中, 有一个字段是<code>Origin</code>, 表示该请求的请求源(origin)</p>
+<p>正式因为有了<code>Origin</code>这个字段, 所以 WebSocket 才没有实行同源政策, 因为服务器可以根据这个字段判断是否许可此次通信</p>
+<h4 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h4><p>CORS 是跨源资源分享(Corss-Origin Resource Sharing) 的缩写, 是 W3C 标准, 是跨源 AJAX 请求的根本解决办法. 相比 JSONP 只能发<code>GET</code>请求, CORS 允许任何类型的请求.</p>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2016/08/01/node-js-url-e6-a8-a1-e5-9d-97-e7-9a-84-e4-bd-bf-e7-94-a8/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            أحدث
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2016/08/02/e8-b7-a8-e5-9f-9f-e8-b5-84-e6-ba-90-e5-85-b1-e4-ba-ab-cors/" id="post_nav-older" class="next-content">
+            أقدم
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.png" alt="Chen Yu's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        youremail@email.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                الرئيسية
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    أرشيف
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">10</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">April 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">March 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/02/">February 2017<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">3</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/12/">December 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">November 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">October 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">September 2016<span class="sidebar_archives-count">16</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/08/">August 2016<span class="sidebar_archives-count">30</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/07/">July 2016<span class="sidebar_archives-count">43</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/06/">June 2016<span class="sidebar_archives-count">25</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">May 2016<span class="sidebar_archives-count">24</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            سمة - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+        <a href="https://twitter.com/twitter" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-twitter.svg);">
+                <span class="visuallyhidden">Twitter</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/facebook" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+        <a href="https://www.google.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-gplus.svg);">
+                <span class="visuallyhidden">Google Plus</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;EzCook
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

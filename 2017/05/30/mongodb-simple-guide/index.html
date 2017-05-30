@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.4 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            mongodb simple guide | 
+        
+        EzCook
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Chen Yu">
+    <meta name="description" content="null">
+    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="EzCook">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="mongodb simple guide | EzCook">
+    <meta property="og:description" content="null">
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00BCD4;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #00BCD4 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #00BCD4 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #00BCD4 !important;
+  }
+
+  .toTop {
+    background: #000BCD4 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #000BCD4;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #000BCD4;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #000BCD4;
+  }
+
+  .post-toc a:hover {
+    color: #00BCD4;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body {
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text {
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+        <script type="text/javascript">
+            queue.offer(function(){
+                $('body').attr('data-original', 'https://api.i-meto.com/bing?null');
+            });
+        </script>
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Schema"><span class="post-toc-number">1.</span> <span class="post-toc-text">Schema</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Model"><span class="post-toc-number">2.</span> <span class="post-toc-text">Model</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Entity"><span class="post-toc-number">3.</span> <span class="post-toc-text">Entity</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Collection"><span class="post-toc-number">4.</span> <span class="post-toc-text">Collection</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Find"><span class="post-toc-number">5.</span> <span class="post-toc-text">Find</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#findOne"><span class="post-toc-number">6.</span> <span class="post-toc-text">findOne</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#findById"><span class="post-toc-number">7.</span> <span class="post-toc-text">findById</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Create"><span class="post-toc-number">8.</span> <span class="post-toc-text">Create</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Save"><span class="post-toc-number">9.</span> <span class="post-toc-text">Save</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Update"><span class="post-toc-number">10.</span> <span class="post-toc-text">Update</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Remove"><span class="post-toc-number">11.</span> <span class="post-toc-text">Remove</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Advanced-Search"><span class="post-toc-number">12.</span> <span class="post-toc-text">Advanced Search</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Limit"><span class="post-toc-number">13.</span> <span class="post-toc-text">Limit</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Skip"><span class="post-toc-number">14.</span> <span class="post-toc-text">Skip</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Sort"><span class="post-toc-number">15.</span> <span class="post-toc-text">Sort</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#ObjectId"><span class="post-toc-number">16.</span> <span class="post-toc-text">ObjectId</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Schema-add-Attribute"><span class="post-toc-number">17.</span> <span class="post-toc-text">Schema add Attribute</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Schema-add-instance-method"><span class="post-toc-number">18.</span> <span class="post-toc-text">Schema add instance method</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Schema-add-static-method"><span class="post-toc-number">19.</span> <span class="post-toc-text">Schema add static method</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                mongodb simple guide
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="images/avatar.gif" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Chen Yu</strong>
+        <span>May 30, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=mongodb simple guide&url=http://yoursite.com//2017/05/30/mongodb-simple-guide/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=mongodb simple guide&url=http://yoursite.com//2017/05/30/mongodb-simple-guide/index.html&via=Chen Yu" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/05/30/mongodb-simple-guide/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/05/30/mongodb-simple-guide/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <ul>
+<li><p><code>yarn add mongoose</code></p>
+</li>
+<li><p><code>import mongoose from &#39;mongoose&#39;</code></p>
+</li>
+<li><p><code>const db = mongoose.conenct(MONGODB_URI)</code></p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> mongoose <span class="keyword">from</span> <span class="string">'mongoose'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> db = mongoose.connect(MONGODB_URI)</div><div class="line"></div><div class="line">db.connection.on(<span class="string">'open'</span>, () =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'connected'</span>)</div><div class="line">&#125;)</div><div class="line">db.connection.on(<span class="string">'error'</span>, (err) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`db error: <span class="subst">$&#123;err&#125;</span>`</span>)</div><div class="line">  process.exit</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="Schema"><a href="#Schema" class="headerlink" title="Schema"></a>Schema</h1><p>Schema defines the skeleton of minimal unit</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> mongoose <span class="keyword">from</span> <span class="string">'mongoose'</span></div><div class="line"><span class="keyword">const</span> TestSchema = <span class="keyword">new</span> mongoose.Schema(&#123;</div><div class="line">  <span class="attr">name</span>: &#123; <span class="attr">type</span>: <span class="built_in">String</span> &#125;,</div><div class="line">  <span class="attr">age</span>: &#123; <span class="attr">type</span>: <span class="built_in">Number</span>, <span class="attr">default</span>: <span class="number">0</span> &#125;,</div><div class="line">  <span class="attr">time</span>: &#123; <span class="attr">type</span>: <span class="built_in">Date</span>, <span class="attr">default</span>: <span class="built_in">Date</span>.now() &#125;,</div><div class="line">  <span class="attr">email</span>: &#123; <span class="attr">type</span>: <span class="built_in">String</span>, <span class="attr">default</span>: <span class="string">''</span> &#125;,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Primitive Types: String, Number, Boolean, null, Array, Document, Date</p>
+</blockquote>
+<h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><p>Instance of Schema, it has ability to operate db</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> db = mongoose.connect(MONGODB.URI)</div><div class="line"><span class="keyword">const</span> testModal = db.model(<span class="string">'test1'</span>, TestSchema)</div></pre></td></tr></table></figure>
+<ul>
+<li>test1: Name of Collection in the DB</li>
+</ul>
+<h1 id="Entity"><a href="#Entity" class="headerlink" title="Entity"></a>Entity</h1><p>Instance of Model, it has ability to operate db</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> TestEntity = <span class="keyword">new</span> TestModel(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'Lenka'</span>,</div><div class="line">  <span class="attr">age</span>: <span class="number">35</span>,</div><div class="line">  <span class="attr">email</span>: <span class="string">'lenka@gmail.com'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(TestEntity.name) <span class="comment">// Lenka</span></div><div class="line"><span class="built_in">console</span>.log(TestEntity.age) <span class="comment">// 35</span></div></pre></td></tr></table></figure>
+<h1 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> mongoose <span class="keyword">from</span> <span class="string">'mongoose'</span></div><div class="line"><span class="keyword">const</span> db = mongoose.connect(MONGODB.URI)</div><div class="line"><span class="keyword">const</span> TestSchema = <span class="keyword">new</span> mongoose.Schema(&#123;</div><div class="line">  <span class="attr">name</span>: &#123; <span class="attr">type</span>: <span class="built_in">String</span> &#125;,</div><div class="line">  <span class="attr">age</span>: &#123; <span class="attr">type</span>: <span class="built_in">Number</span>, <span class="attr">default</span>: <span class="number">0</span> &#125;,</div><div class="line">  <span class="attr">email</span>: &#123; <span class="attr">type</span>: <span class="built_in">String</span> &#125;,</div><div class="line">  <span class="attr">time</span>: &#123; <span class="attr">type</span>: <span class="built_in">Date</span>, <span class="attr">default</span>: <span class="built_in">Date</span>.now() &#125;,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">const</span> TestModel = db.model(<span class="string">'test1'</span>, TestSchema)</div><div class="line"><span class="keyword">const</span> TestEntity = <span class="keyword">new</span> TestModel(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'hello world'</span>,</div><div class="line">  <span class="attr">age</span>: <span class="number">12</span>,</div><div class="line">  <span class="attr">email</span>: <span class="string">'helloworld@gmail.com'</span>,</div><div class="line">&#125;)</div><div class="line">TestEntity.save(<span class="function">(<span class="params">err, doc</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">if</span> (err) =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'error: '</span> + err)</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(doc)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="Find"><a href="#Find" class="headerlink" title="Find"></a>Find</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj.find(condition, field, callback)</div></pre></td></tr></table></figure>
+<p>if <code>fields</code> is omited, or <code>null</code>, the docs will return all attributes</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Model.find(&#123; <span class="string">'age'</span>: <span class="number">25</span> &#125;, (err, docs) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">  <span class="built_in">console</span>.log(docs)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">Model.find(&#123;&#125;, &#123; <span class="attr">name</span>: <span class="number">1</span>, <span class="attr">age</span>: <span class="number">1</span>, <span class="attr">_id</span>: <span class="number">0</span> &#125;, (err, docs) =&gt; &#123;</div><div class="line">  <span class="comment">// the specific attributes will be returned if corresponding fields are set to positive(here they are name and age), and _id is default to be displayed, if you want to omit it, you should set it to be 0.</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="findOne"><a href="#findOne" class="headerlink" title="findOne"></a>findOne</h1><p>Same as <code>find</code>, except it will return only one matched</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">TestModel.findOne(condition, fields, (err, doc) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="findById"><a href="#findById" class="headerlink" title="findById"></a>findById</h1><p>Same as <code>findOne</code>, but it only find by <code>_id</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">TestModel.findById(<span class="string">'obj._id'</span>, (err, doc) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Model.create(&#123;&#125;, callback)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Model.create(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'test'</span>,</div><div class="line">  <span class="attr">age</span>: <span class="number">12</span>,</div><div class="line">&#125;, (err, doc) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">  <span class="built_in">console</span>.log(doc)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">TestModel.create([</div><div class="line">  &#123; <span class="attr">name</span>: <span class="string">'test1'</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</div><div class="line">  &#123; <span class="attr">name</span>: <span class="string">'test2'</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</div><div class="line">  &#123; <span class="attr">name</span>: <span class="string">'test3'</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</div><div class="line">  &#123; <span class="attr">name</span>: <span class="string">'test4'</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</div><div class="line">  &#123; <span class="attr">name</span>: <span class="string">'test5'</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</div><div class="line">  &#123; <span class="attr">name</span>: <span class="string">'test6'</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</div><div class="line">  &#123; <span class="attr">name</span>: <span class="string">'test7'</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</div><div class="line">  &#123; <span class="attr">name</span>: <span class="string">'test8'</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</div><div class="line">  &#123; <span class="attr">name</span>: <span class="string">'test9'</span>, <span class="attr">age</span>: <span class="number">20</span> &#125;,</div><div class="line">])</div></pre></td></tr></table></figure>
+<h1 id="Save"><a href="#Save" class="headerlink" title="Save"></a>Save</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Entity.save(&#123;&#125;, callback)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Entity = <span class="keyword">new</span> Model(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'entity_save'</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line">Entity.save(<span class="function">(<span class="params">err, doc</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">  <span class="built_in">console</span>.log(doc)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Model.create</p>
+<p>Entity.save</p>
+</blockquote>
+<h1 id="Update"><a href="#Update" class="headerlink" title="Update"></a>Update</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj.update(&#123;&#125;, callback)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> conditions = &#123; <span class="attr">name</span>: <span class="string">'test_upate'</span> &#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> update = &#123; <span class="attr">$set</span>: &#123; <span class="attr">age</span>: <span class="number">16</span> &#125; &#125;</div><div class="line"></div><div class="line">TestModel.update(conditions, update, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'success'</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="Remove"><a href="#Remove" class="headerlink" title="Remove"></a>Remove</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">obj.remove(&#123;&#125;, callback)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> conditions = &#123; <span class="attr">name</span>: <span class="string">'tim'</span> &#125;</div><div class="line"></div><div class="line">TestModel.remove(conditions, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">return</span> <span class="built_in">console</span>.log(err)</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'success'</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="Advanced-Search"><a href="#Advanced-Search" class="headerlink" title="Advanced Search"></a>Advanced Search</h1><ul>
+<li><p><code>$lt</code>: less than</p>
+</li>
+<li><p><code>$lte</code>: less than or equal to</p>
+</li>
+<li><p><code>$gt</code>: greater than</p>
+</li>
+<li><p><code>$gte</code>: greater than or equal to</p>
+</li>
+<li><p><code>$ne</code>: not equal to</p>
+</li>
+<li><p><code>$in</code>: belong to</p>
+</li>
+<li><p><code>$or</code>: or</p>
+</li>
+<li><p><code>$exists</code>: exist</p>
+</li>
+<li><p><code>$all</code></p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">Model.find(&#123; <span class="string">"age"</span>: &#123; <span class="string">"$gt"</span>: <span class="number">18</span>, <span class="string">"$lt"</span>: <span class="number">50</span> &#125; &#125;, (err, docs) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line">Model.find(&#123; <span class="string">"age"</span>: &#123; <span class="string">"$in"</span>: [<span class="number">20</span>, <span class="number">30</span>] &#125; &#125;, (err, docs) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line">Model.find(&#123;</div><div class="line">  <span class="string">"$or"</span>: [</div><div class="line">    &#123; <span class="string">"name"</span>: <span class="string">"yaya"</span> &#125;,</div><div class="line">    &#123; <span class="string">"age"</span>: <span class="number">28</span> &#125;,</div><div class="line">  ]</div><div class="line">&#125;, (err, docs) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line">Model.find(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">"$exists"</span></div><div class="line">&#125;, (err, docs) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="Limit"><a href="#Limit" class="headerlink" title="Limit"></a>Limit</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">find(condition, &#123; <span class="attr">limit</span>: <span class="number">20</span> &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">err, docs</span>) =&gt; </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Model.find(&#123;&#125;, <span class="literal">null</span>, &#123; <span class="attr">limit</span>: <span class="number">20</span> &#125;, (err, docs) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="Skip"><a href="#Skip" class="headerlink" title="Skip"></a>Skip</h1><p>Skim first n docs</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">find(&#123;&#125;, <span class="literal">null</span>, &#123; <span class="attr">skip</span>: <span class="number">4</span> &#125;, (err, docs) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>if total docs less than 4, it will output nothing</p>
+<h1 id="Sort"><a href="#Sort" class="headerlink" title="Sort"></a>Sort</h1><p><code>-1</code>: descending, <code>1</code>: ascending</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Model.find(&#123;&#125;, <span class="literal">null</span>, &#123; <span class="attr">sort</span>: &#123; <span class="attr">age</span>: <span class="number">-1</span> &#125; &#125;, (err, docs) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="ObjectId"><a href="#ObjectId" class="headerlink" title="ObjectId"></a>ObjectId</h1><p>The default id <code>_id</code> could be any types in mongodb, and default to be <code>ObjectId</code></p>
+<p>ObjectId, is a 12-types BSON String.</p>
+<ul>
+<li><p>4 byte: UNIX TimeStamp</p>
+</li>
+<li><p>3 byte: Represents the OS where mongodb running on</p>
+</li>
+<li><p>2 byte: Represents the process where this <code>_id</code> in on</p>
+</li>
+<li><p>3 byte: Rnadom Number</p>
+</li>
+</ul>
+<h1 id="Schema-add-Attribute"><a href="#Schema-add-Attribute" class="headerlink" title="Schema add Attribute"></a>Schema add Attribute</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> mongoose <span class="keyword">from</span> <span class="string">'mongoose'</span></div><div class="line"><span class="keyword">const</span> TestSchema = <span class="keyword">new</span> mongoose.Schema</div><div class="line">TestSchema.add(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'String'</span>,</div><div class="line">  <span class="attr">email</span>: <span class="string">'String'</span>,</div><div class="line">  <span class="attr">age</span>: <span class="string">'Number'</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="Schema-add-instance-method"><a href="#Schema-add-instance-method" class="headerlink" title="Schema add instance method"></a>Schema add instance method</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> mongoose <span class="keyword">from</span> <span class="string">'mongoose'</span></div><div class="line"><span class="keyword">const</span> TextSchema = <span class="keyword">new</span> mongoose.Schema(&#123;</div><div class="line">  <span class="attr">name</span>: <span class="string">'String'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">TestSchema.method(<span class="string">'test'</span>, () =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'hah'</span>)</div><div class="line">&#125;)</div><div class="line"><span class="keyword">const</span> say = mongoose.model(<span class="string">'say'</span>, TestSchema)</div><div class="line"><span class="keyword">var</span> lenka = say()</div><div class="line">lenka.say() <span class="comment">// 'hah'</span></div></pre></td></tr></table></figure>
+<h1 id="Schema-add-static-method"><a href="#Schema-add-static-method" class="headerlink" title="Schema add static method"></a>Schema add static method</h1><p>```javascript import mongoose from ‘mongoose’ const db = mongoose.connect(MONGODB.URI) const TestSchema = new mongoose.Schema({ name: { type: String }, age: { type: Number }, })</p>
+<p>TestSchema.static(‘findByName’, (name, cb) =&gt; { return this.find({name: name}, cb) })</p>
+<p>const TestModel = db.model(‘test’, TestSchema) TestModel.findByName(‘tim’, (err, docs) =&gt; { // … })</p>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/05/30/start-in-typescript/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="images/avatar.gif" alt="Chen Yu's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        keithwhisper@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    Archives
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">13</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">April 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">March 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/02/">February 2017<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">3</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/12/">December 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">November 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">October 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">September 2016<span class="sidebar_archives-count">16</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/08/">August 2016<span class="sidebar_archives-count">30</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/07/">July 2016<span class="sidebar_archives-count">43</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/06/">June 2016<span class="sidebar_archives-count">25</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">May 2016<span class="sidebar_archives-count">24</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Soup/">Soup<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Uncategorized/">Uncategorized<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/">github<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/note/">note<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/">note<span class="sidebar_archives-count">141</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/workNote/">workNote<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/categories/workNote/">workNote<span class="sidebar_archives-count">5</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">175</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            Theme - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+    <a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+             sidebar.about_theme
+            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/keithwhisper" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Keith-CY" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.svg);">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+        <a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-linkedin.svg);">
+                <span class="visuallyhidden">LinkedIn</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;EzCook
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script src="/js/smoothscroll.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

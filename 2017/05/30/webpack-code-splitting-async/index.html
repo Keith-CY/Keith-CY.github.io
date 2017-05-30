@@ -10,7 +10,7 @@
     
     <title>
         
-            babel-polyfill 入门 | 
+            webpack code splitting - async | 
         
         EzCook
     </title>
@@ -32,7 +32,7 @@
     <meta name="theme-color" content="#0097A7">
     <meta name="author" content="Chen Yu">
     <meta name="description" content="null">
-    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux,babel,babel-polyfill">
+    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux">
 
     <!-- Favicons -->
     <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
@@ -58,9 +58,9 @@
     <!-- The Open Graph protocol -->
     <meta property="og:url" content="http://yoursite.com">
     <meta property="og:type" content="blog">
-    <meta property="og:title" content="babel-polyfill 入门 | EzCook">
+    <meta property="og:title" content="webpack code splitting - async | EzCook">
     <meta property="og:description" content="null">
-    <meta property="og:article:tag" content="babel"> <meta property="og:article:tag" content="babel-polyfill"> 
+    
 
     <!--[if lte IE 9]>
         <link rel="stylesheet" href="/css/ie-blocker.css">
@@ -253,7 +253,7 @@
     </button>
 
     <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
-        
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Chunk-Name"><span class="post-toc-number">1.</span> <span class="post-toc-text">Chunk Name</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#import-mode"><span class="post-toc-number">2.</span> <span class="post-toc-text">import mode</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Usage-with-Babel"><span class="post-toc-number">3.</span> <span class="post-toc-text">Usage with Babel</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Usage-with-Babel-and-async-await"><span class="post-toc-number">4.</span> <span class="post-toc-text">Usage with Babel and async / await</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#import-imports-the-entire-module-namespace"><span class="post-toc-number">5.</span> <span class="post-toc-text">import() imports the entire module namespace</span></a></li></ol>
 
         <!--
         <li class="mdl-menu__item">
@@ -290,7 +290,7 @@
         
     
             <p class="article-headline-p">
-                babel-polyfill 入门
+                webpack code splitting - async
             </p>
         </div>
 
@@ -309,7 +309,7 @@
     <!-- Author Name & Date -->
     <div>
         <strong>Chen Yu</strong>
-        <span>Feb 04, 2017</span>
+        <span>May 30, 2017</span>
     </div>
 
     <div class="section-spacer"></div>
@@ -333,7 +333,7 @@
     </button>
     <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
         <li class="mdl-menu__item">
-        <a class="post_tag-link" href="/tags/babel/">babel</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/babel-polyfill/">babel-polyfill</a>
+        
     </ul>
     
 
@@ -349,7 +349,7 @@
 
     <!-- Share Weibo -->
     
-        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=babel-polyfill 入门&url=http://yoursite.com//2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/index.html&pic=&searchPic=false&style=simple" target="_blank">
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=webpack code splitting - async&url=http://yoursite.com//2017/05/30/webpack-code-splitting-async/index.html&pic=&searchPic=false&style=simple" target="_blank">
             <li class="mdl-menu__item">
                 Share to Weibo
             </li>
@@ -358,7 +358,7 @@
 
     <!-- Share Twitter -->
     
-        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=babel-polyfill 入门&url=http://yoursite.com//2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/index.html&via=Chen Yu" target="_blank">
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=webpack code splitting - async&url=http://yoursite.com//2017/05/30/webpack-code-splitting-async/index.html&via=Chen Yu" target="_blank">
             <li class="mdl-menu__item">
                 Share to Twitter
             </li>
@@ -367,7 +367,7 @@
 
     <!-- Share Facebook -->
     
-        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/index.html" target="_blank">
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/05/30/webpack-code-splitting-async/index.html" target="_blank">
             <li class="mdl-menu__item">
                 Share to Facebook
             </li>
@@ -376,7 +376,7 @@
 
     <!-- Share Google+ -->
     
-        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/02/04/babel-polyfill-e5-85-a5-e9-97-a8/index.html" target="_blank">
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/05/30/webpack-code-splitting-async/index.html" target="_blank">
             <li class="mdl-menu__item">
                 Share to Google+
             </li>
@@ -400,42 +400,48 @@
                 <!-- Post Content -->
                 <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
     
-        <pre><code>yarn add babel-polyfill
+        <p>Currently a ‘function-like’ <code>import()</code> module loading syntax proposal is on the way into ECMAScript.</p>
+<p>The ES6 Defines <code>import()</code> as method to load ES6 modules dynamically onruntime.</p>
+<p>Webpack treats <code>import()</code> as a split-point and puts the requested module in a seperate chunk. <code>import()</code> takes the module name as argument and returns a <code>Promise</code>: <code>import(name) =&gt; Promise</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">determineDate</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">import</span>(<span class="string">'moment'</span>).then(<span class="function">(<span class="params">moment</span>) =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(moment().format())</div><div class="line">  &#125;).catch(<span class="function"><span class="params">e</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">'failed'</span>))</div><div class="line">&#125;</div><div class="line"></div><div class="line">determineDate()</div></pre></td></tr></table></figure>
+<p>Note that the fully dynamic statement, such as <code>import(foo)</code> will fail because webpack requries at least some file location information. This is because <code>foo</code> could potentially be any path to any file in your system or project. The <code>import()</code> must contain at least some information about where the module is located. so bundling can be limited to a specific directory or set of files.</p>
+<h1 id="Chunk-Name"><a href="#Chunk-Name" class="headerlink" title="Chunk Name"></a>Chunk Name</h1><p>Since webpack 2.4.0, chunk names for dynamic imports can be specified using a “magic comment”</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span>(<span class="comment">/* webpackChunkName: 'my-chunk-name' */</span> <span class="string">'module'</span>)</div></pre></td></tr></table></figure>
+<p>Since webpack 2.6.0, the placeholder <code>[request]</code>, <code>[index]</code> are supported:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// will generate files like `i18n/namespace-i18n-bundle-en.json`</span></div><div class="line"><span class="keyword">import</span>(<span class="comment">/* webpackChunkName: 'i18n/[request]' */</span> <span class="string">`i18n/<span class="subst">$&#123;namespace&#125;</span>-i18n-bundle-<span class="subst">$&#123;language&#125;</span>.json`</span>)</div><div class="line"></div><div class="line"><span class="comment">// will generate files `i18n-0`, `i18n-1`</span></div><div class="line"><span class="keyword">import</span>(<span class="comment">/* webpackChunkName: 'i18n-[index]' */</span> <span class="string">'`i18n/$&#123;namespace&#125;-i18n-bundle-$&#123;language&#125;.json`'</span>)</div></pre></td></tr></table></figure>
+<h1 id="import-mode"><a href="#import-mode" class="headerlink" title="import mode"></a>import mode</h1><p>Since webpack 2.6.0, different modes for resolving dynamic imports can be specified:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span>(<span class="comment">/* webpackMode: lazy */</span> <span class="string">`i18n/<span class="subst">$&#123;namespace&#125;</span>-i18n-<span class="subst">$&#123;language&#125;</span>.json`</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li><p>lazy: The default behavior. Lazy generates a chunk per request. So everything is lazy loaded.</p>
+</li>
+<li><p>lazy-once: Only available for imports with expression. Generate a single chunk for all possible requests. So the first request causes a network request for all modules, all following requests are already fulfilled.</p>
+</li>
+<li><p>eager: Eager generates no chunk. All files are included in the current chunk. No network request is required to load the files. It still returns a Promise, but it’s already resolved.</p>
+</li>
+</ul>
+<p>You can combine both options ( webpackChunkName and webpackMode ), it’s parsed a JSON5 object without curly brackets:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span>(<span class="comment">/* webpackMode: 'lazy-once', webpackChunkName: 'all-i18n-data' */</span> <span class="string">`i18n/<span class="subst">$&#123;namespace&#125;</span>-i18n-<span class="subst">$&#123;lanaguage&#125;</span>.json`</span>)</div></pre></td></tr></table></figure>
+<h1 id="Usage-with-Babel"><a href="#Usage-with-Babel" class="headerlink" title="Usage with Babel"></a>Usage with Babel</h1><p>If you want to use <code>import</code> with Babel, you’ll need to install the <code>syntax-dynamic-import</code> plugin while it’s still Stage 3 to get around the parser error.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add --dev babel-core babel-loader babel-plugin-syntax-dynamic-import babel-preset-es2015</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">determineDate</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">import</span>(<span class="string">'moment'</span>).then(<span class="function"><span class="params">moment</span> =&gt;</span> moment().format()).then(<span class="function"><span class="params">str</span> =&gt;</span> <span class="built_in">console</span>.log(str)).catch(<span class="function"><span class="params">e</span> =&gt;</span> <span class="built_in">console</span>.log(e))</div><div class="line">&#125;</div><div class="line">determineDate()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">entry</span>: <span class="string">'./index'</span>,</div><div class="line">  <span class="attr">output</span>: &#123;</div><div class="line">    <span class="attr">filename</span>: <span class="string">'app.js'</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">module</span>: &#123;</div><div class="line">    <span class="attr">rules</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="attr">test</span>: <span class="regexp">/\.js$/</span>,</div><div class="line">        <span class="attr">exclude</span>: <span class="regexp">/node_modules/</span>,</div><div class="line">        <span class="attr">loader</span>: <span class="string">'babel-loader'</span></div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"presets"</span>: [[<span class="string">"es2015"</span>, &#123; <span class="attr">"modules"</span>: <span class="literal">false</span> &#125;]],</div><div class="line">  <span class="attr">"plugins"</span>: [<span class="string">"syntax-dynamic-import"</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Diabled default import in es6.</p>
+</blockquote>
+<p>Not using the <code>syntax-dynamic-import</code> plugin will fail the build with</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Module build failed: SyntaxError: <span class="string">'import'</span> and <span class="string">'export'</span> may only appear at the top level</div></pre></td></tr></table></figure>
+<p>or</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Module build failed: SyntaxError: Unexpected token, expected \&#123;</div></pre></td></tr></table></figure>
+<h1 id="Usage-with-Babel-and-async-await"><a href="#Usage-with-Babel-and-async-await" class="headerlink" title="Usage with Babel and async / await"></a>Usage with Babel and <code>async / await</code></h1><p>To use es7 <code>async</code>/<code>await</code> with <code>import()</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add --dev babel-plugin-transform-async-to-generator babel-plugin-trasnform-regenerator babel-plugin-transform-runtime babel-plugin-syntax-async-functions</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">determineDate</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> moment = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">'moment'</span>)</div><div class="line">  <span class="keyword">return</span> moment().format()</div><div class="line">&#125;</div><div class="line"></div><div class="line">determineDate().then(<span class="function"><span class="params">str</span> =&gt;</span> <span class="built_in">console</span>.log(str))</div></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"presets"</span>: [[<span class="string">"es2015"</span>, &#123; <span class="attr">"modules"</span>: <span class="literal">false</span> &#125;]],</div><div class="line">  <span class="attr">"plugins"</span>: [</div><div class="line">    <span class="string">"syntax-async-functions"</span>,</div><div class="line">    <span class="string">"syntax-dynamic-import"</span>,</div><div class="line">    <span class="string">"transform-async-to-generator"</span>,</div><div class="line">    <span class="string">"trasnform-regenerator"</span>,</div><div class="line">    <span class="string">"transform-runtime"</span></div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="import-imports-the-entire-module-namespace"><a href="#import-imports-the-entire-module-namespace" class="headerlink" title="import() imports the entire module namespace"></a><code>import()</code> imports the entire module namespace</h1><p>Note that the promise is resolved with the module namespace. Consider the following two examples:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Example 1: top-level import</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Component <span class="keyword">from</span> <span class="string">'./component'</span></div><div class="line"></div><div class="line"><span class="comment">// Example 2: Code Splitting With Import()</span></div><div class="line"><span class="keyword">import</span>(<span class="string">'./component'</span>).then(<span class="function"><span class="params">Component</span> =&gt;</span> <span class="comment">/* ... */</span>)</div></pre></td></tr></table></figure>
+<p><code>Component</code> in both of the cases resolves to the same thing, meaning in the case of using <code>import()</code> with ES2015 moduels you have to explicitly access default and named exports:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">main</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// Destructing Example</span></div><div class="line">  <span class="keyword">const</span> &#123; <span class="attr">default</span>: Component &#125; = <span class="keyword">await</span> <span class="keyword">import</span> (<span class="string">'./component'</span>)</div><div class="line">  <span class="comment">// Inline example</span></div><div class="line">  render((<span class="keyword">await</span> <span class="keyword">import</span>(<span class="string">'./component'</span>)).default)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
-import &apos;babel-polyfill&apos;
-`&lt;/pre&gt;
-
-babel-polyfill 提供了全局访问 API, 如 Promise, Set 以及 Map, 但是 polyfill 提供的 api 可能会污染到全局作用域, 特别在你把代码导报为第三方库给其他人用时, 或者你无法控制代码运行环境时, 都可能存在问题
-
-`babel` 提供了 `transform-runtime` 插件来解决此问题, `transform-runtime` 提供一个沙盒机制来组织全局变量的污染
-
-&gt; 需要注意, transform-runtime 依赖于 babel-runtime
-
-&lt;pre&gt;`# transform-runtime 只应用于开发环境
-yarn add --dev babel-plugin-transform-runtime 
-
-# 其依赖包 babel-runtime 需要打包到生产环境
-yarn add babel-runtime
-`&lt;/pre&gt;
-
-&lt;pre&gt;`// .babelrc
-{
-  &quot;plugins&quot;: [&quot;transform-runtime&quot;]
-}
-
-or
-
-{
-  &quot;plugins&quot;: [
-    [&quot;transform&quot;, {
-      &quot;helpers&quot;: false,
-      &quot;polyfill&quot;: false,
-      &quot;regenerator&quot;: true,
-      &quot;moduleName&quot;: &quot;babel-runtime&quot;,
-      }]
-  ]
-}
-</code></pre>
     
 
     
@@ -461,7 +467,7 @@ or
             <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
     <!-- Prev Nav -->
     
-        <a href="/2017/02/01/e8-a7-a3-e5-86-b3-commonschunkplugin-e7-9a-84-hash-e5-8f-98-e5-8c-96-e9-97-ae-e9-a2-98/" id="post_nav-newer" class="prev-content">
+        <a href="/2017/05/30/mongodb-simple-guide/" id="post_nav-newer" class="prev-content">
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
                 <i class="material-icons">arrow_back</i>
             </button>
@@ -474,14 +480,6 @@ or
     <div class="section-spacer"></div>
 
     <!-- Next Nav -->
-    
-        <a href="/2017/02/07/react-router-e4-b8-ad-props-e7-9a-84-e4-bc-a0-e9-80-92/" id="post_nav-older" class="next-content">
-            Older
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                <i class="material-icons">arrow_forward</i>
-            </button>
-        </a>
     
 </nav>
 

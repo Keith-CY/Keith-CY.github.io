@@ -3,6 +3,109 @@
   
     
     <entry>
+      <title><![CDATA[TypeScript with Node]]></title>
+      <url>/2017/05/30/start-in-typescript/</url>
+      <content type="html"><![CDATA[<h1 id="Configuring-TypeScript-Compilation"><a href="#Configuring-TypeScript-Compilation" class="headerlink" title="Configuring TypeScript Compilation"></a>Configuring TypeScript Compilation</h1><p>TypeScript uses the file <code>tsconfig.json</code> to adjust project compile options</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">"compilerOptions": &#123;</div><div class="line">  "module": "commonjs",</div><div class="line">  "target": "es6",</div><div class="line">  "noImplicityAny": true,</div><div class="line">  "moduleResolution": "node",</div><div class="line">  "sourceMap": true,</div><div class="line">  "outDir": "dist",</div><div class="line">  "baseUrl": ".",</div><div class="line">  "paths": &#123;</div><div class="line">    "*": [</div><div class="line">      "node_modules/*",</div><div class="line">      "src/types/*"</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th><code>compilerOptions</code></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“module”: “commonjs”</td>
+<td>The <strong>output</strong> module type (in your <code>.js</code> files). Node uses commonjs</td>
+</tr>
+<tr>
+<td>“target”: “es6”</td>
+<td>The output language level. Node supports ES6</td>
+</tr>
+<tr>
+<td>“noImplicityAny”: true</td>
+<td>Enables a stricter setting which throws errors when something has a default <code>any</code> value</td>
+</tr>
+<tr>
+<td>“moduleResolution”: “node”</td>
+<td>TypeScript attempts to mimic Node’s module resolution strategy</td>
+</tr>
+<tr>
+<td>“sourceMap”: true</td>
+<td></td>
+</tr>
+<tr>
+<td>“ourDir”: “dist”</td>
+<td>Location to output <code>.js</code> files after compilation</td>
+</tr>
+<tr>
+<td>“baseUrl”: “.”</td>
+<td>Part of configuring module resolution</td>
+</tr>
+<tr>
+<td>“paths”: {…}</td>
+<td>Part of configuring module resolution</td>
+</tr>
+</tbody>
+</table>
+<p>The rest of the file define the TypeScript project context. The project context is basically a set of options that determine which files are compiled when the compiler is invoked with a specific <code>tsconfig.json</code>.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">"include": [</div><div class="line">  "src/**/*"</div><div class="line">]</div></pre></td></tr></table></figure>
+<p><code>include</code> takes an array of glob pattern of files to include in the compilation.</p>
+<h1 id="Type-Definition-d-ts-Files"><a href="#Type-Definition-d-ts-Files" class="headerlink" title="Type Definition (.d.ts) Files"></a>Type Definition (<code>.d.ts</code>) Files</h1><p>TypeScript uses <code>.d.ts</code> files to provide types for JavaScript libraries that were not written in TypeScript. This is great because once you have a <code>.d.ts</code> file, TypeScript can type check that library and provide you better help in your editor. The TypeScript community actively shares all the most up-to-date <code>.d.ts</code> files for popular libraries on a Github repository called <strong>DefinitelyTyped</strong>.</p>
+<p>Because the <code>&quot;noImplicityAny&quot;: true</code>, we are required to have a <code>.d.ts</code> file for every library used. You could set <code>noImplicityAny</code> to <code>false</code> to silence errors about missing <code>.d.ts</code> files. It’s a best practice to have a <code>.d.ts</code> file for every library(Even the <code>.d.ts</code> file is basically empty)</p>
+<h1 id="Installing-d-ts-files-from-DefinitelyTyped"><a href="#Installing-d-ts-files-from-DefinitelyTyped" class="headerlink" title="Installing .d.ts files from DefinitelyTyped"></a>Installing <code>.d.ts</code> files from DefinitelyTyped</h1><p>For the most part, you’ll find <code>d.ts</code> files for the libraries you are using on DefinitelyTyped. These <code>.d.ts</code> files can be easily installed into your project by using npm scope <code>@types</code>. For example, if we want the <code>.d.ts</code> file for jQuery, we can do so with <code>npm install --save-dev @types/jquery</code>.</p>
+<p>Once <code>.d.ts</code> files have been installed using npm, you should see them in your <code>node_modules/@types</code> folder. The compiler will always look in this folder for <code>.d.ts</code> files when resolving JavaScript libraries.</p>
+<h1 id="What-if-a-library-isn’t-on-DefinitelyTyped"><a href="#What-if-a-library-isn’t-on-DefinitelyTyped" class="headerlink" title="What if a library isn’t on DefinitelyTyped?"></a>What if a library isn’t on DefinitelyTyped?</h1><p>Setting up TypeScript to look for <code>.d.ts</code> files in another folder</p>
+<p>The Compiler knows to look in <code>node_modules/@types</code> by default, but to help the compiler find our own <code>.d.ts</code> files we have to configure path mapping in our <code>tsconfig.json</code>. Path mapping can get pretty confusing, but the basic idea is that the TypeScript compiler will look in specific places, in a specific order when resolving modules, and we have the ability to tell the compiler exactly how to do it. In the <code>tsconfig.json</code> for this project you’ll see the following:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"baseUrl": ".",</div><div class="line">"paths": &#123;</div><div class="line">  "*": [</div><div class="line">    "src/types/*"</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This tells the TypeScript compiler that in addition to looking in <code>node_module/@types</code> for every import (<code>*</code>) also look in our own <code>.d.ts</code> file location <code>&lt;baseUrl&gt; + src/types/*</code></p>
+<p>First the compiler will look for a <code>.d.ts</code> file in <code>node_modules/@types</code> and then <code>src/types</code></p>
+<h1 id="Summary-of-d-ts-management"><a href="#Summary-of-d-ts-management" class="headerlink" title="Summary of .d.ts management"></a>Summary of <code>.d.ts</code> management</h1><p>In general if you stick to the following steps you should have minimal <code>.d.ts</code> issues:</p>
+<ul>
+<li><p>After installing any npm package as a dependency or dev dependency, immediately try to install the <code>.d.ts</code> file via <code>@types</code></p>
+</li>
+<li><p>If the library has a <code>.d.ts</code> file on DefinitelyTyped, the install wil succeed and you are done, if the install fails because the package doesn’t exist, generate <code>.d.ts</code> by yourself</p>
+</li>
+</ul>
+<h1 id="Source-Map"><a href="#Source-Map" class="headerlink" title="Source Map"></a>Source Map</h1><p>In the <code>tsconfig.json</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">"compilerOptiosn": &#123;</div><div class="line">  "sourceMaps": true</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>With this option enabled, next to every <code>.js</code> file that the TypeScript compiler outputs there will be a <code>.map.js</code> file as well. This <code>.map.js</code> file provides the information necessary to map back to the source <code>.ts</code> file while debugging.</p>
+<h1 id="Using-Debugger-in-VS-Code"><a href="#Using-Debugger-in-VS-Code" class="headerlink" title="Using Debugger in VS Code"></a>Using Debugger in VS Code</h1><p>When debugging in VS Code, it looks for a top level <code>.vscode</code> folder with a <code>launch.json</code> file. In this file, you can tell VS Code exactly what you want to do:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"type"</span>: <span class="string">"node"</span>,</div><div class="line">  <span class="attr">"request"</span>: <span class="string">"launch"</span>,</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"Debug"</span>,</div><div class="line">  <span class="attr">"program"</span>: <span class="string">"$&#123;workspaceRoot&#125;/dist/server.js"</span>,</div><div class="line">  <span class="attr">"smartStep"</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">"outFiles"</span>: [</div><div class="line">    <span class="string">"../dist/**/*.js"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"protocal"</span>: <span class="string">"inspector"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This is mostly identical to the “Node.js: Launch Program” template with a couple minor changes:</p>
+<table>
+<thead>
+<tr>
+<th><code>launch.json</code> Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“program”: “${workspaceRoot}/dist/server.js”</td>
+<td>Modified to point to our entry point in <code>dist</code></td>
+</tr>
+<tr>
+<td>“smartStep”: true</td>
+<td>Won’t step into code that doesn’t have a source map</td>
+</tr>
+<tr>
+<td>“outFiles”: […]</td>
+<td>Specify where output files a dropped. Use with source map</td>
+</tr>
+<tr>
+<td>“protocal”: “inspector”</td>
+<td>Use the new Node Debug Protocal because we’re on the latest node</td>
+</tr>
+</tbody>
+</table>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[drag, upload and progress]]></title>
       <url>/2017/05/29/drag-upload-and-progress/</url>
       <content type="html"><![CDATA[<p>Dragging and dropping files from your desktop to a browser is one of the ultimate goals for web application integration, which consists of:</p>

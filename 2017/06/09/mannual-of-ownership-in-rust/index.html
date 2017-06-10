@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.4 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            Mannual of Ownership in Rust  | 
+        
+        EzCook
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Chen Yu">
+    <meta name="description" content="null">
+    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="EzCook">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Mannual of Ownership in Rust  | EzCook">
+    <meta property="og:description" content="null">
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00BCD4;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #00BCD4 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #00BCD4 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #00BCD4 !important;
+  }
+
+  .toTop {
+    background: #000BCD4 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #000BCD4;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #000BCD4;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #000BCD4;
+  }
+
+  .post-toc a:hover {
+    color: #00BCD4;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body {
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text {
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+        <script type="text/javascript">
+            queue.offer(function(){
+                $('body').attr('data-original', 'https://api.i-meto.com/bing?null');
+            });
+        </script>
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#What-is-Ownership"><span class="post-toc-number">1.</span> <span class="post-toc-text">What is Ownership</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Ownership-Rules"><span class="post-toc-number">2.</span> <span class="post-toc-text">Ownership Rules</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Variable-Scope"><span class="post-toc-number">3.</span> <span class="post-toc-text">Variable Scope</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#The-String-Type"><span class="post-toc-number">4.</span> <span class="post-toc-text">The String Type</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Memory-and-Allocation"><span class="post-toc-number">5.</span> <span class="post-toc-text">Memory and Allocation</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Ways-Variables-and-Data-Interact-Move"><span class="post-toc-number">6.</span> <span class="post-toc-text">Ways Variables and Data Interact: Move</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Ways-Variables-and-Data-Interact-Clone"><span class="post-toc-number">7.</span> <span class="post-toc-text">Ways Variables and Data Interact: Clone</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Stack-Only-Data-Copy"><span class="post-toc-number">8.</span> <span class="post-toc-text">Stack-Only Data: Copy</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Ownership-and-Functions"><span class="post-toc-number">9.</span> <span class="post-toc-text">Ownership and Functions</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Return-Values-and-Scope"><span class="post-toc-number">10.</span> <span class="post-toc-text">Return Values and Scope</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Reference-and-Borrowing"><span class="post-toc-number">10.1.</span> <span class="post-toc-text">Reference and Borrowing</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Mutable-References"><span class="post-toc-number">10.2.</span> <span class="post-toc-text">Mutable References</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Dangling-References"><span class="post-toc-number">10.3.</span> <span class="post-toc-text">Dangling References</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#The-Rules-of-References"><span class="post-toc-number">10.4.</span> <span class="post-toc-text">The Rules of References</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Slices"><span class="post-toc-number">10.5.</span> <span class="post-toc-text">Slices</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#String-Slice"><span class="post-toc-number">10.6.</span> <span class="post-toc-text">String Slice</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#String-Literals-Are-Slices"><span class="post-toc-number">10.7.</span> <span class="post-toc-text">String Literals Are Slices</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#String-Slices-as-Parameters"><span class="post-toc-number">10.8.</span> <span class="post-toc-text">String Slices as Parameters</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Other-Slices"><span class="post-toc-number">10.9.</span> <span class="post-toc-text">Other Slices</span></a></li></ol></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                Mannual of Ownership in Rust 
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="images/avatar.gif" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Chen Yu</strong>
+        <span>Jun 09, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Mannual of Ownership in Rust &url=http://yoursite.com//2017/06/09/mannual-of-ownership-in-rust/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Mannual of Ownership in Rust &url=http://yoursite.com//2017/06/09/mannual-of-ownership-in-rust/index.html&via=Chen Yu" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/06/09/mannual-of-ownership-in-rust/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/06/09/mannual-of-ownership-in-rust/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <p>Ownership is Rust’s most unique feature, and it enables Rust to make memory safety guarantees without needing a garbage collector. Therefore, it’s important to understand how ownership works in Rust. In this chapter we’ll talk about ownership as well as several related features: borrowing, slices, and how Rust lays data out in memory.</p>
+<h1 id="What-is-Ownership"><a href="#What-is-Ownership" class="headerlink" title="What is Ownership"></a>What is Ownership</h1><p>Rust’s central feature is <em>ownership</em>, although the feature is staightforward to explain, it has deep implications of the rest of the language.</p>
+<p>All programs have to manage the way they use a computer’s memory while running. Some languages ahve garbage collecion that constantly looks for no longer used memory as the program runs. In other languages, the programmer must explicitly allocate and free the memory. Rust uses a third approach: <strong>memory is managed through a system of ownership with a set of rules that the compiler checks at compile time.</strong> No run-time costs are iccured for any of the ownership features.</p>
+<p>Because ownership is a new concept for many programmers, it does take some time to get used to. The good news is that the more experienced you become with Rust and the rules of the ownership system, the more you’ll be able to naturally develop code that is safe and efficient.</p>
+<h1 id="Ownership-Rules"><a href="#Ownership-Rules" class="headerlink" title="Ownership Rules"></a>Ownership Rules</h1><p>First, let’s take a look at the ownership rules.</p>
+<blockquote>
+<ol>
+<li><p>Each Value in Rust has a variable that’s called its <em>owner</em>.</p>
+</li>
+<li><p>There can only be one owner at a time.</p>
+</li>
+<li><p>When the owner goes out of scope, the value will be dropped.</p>
+</li>
+</ol>
+</blockquote>
+<h1 id="Variable-Scope"><a href="#Variable-Scope" class="headerlink" title="Variable Scope"></a>Variable Scope</h1><p>A scope is the range within a program for which an item is valid.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span> </span>() &#123;</div><div class="line">  <span class="keyword">let</span> s = <span class="string">"hello"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>The variable <code>s</code> refers to a string literal, where the value of the string is hardcoded into the text of our program. The variable is valid from the point at which it’s declared until the end of the current <em>scope</em>.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;                       <span class="comment">// s is not valid here</span></div><div class="line">  <span class="keyword">let</span> s = <span class="string">"hello"</span>;      <span class="comment">// s is valid here</span></div><div class="line">&#125;                       <span class="comment">// the scope is over, and s is no longer valid.</span></div></pre></td></tr></table></figure>
+<ul>
+<li><p>When <code>s</code> comes <em>into scope</em> it is valid</p>
+</li>
+<li><p>It remains so until it goes <em>out of scope</em></p>
+</li>
+</ul>
+<p>At this point, the relationship between scopes and the valid variables are valid is similar to other programming languages. Now we’ll build on top of this understanding by introducing the <code>String</code> type.</p>
+<h1 id="The-String-Type"><a href="#The-String-Type" class="headerlink" title="The String Type"></a>The String Type</h1><p>To illustrate the rules of ownership, we need a data type that is complex.</p>
+<p>We’ll use <code>String</code> as the example here and concentrate on the parts of <code>String</code> that relate to ownership. These aspects also apply to other complex data types provided by the standard library and that you create.</p>
+<p>We’ve already seen string literals, where a string value is hardcoded into our program. String literals are conveient, but they aren’t always suitable for every situation in which you want to use text. One reason is that they’re immutable. Another is that not every string value can be known when we write our code. For these situations, Rust has a second string type, <code>String</code>. This type is allocated on the heap and as such is able to store an amount of text that is unknown to us at compile time. You can create a <code>String</code> from a string literal using the <code>from</code> function, like so:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> s = <span class="built_in">String</span>::from(<span class="string">"hello"</span>)</div></pre></td></tr></table></figure>
+<p>The double colon(<code>::</code>) is an operator that allows us to namespace this particular <code>from</code> function under the <code>String</code> type rather than using some sort of name like <code>string_from</code>.</p>
+<p>This kind of string <em>can</em> be mutated:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="symbol">'Hello</span>')</div><div class="line">s.push_str(<span class="string">", world!"</span>)</div><div class="line"><span class="built_in">println!</span>(<span class="string">"&#123;&#125;"</span>, s);</div></pre></td></tr></table></figure>
+<p>So why can <code>String</code> be mutated but literals cannot.</p>
+<h1 id="Memory-and-Allocation"><a href="#Memory-and-Allocation" class="headerlink" title="Memory and Allocation"></a>Memory and Allocation</h1><p>In the case of a string literal, <em>we know the contents at compile</em> so the text is hardcoded directly in to the final executable, making string literals fast and efficient. But these properties only come from its immutability. Unfortunately, <em>we can’t put a blob of memory into the binary for each piece of text whose size is unknown at compile time</em> and whose size might change while running the program.</p>
+<p>With the <code>String</code> type, in order to support a mutable, growable piece of text, we need to allocate an amount of memory on the heap, unknown at compile time, to hold the contents. This means:</p>
+<ul>
+<li><p>The memory must be requested from the operating system at runtime.</p>
+</li>
+<li><p>We need a way of returning this memory to the operating system when we’re done with our <code>String</code></p>
+</li>
+</ul>
+<p>That first part is done by us: when we call <code>String::from</code>, its implementation requests the memory if needs. This is pretty much universal in programming languages.</p>
+<p>However, the second part is different. In languages with a <code>garbage collector(GC)</code>, the GC keeps track and cleans up memory that isn’t being used anymore, and we, as the programmer, don’t need to think about it. Without a GC, it’s the programmer’s responsibility to identify when memory is no longer being used and call code to explicitly return it, just as we did to request it. Doing this correctly has historically been a difficult programming problem. If we forget, we’ll waste memory. If we do it too early, we’ll have an invalid vairable. If we do it twice, that’s a bug too. We need to pair exactly one <code>allocate</code> with exact one <code>free</code></p>
+<p>Rust takes a different path: the memory is automatically returned once the variable that owns it goes out of scope.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="keyword">let</span> s = <span class="built_in">String</span>::from(<span class="string">"Helloe"</span>); <span class="comment">// s is valid from this point</span></div><div class="line"></div><div class="line">&#125;  <span class="comment">// the scope is over</span></div></pre></td></tr></table></figure>
+<p>These is a natural point at which we can return the memory our <code>String</code> needs to operating system: when <code>s</code> goes out of scope. When a variables goes out of scope, Rust calls a special function for us. This function is called <code>drop</code>, and it’s where the author of <code>String</code> can put the code to return the memory. Rust calls <code>drop</code> automatically at the closing <code>}</code>.</p>
+<blockquote>
+<p>Note: In C++, this pattern of deallocating resources at the end of an item’s lifetime is sometimes called <em>Resource Acquisition Is Initialization(RAII)</em>. The <code>drop</code> function in Rust will be familiar to you if you’ve used RAII patterns.</p>
+</blockquote>
+<p>This patterns has profound impact on the way Rust code is written. It may seem simple right now, but the behavior of code can be unexpected in more complicated situations when we want to have multiple variables use the data we’ve allocated ont the heap.</p>
+<h1 id="Ways-Variables-and-Data-Interact-Move"><a href="#Ways-Variables-and-Data-Interact-Move" class="headerlink" title="Ways Variables and Data Interact: Move"></a>Ways Variables and Data Interact: Move</h1><p>Multiple variables can interact with the same data in different ways in Rust. Let’s look at an example using an integer.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> x = <span class="number">5</span>;</div><div class="line"><span class="keyword">let</span> y = x;</div></pre></td></tr></table></figure>
+<p>Here we got two independent variables <code>x</code> and <code>y</code>, this is because integers are simple values with a known, fixed size, and two <code>5</code> are pushed onto the stack.</p>
+<p>Now let’s look at the <code>String</code> version.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>);</div><div class="line"><span class="keyword">let</span> s2 = s1;</div></pre></td></tr></table></figure>
+<p>This looks very similar to the previous code, so we might assume that the way it works would be the same: that is, the second line would make a copy of the value in <code>s1</code> and bind it to <code>s2</code>. But this isn’t quite what happens.</p>
+<p>To explain this more thoroughly, let’s look at what <code>String</code> looks like under the covers in the Figure.</p>
+<p><img src="https://doc.rust-lang.org/book/second-edition/img/trpl04-01.svg" alt=""></p>
+<p>A <code>String</code> is made up of three parts, shown on the left: a pointer to the memory that holds the contents of the string, a length, and a capacity. This group of data is stored on the stack. On the right is the memory on the heap that holds the contents.</p>
+<p>The length is how much memory, in bytes, the contents of the <code>String</code> is currently using. The capacity is the total amount of memory, in bytes, that the <code>String</code> has received from the operating system. The difference between length and capacity matters, but not in this context, so far now, it’s fine to ignore the capacity.</p>
+<p>When we assign <code>s1</code> to <code>s2</code>, the <code>String</code> data is copied, meaning we copy the pointer, the length and the capacity that are on the stack. We do not copy the data on the heap that the pointer refers to. In other words, the data representation in memory looks like the figure following.</p>
+<p><img src="https://doc.rust-lang.org/book/second-edition/img/trpl04-02.svg" alt=""></p>
+<p>Eariler, we said that when a variable goes out of scope, Rust automatically calls the <code>drop</code> function and cleans up the heap memory for the variable. But the fact is that both data pointers pointing to the same location. This is a problem: when <code>s2</code> and <code>s1</code> go out of scope, they will both try to free the same memory. This is known as a <em>double free</em> error. Freeing memory twice can lead to memory corruption, which can potentially lead to security vulnerabilities.</p>
+<p>To ensure memory safety, there’s one more detail to what happens in this situation in Rust. Instead of trying to copy the allocated memory, Rust considers <code>s1</code> to no longer be valid and therefore, Rust doesn’t need to free anything when <code>s1</code> goes out of scope. Check out what happens when you try to use <code>s1</code> after <code>s2</code> is created.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">"hello"</span>);</div><div class="line"><span class="keyword">let</span> s2 = s1;</div><div class="line"></div><div class="line"><span class="built_in">println!</span>(<span class="string">"&#123;&#125;"</span>, s1);</div></pre></td></tr></table></figure>
+<p>You’ll get an error like this because Rust prevents you from using the invalidated reference:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">error[E0382]: use of moved value: `s1`</div><div class="line"> --&gt; src/main.rs:4:27</div><div class="line">  |</div><div class="line">3 |  <span class="built_in">let</span> s2 = s1;</div><div class="line">  |     -- value moved here</div><div class="line">4 |  println!(<span class="string">"&#123;&#125;"</span>, s1);</div><div class="line">  |                 ^^ value used here after move</div><div class="line">  |</div><div class="line">  = note: move occurs because `s1` has <span class="built_in">type</span> `std::string::String`,</div><div class="line"><span class="built_in">which</span> does not implement the `Copy` trait</div></pre></td></tr></table></figure>
+<p>This action in Rust, similar to <code>shallow copy</code>, it copy pointer, length and capacity in stack, but Rust also invalidates the first variable.</p>
+<p>We call it <code>move</code>.</p>
+<p><img src="https://doc.rust-lang.org/book/second-edition/img/trpl04-04.svg" alt=""></p>
+<p><code>s1</code> has been invalidated.</p>
+<p>That solves our problem, with only <code>s2</code> valid, when it goes out of scope, it alone will freee the memory, and we’re done.</p>
+<p>In addition, there’s a design choice that’s implied by this: Rust will never automatically create ‘deep’ copies of your data. Therefore, any <em>automatic</em> copying can be assumed to be inexpensive in terms of runtime performance.</p>
+<h1 id="Ways-Variables-and-Data-Interact-Clone"><a href="#Ways-Variables-and-Data-Interact-Clone" class="headerlink" title="Ways Variables and Data Interact: Clone"></a>Ways Variables and Data Interact: Clone</h1><p>If we do want to deeply copy the heap data of the <code>String</code>, not just the stack data, we can use a common method called <code>clone</code>.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>);</div><div class="line"><span class="keyword">let</span> s2 = s1.clone();</div><div class="line"><span class="built_in">println!</span>(<span class="string">"s1 = &#123;&#125;, s2 = &#123;&#125;"</span>, s1, s2);</div></pre></td></tr></table></figure>
+<p>This works just fine, the heap data does get copied.</p>
+<p>When you see a call to <code>clone</code>, you know that some arbitrary code is being executed and that code may be expensive. It’s a visual indicator that something different is going on.</p>
+<h1 id="Stack-Only-Data-Copy"><a href="#Stack-Only-Data-Copy" class="headerlink" title="Stack-Only Data: Copy"></a>Stack-Only Data: Copy</h1><p>There’s another wrinkle we haven’t talked about yet. This code using integers.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> x = <span class="number">5</span>;</div><div class="line"><span class="keyword">let</span> y = x;</div><div class="line"></div><div class="line"><span class="built_in">println!</span>(<span class="string">"x = &#123;&#125;, y = &#123;&#125;"</span>, x, y);</div></pre></td></tr></table></figure>
+<p>This code runs correctly because those types like integers that have a <strong>known size</strong> at compile time are stored entirely on the stack, so copied of the actual values are quick to make. That means there’s no reason we would want to prevent <code>x</code> from being valid after we created the variable <code>y</code>. In other words, there’s no difference between deep and shallow copying here, so calling <code>clone</code> wouldn’t do anything differently from the usual shallow copying and we can leave it out.</p>
+<p>Rust has a special annotation called the <code>Copy</code> trait that we can place on types like integers that are stored on stack.</p>
+<p>If a type has the <code>Copy</code> trait, an older variable is still usable after the assignment. Rust won’t let us annotate a type with the <code>Copy</code> trait if the type, or any of its parts, has implemented the <code>Drop</code> trait. If the type needs something special to happen when the value goes out of scope and we add the <code>Copy</code> annotation to that type, we’ll get a compile time error.</p>
+<p>As a general rule, any group of simple scalar values can be <code>Copy</code>, and nothing that requires allocation or is some form of resource is <code>Copy</code>. Here are some of the types that are <code>Copy</code>:</p>
+<ul>
+<li><p>All the integer types</p>
+</li>
+<li><p>The boolean type</p>
+</li>
+<li><p>All the floating point types</p>
+</li>
+<li><p>Tuples, but only if they contain types a also <code>Copy</code>.</p>
+</li>
+</ul>
+<h1 id="Ownership-and-Functions"><a href="#Ownership-and-Functions" class="headerlink" title="Ownership and Functions"></a>Ownership and Functions</h1><p><strong>The semantics for passing a value to a function are similar to assigning a value to a variable.</strong> Passing a variable to a function <strong>will move or copy</strong>, just like assignment.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span> </span>() &#123;</div><div class="line">  <span class="keyword">let</span> s = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>); <span class="comment">// s comes into scope</span></div><div class="line"></div><div class="line">  take_ownership(s); <span class="comment">// s's value moves into the function</span></div><div class="line">                     <span class="comment">// s is no longer valid here</span></div><div class="line">  <span class="keyword">let</span> x = <span class="number">5</span>;         <span class="comment">// x comes into scope</span></div><div class="line"></div><div class="line">  make_copy(x);      <span class="comment">// x would move into the function, but i32 is Copy, so it's okay to still use x afterward.</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">take_ownership</span> </span>(some_string: <span class="built_in">String</span>) &#123; <span class="comment">// some_string comes into scope</span></div><div class="line">  <span class="built_in">println!</span>(<span class="string">"&#123;&#125;"</span>, some_string);</div><div class="line">&#125; <span class="comment">// here, some_string goes out of scope and `drop` is called. The backing memory is freed.</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">make_copy</span> </span>(some_integer: <span class="built_in">i32</span>) &#123; <span class="comment">//  some_integer comes into scope</span></div><div class="line">  <span class="built_in">println!</span>(<span class="string">"&#123;&#125;"</span>, some_integer);</div><div class="line">&#125; <span class="comment">// Here some_integer goes out of scope.</span></div></pre></td></tr></table></figure>
+<p>If we tried to use <code>s</code> after the call to <code>take_ownership</code>, Rust would throw a compile time error. These static checks protect us from mistakes.</p>
+<h1 id="Return-Values-and-Scope"><a href="#Return-Values-and-Scope" class="headerlink" title="Return Values and Scope"></a>Return Values and Scope</h1><p>Returning values can also transfer ownership.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span> </span>() &#123;</div><div class="line">  <span class="keyword">let</span> s1 = give_ownership(); <span class="comment">// give_ownership moves its return value into s1</span></div><div class="line">  <span class="keyword">let</span> s2 = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>); <span class="comment">// s2 comes into scope</span></div><div class="line">  <span class="keyword">let</span> s2 = take_and_give_back(s2); <span class="comment">// s2 is moved into take_and_give_back, which aslo move its returned value into s2</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">give_ownership</span> </span>() -&gt; <span class="built_in">String</span> &#123;</div><div class="line">  <span class="keyword">let</span> some_string = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>); <span class="comment">// some_string comes into scope</span></div><div class="line">  some_string      <span class="comment">// some_string is returned and moves out to the calling function</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">take_and_give_back</span></span>(a_string: <span class="built_in">String</span>) -&gt; &#123; <span class="comment">// a_string comes into scope</span></div><div class="line">  a_string <span class="comment">// a_string is returned and moves out to the calling function</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>It’s possible to return mutiple values using a tuple.</p>
+<h2 id="Reference-and-Borrowing"><a href="#Reference-and-Borrowing" class="headerlink" title="Reference and Borrowing"></a>Reference and Borrowing</h2><p>Here is how you would define and use a <code>calculate_length</code> function that has a <em>reference</em> to an object as a parameter instead of taking ownership of the value.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span> </span>() &#123;</div><div class="line">  <span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>);</div><div class="line"></div><div class="line">  <span class="keyword">let</span> len = calculate_length(&amp;s1);</div><div class="line"></div><div class="line">  <span class="built_in">println!</span>(<span class="string">"The length of '&#123;&#125;' is &#123;&#125;."</span>, s1, len);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">calculate_length</span></span>(s: &amp;<span class="built_in">String</span>) - <span class="built_in">usize</span> &#123;</div><div class="line">  s.len()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>First notice that all the tuple code in the variable declaration and the function return value is gone. Second, note that we pass <code>&amp;s1</code> into <code>calculate_length</code>, and in its definition, we take <code>&amp;String</code> rather than <code>String</code>.</p>
+<p>These ampersands(&amp;) are <em>reference</em>, and they allow you to refer to some value without taking ownership of it.</p>
+<p><img src="https://doc.rust-lang.org/book/second-edition/img/trpl04-05.svg" alt=""></p>
+<p>In this figure, <code>&amp;String s</code> pointing to <code>String s1</code></p>
+<p>Let’s take a closer look at the function call here:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> s1 = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>)</div><div class="line"><span class="keyword">let</span> len = calculate_length(&amp;s1)</div></pre></td></tr></table></figure>
+<p>The <code>&amp;s1</code> syntax lets us create a reference that <em>refer</em> to the value of <code>s1</code>, but does not own it.</p>
+<p><strong>Because it does not own it, the value it points to will not be dropped when the reference goes out of scope.</strong></p>
+<p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that the type of the paramter <code>s</code> is a reference.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">calculate_length</span></span>(s: &amp;<span class="built_in">String</span>) -&gt; <span class="built_in">usize</span> &#123; <span class="comment">// s is a reference to a String</span></div><div class="line">  s.len()</div><div class="line">&#125; <span class="comment">// Here, s goes out of the scope. But because it does not have ownership of what it refers to, no drop happens.</span></div></pre></td></tr></table></figure>
+<p>The scope in which the variable <code>s</code> is valid is the same as any function parameter’s scope, but we don’t drop what the reference points to when it goes out of scope because we don’t have ownership.</p>
+<p>Functions that have references as parameters instead of the actual values mean we won’t need to return the values in order to give back ownership, since we never had ownership.</p>
+<p>We call having references as function paramters <code>borrowing</code>. As in real life, if a person owns something, you can borrow it from them, When you’re done, you have to give it back.</p>
+<p>If we try to modify something we’re borrowing, it won’t work.</p>
+<h2 id="Mutable-References"><a href="#Mutable-References" class="headerlink" title="Mutable References"></a>Mutable References</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span> </span>() &#123;</div><div class="line">  <span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>);</div><div class="line">  change(&amp;<span class="keyword">mut</span> s);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">change</span></span>(some_string: &amp;<span class="keyword">mut</span> <span class="built_in">String</span>) &#123;</div><div class="line">  some_string.push_str(', world')</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>First, we had to change <code>s</code> to be <code>mut</code>. Then we had to create mutable reference with <code>&amp;mut s</code> and accept a mutable reference with <code>some_string: &amp;mut String</code>.</p>
+<p>But mutable references have one big restriction: you can only mutable reference to a particular piece of data in a particular scope.</p>
+<p>This restriction allows for mutation but in a very controlled fashion. It’s something that new Rustaceans struggle with, because most languages let you mutate whenever you’d like. The benefit of having this restriction is that <em>Rust can prevent data races at compile time</em>.</p>
+<p>A <code>data race</code> is a particular type of race condition in which these three behaviors occur:</p>
+<ul>
+<li><p>Two or more pointers access the same data at the same time.</p>
+</li>
+<li><p>At least one of the pointers is being used to write to the data.</p>
+</li>
+<li><p>There’s no mechanism being used to synchrnize access to the data.</p>
+</li>
+</ul>
+<p>Data races cause undefined behavior and can be difficult to diagnose and fix when you’re trying to track them down at runtime. Rust prevents this problem from happening because it won’t even compile code with data race.</p>
+<p>As always, we can use curly brackets to create a new scope, allowing for multiple mutable references, just not <em>simultaneous</em> ones:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>);</div><div class="line">&#123;</div><div class="line">  <span class="keyword">let</span> r1 = &amp;<span class="keyword">mut</span> s;</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> r2 = &amp;<span class="keyword">mut</span> s;</div></pre></td></tr></table></figure>
+<p>A similar rule exists for combining mutable and immutable references. This code results in an error:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> <span class="keyword">mut</span> s = <span class="built_in">String</span>::from(<span class="string">"Hello"</span>);</div><div class="line"><span class="keyword">let</span> r1 = &amp;s; <span class="comment">// no problem</span></div><div class="line"><span class="keyword">let</span> r2 = &amp;s; <span class="comment">// no problem</span></div><div class="line"><span class="keyword">let</span> r3 = &amp;<span class="keyword">mut</span> s; <span class="comment">//BIG PROBLEM, mutable borrow occurs</span></div></pre></td></tr></table></figure>
+<p>We also cannot have mutable reference while we have an immutable one.</p>
+<p>Users of an immutable reference don’t expect the values to suddently change out from under them.</p>
+<h2 id="Dangling-References"><a href="#Dangling-References" class="headerlink" title="Dangling References"></a>Dangling References</h2><p>In languages with pointers, it’s easy to erroneously to create a <em>dangling pointer</em>, a pointer that references a location in memory that may have been given to someone else, by freeing some memory while preserving a pointer to that memory. In Rust, by contrast, the compiler guarantees the references will never be dangling references: if we have a reference to some data, the compiler will ensure that the data will not go out of scope before reference to the data does.</p>
+<h2 id="The-Rules-of-References"><a href="#The-Rules-of-References" class="headerlink" title="The Rules of References"></a>The Rules of References</h2><ul>
+<li><p>At any given time, you can have <code>either</code> but not both of</p>
+<ul>
+<li><p>One mutable reference</p>
+</li>
+<li><p>Any number of immutable references</p>
+</li>
+</ul>
+</li>
+<li><p>Referecences must always be valid.</p>
+</li>
+</ul>
+<h2 id="Slices"><a href="#Slices" class="headerlink" title="Slices"></a>Slices</h2><p>Another data type that doesn’t have ownership is the <code>slice</code>. Slices let you reference a configuous sequence of elements in a collection rather tahn the whole collection.</p>
+<h2 id="String-Slice"><a href="#String-Slice" class="headerlink" title="String Slice"></a>String Slice</h2><p>A <em>string slice</em> is a reference to part of a <code>String</code>, and looks like this:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> s = <span class="built_in">String</span>::from(<span class="string">"Hello world"</span>);</div><div class="line"></div><div class="line"><span class="keyword">let</span> hello = &amp;s[<span class="number">0</span>..<span class="number">5</span>];</div><div class="line"><span class="keyword">let</span> world = &amp;s[<span class="number">6</span>..<span class="number">11</span>];</div></pre></td></tr></table></figure>
+<p>This is similar to taking a reference to the whole <code>String</code>, but with the extra <code>[0..5]</code> but. Rather than a reference to the entire <code>String</code>, it’s a reference to an internal position in the <code>String</code> and the number of elements that it refers to.</p>
+<p>We create slices with a range of <code>[start_index..end_index]</code>, but the slice data structure acutally <strong>stores the starting position and the length of the slice</strong>.</p>
+<p>So in the case of <code>let world = &amp;s[6..11];</code>, <code>world</code> would be a slice that contains a pointer to the 6th byte of <code>s</code> and a length of value of 5.</p>
+<p><img src="https://doc.rust-lang.org/book/second-edition/img/trpl04-06.svg" alt=""></p>
+<p>With Rust’s <code>..</code> range syntax, if you want to start at the first index(0), you can drop the value before the two periods. In other words</p>
+<p>By the same token, if your slice includes the last byte of the <code>String</code>, you can drop the trailing number.</p>
+<p>You can also drop both values to take a slice of the entire string.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">first_word</span> </span>(s: &amp;<span class="built_in">String</span>) -&gt; &amp;<span class="built_in">str</span> &#123;</div><div class="line">  <span class="keyword">let</span> bytes = s.as_bytes();</div><div class="line"></div><div class="line">  <span class="keyword">for</span> (i, &amp;item) <span class="keyword">in</span> bytes.iter().enumerate() &#123;</div><div class="line">    <span class="keyword">if</span> item == <span class="string">b' '</span> &#123;</div><div class="line">      <span class="keyword">return</span> &amp;s[<span class="number">0</span>..i]</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  &amp;s[..]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="String-Literals-Are-Slices"><a href="#String-Literals-Are-Slices" class="headerlink" title="String Literals Are Slices"></a>String Literals Are Slices</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> s = <span class="string">"Hello, World"</span>;</div></pre></td></tr></table></figure>
+<p>The type of <code>s</code> here is <code>&amp;str</code>: it’s a slice pointing to the specific point of the binary. This is also why string literals are immutable; <code>&amp;str</code> is an immutable reference.</p>
+<h2 id="String-Slices-as-Parameters"><a href="#String-Slices-as-Parameters" class="headerlink" title="String Slices as Parameters"></a>String Slices as Parameters</h2><p>Knowing that you can take slices of literals and <code>String</code>s leads us to one more improvement on <code>first_word</code>, and that’s its signature:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">first_word</span></span>(s: &amp;<span class="built_in">String</span>) -&gt; &amp;<span class="built_in">str</span> &#123;</div></pre></td></tr></table></figure>
+<p>If we have a string slice, we can pass that directly. If we have a <code>String</code>, we can pass a slice of the entire <code>String</code>. Defining a function to take a string slcie instead of a reference to a String makes our API more general and useful without losing any functionality.</p>
+<h2 id="Other-Slices"><a href="#Other-Slices" class="headerlink" title="Other Slices"></a>Other Slices</h2><p>String slices, as you might imagine, are specific to strings. But there’s a more general slice type, too.</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</div><div class="line"><span class="keyword">let</span> slice = &amp;a[<span class="number">1</span>..<span class="number">3</span>];</div></pre></td></tr></table></figure>
+<p>This slice has the type <code>&amp;[i32]</code>. It works the same way as string slices do, by storing a reference to the first element and the length.</p>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/06/06/Basic-Info-of-Web-Worker/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="images/avatar.gif" alt="Chen Yu's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        keithwhisper@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    Archives
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/06/">June 2017<span class="sidebar_archives-count">5</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">15</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">April 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">March 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/02/">February 2017<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">3</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/12/">December 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">November 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">October 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">September 2016<span class="sidebar_archives-count">16</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/08/">August 2016<span class="sidebar_archives-count">30</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/07/">July 2016<span class="sidebar_archives-count">43</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/06/">June 2016<span class="sidebar_archives-count">25</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">May 2016<span class="sidebar_archives-count">24</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Soup/">Soup<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Uncategorized/">Uncategorized<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/">github<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/note/">note<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/">note<span class="sidebar_archives-count">141</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/workNote/">workNote<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/categories/workNote/">workNote<span class="sidebar_archives-count">5</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">182</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            Theme - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+    <a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+             sidebar.about_theme
+            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/keithwhisper" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Keith-CY" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.svg);">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+        <a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-linkedin.svg);">
+                <span class="visuallyhidden">LinkedIn</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;EzCook
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script src="/js/smoothscroll.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

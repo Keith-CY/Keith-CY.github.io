@@ -3,6 +3,47 @@
   
     
     <entry>
+      <title><![CDATA[git merge and rebase]]></title>
+      <url>/2017/06/14/git-merge-and-rebase/</url>
+      <content type="html"><![CDATA[<h1 id="Conceptual-Overview"><a href="#Conceptual-Overview" class="headerlink" title="Conceptual Overview"></a>Conceptual Overview</h1><p>The first thing to understand about <code>git rebase</code> is that it solves the same problem as <code>git merge</code>. Both of these commands are designed to integrate changes from one branch into another branch – they just do it in very different ways.</p>
+<p>Consider what happens when you start working on a new feature in a dedicated branch, then another team member updates the <code>master</code> branch with new commits. The results in a forked history which should be familiar to anyone who has used Git as a collaboration tool.</p>
+<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:01b0b04e-64f3-4659-af21-c4d86bc7cb0b/01.svg?cdnVersion=ey" alt=""></p>
+<p>Now, let’s say that the new commits in <code>master</code> are relevant to the feature that you’re working on. To incorporate the new commits into your <code>feature</code> branch, you have two options: <code>mergin</code>or <code>rebasing</code>.</p>
+<h1 id="The-Merge-Option"><a href="#The-Merge-Option" class="headerlink" title="The Merge Option"></a>The Merge Option</h1><p>The easiest option is to merge the <code>master</code> branch into the <code>feature</code> branch using something like the following:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout feature</div><div class="line">git merge master</div></pre></td></tr></table></figure>
+<p>Or you can condense this to a one-liner:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git merge master feature</div></pre></td></tr></table></figure>
+<p>This creates a new <code>merge commit</code> in the <code>feature</code> branch that ties together the histories of the both branches, giving you a branch structure that looks like this:</p>
+<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:e229fef6-2c2f-4a4f-b270-e1e1baa94055/02.svg?cdnVersion=ey" alt=""></p>
+<p>Merging is nice because it’s a <code>non-destructive</code> operation. The existing branches are not changed in any way. This avoids all of the potential pitfalls of rebasing.</p>
+<p>On the other hand, this also means that the <code>feature</code> branch will have an extraneous merge commit every time you need to incorporate upstream changes. If <code>master</code> is very active, this can pollute your <code>feature</code> branch history quite a bit. While it’s possible to migrate this issue with advanced <code>git log</code> options, it can make it hard to other developers to understand the history of the project.</p>
+<h1 id="The-Rebase-Option"><a href="#The-Rebase-Option" class="headerlink" title="The Rebase Option"></a>The Rebase Option</h1><p>As an alternative to merge, you can rebase the <code>feature</code> branch onto <code>master</code> branch using the following commands:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout feature</div><div class="line">git rebase master</div></pre></td></tr></table></figure>
+<p>This moves the entire <code>feature</code> branch to begin on the top of the <code>master</code> branch, effectively incorporating all of the new commits in <code>master</code>. But, instead of using a merge commit, rebasing <code>re-writes</code> the project history by creating brand new commits for each commit in the original branch.</p>
+<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:5b153a22-38be-40d0-aec8-5f2fffc771e5/03.svg?cdnVersion=ey" alt=""></p>
+<p>The major benefit of rebasing is that you get a much cleaner project history. First, it eliminates the unnecessary merge commits required by <code>git merge</code>. Second, as you can see in the above diagram, rebasing also results in a perfectly linear project history – you can follow the top of <code>feature</code> all the way to the beginning of the project without any forks. This makes it easier to navigate your project with commands like <code>git log</code>.</p>
+<h1 id="Interactive-Rebasing"><a href="#Interactive-Rebasing" class="headerlink" title="Interactive Rebasing"></a>Interactive Rebasing</h1><p>Interactive rebasing gives you the opportunity to alter commits as they are moved to the new branch. This is even more powerful than an automated rebase, since it offers complete control over the branch’s commit history. Typically, this is used to clean up a messy history before merging a feature branch into <code>master</code>.</p>
+<p>To begin an interactive rebasing session, pass the <code>-i</code> option to the <code>git rebase</code> command.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git checkout feature</div><div class="line">git rebase -i master</div></pre></td></tr></table></figure>
+<p>This will open a text editor listing all of the commits that are about to be moved:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pick 33d5b7a Message <span class="keyword">for</span> commit <span class="comment">#1</span></div><div class="line">pick 9480b3d Message <span class="keyword">for</span> commit <span class="comment">#2</span></div><div class="line">pick 5c67e61 Message <span class="keyword">for</span> commit <span class="comment">#3</span></div></pre></td></tr></table></figure>
+<p>This listing defines exactly what the branch will look like after the rebase is performed. By changing the <code>pick</code> command and/or reordering the entries, you can make the branch’s history look like whatever you want.</p>
+<p>For example, if the 2nd commit fixes a small problem in the 1st commit, you can condense them into a single comit with the <code>fixup</code> command:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pick 33d5b7a Message <span class="keyword">for</span> commit <span class="comment">#1</span></div><div class="line">fixup 9480b3d Message <span class="keyword">for</span> commit <span class="comment">#2</span></div><div class="line">pick 5c67e61 Message <span class="keyword">for</span> commit <span class="comment">#3</span></div></pre></td></tr></table></figure>
+<p>When you save and close the file, Git will perform the rebase according to your instructions, resulting in project history that looks like the following:</p>
+<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:fe6942b4-7a60-4464-9181-b67e59e50788/04.svg?cdnVersion=ey" alt=""></p>
+<p>Eliminating insignificant commits like this makes your feature’s history much easier to understand. <strong>This is something that <code>git merge</code> simply cannot do</strong>.</p>
+<h1 id="The-Golden-Rule-of-Rebasing"><a href="#The-Golden-Rule-of-Rebasing" class="headerlink" title="The Golden Rule of Rebasing"></a>The Golden Rule of Rebasing</h1><p>The Golden Rule of <code>git rebase</code> is to never use it on <em>public</em> branches.</p>
+<p>For example, think about what would happen if you rebased <code>master</code> onto your <code>feature</code> branch.</p>
+<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:1d22f018-b2c7-4096-9db1-c54940cf4f4e/05.svg?cdnVersion=ey" alt=""></p>
+<p>The rebase moves all of the commits in <code>master</code> onto the tip of <code>feature</code>. The problem is that only happened in <em>your</em> repo. All of the other developers are still working with the origin master. Since rebasing results in brand new commits, Git will think that your <code>master</code> branch’s history has diverged from everybody else’s.</p>
+<p>The only way to synchronize the two <code>master</code> branches is to merge them back together, resulting in an extra merge commit <strong>and</strong> two sets of commits that contain the same changes.</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Type Compatibility in TypeScript]]></title>
       <url>/2017/06/12/Type-Compatibility-in-TypeScript/</url>
       <content type="html"><![CDATA[<p>Type Compaibility in TypeScript is based on <strong>Structural Subtyping</strong>. Structural Typing is a way of relating types based solely on their members. This is in contrast with nominal typing. Consider the following code:</p>

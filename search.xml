@@ -3,6 +3,216 @@
   
     
     <entry>
+      <title><![CDATA[Querying InfluxDB with the HTTP API]]></title>
+      <url>/2017/06/30/Querying-InfluxDB-with-the-HTTP-API/</url>
+      <content type="html"><![CDATA[<p>The HTTP API is the primary means for querying data in InfluxDB.</p>
+<p>To perform a query send a <code>GET</code> request to the <code>/query</code> endpoint, set the URL parameter <code>db</code> as the target database, and set the URL parameter <code>q</code> as your query.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -G <span class="string">'http://localhost:8086/query?pretty=true'</span> --data-urlencode <span class="string">"db=mydb"</span> --data-urlencode <span class="string">"q=SELECT \"value\" FROM \"cpu_load_short\" WHERE \"region\"='us-west'"</span></div></pre></td></tr></table></figure>
+<p>InfluxDB returns JSON. The results of your query appear in the <code>&#39;result&#39;</code> array. If an error occurs, InfluxDB sets an <code>&#39;error&#39;</code> key with an explanation of the error.</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"results"</span>: [</div><div class="line">    &#123;</div><div class="line">      <span class="attr">"statement_id"</span>: <span class="number">0</span>,</div><div class="line">      <span class="attr">"series"</span>: [</div><div class="line">        &#123;</div><div class="line">          <span class="attr">"name"</span>: <span class="string">"cpu_load_start"</span>,</div><div class="line">          <span class="attr">"columns"</span>: [</div><div class="line">            <span class="string">"time"</span>,</div><div class="line">            <span class="string">"value"</span></div><div class="line">          ],</div><div class="line">          <span class="attr">"values"</span>: [</div><div class="line">            [</div><div class="line">                <span class="string">"2015-01-29T21:55:43.702900257Z"</span>,</div><div class="line">                <span class="number">2</span></div><div class="line">            ],</div><div class="line">            [</div><div class="line">                <span class="string">"2015-01-29T21:55:43.702900257Z"</span>,</div><div class="line">                <span class="number">0.55</span></div><div class="line">            ],</div><div class="line">            [</div><div class="line">                <span class="string">"2015-06-11T20:46:02Z"</span>,</div><div class="line">                <span class="number">0.64</span></div><div class="line">            ]</div><div class="line">          ]</div><div class="line">        &#125;</div><div class="line">      ]</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Note: Appending <code>pretty=true</code> to the URL enables pretty-printed JSON output. While this is useful for debugging or when queryting directly with tools like <code>curl</code>, it is not recommended for production use as it consumes unnecessary network bandwidth.</p>
+</blockquote>
+<h1 id="Multiple-queries"><a href="#Multiple-queries" class="headerlink" title="Multiple queries"></a>Multiple queries</h1><p>Send multiple queries to InfluxDB in a single API call. Simply delimit each query using a semicolon</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -G <span class="string">'http://localhost:8086/query?pretty=true'</span> --data-urlencode <span class="string">"db=mydb"</span> --data-urlencode <span class="string">"q=SELECT \"value\" FROM \"cpu_load_short\" WHERE \"region\"='us-west';SELECT count(\"value\") FROM \"cpu_load_short\" WHERE \"region\"='us-west'"</span></div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Simple about InfluxDB]]></title>
+      <url>/2017/06/30/Simple-about-InfluxDB/</url>
+      <content type="html"><![CDATA[<h1 id="Install-InfluxDB-on-MacOS"><a href="#Install-InfluxDB-on-MacOS" class="headerlink" title="Install InfluxDB on MacOS"></a>Install InfluxDB on MacOS</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">brew update</div><div class="line">brew install influxdb</div></pre></td></tr></table></figure>
+<p>To run influxDB at startup, run this command</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ln -sfv /usr/<span class="built_in">local</span>/opt/influxdb/*.plist ~/Library/LaunchAgents</div></pre></td></tr></table></figure>
+<p>Now, to start InfluxDB, run this command(Accept the request of incoming connections in the window that appears)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">influxd -config /usr/<span class="built_in">local</span>/etc/influxdb.conf</div></pre></td></tr></table></figure>
+<h1 id="Check-if-InfluxDB-works"><a href="#Check-if-InfluxDB-works" class="headerlink" title="Check if InfluxDB works"></a>Check if InfluxDB works</h1><p>InfluxDB exposes an API with which one can easily check its good working condition. Here’s what you will receive in return for this curl command</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">curl -sl -I localhost:8086/ping</div><div class="line">HTTP/1.1 204 No Content</div><div class="line">Content-Type: application/json</div><div class="line">Request-Id: 95b307f8-5d6b-11e7-8002-000000000000</div><div class="line">X-Influxdb-Version: v1.3.0</div><div class="line">Date: Fri, 30 Jun 2017 08:10:31 GMT</div></pre></td></tr></table></figure>
+<h1 id="Terminology-difference-with-SQL-database"><a href="#Terminology-difference-with-SQL-database" class="headerlink" title="Terminology, difference with SQL database"></a>Terminology, difference with SQL database</h1><p>Like all non-relational database, InfluxDB for its own vocabulary your need to know before starting</p>
+<ul>
+<li><p><strong>Measurement</strong> is equivalent to <strong>SQL table</strong></p>
+</li>
+<li><p><strong>Tags</strong> is similar to a <strong>indexed column</strong> in a SQL database</p>
+</li>
+<li><p><strong>Fields</strong> is similar to the <strong>column not indexed</strong> in a SQL database</p>
+</li>
+<li><p><strong>Points</strong> is equivalent to <strong>line(row)</strong> in a SQL database</p>
+</li>
+</ul>
+<h1 id="Database-Management-Methods"><a href="#Database-Management-Methods" class="headerlink" title="Database Management Methods"></a>Database Management Methods</h1><p>There are 6 methods to manage database</p>
+<ul>
+<li><p>CREATE DATABASE</p>
+</li>
+<li><p>DROP DATABASE</p>
+</li>
+<li><p>DROP SETS</p>
+</li>
+<li><p>DELETE</p>
+</li>
+<li><p>DROP MEASUREMENT</p>
+</li>
+<li><p>DROP SHARD</p>
+</li>
+</ul>
+<h2 id="Create-a-Database"><a href="#Create-a-Database" class="headerlink" title="Create a Database"></a>Create a Database</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE DATABASE &lt;database_name&gt; [WITH [DURATION &lt;duration&gt;] [REPLICATION &lt;n&gt;] [SHARD DURATION &lt;shard_duration&gt;] [NAME &lt;retention-policy-name&gt;]]</div></pre></td></tr></table></figure>
+<p><strong>Basic Setting</strong></p>
+<ul>
+<li><p>database_name: name of the database</p>
+</li>
+<li><p>duration: you can set the period of data retention(conversation) but it makes more sense to implement a retention policy.</p>
+</li>
+</ul>
+<h2 id="Delete-a-database-drop-database"><a href="#Delete-a-database-drop-database" class="headerlink" title="Delete a database (drop database)"></a>Delete a database (drop database)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DROP DATABASE &lt;database_name&gt;</div></pre></td></tr></table></figure>
+<h1 id="Establish-a-retention-policy"><a href="#Establish-a-retention-policy" class="headerlink" title="Establish a retention policy"></a>Establish a retention policy</h1><p>InfluxDB incorporates a system of automatic deletion of data. It is the policy of Retention. Spent some time, data is automatically deleted from the base. This mechanism is very convenient because it for a good grasp of size of the base and we don’t have to worry about the maintenance operation. Free to each set the lifetime of any particular measure. If you want to follow the temperature of its microprocessor, one less may be sufficient, instead the retention policy must be more flexible if we want to compare the temperature in a House form one year to the other. It will also think about the system upstream, you don’t have to store a measurement of atmosphere temperature every 10 seconds! A measurement per minutes, 15 minutes, that’s enough. Instead in an industrial process, we certainly want to go for the second… or a lot less.</p>
+<p>We therefore for 3 methods</p>
+<ul>
+<li><p>Create: to create a rule of conservation of data</p>
+</li>
+<li><p>Alter: to change a rule</p>
+</li>
+<li><p>Drop: to remove a rule</p>
+</li>
+</ul>
+<h1 id="Create-a-retention-policy"><a href="#Create-a-retention-policy" class="headerlink" title="Create a retention policy"></a>Create a retention policy</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE RETENTION POLICY &lt;name_politic_retention&gt; ON &lt;name_database&gt; DURATION: &lt;duration&gt; REPLICATION: &lt;n&gt; [SHARD DURATION &lt;duration duration_shard&gt;] [DEFAULT]</div></pre></td></tr></table></figure>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><p>name_politic_retention: a short name without spaces of preference</p>
+</li>
+<li><p>name_database: the database on which applies the retention policy</p>
+</li>
+<li><p>duration: duration of data retention. It’s a literal expression which must respect the convention InfluxDB</p>
+</li>
+<li><p>duration_shard: the duration of storage of the data in the buffer zone</p>
+</li>
+<li><p>n: number of replication(required), put 1 if no cluster installed</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE RETENTION POLICY <span class="string">'one_day_only'</span> WE <span class="string">'NOAA_water_database'</span> DURATION 1 d REPLICATION 1</div></pre></td></tr></table></figure>
+<p>This policy keeps the records during a day(one_day_only) based NOAA_water_database. The data are stored in space shard 1 day. Replication 1 indicates that a copy of each item is copied in the cluster.</p>
+<h1 id="Modify-retention-policy-alter-retention-policy"><a href="#Modify-retention-policy-alter-retention-policy" class="headerlink" title="Modify retention policy(alter retention policy)"></a>Modify retention policy(alter retention policy)</h1><p>This method allows to change an existing retention policy</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ALTER ...</div></pre></td></tr></table></figure>
+<h1 id="Destroyed-a-retention-policy-drop-retention-policy"><a href="#Destroyed-a-retention-policy-drop-retention-policy" class="headerlink" title="Destroyed a retention policy(drop retention policy)"></a>Destroyed a retention policy(drop retention policy)</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DROP RETENTION ...</div></pre></td></tr></table></figure>
+<h1 id="Discover-the-InfluxDB-Shell"><a href="#Discover-the-InfluxDB-Shell" class="headerlink" title="Discover the InfluxDB Shell"></a>Discover the InfluxDB Shell</h1><p>Now we know some methods, we will provide to run some test</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Usage of Node-Influx]]></title>
+      <url>/2017/06/30/Usage-of-Node-Influx/</url>
+      <content type="html"><![CDATA[<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>InfluxDB is a time series database, so it would make sense that the concept of time is moderately important when dealing with it.</p>
+<p>By default, Influx will store all dates you give to it as a nanosecond precision timestamp, whereas in JavaScript, most of the time we’re dealing with millisecond precision timestamps, which we get from <code>Date.now()</code> or <code>myDate.getTime()</code>. This presents a bit of a problem for us JavaScripters, since nanosecond-precision timestamps are stored as 64-bit unsigned integers that JavaScript simply cannot represent accurately.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">node-influx git:(master) node</div><div class="line">&gt; <span class="number">1475985480231035677</span></div><div class="line"><span class="number">1475985480231035600</span></div></pre></td></tr></table></figure>
+<p>This module tries to make dates as easy as possible for you to deal with, and out of the box everything should ‘just work’.</p>
+<p>There are three places that dates can get passed around:</p>
+<ul>
+<li><p>Dates coming rom Influx queries, like <code>select * from my_series</code></p>
+</li>
+<li><p>Dates being interpolated <em>into</em> Influx queries</p>
+</li>
+<li><p>Dates being used when writing points on the line protocol, via <code>.writePoints()</code> or <code>.writeMeasurement()</code>.</p>
+</li>
+</ul>
+<p>To deal with this, we introduce a new type called <code>NanoDate</code>. These dates behave just like the normal <code>Date</code> type, but have two additional methods: <code>.getNanoTime()</code> and <code>.getNanoISOString()</code>. They behave just like the normal <code>.getTime()</code> and <code>getISOString</code> methods, but they both return nanosecond-precision strings instead of millisecond-precision numbers and timestamps.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">expect(myNanoDate.getTime()).to.equal(<span class="number">1475985480231</span>)</div><div class="line">expect(myNanoDate.getNanoTime()).to.equal(<span class="string">'1475985480231035677'</span>)</div><div class="line">expect(myNanoDate.toISOString()).to.equal(<span class="string">'2016-10-09T03:58:00.231Z'</span>)</div><div class="line">expect(myNanoDate.toNanoISOString()).to.equal(<span class="string">'2016-10-09T03:58:00.231035677Z'</span>)</div></pre></td></tr></table></figure>
+<p>All times returned from Influx queries are parsed to INanoDates. For example you can do something like the following:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">influx.query(<span class="string">'select * from perf'</span>).then(<span class="function"><span class="params">results</span> =&gt;</span> &#123;</div><div class="line">  result.forEach(<span class="function"><span class="params">row</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Used <span class="subst">$&#123;row.cpu&#125;</span> at <span class="subst">$&#123;row.time.toNanoISOString()&#125;</span>`</span>))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>When writing data to Influx, all write methods accept INanoDates in all situation. This means if you select data from Influx and want to update a data point, you can pass the time right back into <code>write</code> method. (Remember, points within series are unique by their time) If you have a nanosecond timestamp from some external source, you can convert it to INanoDate using <code>toNanoDate</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; toNanoDate &#125; <span class="keyword">from</span> <span class="string">'influx'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> myNanoDate = toNanoDate(<span class="string">'1475985480231035600'</span>)</div><div class="line">expect(myNanoDate.getTime()).to.equal(<span class="number">1475985480231</span>)</div><div class="line">expect(myNanoDate.getNanoTime()).to.equal(<span class="string">'1475985480231035600'</span>)</div><div class="line">expect(myNanoDate.toNanoISOString()).to.equal(<span class="string">'2016-10-09T03:58:00.231035600Z'</span>)</div></pre></td></tr></table></figure>
+<p>Finally, if you want to embed a iNanoDate into an Influx query, you should use <code>toNanoString</code> to do so:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">influx.query(<span class="string">`select * from perf where time &gt; "<span class="subst">$&#123;myNanoDate.toNanoISOString()&#125;</span>"`</span>)</div></pre></td></tr></table></figure>
+<h1 id="Browser-Setup"><a href="#Browser-Setup" class="headerlink" title="Browser Setup"></a>Browser Setup</h1><p>For Node.js, <code>influx</code> can be installed and you can use it out of the box.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add influx@next</div></pre></td></tr></table></figure>
+<p>You can tell Webpack to use this module by adding the following section in your <code>webpack.config.js</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = path.resolve(__dirname, <span class="string">'node_modules/stream-http/index.js'</span>)</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">resolve</span>: &#123;</div><div class="line">    <span class="attr">alias</span>: &#123; http, <span class="attr">https</span>: http &#125;,</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h2 id="Class-Summary"><a href="#Class-Summary" class="headerlink" title="Class Summary"></a>Class Summary</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">attr</th>
+<th style="text-align:left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">public</td>
+<td style="text-align:left">ExponentialBackoff</td>
+</tr>
+<tr>
+<td style="text-align:center">public</td>
+<td style="text-align:left">Expression:<br></td>
+</tr>
+</tbody>
+</table>
+<p>Expression is used to build filtering expression, like those used in WHERE clauses<br>public | InfluxDB:<br><br>InfluxDB is the public interface to run queries against your database<br>public | Measurement:<br><br>Measurement creates a reference to a particular measurement<br>public | Pool:<br><br>The Pool maintains a list available Influx hosts and dispatches requests to them<br>public | Raw:<br><br>You can provide Raw values to Influx methods to prevent it from escaping your provided string.<br>public | RequestError:<br><br>An RequestError is thrown when a query generates errorful results in a 300&lt;= error &lt;=500<br>public | ResultError:<br><br>An ResultError is thrown when a query generates errorful results from Influx<br>public | ServiceNotAvailableError:<br><br>An ServiceNotAvailableError is returned as an error from requests that result in a &gt;500 error code</p>
+<h3 id="interface-Summary"><a href="#interface-Summary" class="headerlink" title="interface Summary"></a>interface Summary</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">attr</th>
+<th style="text-align:left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">public</td>
+<td style="text-align:left">IBackoffStrategy:<br></td>
+</tr>
+</tbody>
+</table>
+<p>The IBackoffStrategy dictates behavior to use when hosts in the connection pool start failing<br>public | INanoDate:<br><br>An INanoDate is a type of Date that holds a nanosecond-precision unix timestamp<br>public | IResults:<br><br>IResults are returned from the InfluxBD#query mehtod</p>
+<h3 id="Function-Summary"><a href="#Function-Summary" class="headerlink" title="Function Summary"></a>Function Summary</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">attr</th>
+<th style="text-align:left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">public</td>
+<td style="text-align:left">toNanoDate(timestamp: String): NanoDate:<br></td>
+</tr>
+</tbody>
+</table>
+<p>Covers a nanoseconds unix timestamp to a INanoDate for node-influx.</p>
+<h3 id="Variable-Summary"><a href="#Variable-Summary" class="headerlink" title="Variable Summary"></a>Variable Summary</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">attr</th>
+<th style="text-align:left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">public</td>
+<td style="text-align:left">Precision: Object</td>
+</tr>
+</tbody>
+</table>
+<p><string, string="">:<br>Precision is a map of available influx time precision</string,><br>public | escape: Object:<br><br>tagEscaper escapes tag keys, tag values and field keys.</p>
+<h3 id="Typedef-Summary"><a href="#Typedef-Summary" class="headerlink" title="Typedef Summary"></a>Typedef Summary</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">attr</th>
+<th style="text-align:left">name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">public</td>
+<td style="text-align:left">FieldType: Number:<br></td>
+</tr>
+</tbody>
+</table>
+<p>FieldType is an enumeration of influxDB field data types<br>public | IClusterConfig: Object:<br><br>A IClusterConfig can be provided into <code>new InfluxDB(config)</code> when you have a multiple influx nodes to connect to<br>public | IPingStats: Object:<br><br>IPingStats is returned from InfluxDB#ping<br>public | IPoint: Object<br><br>IPoint is passed to the client’s write methods to store a point in InfluxDB<br>public | IPoolOptions: Object<br><br>Pool options can be passed into the database to configure the behavior of the connection Pool<br>public | IQueryOptions: Object<br><br>The IQueryOptions allows you to configure how queries are run against Influx<br>public | ISchemaOptions: Object<br><br>Schema options can be passed into the <code>new InfluxDB()</code> constructor to help define the shape of your data.<br>public | ISingleHostConfig: Object<br><br>A ISingleHostConfig can be provided into <code>new InfluxDB(config)</code> when you have a single Influx address to connect to<br>public | IWriteOptions: Object<br><br>IWriteOptions configure how points are written in the database.</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Example of node-influx]]></title>
       <url>/2017/06/30/Example-of-node-influx/</url>
       <content type="html"><![CDATA[<h1 id="Express-Response-Times-Example"><a href="#Express-Response-Times-Example" class="headerlink" title="Express Response Times Example"></a>Express Response Times Example</h1><p>In this example we’ll create a server which has an index page that prints out ‘hello world’, and a page</p>

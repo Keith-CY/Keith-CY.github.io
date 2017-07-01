@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.4 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            Glossary of Terms on InfluxDB | 
+        
+        EzCook
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Chen Yu">
+    <meta name="description" content="null">
+    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="EzCook">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Glossary of Terms on InfluxDB | EzCook">
+    <meta property="og:description" content="null">
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00BCD4;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #00BCD4 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #00BCD4 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #00BCD4 !important;
+  }
+
+  .toTop {
+    background: #000BCD4 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #000BCD4;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #000BCD4;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #000BCD4;
+  }
+
+  .post-toc a:hover {
+    color: #00BCD4;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body {
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text {
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+        <script type="text/javascript">
+            queue.offer(function(){
+                $('body').attr('data-original', 'https://api.i-meto.com/bing?null');
+            });
+        </script>
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#aggregation"><span class="post-toc-number">1.</span> <span class="post-toc-text">aggregation</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#batch"><span class="post-toc-number">2.</span> <span class="post-toc-text">batch</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#continuous-query-CQ"><span class="post-toc-number">3.</span> <span class="post-toc-text">continuous query(CQ)</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#database"><span class="post-toc-number">4.</span> <span class="post-toc-text">database</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#duration"><span class="post-toc-number">5.</span> <span class="post-toc-text">duration</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#field"><span class="post-toc-number">6.</span> <span class="post-toc-text">field</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#field-key"><span class="post-toc-number">7.</span> <span class="post-toc-text">field key</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#field-set"><span class="post-toc-number">8.</span> <span class="post-toc-text">field set</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#field-value"><span class="post-toc-number">9.</span> <span class="post-toc-text">field value</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#function"><span class="post-toc-number">10.</span> <span class="post-toc-text">function</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#identifier"><span class="post-toc-number">11.</span> <span class="post-toc-text">identifier</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#line-protocol"><span class="post-toc-number">12.</span> <span class="post-toc-text">line protocol</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#measurement"><span class="post-toc-number">13.</span> <span class="post-toc-text">measurement</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#metastore"><span class="post-toc-number">14.</span> <span class="post-toc-text">metastore</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#node"><span class="post-toc-number">15.</span> <span class="post-toc-text">node</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#now"><span class="post-toc-number">16.</span> <span class="post-toc-text">now()</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#point"><span class="post-toc-number">17.</span> <span class="post-toc-text">point</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#query"><span class="post-toc-number">18.</span> <span class="post-toc-text">query</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#replication-factor"><span class="post-toc-number">19.</span> <span class="post-toc-text">replication factor</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#retention-policy-RP"><span class="post-toc-number">20.</span> <span class="post-toc-text">retention policy (RP)</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#schema"><span class="post-toc-number">21.</span> <span class="post-toc-text">schema</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#selector"><span class="post-toc-number">22.</span> <span class="post-toc-text">selector</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#series"><span class="post-toc-number">23.</span> <span class="post-toc-text">series</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#series-cardinality"><span class="post-toc-number">24.</span> <span class="post-toc-text">series cardinality</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#server"><span class="post-toc-number">25.</span> <span class="post-toc-text">server</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#shard"><span class="post-toc-number">26.</span> <span class="post-toc-text">shard</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#shard-duration"><span class="post-toc-number">27.</span> <span class="post-toc-text">shard duration</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#shard-group"><span class="post-toc-number">28.</span> <span class="post-toc-text">shard group</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#subscription"><span class="post-toc-number">29.</span> <span class="post-toc-text">subscription</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#tag"><span class="post-toc-number">30.</span> <span class="post-toc-text">tag</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#tag-key"><span class="post-toc-number">31.</span> <span class="post-toc-text">tag key</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#tag-set"><span class="post-toc-number">32.</span> <span class="post-toc-text">tag set</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#tag-value"><span class="post-toc-number">33.</span> <span class="post-toc-text">tag value</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#timestamp"><span class="post-toc-number">34.</span> <span class="post-toc-text">timestamp</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#transformation"><span class="post-toc-number">35.</span> <span class="post-toc-text">transformation</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#tsm-Time-Structured-Merge-Tree"><span class="post-toc-number">36.</span> <span class="post-toc-text">tsm (Time Structured Merge Tree)</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#user"><span class="post-toc-number">37.</span> <span class="post-toc-text">user</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#values-per-second"><span class="post-toc-number">38.</span> <span class="post-toc-text">values per second</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                Glossary of Terms on InfluxDB
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="images/avatar.gif" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Chen Yu</strong>
+        <span>Jul 01, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Glossary of Terms on InfluxDB&url=http://yoursite.com//2017/07/01/Glossary-of-Terms-on-InfluxDB/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Glossary of Terms on InfluxDB&url=http://yoursite.com//2017/07/01/Glossary-of-Terms-on-InfluxDB/index.html&via=Chen Yu" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/07/01/Glossary-of-Terms-on-InfluxDB/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/07/01/Glossary-of-Terms-on-InfluxDB/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h1 id="aggregation"><a href="#aggregation" class="headerlink" title="aggregation"></a>aggregation</h1><p>An InfluxQL function that returns an aggregated value across a set of points</p>
+<h1 id="batch"><a href="#batch" class="headerlink" title="batch"></a>batch</h1><p>A collection of points in line protocol format, separated by newlines(0x0A). A batch of points may be submitted to the database using a single HTTP request to the write endpoint. This makes writes via the HTTP API much more performant by drastically reducting the HTTP overhead. InfluxData recommends batch size of 5,000-10,000 points, although different use cases may be better served by significantly smaller or larger batches.</p>
+<h1 id="continuous-query-CQ"><a href="#continuous-query-CQ" class="headerlink" title="continuous query(CQ)"></a>continuous query(CQ)</h1><p>An InfluxQL query that runs automatically and periodically within a database. Continuous queries require a function in the <code>SELECT</code> clause and must include a <code>GROUP BY time()</code> clause.</p>
+<h1 id="database"><a href="#database" class="headerlink" title="database"></a>database</h1><p>A logical container for users, retention policies, continuous queries, and time series data.</p>
+<h1 id="duration"><a href="#duration" class="headerlink" title="duration"></a>duration</h1><p>The attribute of the retention policy that determines how long InfluxDB stores data. Data older than the duration are automatically dropped from the database.</p>
+<h1 id="field"><a href="#field" class="headerlink" title="field"></a>field</h1><p>The key-value pair in InfluxDB’s data structure that records metadata and the actual data value. Fields are required in InfluxDB’s data structure and they are not indexed - queries on field values scan all points that match the specified time range and , as a result, are not performant relative to tags.</p>
+<blockquote>
+<p>Query tip: Compare fields to tags: tags are indexed</p>
+</blockquote>
+<h1 id="field-key"><a href="#field-key" class="headerlink" title="field key"></a>field key</h1><p>The key part of the key-value pair that makes up a field. Field keys are strings and they store metadata.</p>
+<h1 id="field-set"><a href="#field-set" class="headerlink" title="field set"></a>field set</h1><p>The collection of field keys and field values on a point.</p>
+<h1 id="field-value"><a href="#field-value" class="headerlink" title="field value"></a>field value</h1><p>The value part of the key-value pair that makes up a field. Field values are the actual data: they can be strings, floats, integers, or booleans. A field value is always associated with a timestamp.</p>
+<p>Field values are not indexed - queries on field values scan all points that match the specified time range and, as a result, are not performant.</p>
+<h1 id="function"><a href="#function" class="headerlink" title="function"></a>function</h1><p>InfluxQL aggregation, selectors, and transformations.</p>
+<h1 id="identifier"><a href="#identifier" class="headerlink" title="identifier"></a>identifier</h1><p>Tokens that refer to continuous query names, database names, field keys, measurement names, retention policy names, subscription names, tag keys and user names.</p>
+<h1 id="line-protocol"><a href="#line-protocol" class="headerlink" title="line protocol"></a>line protocol</h1><p>The text based format for writing points to InfluxDB.</p>
+<h1 id="measurement"><a href="#measurement" class="headerlink" title="measurement"></a>measurement</h1><p>The part of InfluxDB’s structure that describes the data stored in the associated fields. Measurements are strings.</p>
+<h1 id="metastore"><a href="#metastore" class="headerlink" title="metastore"></a>metastore</h1><p>Contains internal information about the status of the system. The metastore contains the user information, databse, retention policies, shard metadata, continuous queries, and subscriptions.</p>
+<h1 id="node"><a href="#node" class="headerlink" title="node"></a>node</h1><p>An independent <code>influxd</code> process</p>
+<h1 id="now"><a href="#now" class="headerlink" title="now()"></a>now()</h1><p>The local server’s nanosecond timestamp</p>
+<h1 id="point"><a href="#point" class="headerlink" title="point"></a>point</h1><p>The part of InfluxDB’s data structure taht consists of a single collection of fields in a series. Each point is uniquely idenfified by its series and timestamp.</p>
+<p>You cannot store more than one point with the same timestamp in the same series. Instead, when you write a new point to the same series with the same timestamp as an existing point in that series, the field set becomes the union of the old field set and the new field set, where any ties tgo to the new field set.</p>
+<h1 id="query"><a href="#query" class="headerlink" title="query"></a>query</h1><p>An operation that retrieves data from InfluxDB.</p>
+<h1 id="replication-factor"><a href="#replication-factor" class="headerlink" title="replication factor"></a>replication factor</h1><p>The attribute of the retention policy that determines how many copies of the data are stored <strong>in the cluster</strong>.</p>
+<blockquote>
+<p>Replication factors do not seve a purpose with single node instances.</p>
+</blockquote>
+<h1 id="retention-policy-RP"><a href="#retention-policy-RP" class="headerlink" title="retention policy (RP)"></a>retention policy (RP)</h1><p>The part of InfluxDB’s data structure that describes for how long InfluxDB keeps data(ducation), how many copies of those data are stored in the cluster(<strong>replication factor</strong>), and the time range covered by shard groups(shard group duration). RPs are unique per databse and along with the measurement and tag set define a series.</p>
+<p>When you create a database, InfluxDB automatically creates a retention policy called <code>autogen</code> with an infinite duration, a replication factor set to one, and a shard group duration set to seven days.</p>
+<h1 id="schema"><a href="#schema" class="headerlink" title="schema"></a>schema</h1><p>How the data are organized in InfluxDB. The fundamentals of the InfluxDB schema are database, retention policies, series, measurements, tag keys, tag values, and field keys.</p>
+<h1 id="selector"><a href="#selector" class="headerlink" title="selector"></a>selector</h1><p>An InfluxQL function that returns a single point from the range of specified points.</p>
+<h1 id="series"><a href="#series" class="headerlink" title="series"></a>series</h1><p>The collection of data in InfluxDB’s data structure that share a measurement, tag set and retention policy.</p>
+<blockquote>
+<p>The field set is not part of the series identification.</p>
+</blockquote>
+<h1 id="series-cardinality"><a href="#series-cardinality" class="headerlink" title="series cardinality"></a>series cardinality</h1><p>The number of unique database, measurement, and tag set combinations in an InfluxDB instance.</p>
+<p>For example, assume that an InfluxDB instance has a single database and one measurement. The single measurement has two tag keys: <code>email</code> and <code>status</code>. If there are three different <code>email</code>s, and each email address is associated with two different <code>status</code>, then the series cardinality for the measurement is 6.</p>
+<p>Note that, in some cases, simply performing that multiplication may overestimate series cardinality because of the presence of dependent tags.</p>
+<h1 id="server"><a href="#server" class="headerlink" title="server"></a>server</h1><p>A machine virtual or physical, that is running InfluxDB. There should only be one InfluxDB process per server.</p>
+<h1 id="shard"><a href="#shard" class="headerlink" title="shard"></a>shard</h1><p>A shard contains the actual encoded and compressed data, and is represented by a TSM file on disk. Every shard belongs to one and only one shard group. Multiple shards may exist in a single shard group. Each shard contains a specific set of series. All points falling on a given series in a given shard group will be stored in the same shard(TSM file) on disk.</p>
+<h1 id="shard-duration"><a href="#shard-duration" class="headerlink" title="shard duration"></a>shard duration</h1><p>The shard duration determines hwo much time each shard group spans. The specific interval is determined by the <code>SHARD DURATION</code> of the retention policy.</p>
+<p>For example, given a retention policy with <code>SHARD DURATION</code> set to <code>1w</code>, each shard group will span a single week and contain all points with timestamps in that week.</p>
+<h1 id="shard-group"><a href="#shard-group" class="headerlink" title="shard group"></a>shard group</h1><p>Shard groups are logical container for shards. Shard groups are organized by <strong>time and retention policy</strong>. Every retention policy that contains data has at least one associated shard group. A given shard group contains all shards with data for the interval covered by the shard group. The interval spanned by each shard group is the shard duration.</p>
+<h1 id="subscription"><a href="#subscription" class="headerlink" title="subscription"></a>subscription</h1><p>Subscription allows <code>Kapacitor</code> to receive data from InfluxDB in a push model rather than the pull model based on querying data. When Kapacitor is configured to work with InfluxDB, the subscription will automatically push every write for the subscribed databse form InfluxDB to Kapacitor. Subscription can use TCP or UDP for transmitting the writes.</p>
+<h1 id="tag"><a href="#tag" class="headerlink" title="tag"></a>tag</h1><p>The key-value pair in InfluxDB’s data structure that records metadata. Tags are an optional part of InfluxDB’s data structure but they are useful for storing commonly-queried metadata; tags are indexed so queries on tags are performant</p>
+<h1 id="tag-key"><a href="#tag-key" class="headerlink" title="tag key"></a>tag key</h1><p>The key part of the key-value pair that makes up a tag. Tag keys are strings and they store metadata. Tag keys are indexed so queires on tag keys are performant.</p>
+<h1 id="tag-set"><a href="#tag-set" class="headerlink" title="tag set"></a>tag set</h1><p>The collection of tag keys and tag values on a point.</p>
+<h1 id="tag-value"><a href="#tag-value" class="headerlink" title="tag value"></a>tag value</h1><p>The value part of the key-value pair that makes up a tag. Tag values are strings and they store metadata. Tag values are indexed so queries on tag values are performant.</p>
+<h1 id="timestamp"><a href="#timestamp" class="headerlink" title="timestamp"></a>timestamp</h1><p>The date and time associated with a point. All time in influxDB is UTC.</p>
+<h1 id="transformation"><a href="#transformation" class="headerlink" title="transformation"></a>transformation</h1><p>An InfluxQl function that returns a value or a set of values calculated from specified points, but does not return an aggregated value across those points.</p>
+<h1 id="tsm-Time-Structured-Merge-Tree"><a href="#tsm-Time-Structured-Merge-Tree" class="headerlink" title="tsm (Time Structured Merge Tree)"></a>tsm (Time Structured Merge Tree)</h1><p>The purpose-built data storage format for InfluxDB. TSM allows for greater compaction and higher write and read throughput than exsiting B+ or LSM tree implementations.</p>
+<h1 id="user"><a href="#user" class="headerlink" title="user"></a>user</h1><p>There are two kinds of users in InfluxDB:</p>
+<ul>
+<li><p><em>Admin users</em> have <code>READ</code> and <code>WRITE</code> access to all database and full across to administrative queries and user management commands.</p>
+</li>
+<li><p><em>Non-admin users</em> have <code>READ</code>, <code>WRITE</code>, or <code>ALT</code> (both <code>READ</code>, <code>WRITE</code>) access to per database.</p>
+</li>
+</ul>
+<p>When authentication is enabled, InfluxDB only executes HTTP requests that are spent with a valid username and password.</p>
+<h1 id="values-per-second"><a href="#values-per-second" class="headerlink" title="values per second"></a>values per second</h1><p>The preferred measurement of the rate at which data are persisted to InfluxDB. Write speeds are generally quoted in values per second.</p>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/06/30/APIs-of-InfluxDB/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="images/avatar.gif" alt="Chen Yu's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        keithwhisper@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    Archives
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/07/">July 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/06/">June 2017<span class="sidebar_archives-count">14</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">15</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">April 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">March 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/02/">February 2017<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">3</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/12/">December 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">November 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">October 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">September 2016<span class="sidebar_archives-count">16</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/08/">August 2016<span class="sidebar_archives-count">30</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/07/">July 2016<span class="sidebar_archives-count">43</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/06/">June 2016<span class="sidebar_archives-count">25</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">May 2016<span class="sidebar_archives-count">24</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Soup/">Soup<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Uncategorized/">Uncategorized<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/">github<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/note/">note<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/">note<span class="sidebar_archives-count">141</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/workNote/">workNote<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/categories/workNote/">workNote<span class="sidebar_archives-count">5</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">192</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            Theme - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+    <a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+             sidebar.about_theme
+            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/keithwhisper" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Keith-CY" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.svg);">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+        <a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-linkedin.svg);">
+                <span class="visuallyhidden">LinkedIn</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;EzCook
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script src="/js/smoothscroll.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

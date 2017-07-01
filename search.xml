@@ -3,6 +3,115 @@
   
     
     <entry>
+      <title><![CDATA[APIs of InfluxDB]]></title>
+      <url>/2017/06/30/APIs-of-InfluxDB/</url>
+      <content type="html"><![CDATA[<p>The InfluxDB API provides a simple way interact with the database. It uses HTTP response codes, HTTP authentication, JWT Token, and basic authentication and responses are returned in JSON.</p>
+<p>The following sections assume your InfluxDB instance is running on <code>localhost</code> port <code>8086</code> and HTTPS is not enabled.</p>
+<h1 id="Endpoints"><a href="#Endpoints" class="headerlink" title="Endpoints"></a>Endpoints</h1><table>
+<thead>
+<tr>
+<th style="text-align:left">Endpoint</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">/ping</td>
+<td style="text-align:left">use <code>/ping</code> to check the status of your InfluxDB instance and your version of InfluxDB</td>
+</tr>
+<tr>
+<td style="text-align:left">/query</td>
+<td style="text-align:left">use <code>/query</code> to query data and manage databsae, retention policies and users</td>
+</tr>
+<tr>
+<td style="text-align:left">/write</td>
+<td style="text-align:left">use <code>/write</code> to write data to a pre-exising databse</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ping"><a href="#ping" class="headerlink" title="/ping"></a>/ping</h2><p>The ping endpoint accepts both <code>GET</code> and <code>POST</code> HTTP requests. Use this endpoint to check the status of your InfluxDB instance and your version of InfluxDB.</p>
+<h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GET http://localhost:8086/ping</div><div class="line"></div><div class="line">HEAD http://localhost:8086/ping</div></pre></td></tr></table></figure>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>Extract the version of your InfluxDB instance in the <code>X-Influxdb-Version</code> field of the header</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ curl -sl -I localhost:8086/ping</div><div class="line"></div><div class="line">HTTP/1.1 204 No Content</div><div class="line">Content-Type: application/json</div><div class="line">Request-Id: [...]</div><div class="line">X-Influxdb-Version: 1.2.x</div><div class="line">Date: Wed, 01 Mar 2017 00:09:51 GMT</div></pre></td></tr></table></figure>
+<h3 id="Status-Codes-and-Responses"><a href="#Status-Codes-and-Responses" class="headerlink" title="Status Codes and Responses"></a>Status Codes and Responses</h3><p>The response body is empty</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">HTTP Status Code</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">      204</td>
+<td style="text-align:center">Success! Your InfluxDB instance is up and running</td>
+</tr>
+</tbody>
+</table>
+<h2 id="query"><a href="#query" class="headerlink" title="/query"></a>/query</h2><p>The <code>/query</code> endpoint accepts <code>GET</code> and <code>POST</code> HTTP requests. Use this endpoint to query data and manage databases, retention policies, and users.</p>
+<h3 id="Definition-1"><a href="#Definition-1" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GET http://localhost:8086/query</div><div class="line"></div><div class="line">POST http://localhost:8086/query</div></pre></td></tr></table></figure>
+<h3 id="Verb-usage"><a href="#Verb-usage" class="headerlink" title="Verb usage"></a>Verb usage</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">verb</th>
+<th style="text-align:center">Query Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">GET</td>
+<td style="text-align:center">use for all queries that start with <code>SETECT</code>, <code>SHOW</code></td>
+</tr>
+<tr>
+<td style="text-align:center">POST</td>
+<td style="text-align:center">use for all queries that start with <code>ALTER</code>, <code>CREATE</code>, <code>DELETE</code>, <code>DROP</code>, <code>GRANT</code>, <code>KILL</code>, <code>REVOKE</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>THe only exceptions are <code>SELECT</code> queries that include an <code>INTO</code> <strong>clause</strong>. Those <code>SELECT</code> queries require a <code>POST</code> request.</p>
+</blockquote>
+<h4 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h4><h5 id="Example-1-Query-data-with-a-SELECT-statement"><a href="#Example-1-Query-data-with-a-SELECT-statement" class="headerlink" title="Example 1: Query data with a SELECT statement"></a>Example 1: Query data with a <code>SELECT</code> statement</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">curl -G <span class="string">'http://localhost:8086/query?db=mydb'</span> --data-urlencoded <span class="string">'q=SELECT * FROM "mymeas"'</span></div><div class="line"></div><div class="line">&#123;<span class="string">"results"</span>:[&#123;<span class="string">"statement_id"</span>:0,<span class="string">"series"</span>:[&#123;<span class="string">"name"</span>:<span class="string">"mymeas"</span>,<span class="string">"columns"</span>:[<span class="string">"time"</span>,<span class="string">"myfield"</span>,<span class="string">"mytag1"</span>,<span class="string">"mytag2"</span>],<span class="string">"values"</span>:[[<span class="string">"2017-03-01T00:16:18Z"</span>,33.1,null,null],[<span class="string">"2017-03-01T00:17:18Z"</span>,12.4,<span class="string">"12"</span>,<span class="string">"14"</span>]]&#125;]&#125;]&#125;</div></pre></td></tr></table></figure>
+<p>The <code>mymeas</code> <strong>measurement</strong> has two points. The first point has the <strong>timestamp</strong> <code>2017-03--1T00:15:18Z</code>, a <code>myfield</code> value of <code>33.1</code> and no tag values for the <code>mytag1</code> and <code>mytag2</code> tag keys.</p>
+<p>The second point has the timestamp <code>2017-03--1T00:18:18Z</code>, a <code>myfield</code> value of <code>12</code>, a <code>mymeas</code> value of <code>12</code>, a <code>mytag1</code> value of <code>12</code> and a <code>mytag2</code> value of <code>14</code></p>
+<p>The same query in InfluxDB’s Command Line Interface(CLI) returns the following table:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">name: mymeas</div><div class="line">time                   myfield   mytag1   mytag2</div><div class="line">----                   -------   ------   ------</div><div class="line">2017-03--1T00:15:18Z    33.1</div><div class="line">2017-03--1T00:18:18Z    12        12       14</div></pre></td></tr></table></figure>
+<h5 id="Example-2-Query-data-with-a-SELECT-statement-and-an-INTO-clause"><a href="#Example-2-Query-data-with-a-SELECT-statement-and-an-INTO-clause" class="headerlink" title="Example 2: Query data with a SELECT statement and an INTO clause"></a>Example 2: Query data with a <code>SELECT</code> statement and an <code>INTO</code> clause</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -XPOST <span class="string">'http://localhost:8086/query?db=mydb'</span> --data-urlencoded <span class="string">'q=SELECT * INTO "newmeas" FROM "mymeas"'</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>SELECT</code> queries that include and <code>INTO</code> clause require a <code>POST</code> requests</p>
+</blockquote>
+<h5 id="Example-3-Create-a-database"><a href="#Example-3-Create-a-database" class="headerlink" title="Example 3: Create a database"></a>Example 3: Create a database</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -XPOST <span class="string">'http://localhost:8086/query'</span> --data-urlencoded <span class="string">'q=CREATE DATABASE "mydb"'</span></div></pre></td></tr></table></figure>
+<p>A successful <code>CREATE DATABASE</code> query returns no additional information.</p>
+<h4 id="Query-String-Parameter"><a href="#Query-String-Parameter" class="headerlink" title="Query String Parameter"></a>Query String Parameter</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Query String Parameter         |                                            Optional/Required                                             |                                                                                Definition</div></pre></td></tr></table></figure>
+<p>:———————————–: | :——————————————————————————————————: | :———————————————————————————————————————————————————————–: chunked=[true | &lt;number_of_points] | Optional | Returns points in streamed batches instead of in a single response. If set to <code>true</code>, InfluxDB chunks responses by series or by every 10,000 point, whichever occurs first. It set to a specific value, InfluxDB chunks responses by series or by that number of points db=</p>
+<database_name><br></database_name>
+
+<p> | Required for database-dependent queries(most <code>SELECT</code> queries and <code>SHOW</code> queries require this parameter) | Sets the target database for the query epoch=[ns,u,ms,s,m,h] | Optional | Returns epoch timestamps with the specified precision. By default, InfluxDB returns timestamps in RFC3339 format with nanosecond precision. Both <code>u</code> indicate microsecond p=</p>
+<password><br></password>
+
+<p> | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the password for authentication if you’ve enabled authentication. Use with the query string parameter <code>u</code> pretty=true | Optional | Enables pretty-printed JSON output. While this is useful for debugging it is not recommended for production use as it consumes unnecessary network bandwidth u=</p>
+<username><br></username>
+
+<p> | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the username for authentication if you’ve enabled authentication. The user must have read access to the database. Use with the query string parameter <code>p</code></p>
+<blockquote>
+<p>In versions 1.2.0 and 1.2.1, InfluxDB automatically truncates the number of rows returned for requests without the <code>chunked</code> parameter. By default, the maximum number of rows returned is set to 10000, if a query has more than 10000 rows to return, InfluxDB includes a <code>&#39;partial&#39;: true</code> tag in the response body.</p>
+<p>The HTTP API also supports basic authentication. Use basic authentication if you’ve enabled authentication and aren’t using the query string parameter <code>u</code> and <code>p</code>.</p>
+</blockquote>
+<h5 id="Example-Create-a-database-using-HTTP-authentication"><a href="#Example-Create-a-database-using-HTTP-authentication" class="headerlink" title="Example: Create a database using HTTP authentication"></a>Example: Create a database using HTTP authentication</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -XPOST <span class="string">'http://localhost:8086/query?u=myusername&amp;p=mypassword'</span> --data-urlencoded <span class="string">'q=CREATE DATABASE "mydb"'</span></div></pre></td></tr></table></figure>
+<h2 id="write"><a href="#write" class="headerlink" title="/write"></a>/write</h2><p>The <code>/write</code> endpoint accepts <code>POST</code> HTTP requests. Use this endpoint to write data to a pre-existing databse.</p>
+<h3 id="Definition-2"><a href="#Definition-2" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">POST http://localhost:8086/write</div></pre></td></tr></table></figure>
+<h3 id="Query-String-Parameter-1"><a href="#Query-String-Parameter-1" class="headerlink" title="Query String Parameter"></a>Query String Parameter</h3><pre><code>Query String Parameter                 | Optional/Required                                                                         | Description
+</code></pre><p>:—————————————————: | :—————————————————————————————- | :————————————————————————————————————————————————————–<br>                  consistency=[any                    | one                                                                                       | quorum                                                                                                                                                          | all] | Optional, available with InfluxEnterprise clusters only | Sets the write consistency for the point. InfluxDB assumes that the write consistency is <code>one</code> if you do not specify <code>consistency</code><br>             db=</p>
+<p><database><br></database>              | Required                                                                                  | Sets the target database for the write<br>             p=</p>
+<p><password><br></password>               | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the password for authentication if you’ve enabled authentication. Use with the query string parameter <code>u</code><br>               precision=[ns,u,ms,m,h]                | Optional                                                                                  | Sets the precision for the supplied Unix time values. InfluxDB assumes that timestamps are in nanoseconds if you do not specify <code>precision</code><br>rp=</p>
+<p><retention_policy_name><br></retention_policy_name> | Optional                                                                                  | Sets the target retention policy for the write. InfluxDB writes to the <code>DEFAULT</code> retention policy if you do not specify a retention policy<br>             u=</p>
+<p><username><br></username>               | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the username for authentication if you’ve enabled authentication. The user must have write access to the database. Use with the query string parameter <code>p</code></p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Writing Data in InfluxDB with HTTP API]]></title>
       <url>/2017/06/30/Writing-Data-in-InfluxDB-with-HTTP-API/</url>
       <content type="html"><![CDATA[<h1 id="Create-a-database-using-the-HTTP-API"><a href="#Create-a-database-using-the-HTTP-API" class="headerlink" title="Create a database using the HTTP API"></a>Create a database using the HTTP API</h1><p>To create a database send a <code>POST</code> request to the <code>/query</code> endpoint and set the URL parameter <code>q</code> to <code>CREATE DATABASE &lt;new_database_name&gt;</code>. The example below sends a request to InfluxDB running on <code>locahost</code> and create the database <code>mydb</code>.</p>

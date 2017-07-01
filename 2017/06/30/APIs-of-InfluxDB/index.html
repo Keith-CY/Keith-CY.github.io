@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.4 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            APIs of InfluxDB | 
+        
+        EzCook
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Chen Yu">
+    <meta name="description" content="null">
+    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="EzCook">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="APIs of InfluxDB | EzCook">
+    <meta property="og:description" content="null">
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00BCD4;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #00BCD4 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #00BCD4 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #00BCD4 !important;
+  }
+
+  .toTop {
+    background: #000BCD4 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #000BCD4;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #000BCD4;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #000BCD4;
+  }
+
+  .post-toc a:hover {
+    color: #00BCD4;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body {
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text {
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+        <script type="text/javascript">
+            queue.offer(function(){
+                $('body').attr('data-original', 'https://api.i-meto.com/bing?null');
+            });
+        </script>
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Endpoints"><span class="post-toc-number">1.</span> <span class="post-toc-text">Endpoints</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ping"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">/ping</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Definition"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">Definition</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Example"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">Example</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Status-Codes-and-Responses"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">Status Codes and Responses</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#query"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">/query</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Definition-1"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">Definition</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Verb-usage"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">Verb usage</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Example-1"><span class="post-toc-number">1.2.2.1.</span> <span class="post-toc-text">Example</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Example-1-Query-data-with-a-SELECT-statement"><span class="post-toc-number">1.2.2.1.1.</span> <span class="post-toc-text">Example 1: Query data with a SELECT statement</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Example-2-Query-data-with-a-SELECT-statement-and-an-INTO-clause"><span class="post-toc-number">1.2.2.1.2.</span> <span class="post-toc-text">Example 2: Query data with a SELECT statement and an INTO clause</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Example-3-Create-a-database"><span class="post-toc-number">1.2.2.1.3.</span> <span class="post-toc-text">Example 3: Create a database</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Query-String-Parameter"><span class="post-toc-number">1.2.2.2.</span> <span class="post-toc-text">Query String Parameter</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#Example-Create-a-database-using-HTTP-authentication"><span class="post-toc-number">1.2.2.2.1.</span> <span class="post-toc-text">Example: Create a database using HTTP authentication</span></a></li></ol></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#write"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">/write</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Definition-2"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">Definition</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Query-String-Parameter-1"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">Query String Parameter</span></a></li></ol></li></ol></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                APIs of InfluxDB
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="images/avatar.gif" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Chen Yu</strong>
+        <span>Jun 30, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=APIs of InfluxDB&url=http://yoursite.com//2017/06/30/APIs-of-InfluxDB/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=APIs of InfluxDB&url=http://yoursite.com//2017/06/30/APIs-of-InfluxDB/index.html&via=Chen Yu" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/06/30/APIs-of-InfluxDB/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/06/30/APIs-of-InfluxDB/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <p>The InfluxDB API provides a simple way interact with the database. It uses HTTP response codes, HTTP authentication, JWT Token, and basic authentication and responses are returned in JSON.</p>
+<p>The following sections assume your InfluxDB instance is running on <code>localhost</code> port <code>8086</code> and HTTPS is not enabled.</p>
+<h1 id="Endpoints"><a href="#Endpoints" class="headerlink" title="Endpoints"></a>Endpoints</h1><table>
+<thead>
+<tr>
+<th style="text-align:left">Endpoint</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">/ping</td>
+<td style="text-align:left">use <code>/ping</code> to check the status of your InfluxDB instance and your version of InfluxDB</td>
+</tr>
+<tr>
+<td style="text-align:left">/query</td>
+<td style="text-align:left">use <code>/query</code> to query data and manage databsae, retention policies and users</td>
+</tr>
+<tr>
+<td style="text-align:left">/write</td>
+<td style="text-align:left">use <code>/write</code> to write data to a pre-exising databse</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ping"><a href="#ping" class="headerlink" title="/ping"></a>/ping</h2><p>The ping endpoint accepts both <code>GET</code> and <code>POST</code> HTTP requests. Use this endpoint to check the status of your InfluxDB instance and your version of InfluxDB.</p>
+<h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GET http://localhost:8086/ping</div><div class="line"></div><div class="line">HEAD http://localhost:8086/ping</div></pre></td></tr></table></figure>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>Extract the version of your InfluxDB instance in the <code>X-Influxdb-Version</code> field of the header</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ curl -sl -I localhost:8086/ping</div><div class="line"></div><div class="line">HTTP/1.1 204 No Content</div><div class="line">Content-Type: application/json</div><div class="line">Request-Id: [...]</div><div class="line">X-Influxdb-Version: 1.2.x</div><div class="line">Date: Wed, 01 Mar 2017 00:09:51 GMT</div></pre></td></tr></table></figure>
+<h3 id="Status-Codes-and-Responses"><a href="#Status-Codes-and-Responses" class="headerlink" title="Status Codes and Responses"></a>Status Codes and Responses</h3><p>The response body is empty</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">HTTP Status Code</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">      204</td>
+<td style="text-align:center">Success! Your InfluxDB instance is up and running</td>
+</tr>
+</tbody>
+</table>
+<h2 id="query"><a href="#query" class="headerlink" title="/query"></a>/query</h2><p>The <code>/query</code> endpoint accepts <code>GET</code> and <code>POST</code> HTTP requests. Use this endpoint to query data and manage databases, retention policies, and users.</p>
+<h3 id="Definition-1"><a href="#Definition-1" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GET http://localhost:8086/query</div><div class="line"></div><div class="line">POST http://localhost:8086/query</div></pre></td></tr></table></figure>
+<h3 id="Verb-usage"><a href="#Verb-usage" class="headerlink" title="Verb usage"></a>Verb usage</h3><table>
+<thead>
+<tr>
+<th style="text-align:center">verb</th>
+<th style="text-align:center">Query Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">GET</td>
+<td style="text-align:center">use for all queries that start with <code>SETECT</code>, <code>SHOW</code></td>
+</tr>
+<tr>
+<td style="text-align:center">POST</td>
+<td style="text-align:center">use for all queries that start with <code>ALTER</code>, <code>CREATE</code>, <code>DELETE</code>, <code>DROP</code>, <code>GRANT</code>, <code>KILL</code>, <code>REVOKE</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>THe only exceptions are <code>SELECT</code> queries that include an <code>INTO</code> <strong>clause</strong>. Those <code>SELECT</code> queries require a <code>POST</code> request.</p>
+</blockquote>
+<h4 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h4><h5 id="Example-1-Query-data-with-a-SELECT-statement"><a href="#Example-1-Query-data-with-a-SELECT-statement" class="headerlink" title="Example 1: Query data with a SELECT statement"></a>Example 1: Query data with a <code>SELECT</code> statement</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">curl -G <span class="string">'http://localhost:8086/query?db=mydb'</span> --data-urlencoded <span class="string">'q=SELECT * FROM "mymeas"'</span></div><div class="line"></div><div class="line">&#123;<span class="string">"results"</span>:[&#123;<span class="string">"statement_id"</span>:0,<span class="string">"series"</span>:[&#123;<span class="string">"name"</span>:<span class="string">"mymeas"</span>,<span class="string">"columns"</span>:[<span class="string">"time"</span>,<span class="string">"myfield"</span>,<span class="string">"mytag1"</span>,<span class="string">"mytag2"</span>],<span class="string">"values"</span>:[[<span class="string">"2017-03-01T00:16:18Z"</span>,33.1,null,null],[<span class="string">"2017-03-01T00:17:18Z"</span>,12.4,<span class="string">"12"</span>,<span class="string">"14"</span>]]&#125;]&#125;]&#125;</div></pre></td></tr></table></figure>
+<p>The <code>mymeas</code> <strong>measurement</strong> has two points. The first point has the <strong>timestamp</strong> <code>2017-03--1T00:15:18Z</code>, a <code>myfield</code> value of <code>33.1</code> and no tag values for the <code>mytag1</code> and <code>mytag2</code> tag keys.</p>
+<p>The second point has the timestamp <code>2017-03--1T00:18:18Z</code>, a <code>myfield</code> value of <code>12</code>, a <code>mymeas</code> value of <code>12</code>, a <code>mytag1</code> value of <code>12</code> and a <code>mytag2</code> value of <code>14</code></p>
+<p>The same query in InfluxDB’s Command Line Interface(CLI) returns the following table:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">name: mymeas</div><div class="line">time                   myfield   mytag1   mytag2</div><div class="line">----                   -------   ------   ------</div><div class="line">2017-03--1T00:15:18Z    33.1</div><div class="line">2017-03--1T00:18:18Z    12        12       14</div></pre></td></tr></table></figure>
+<h5 id="Example-2-Query-data-with-a-SELECT-statement-and-an-INTO-clause"><a href="#Example-2-Query-data-with-a-SELECT-statement-and-an-INTO-clause" class="headerlink" title="Example 2: Query data with a SELECT statement and an INTO clause"></a>Example 2: Query data with a <code>SELECT</code> statement and an <code>INTO</code> clause</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -XPOST <span class="string">'http://localhost:8086/query?db=mydb'</span> --data-urlencoded <span class="string">'q=SELECT * INTO "newmeas" FROM "mymeas"'</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>SELECT</code> queries that include and <code>INTO</code> clause require a <code>POST</code> requests</p>
+</blockquote>
+<h5 id="Example-3-Create-a-database"><a href="#Example-3-Create-a-database" class="headerlink" title="Example 3: Create a database"></a>Example 3: Create a database</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -XPOST <span class="string">'http://localhost:8086/query'</span> --data-urlencoded <span class="string">'q=CREATE DATABASE "mydb"'</span></div></pre></td></tr></table></figure>
+<p>A successful <code>CREATE DATABASE</code> query returns no additional information.</p>
+<h4 id="Query-String-Parameter"><a href="#Query-String-Parameter" class="headerlink" title="Query String Parameter"></a>Query String Parameter</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Query String Parameter         |                                            Optional/Required                                             |                                                                                Definition</div></pre></td></tr></table></figure>
+<p>:———————————–: | :——————————————————————————————————: | :———————————————————————————————————————————————————————–: chunked=[true | &lt;number_of_points] | Optional | Returns points in streamed batches instead of in a single response. If set to <code>true</code>, InfluxDB chunks responses by series or by every 10,000 point, whichever occurs first. It set to a specific value, InfluxDB chunks responses by series or by that number of points db=</p>
+<database_name><br></database_name>
+
+<p> | Required for database-dependent queries(most <code>SELECT</code> queries and <code>SHOW</code> queries require this parameter) | Sets the target database for the query epoch=[ns,u,ms,s,m,h] | Optional | Returns epoch timestamps with the specified precision. By default, InfluxDB returns timestamps in RFC3339 format with nanosecond precision. Both <code>u</code> indicate microsecond p=</p>
+<password><br></password>
+
+<p> | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the password for authentication if you’ve enabled authentication. Use with the query string parameter <code>u</code> pretty=true | Optional | Enables pretty-printed JSON output. While this is useful for debugging it is not recommended for production use as it consumes unnecessary network bandwidth u=</p>
+<username><br></username>
+
+<p> | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the username for authentication if you’ve enabled authentication. The user must have read access to the database. Use with the query string parameter <code>p</code></p>
+<blockquote>
+<p>In versions 1.2.0 and 1.2.1, InfluxDB automatically truncates the number of rows returned for requests without the <code>chunked</code> parameter. By default, the maximum number of rows returned is set to 10000, if a query has more than 10000 rows to return, InfluxDB includes a <code>&#39;partial&#39;: true</code> tag in the response body.</p>
+<p>The HTTP API also supports basic authentication. Use basic authentication if you’ve enabled authentication and aren’t using the query string parameter <code>u</code> and <code>p</code>.</p>
+</blockquote>
+<h5 id="Example-Create-a-database-using-HTTP-authentication"><a href="#Example-Create-a-database-using-HTTP-authentication" class="headerlink" title="Example: Create a database using HTTP authentication"></a>Example: Create a database using HTTP authentication</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -XPOST <span class="string">'http://localhost:8086/query?u=myusername&amp;p=mypassword'</span> --data-urlencoded <span class="string">'q=CREATE DATABASE "mydb"'</span></div></pre></td></tr></table></figure>
+<h2 id="write"><a href="#write" class="headerlink" title="/write"></a>/write</h2><p>The <code>/write</code> endpoint accepts <code>POST</code> HTTP requests. Use this endpoint to write data to a pre-existing databse.</p>
+<h3 id="Definition-2"><a href="#Definition-2" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">POST http://localhost:8086/write</div></pre></td></tr></table></figure>
+<h3 id="Query-String-Parameter-1"><a href="#Query-String-Parameter-1" class="headerlink" title="Query String Parameter"></a>Query String Parameter</h3><pre><code>Query String Parameter                 | Optional/Required                                                                         | Description
+</code></pre><p>:—————————————————: | :—————————————————————————————- | :————————————————————————————————————————————————————–<br>                  consistency=[any                    | one                                                                                       | quorum                                                                                                                                                          | all] | Optional, available with InfluxEnterprise clusters only | Sets the write consistency for the point. InfluxDB assumes that the write consistency is <code>one</code> if you do not specify <code>consistency</code><br>             db=</p>
+<p><database><br></database>              | Required                                                                                  | Sets the target database for the write<br>             p=</p>
+<p><password><br></password>               | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the password for authentication if you’ve enabled authentication. Use with the query string parameter <code>u</code><br>               precision=[ns,u,ms,m,h]                | Optional                                                                                  | Sets the precision for the supplied Unix time values. InfluxDB assumes that timestamps are in nanoseconds if you do not specify <code>precision</code><br>rp=</p>
+<p><retention_policy_name><br></retention_policy_name> | Optional                                                                                  | Sets the target retention policy for the write. InfluxDB writes to the <code>DEFAULT</code> retention policy if you do not specify a retention policy<br>             u=</p>
+<p><username><br></username>               | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the username for authentication if you’ve enabled authentication. The user must have write access to the database. Use with the query string parameter <code>p</code></p>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/06/30/Writing-Data-in-InfluxDB-with-HTTP-API/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="images/avatar.gif" alt="Chen Yu's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        keithwhisper@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    Archives
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/06/">June 2017<span class="sidebar_archives-count">14</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">15</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">April 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">March 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/02/">February 2017<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">3</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/12/">December 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">November 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">October 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">September 2016<span class="sidebar_archives-count">16</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/08/">August 2016<span class="sidebar_archives-count">30</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/07/">July 2016<span class="sidebar_archives-count">43</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/06/">June 2016<span class="sidebar_archives-count">25</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">May 2016<span class="sidebar_archives-count">24</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Soup/">Soup<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Uncategorized/">Uncategorized<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/">github<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/note/">note<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/">note<span class="sidebar_archives-count">141</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/workNote/">workNote<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/categories/workNote/">workNote<span class="sidebar_archives-count">5</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">191</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            Theme - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+    <a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+             sidebar.about_theme
+            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/keithwhisper" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Keith-CY" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.svg);">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+        <a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-linkedin.svg);">
+                <span class="visuallyhidden">LinkedIn</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;EzCook
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script src="/js/smoothscroll.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

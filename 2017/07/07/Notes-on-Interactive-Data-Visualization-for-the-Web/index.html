@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.4 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            Notes on Interactive Data Visualization for the Web | 
+        
+        EzCook
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Chen Yu">
+    <meta name="description" content="null">
+    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="EzCook">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Notes on Interactive Data Visualization for the Web | EzCook">
+    <meta property="og:description" content="null">
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00BCD4;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #00BCD4 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #00BCD4 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #00BCD4 !important;
+  }
+
+  .toTop {
+    background: #000BCD4 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #000BCD4;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #000BCD4;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #000BCD4;
+  }
+
+  .post-toc a:hover {
+    color: #00BCD4;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body {
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text {
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+        <script type="text/javascript">
+            queue.offer(function(){
+                $('body').attr('data-original', 'https://api.i-meto.com/bing?null');
+            });
+        </script>
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Introducing-D3"><span class="post-toc-number">1.</span> <span class="post-toc-text">Introducing D3</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Data"><span class="post-toc-number">2.</span> <span class="post-toc-text">Data</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binding-Data"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">Binding Data</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Drawing-with-Data"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">Drawing with Data</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Scales"><span class="post-toc-number">3.</span> <span class="post-toc-text">Scales</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Domains-and-Ranges"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">Domains and Ranges</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Normalization"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">Normalization</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Creating-a-Scale"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">Creating a Scale</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#d3-max-and-d3-min"><span class="post-toc-number">3.3.1.</span> <span class="post-toc-text">d3.max() and d3.min()</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Setting-Up-Dynamic-Scales"><span class="post-toc-number">3.3.2.</span> <span class="post-toc-text">Setting Up Dynamic Scales</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Axes"><span class="post-toc-number">4.</span> <span class="post-toc-text">Axes</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Setting-Up-an-Axis"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Setting Up an Axis</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Positioning-Axes"><span class="post-toc-number">4.1.1.</span> <span class="post-toc-text">Positioning Axes</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CSS-styles-on-axis"><span class="post-toc-number">4.1.2.</span> <span class="post-toc-text">CSS styles on axis</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Check-for-Ticks"><span class="post-toc-number">4.1.3.</span> <span class="post-toc-text">Check for Ticks</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Formatting-Tick-labels"><span class="post-toc-number">4.1.4.</span> <span class="post-toc-text">Formatting Tick labels</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Updates-Transtions-and-Motion"><span class="post-toc-number">5.</span> <span class="post-toc-text">Updates, Transtions, and Motion</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#on-Transition-Starts-and-Ends"><span class="post-toc-number">5.0.1.</span> <span class="post-toc-text">on() Transition Starts and Ends</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Containing-Visual-Elements-With-Clipping-Paths"><span class="post-toc-number">5.0.2.</span> <span class="post-toc-text">Containing Visual Elements With Clipping Paths</span></a></li></ol></li></ol></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                Notes on Interactive Data Visualization for the Web
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="images/avatar.gif" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Chen Yu</strong>
+        <span>Jul 07, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Notes on Interactive Data Visualization for the Web&url=http://yoursite.com//2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Notes on Interactive Data Visualization for the Web&url=http://yoursite.com//2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/index.html&via=Chen Yu" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h1 id="Introducing-D3"><a href="#Introducing-D3" class="headerlink" title="Introducing D3"></a>Introducing D3</h1><p>D3 – also referred to as d3.js – is a JavaScript library for creating data visualization. But that kind of undersell it.</p>
+<p>The abbreviation D3 reference the tool’s full name, <em>Data-Driven Documents</em>. The <em>data</em> is provided by you, and the <em>documents</em> are web-based documents, meaning anything that can be rendered by a web browser, such as HTML and SVG. D3 does the <em>driviing</em>, in the sense that it connects the data to the documents.</p>
+<h1 id="Data"><a href="#Data" class="headerlink" title="Data"></a>Data</h1><p><em>Data</em> is an extemely broad term, only slightly less vague than the nearly all-encompassing <em>information</em>.</p>
+<p>Boradly speaking, data is a structured information with potential for meaning.</p>
+<p>In the context of programming for visualization, data is stored in a digital file, typically in either text or binary form. Of course, potentially every piece of digital ephemera may be considered <code>data</code> – not just text, but bits and bytes representing images, audio, video, database, streams, models, archives, and anything else.</p>
+<p>Within the scope of D3 and browser-based visualization, however, we will limit ourselves to <em>text-based</em>. That is, anything that can be presented as numbers and strings of alpha charaters.</p>
+<h2 id="Binding-Data"><a href="#Binding-Data" class="headerlink" title="Binding Data"></a>Binding Data</h2><p>We use D3’s <code>data()</code> method to bind data to DOM elements. But there are two things we need in place first, before we can bind data:</p>
+<ul>
+<li><p>The data</p>
+</li>
+<li><p>A selection of DOM elements</p>
+</li>
+</ul>
+<p>Anytime after you call <code>data()</code>, you can craete an anonymous function accepts <code>d</code> as input.</p>
+<p>The magical <code>data()</code> method ensures that <code>d</code> is set to the corresponding value in your original dataset, given the current element at hand.</p>
+<h2 id="Drawing-with-Data"><a href="#Drawing-with-Data" class="headerlink" title="Drawing with Data"></a>Drawing with Data</h2><p><code>.attr</code>, <code>.classed</code>, <code>.style</code></p>
+<h1 id="Scales"><a href="#Scales" class="headerlink" title="Scales"></a>Scales</h1><blockquote>
+<p>Scales are functions that map from an input domain to an output domain.</p>
+</blockquote>
+<p>The values in any dataset are unlikely to correspond exactly to pixel measurement for use in your visuallization.  Scales provide a convenient way to map those data values to new values useful for visuallization purposes.</p>
+<p>D3 scales are <em>functions</em> with parameters that you define. Once they are created, you call the <code>scale</code> function , pass it a data value and it nicely returns a scaled output value.</p>
+<p>A scale is a mathematical relationship, with no direct visual output.</p>
+<h2 id="Domains-and-Ranges"><a href="#Domains-and-Ranges" class="headerlink" title="Domains and Ranges"></a>Domains and Ranges</h2><p>A scale’s <em>input domain</em> is the range of possible input data values.</p>
+<p>A scale’s <em>output range</em> is the range of possible output values, commonly used as display values in pixel units.</p>
+<h2 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h2><p>Normalization is the process of mapping a numeric value to a new value between 0 and 1, based on the possible minumum and maximum values.</p>
+<h2 id="Creating-a-Scale"><a href="#Creating-a-Scale" class="headerlink" title="Creating a Scale"></a>Creating a Scale</h2><p>D3’s linear scale function generator is accessed with <code>d3.scaleLiner()</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scale = d3.scaleLinear()</div></pre></td></tr></table></figure>
+<p>Now <code>scale</code> is a function to which you can pass input values.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale(<span class="number">2.5</span>) <span class="comment">// return 2.5</span></div></pre></td></tr></table></figure>
+<p>Because we haven’t set a domain and a range yet, this function will map input to output on a <code>1:1</code> scale.</p>
+<p>We set the scale’s input domain to 100, 500 by passing those values to the <code>domain()</code> method as an array.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale.domain([<span class="number">100</span>, <span class="number">500</span>])</div></pre></td></tr></table></figure>
+<p>Set the output range in similar fashion, with <code>range()</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale.range([<span class="number">10</span>, <span class="number">350</span>])</div></pre></td></tr></table></figure>
+<p>These steps can be chained:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scale = d3.scaleLinear()</div><div class="line">  .domain([<span class="number">100</span>, <span class="number">500</span>])</div><div class="line">  .range([<span class="number">10</span>, <span class="number">350</span>])</div></pre></td></tr></table></figure>
+<p>Now it’s effective</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scale(<span class="number">100</span>) <span class="comment">// return 10</span></div><div class="line">scale(<span class="number">300</span>) <span class="comment">// return 180</span></div><div class="line">scale(<span class="number">500</span>) <span class="comment">// return 350</span></div></pre></td></tr></table></figure>
+<h3 id="d3-max-and-d3-min"><a href="#d3-max-and-d3-min" class="headerlink" title="d3.max() and d3.min()"></a>d3.max() and d3.min()</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> dataset = [</div><div class="line">  [<span class="number">5</span>, <span class="number">20</span>], [<span class="number">480</span>, <span class="number">90</span>], [<span class="number">250</span>, <span class="number">50</span>], [<span class="number">100</span>, <span class="number">33</span>], [<span class="number">330</span>, <span class="number">95</span>],</div><div class="line">  [<span class="number">410</span>, <span class="number">12</span>], [<span class="number">475</span>, <span class="number">44</span>], [<span class="number">25</span>, <span class="number">67</span>], [<span class="number">85</span>, <span class="number">21</span>], [<span class="number">220</span>, <span class="number">88</span>]</div><div class="line">]</div><div class="line"></div><div class="line">d3.max(dataset, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> d[<span class="number">0</span>]</div><div class="line">&#125;)</div><div class="line"><span class="comment">// this function will return the value 480</span></div></pre></td></tr></table></figure>
+<h3 id="Setting-Up-Dynamic-Scales"><a href="#Setting-Up-Dynamic-Scales" class="headerlink" title="Setting Up Dynamic Scales"></a>Setting Up Dynamic Scales</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xScale = d3.scaleLinear()</div><div class="line">  .domain([<span class="number">0</span>, d3.max(dataset, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">    retrun d[<span class="number">0</span>]</div><div class="line">  &#125;)])</div><div class="line">  .range([<span class="number">0</span>, w])</div></pre></td></tr></table></figure>
+<p>Output range is set to 0 and w, the SVG’s width.</p>
+<p>Use the scale</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.attr(<span class="string">'x'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> xScale(d[<span class="number">0</span>])</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<blockquote>
+<p><code>d3.scaleLinear()</code> has several other handly methods that deserve a breif mention here:</p>
+</blockquote>
+<ul>
+<li><p><code>nice()</code>: this tells the scale to take whatever input domain that you gave to <code>domian()</code> and expand both ends to the nearest round value.</p>
+</li>
+<li><p><code>rangeRound()</code>: User <code>rangeRound()</code> in place of <code>range()</code>, and all values output by the scale will be rounded to nearest whole number.</p>
+</li>
+<li><p><code>clamp()</code>: By default, a linear scale can return values outside of the specified range. For example, if if given a value outside of its expected input domain, a scale will return a number also outside of the output range. Calling <code>clamp(true)</code> on a scale, forces all output values to be within the specified range. This means excessive values will be rounded to the range’s low or high value.</p>
+</li>
+</ul>
+<p>To use any of these special methods, just tack them onto the chain in which you define the original scale function.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> scale = d3.scaleLinear().domain([<span class="number">0.123</span>, <span class="number">4.67</span>]).range([<span class="number">0</span>, <span class="number">500</span>]).nice()</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Other Scales</p>
+</blockquote>
+<ul>
+<li><p><code>sclaeSqrt</code></p>
+</li>
+<li><p><code>scalePow</code></p>
+</li>
+<li><p><code>scaleLog</code></p>
+</li>
+<li><p><code>scaleQuantize</code></p>
+</li>
+<li><p><code>scaleQuantile</code></p>
+</li>
+<li><p><code>scaleOrdinal</code></p>
+</li>
+<li><p><code>scaleTime</code></p>
+</li>
+</ul>
+<h1 id="Axes"><a href="#Axes" class="headerlink" title="Axes"></a>Axes</h1><p>D3’s axes are actually <code>function</code> whose parameters you define. Unlike scales, when an axis function is called, it doesn’t return a value, but generates the visual elements of the axis, including lines, labels, and ticks.</p>
+<h2 id="Setting-Up-an-Axis"><a href="#Setting-Up-an-Axis" class="headerlink" title="Setting Up an Axis"></a>Setting Up an Axis</h2><p>There are four different axis function constructors, each one corresponding to a different orientation and placement of labels: <code>d3.axisTop</code>, <code>d3.axisBottom</code>, <code>d3.axisLeft</code>, <code>d3.axisRight</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> xAxis = d3.axisBottom()</div></pre></td></tr></table></figure>
+<p>At a minimum, each axis also needs to be told on what <em>scale</em> to operate.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> xAxis = d3.axisBottom().scale(xScale)</div><div class="line"><span class="comment">// or</span></div><div class="line"><span class="keyword">const</span> xAxis = d3.axisBottom(xScale)</div></pre></td></tr></table></figure>
+<p>Finally, to actually generate the axis and insert all those little lines and labels into our SVG, we must <code>call</code> teh <code>xAxis</code> function. This is similar to the scale functions, which we first configured by setting parameters, and then later <code>called</code> to put them into action.</p>
+<p>Here we put this code at the end of script, so the axis is generated after the other elements in the SVG, and therefore appears ‘on top’</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="string">'g'</span>).call(xAxis)</div></pre></td></tr></table></figure>
+<p>This is where things get a little funky. You might be wondering why this looks so different from our friendly scale functions. Here’s why: because an axis function actually draws something to the screen (by appending SVG elements to the DOM), we need to specify where in the DOM it should place new elements.</p>
+<p>In the svg, we <code>append()</code> a new <code>g</code> element to the end of the SVG. In SVG land, a <code>g</code> element is a <code>group</code> element. Group elements are invisible, unlike <code>line</code>, <code>rect</code>, and <code>circle</code> and they have no visual presence themselves.</p>
+<p>The <code>g</code> element can keep our code nice and be transformed.</p>
+<p>So we’ve created a new <code>g</code>, and then finally, the function <code>call()</code> is called on our new <code>g</code>.</p>
+<p>D3’s <code>call()</code> function takes the incoming <code>selection</code>, as received from the prior link in the chain, and hands that selection off to any <code>function</code>.</p>
+<p>This this case, the selection is our new <code>g</code> group element. Although the <code>g</code> isn’t strictly necessary, we are using it because the axis function is about to generate lots of crazy lines and numbers, and it’s noce to contain all those element within a single group object.</p>
+<p><code>call()</code> hands off <code>g</code> to the <code>xAxis</code> function, so our axis is genrated within <code>g</code></p>
+<h3 id="Positioning-Axes"><a href="#Positioning-Axes" class="headerlink" title="Positioning Axes"></a>Positioning Axes</h3><p>By default, an axis is positioned using the range values of the specified scale. In our case, <code>xAxis</code> is referencing <code>xScale</code>, which has a range of [20, 460], because we applied 20 pixels of padding on all edge of the SVG. We can transform the axis by:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="string">'g'</span>)</div><div class="line">  .attr(<span class="string">'class'</span>, <span class="string">'axis'</span>)</div><div class="line">  .attr(<span class="string">'tranform'</span>, <span class="string">'translate(0, '</span> + (h - padding) + <span class="string">')'</span>)</div><div class="line">  .call(xAxis)</div></pre></td></tr></table></figure>
+<p>In the end, we would like  our <code>g</code> to look like this in the DOM:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">g</span> <span class="attr">class</span>=<span class="string">"axis"</span> <span class="attr">transform</span>=<span class="string">"translate(0, 280)"</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="CSS-styles-on-axis"><a href="#CSS-styles-on-axis" class="headerlink" title="CSS styles on axis"></a>CSS styles on axis</h3><p>The axes themselves are made up of <code>path</code>, <code>line</code>, <code>text</code> element, so those are the three elemnts to target in your CSS.</p>
+<p>The paths and lines can be styled together, with the same rules, and text gets its own rules around for font and font size.</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.axis</span> <span class="selector-tag">path</span>, <span class="selector-class">.axis</span> <span class="selector-tag">line</span> &#123;</div><div class="line">  <span class="attribute">stroke</span>: teal;</div><div class="line">  <span class="attribute">shape-rendering</span>: crispEdges;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.axis</span> <span class="selector-tag">text</span> &#123;</div><div class="line">  <span class="attribute">font-family</span>: Optima, Futura, sans-serif;</div><div class="line">  <span class="attribute">font-weight</span>: bold;</div><div class="line">  <span class="attribute">font-size</span>: <span class="number">14px</span>;</div><div class="line">  <span class="attribute">fill</span>: teal;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>These CSS rules will override D3’s default styles.</p>
+<p>Note that when we use CSS rules to style SVG elements, only SVG attribute names – not regular CSS properties – should be used.</p>
+<h3 id="Check-for-Ticks"><a href="#Check-for-Ticks" class="headerlink" title="Check for Ticks"></a>Check for Ticks</h3><p>Some ticks spread disease, but D3’s ticks communicates information.</p>
+<p>You can customize all aspects of your axes, starting with the rough number of ticks, using <code>ticks()</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> xAxis = d3.axisBottom().scale(xScale).ticks(<span class="number">6</span>) <span class="comment">// set rough # of ticks</span></div></pre></td></tr></table></figure>
+<p>Specifying tick values manually</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> xAixs = d3.axisBottom().scale(xScale).tickValues([<span class="number">0</span>, <span class="number">100</span>, <span class="number">250</span>, <span class="number">700</span>])</div></pre></td></tr></table></figure>
+<h3 id="Formatting-Tick-labels"><a href="#Formatting-Tick-labels" class="headerlink" title="Formatting Tick labels"></a>Formatting Tick labels</h3><p>Enter <code>tickFormat()</code>, which enables you to specify how your numbers should be formatted.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> formatAsPercentage = d3.format(<span class="string">".1%"</span>)</div><div class="line">xAxis.tickFormat(formatAsPercentage)</div></pre></td></tr></table></figure>
+<h1 id="Updates-Transtions-and-Motion"><a href="#Updates-Transtions-and-Motion" class="headerlink" title="Updates, Transtions, and Motion"></a>Updates, Transtions, and Motion</h1><blockquote>
+<p>Transtion: .transition(), .duration()</p>
+<p>Motion: .delay(), .ease()</p>
+</blockquote>
+<p>The argument could be number or function</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.transition()</div><div class="line">.delay(<span class="function">(<span class="params">d, i</span>) =&gt;</span> <span class="number">100</span> * i)</div><div class="line">.duration(<span class="number">300</span>)</div></pre></td></tr></table></figure>
+<p>The default easing is <code>d3.easeCubicInOut</code>, which produces the gradual acceleration and deceleration.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.transition()</div><div class="line">.duration(<span class="number">3000</span>)</div><div class="line">.ease(d3.easeLinear)</div></pre></td></tr></table></figure>
+<ul>
+<li><p>d3.easeCircleIn</p>
+</li>
+<li><p>d3.easeElasticOut</p>
+</li>
+<li><p>d3.easeBounceOut</p>
+</li>
+</ul>
+<h3 id="on-Transition-Starts-and-Ends"><a href="#on-Transition-Starts-and-Ends" class="headerlink" title="on() Transition Starts and Ends"></a>on() Transition Starts and Ends</h3><p>There will be times when you want to make something happen at the start or end of a transition. In those time you can use <code>on()</code> to execute arbitrary code for each element in the selection.</p>
+<p><code>on()</code> expects two arguments:</p>
+<ul>
+<li><p>Either “start” or “end”</p>
+</li>
+<li><p>An anonymous function, to be executed either at the start of a transition, or as soon as it has ended.</p>
+</li>
+</ul>
+<blockquote>
+<p>Notice: Only one transition can be active on any given element at any given time.</p>
+</blockquote>
+<h3 id="Containing-Visual-Elements-With-Clipping-Paths"><a href="#Containing-Visual-Elements-With-Clipping-Paths" class="headerlink" title="Containing Visual Elements With Clipping Paths"></a>Containing Visual Elements With Clipping Paths</h3><p>SVG has support for <em>clipping paths</em>, which you might know as <em>masks</em> in many drawing tools.</p>
+<p>Much like <code>g</code>, <code>clipPath</code> has no visual presence of its own, but it contains visual elements.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;clipPath id=<span class="string">"chart-area"</span>&gt;</div><div class="line">  <span class="xml"><span class="tag">&lt;<span class="name">rect</span> <span class="attr">x</span>=<span class="string">"30"</span> <span class="attr">y</span>=<span class="string">"30"</span> <span class="attr">width</span>=<span class="string">"410"</span> <span class="attr">height</span>=<span class="string">"240"</span>&gt;</span><span class="tag">&lt;/<span class="name">rect</span>&gt;</span></span></div><div class="line">&lt;<span class="regexp">/clipPath&gt;</span></div></pre></td></tr></table></figure>
+<p>Note that outer <code>clipPath</code> element has been given an ID of <code>chart-area</code>. We can use that ID to reference it later. Within the <code>clipPath</code> is a <code>rect</code>, which will function as the mask.</p>
+<p>3 steps to using a clipping path:</p>
+<ol>
+<li><p>Define a <code>clipPath</code> and give it an ID</p>
+</li>
+<li><p>Put visual elements within the <code>clipPath</code> (usuallly just a <code>rect</code>, but this could be <code>circles</code> or any other visual elements)</p>
+</li>
+<li><p>Add a reference to the <code>clipPath</code> form whatever elements you wish to be masked.</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="string">'clipPath'</span>)</div><div class="line"> .attr(<span class="string">'id'</span>, <span class="string">'chart-area'</span>) <span class="comment">// assign an id</span></div><div class="line"> .append(<span class="string">'rect'</span>) <span class="comment">// within the clippath, create new rect</span></div><div class="line"> .attr(<span class="string">'x'</span>, padding)</div><div class="line"> .attr(<span class="string">'y'</span>, padding)</div><div class="line"> .attr(<span class="string">'width'</span>, w - padding * <span class="number">2</span>)</div><div class="line"> .attr(<span class="string">'height'</span>, h - padding * <span class="number">2</span>)</div><div class="line"></div><div class="line"> svg.append(<span class="string">'g'</span>)</div><div class="line">   .attr(<span class="string">'id'</span>, <span class="string">'circles'</span>)</div><div class="line">   .attr(<span class="string">'clip-path'</span>, <span class="string">'url(#chart-area)'</span>)</div><div class="line">   .selectAll(<span class="string">'circle'</span>)</div><div class="line">   .data(dataset)</div><div class="line">   .enter()</div><div class="line">   .append(<span class="string">'circle'</span>)</div></pre></td></tr></table></figure>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/07/01/Simple-usage-of-SW/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/07/10/Simple-Api-of-Mongoose/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="images/avatar.gif" alt="Chen Yu's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        keithwhisper@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    Archives
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/07/">July 2017<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/06/">June 2017<span class="sidebar_archives-count">14</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">15</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">April 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">March 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/02/">February 2017<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">3</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/12/">December 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">November 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">October 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">September 2016<span class="sidebar_archives-count">16</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/08/">August 2016<span class="sidebar_archives-count">30</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/07/">July 2016<span class="sidebar_archives-count">43</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/06/">June 2016<span class="sidebar_archives-count">25</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">May 2016<span class="sidebar_archives-count">24</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Soup/">Soup<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Uncategorized/">Uncategorized<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/">github<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/note/">note<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/">note<span class="sidebar_archives-count">141</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/workNote/">workNote<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/categories/workNote/">workNote<span class="sidebar_archives-count">5</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">195</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            Theme - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+    <a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+             sidebar.about_theme
+            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/keithwhisper" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Keith-CY" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.svg);">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+        <a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-linkedin.svg);">
+                <span class="visuallyhidden">LinkedIn</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;EzCook
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script src="/js/smoothscroll.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

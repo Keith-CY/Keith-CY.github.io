@@ -3,6 +3,185 @@
   
     
     <entry>
+      <title><![CDATA[Tutorial Par1 of Dapp]]></title>
+      <url>/2017/07/13/Tutorial-Par1-of-Dapp/</url>
+      <content type="html"><![CDATA[<h1 id="Spawning-a-new-Dapp"><a href="#Spawning-a-new-Dapp" class="headerlink" title="Spawning a new Dapp"></a>Spawning a new Dapp</h1><p>The dapp will use modern JS technologies: NPM, Webpack2, React, Babel, ES6, JSX and oo7.</p>
+<p>Clone a <code>skeleton</code> repo from parity:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/paritytech/skeleton mydapp</div></pre></td></tr></table></figure>
+<p>This will make your a new repo with everything ready.</p>
+<p><code>cd</code> in to it and remove the origin repository lest it confuse Git.</p>
+<p>It’s liberally licensed (Apache 2.0) so you don’t have to worry about open sourcing your own code(though obviously you’ll be enlightened and want to do that anyway.)</p>
+<p>The next stage is to get all dependencies installed, NPM makes this rather easy, but the bundled script makes it even easier</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./init.sh</div></pre></td></tr></table></figure>
+<p>This should grab and install all that is required. The next thing to do is to build the final web-ready version of the fledling dapp. We use webpack for this.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack</div></pre></td></tr></table></figure>
+<p>You now have a basic dapp built.</p>
+<h1 id="Configuring-its-look"><a href="#Configuring-its-look" class="headerlink" title="Configuring its look"></a>Configuring its look</h1><p>While your dapp may well be built, it is not yet easily discoverable. You would have to host it somewhere. This can be done traditionally with a web server but for development, we will use Parity’s in-built hosting.</p>
+<p>Parity uses a special ‘manifest’ file called to figure out how to display the entry for your dapp in Parity Wallet. This file is called <code>manifest.json</code> and must be placed in the root of your dapp’s directory, in our case, thi sis our ‘build’ directory, <code>dist</code>.</p>
+<p>Open an editor to edit <code>dist/manifest.json</code> you’ll see something like:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"id"</span>: <span class="string">"skeleton"</span>,</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"Skeleton"</span>,</div><div class="line">  <span class="attr">"description"</span>: <span class="string">"A skeleton dapp"</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"0.1"</span>,</div><div class="line">  <span class="attr">"author"</span>: <span class="string">"parity Technologies Ltd"</span>,</div><div class="line">  <span class="attr">"iconUrl"</span>: <span class="string">"title.png"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>The <code>id</code> is the dapp’s unique identity: change that from <code>skeleton</code> to <code>mydapp</code></p>
+</li>
+<li><p>The <code>name</code> is the dapp’s user-visible name: change that to <code>My Dapp</code></p>
+</li>
+<li><p>The <code>description</code> is a user-visible by-line describing what the dapp is good for.</p>
+</li>
+<li><p><code>version</code> is the dapp’s version - you can leave that at <code>0.1</code> for now.</p>
+</li>
+<li><p>You can change the <code>author</code> to your name.</p>
+</li>
+<li><p>The <code>iconUrl</code> is the path(within <code>dist</code>) to a square(best to make it 128 x 128) icon for your dapp.</p>
+</li>
+</ul>
+<h1 id="Getting-it-visible-in-Parity"><a href="#Getting-it-visible-in-Parity" class="headerlink" title="Getting it visible in Parity"></a>Getting it visible in Parity</h1><p>To get Parity to discover your dapp, it needs to be placed into a place that Parity will see it in its local ‘dapps’ directory. We will make a symbolic linke for our dapp’s <code>dist</code> directory(containing all of the ready-built dapp) in Parity’s dapp directory.</p>
+<p>Parity’s directory structure is different depending on your system.</p>
+<p>For Mac, Parity’s local dapp directory sits at <code>$HOME/Library/Application Support/io.parity.ethereum/dapps</code></p>
+<p>Once you have it linked, you should start(or restart, if already running) Parity and head to the Application Page of Parity Wallet. There you will see your new dapp:</p>
+<p>Note: If you are not running <code>npm start</code> in parity/src/js to have a development instance your URL is likely <code>localhost:8180</code> instead of port 3000.</p>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[d3-scale]]></title>
+      <url>/2017/07/13/d3-scale/</url>
+      <content type="html"></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[d3-shape]]></title>
+      <url>/2017/07/12/d3-shape/</url>
+      <content type="html"><![CDATA[<h3 id="d3-shape"><a href="#d3-shape" class="headerlink" title="d3.shape"></a>d3.shape</h3><p>Visualization typically consist of discrete  graphical marks, such as <code>Symbols</code>, <code>arcs</code>, <code>lines</code> and <code>areas</code>. While the ractangles of a bar chart may be easy enough to generate directly using <code>SVG</code> or <code>Canvas</code>, other shapes are complex, such as roudned annular sectors and centripetal Catmull-Rom splines. This module provides a variety of shape generators for your convenience.</p>
+<p>As with other aspects of D3, these shapes are driven by data: each shape generator exposes accessors that control how the input data are mapped to a visual representation.</p>
+<p>You might define a line generator for a time series by <code>scaling</code> field of your data to fit the chart.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> lineGen = d3.line()</div><div class="line">    .x(<span class="function"><span class="params">d</span> =&gt;</span> (d.date))</div><div class="line">    .y(<span class="function"><span class="params">d</span> =&gt;</span> (d.value))</div></pre></td></tr></table></figure>
+<p>This line generator can then be used to compute the <code>d</code> attribute of an SVG path element:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">path.datum(data).attr(<span class="string">'d'</span>, lineGen)</div></pre></td></tr></table></figure>
+<p>Or you can use it to render to a Canvas 2D context:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lineGen.context(context)(data)</div></pre></td></tr></table></figure>
+<h3 id="Installing"><a href="#Installing" class="headerlink" title="Installing"></a>Installing</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://d3js.org/d3-path.v1.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"https://d3js.org/d3-shape.v1.min.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>or</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add d3-shape</div></pre></td></tr></table></figure>
+<h3 id="Arcs"><a href="#Arcs" class="headerlink" title="Arcs"></a>Arcs</h3><p><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/pie.png" alt=""></p>
+<p>The arc genrateor produces a circular or annular sector, as in a pie or donut chart. If the difference between the start and end angles(the regular span) is greater than 2 <em> Math.PI, the arc generator will produce a complete circle or annulus. If it is less than 2 </em> Math.PI, arcs may have rounded corners and angular padding.</p>
+<p>Arcs are always centered at <0, 0="">, use a transform to move the arc to a different position.</0,></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> arc = d3.arc() <span class="comment">// construct a new arc genrator with default settings.</span></div><div class="line"></div><div class="line">arc(&#123;</div><div class="line">  <span class="attr">innerRadius</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">outerRadius</span>: <span class="number">100</span>,</div><div class="line">  <span class="attr">startAngle</span>: <span class="number">0</span>,</div><div class="line">  <span class="attr">endAngle</span>: <span class="built_in">Math</span>.PI / <span class="number">2</span>,</div><div class="line">&#125;)</div><div class="line"><span class="comment">// or</span></div><div class="line"><span class="keyword">const</span> arc = d3.arc()</div><div class="line">    .innerRadius(<span class="number">0</span>)</div><div class="line">    .outerRadius(<span class="number">100</span>)</div><div class="line">    .startAngle(<span class="number">0</span>)</div><div class="line">    .endAngle(<span class="built_in">Math</span>.PI/<span class="number">2</span>)</div><div class="line"></div><div class="line">arc()</div></pre></td></tr></table></figure>
+<p><strong>arc.centroid(arguments)</strong> computes the midpoint <x, y=""> of the center line of the arc that would be generated by the given arguments. The arguments are arbitrary. They are simple propagated to the arc generator’s accessor functions along with the <code>this</code> object.</x,></p>
+<p>To be consistent with the generated arc, the accessors must be deterministirc, i.e., return the same value given the same arguments. The midpoint is defined as (startAngle + endAngle) / 2 and (innerRadius + outerRadius) / 2</p>
+<p><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/centroid-annular-sector.png" alt=""></p>
+<p><strong>arc.cornerRadius([radius])</strong> sets the corner radius to the specified function or number and returns the arc generator.</p>
+<p><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/rounded-annular-sector.png" alt=""></p>
+<p><strong>arc.padAngle([angle])</strong> sets the pad angle to the specifid function or number and returns this arc generator. The pad angle is converted to a fixed linear distances seperateing adajacent arcs, defined as <strong>padRadius * padAngle</strong>.</p>
+<p><strong>arc.context([context])</strong> sets the context and returns this arc generator. If <em>context</em> is not specified, returns the current context, which defaults to null. If the context is not null, then the generated arc is rendered to this context as a sequence of path method calls. Otherwise, a path data string representing the generated arc is returned.</p>
+<h3 id="Pies"><a href="#Pies" class="headerlink" title="Pies"></a>Pies</h3><p>This pie generator does not produce a shape directly, but instead <strong>computes</strong> the necessary angles to represent a tabular dataset as a pie or donut chart. These angles can be passed to an arc generator.</p>
+<p><strong>d3.pie()</strong> constructs a new pie generator with the default settings.</p>
+<p><strong>pie(data[, arguments])</strong> generates a pie for the given array of data, <strong>returning an array of objects representing each datum’s arc angle</strong>. Any additional arguments are arbitrary. They are simply propagated to the pie generator’s accessor functions along with the <code>this</code> object.</p>
+<p>The length of the returned array is the same as data and each element <em>i</em> in the returned array corresponds to the element <em>i</em> in the input data. Each object in the returned array has the following properties:</p>
+<ul>
+<li><p>data: the input datum; the corresponding element in the input data array.</p>
+</li>
+<li><p>value: the numeric value of the arc</p>
+</li>
+<li><p>index: the zero-based sorted index of arc</p>
+</li>
+<li><p>startAgnle: the start angle of the arc</p>
+</li>
+<li><p>endAngle: the end angle of the arc</p>
+</li>
+<li><p>padAngle: the pad angle of the arc</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> data = [<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">13</span>, <span class="number">21</span>];</div><div class="line"><span class="keyword">var</span> arcs = d3.pie()(data);</div><div class="line"><span class="comment">// to</span></div><div class="line">[</div><div class="line">  &#123;<span class="string">"data"</span>:  <span class="number">1</span>, <span class="string">"value"</span>:  <span class="number">1</span>, <span class="string">"index"</span>: <span class="number">6</span>, <span class="string">"startAngle"</span>: <span class="number">6.050474740247008</span>, <span class="string">"endAngle"</span>: <span class="number">6.166830023713296</span>, <span class="string">"padAngle"</span>: <span class="number">0</span>&#125;,</div><div class="line">  &#123;<span class="string">"data"</span>:  <span class="number">1</span>, <span class="string">"value"</span>:  <span class="number">1</span>, <span class="string">"index"</span>: <span class="number">7</span>, <span class="string">"startAngle"</span>: <span class="number">6.166830023713296</span>, <span class="string">"endAngle"</span>: <span class="number">6.283185307179584</span>, <span class="string">"padAngle"</span>: <span class="number">0</span>&#125;,</div><div class="line">  &#123;<span class="string">"data"</span>:  <span class="number">2</span>, <span class="string">"value"</span>:  <span class="number">2</span>, <span class="string">"index"</span>: <span class="number">5</span>, <span class="string">"startAngle"</span>: <span class="number">5.817764173314431</span>, <span class="string">"endAngle"</span>: <span class="number">6.050474740247008</span>, <span class="string">"padAngle"</span>: <span class="number">0</span>&#125;,</div><div class="line">  &#123;<span class="string">"data"</span>:  <span class="number">3</span>, <span class="string">"value"</span>:  <span class="number">3</span>, <span class="string">"index"</span>: <span class="number">4</span>, <span class="string">"startAngle"</span>: <span class="number">5.468698322915565</span>, <span class="string">"endAngle"</span>: <span class="number">5.817764173314431</span>, <span class="string">"padAngle"</span>: <span class="number">0</span>&#125;,</div><div class="line">  &#123;<span class="string">"data"</span>:  <span class="number">5</span>, <span class="string">"value"</span>:  <span class="number">5</span>, <span class="string">"index"</span>: <span class="number">3</span>, <span class="string">"startAngle"</span>: <span class="number">4.886921905584122</span>, <span class="string">"endAngle"</span>: <span class="number">5.468698322915565</span>, <span class="string">"padAngle"</span>: <span class="number">0</span>&#125;,</div><div class="line">  &#123;<span class="string">"data"</span>:  <span class="number">8</span>, <span class="string">"value"</span>:  <span class="number">8</span>, <span class="string">"index"</span>: <span class="number">2</span>, <span class="string">"startAngle"</span>: <span class="number">3.956079637853813</span>, <span class="string">"endAngle"</span>: <span class="number">4.886921905584122</span>, <span class="string">"padAngle"</span>: <span class="number">0</span>&#125;,</div><div class="line">  &#123;<span class="string">"data"</span>: <span class="number">13</span>, <span class="string">"value"</span>: <span class="number">13</span>, <span class="string">"index"</span>: <span class="number">1</span>, <span class="string">"startAngle"</span>: <span class="number">2.443460952792061</span>, <span class="string">"endAngle"</span>: <span class="number">3.956079637853813</span>, <span class="string">"padAngle"</span>: <span class="number">0</span>&#125;,</div><div class="line">  &#123;<span class="string">"data"</span>: <span class="number">21</span>, <span class="string">"value"</span>: <span class="number">21</span>, <span class="string">"index"</span>: <span class="number">0</span>, <span class="string">"startAngle"</span>: <span class="number">0.000000000000000</span>, <span class="string">"endAngle"</span>: <span class="number">2.443460952792061</span>, <span class="string">"padAngle"</span>: <span class="number">0</span>&#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>The first pair of parens, <code>pie()</code> constructs a default pie generator, the second <code>pie()(data)</code> invokes this generator on the dataset, returning an array of objects.</p>
+<p>Note that the returned array is in the same order as the data.</p>
+<h3 id="Lines"><a href="#Lines" class="headerlink" title="Lines"></a>Lines</h3><p>The line generator produces a spline or polyline, as in a line chart. Lines also appear in many other visualization types, such as the links in hierarchical edge bundling.</p>
+<p><strong>d3.line()</strong> constructs a new line generator with default settings.</p>
+<p><strong>line(data)</strong> generates a line for the given array of data. Depending on this line generator’s assciated curve, the given input data may need to be sorted by x-value before being passed to the line generator. If the line generator has a context, then the line is rendered to this context as a sequence of path method calls and this function returns void.</p>
+<p><strong>line.x(fn)</strong> specifies the x accessor.</p>
+<p><strong>line.y(fn)</strong> specifies the y accessor.</p>
+<p><strong>line.defined([defined])</strong> sets the defined accessor.</p>
+<p><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/line-defined.png" alt=""></p>
+<p><strong>line.curve([curve])</strong> sets the curve factory and returns this line genrator. If curve is not specified, returns the current curve factory, which defaults to <strong>curveLinear</strong>.</p>
+<p><strong>d3.lineRadial()</strong> constructs a new radial line generator with the default settings.</p>
+<p><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/line-radial.png" alt=""></p>
+<p>A radial line generator is equivalent to the standard cartesian line generator, except the x and y accessor are replaced with angle and readius accessors.</p>
+<p>Radial lines are always positioned relative to <0, 0="">, use a transform to change the origin.</0,></p>
+<h3 id="Areas"><a href="#Areas" class="headerlink" title="Areas"></a>Areas</h3><p>The area generator produces an area, as in an area chart. An area is defined by two bounding lines, either splines or polilines. Typically two lines share the same x-value, differing only in y-value; most commonly, y0 is defined as a constant representing zero.  The first line (the top line) is defined by x1 and y1 and is rendered first; the second line (the base line) is defined by x0 and y0 and is rendered second, with the points in reverse order.</p>
+<p><strong>d3.area()</strong> constructs a new area generator with the default settings.</p>
+<p><strong>area.data()</strong> generats area for the given array of data. Depending on this area generator’s associated curve.</p>
+<p><strong>area.x([x])</strong> sets x0 to x and x1 to null.</p>
+<p><strong>area.x0()</strong> sets the x0 accessor.</p>
+<p><strong>area.defined()</strong></p>
+<p><strong>d3.areaRadial()</strong></p>
+<p><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/area-radial.png" alt=""></p>
+<h3 id="Curves"><a href="#Curves" class="headerlink" title="Curves"></a>Curves</h3><p>Curves are typically not constructed or used directly, insread being passed to <code>line.curve</code> and <code>arec.curve</code>. For example:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> line = d3.line()</div><div class="line">  .x(<span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123; <span class="keyword">return</span> x(d.date) &#125;)</div><div class="line">  .y(<span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123; <span class="keyword">return</span> y(d.value) &#125;)</div><div class="line">  .curve(d3.curveCatmullRom.alpha(<span class="number">0.5</span>))</div></pre></td></tr></table></figure>
+<ul>
+<li><p>d3.curveBasis(context)</p>
+</li>
+<li><p>d3.curveBasisClosed(context)</p>
+</li>
+<li><p>d3.curveBasisOpen(context)</p>
+</li>
+<li><p>d3.curveBundle(context)</p>
+</li>
+<li><p>d3.curveCardinal(context)</p>
+</li>
+<li><p>d3.curveCardinalClosed(context)</p>
+</li>
+<li><p>d3.curveLinear(context)</p>
+</li>
+<li><p>d3.curveStep(context)</p>
+</li>
+<li><p>d3.curveStepAfter(context)</p>
+</li>
+<li><p>d3.curveStepBefore(context)</p>
+</li>
+</ul>
+<h3 id="Links"><a href="#Links" class="headerlink" title="Links"></a>Links</h3><p>The link shape generates a smooth cubic Bezier curve from a source point to a target point. The tangents of the curve at the start and end are either <code>vertical</code>, <code>horizontal</code>, or <code>radial</code>.</p>
+<p><strong>d3.linkVertical()</strong>, returns a new link generator with vertical tangents.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> link = d3.linkVertical()</div><div class="line">    .x(<span class="function"><span class="keyword">function</span>(<span class="params">d</span>)</span>&#123; <span class="keyword">return</span> d.x &#125;)</div><div class="line">    .y(<span class="function"><span class="keyword">function</span>(<span class="params">d</span>)</span>&#123; <span class="keyword">return</span> d.y &#125;)</div></pre></td></tr></table></figure>
+<p><strong>d3.linkHorizontal()</strong>, returns a new link generator with horizontal tangents.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> link = d3.linkHorizontal()</div><div class="line">    .x(<span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123; <span class="keyword">return</span> d.y &#125;)</div><div class="line">    .y(<span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123; <span class="keyword">return</span> d.x &#125;)</div></pre></td></tr></table></figure>
+<h3 id="Stacks"><a href="#Stacks" class="headerlink" title="Stacks"></a>Stacks</h3><p>Some shape types can be stakced, placing one shape adjacent to another.</p>
+<p>Stacked charts can show overall value and per-category value simultaneously.</p>
+<p><strong>d3.stack()</strong>, constructs a new stack generator with the default settings.</p>
+<p><strong>stack(data[, arguments])</strong>, generates a stack for the given array of data, returning an array of representing each series. Any additional arguments are arbitrary, they are simply propagated to accessors along with <code>this</code> object.</p>
+<p>The series are determined by the keys accessor; each series <em>i</em> in the returned array corresponds to the <em>i</em> th key. Each series is an array o points, where each point <em>j</em> corresponds to the <em>j</em> th element in the input <em>data</em>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> data = [</div><div class="line">  &#123;<span class="attr">month</span>: <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>, <span class="number">0</span>, <span class="number">1</span>), <span class="attr">apples</span>: <span class="number">3840</span>, <span class="attr">bananas</span>: <span class="number">1920</span>, <span class="attr">cherries</span>: <span class="number">960</span>, <span class="attr">dates</span>: <span class="number">400</span>&#125;,</div><div class="line">  &#123;<span class="attr">month</span>: <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>, <span class="number">1</span>, <span class="number">1</span>), <span class="attr">apples</span>: <span class="number">1600</span>, <span class="attr">bananas</span>: <span class="number">1440</span>, <span class="attr">cherries</span>: <span class="number">960</span>, <span class="attr">dates</span>: <span class="number">400</span>&#125;,</div><div class="line">  &#123;<span class="attr">month</span>: <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>, <span class="number">2</span>, <span class="number">1</span>), <span class="attr">apples</span>:  <span class="number">640</span>, <span class="attr">bananas</span>:  <span class="number">960</span>, <span class="attr">cherries</span>: <span class="number">640</span>, <span class="attr">dates</span>: <span class="number">400</span>&#125;,</div><div class="line">  &#123;<span class="attr">month</span>: <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">2015</span>, <span class="number">3</span>, <span class="number">1</span>), <span class="attr">apples</span>:  <span class="number">320</span>, <span class="attr">bananas</span>:  <span class="number">480</span>, <span class="attr">cherries</span>: <span class="number">640</span>, <span class="attr">dates</span>: <span class="number">400</span>&#125;</div><div class="line">];</div><div class="line"></div><div class="line"><span class="comment">// To produce a stack of this data</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> stack = d3.stack()</div><div class="line">    .keys([ <span class="string">'apples'</span>, <span class="string">'bananas'</span>, <span class="string">'cherries'</span>, <span class="string">'dates'</span> ])</div><div class="line">    .order(d3.stackOrderNone)</div><div class="line">    .offset(d3.stackOffsetNone)</div><div class="line"></div><div class="line"><span class="comment">// returned</span></div><div class="line"></div><div class="line">[</div><div class="line">  [[   <span class="number">0</span>, <span class="number">3840</span>], [   <span class="number">0</span>, <span class="number">1600</span>], [   <span class="number">0</span>,  <span class="number">640</span>], [   <span class="number">0</span>,  <span class="number">320</span>]], <span class="comment">// apples</span></div><div class="line">  [[<span class="number">3840</span>, <span class="number">5760</span>], [<span class="number">1600</span>, <span class="number">3040</span>], [ <span class="number">640</span>, <span class="number">1600</span>], [ <span class="number">320</span>,  <span class="number">800</span>]], <span class="comment">// bananas</span></div><div class="line">  [[<span class="number">5760</span>, <span class="number">6720</span>], [<span class="number">3040</span>, <span class="number">4000</span>], [<span class="number">1600</span>, <span class="number">2240</span>], [ <span class="number">800</span>, <span class="number">1440</span>]], <span class="comment">// cherries</span></div><div class="line">  [[<span class="number">6720</span>, <span class="number">7120</span>], [<span class="number">4000</span>, <span class="number">4400</span>], [<span class="number">2240</span>, <span class="number">2640</span>], [<span class="number">1440</span>, <span class="number">1840</span>]], <span class="comment">// dates</span></div><div class="line">]</div></pre></td></tr></table></figure>
+<p><strong>stack.keys([keys])</strong>, sets the keys accessor to the specified function or array and returns this stack generator.</p>
+<p><strong>stack.order([order])</strong>, sets the order accessor to the specified functino or array and returns this stack generator. If order is not specified, returns the current order accessor, which default to <code>stackOrderNone</code>, this uses the order given by the key accessor.</p>
+<ul>
+<li><p>d3.stackOrderAscending(series)</p>
+</li>
+<li><p>d3.stackOrderDescending(series)</p>
+</li>
+<li><p>d3.stackOrderInsideOut(series)</p>
+</li>
+<li><p>d3.stackOrderNone(series)</p>
+</li>
+<li><p>d3.stackOrderReverse(series)</p>
+</li>
+</ul>
+<p><strong>stack.offset([offest])</strong>, sets the offset accessor to the specified function or array, and returns this stack generator. If no offset is specified, returns the current offset accessor, which default to <code>stackOffsetNone</code>, this uses a zero baseline.</p>
+<ul>
+<li><p>d3.stackOffsetDiverging(series, order)</p>
+</li>
+<li><p>d3.stackOffsetExpand(series, order)</p>
+</li>
+<li><p>d3.stackOffsetNone(series, order)</p>
+</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[d3.range]]></title>
       <url>/2017/07/12/d3-range/</url>
       <content type="html"><![CDATA[<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">d3.range([start, ]stop[, step])</div></pre></td></tr></table></figure>

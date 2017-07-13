@@ -3,6 +3,91 @@
   
     
     <entry>
+      <title><![CDATA[Tutorial Part 3 of Dapp]]></title>
+      <url>/2017/07/13/Tutorial-Part-3-of-Dapp/</url>
+      <content type="html"><![CDATA[<h1 id="Parity-Bonds"><a href="#Parity-Bonds" class="headerlink" title="Parity Bonds"></a>Parity Bonds</h1><p>It’s time to get down and dirty with the blockchain.</p>
+<p>For this we will introduce the <code>oo7-parity</code> package, which provides a high-level reactive <code>Bond</code> API.</p>
+<p>To set this up, all we need do is import <code>bonds</code> from the <code>oo7-parity</code> module, so ensure you have this at the top of your file:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; bonds &#125; <span class="keyword">from</span> <span class="string">'oo7-parity'</span></div></pre></td></tr></table></figure>
+<h2 id="Watch-the-block"><a href="#Watch-the-block" class="headerlink" title="Watch the block"></a>Watch the block</h2><p>For our first task, we will introduce the simplest of all bonds: <code>bonds.height</code>. This evaluates to <code>the number of the latest block</code>, expressed as a simple number.</p>
+<p>In <code>app.jsx</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  render () &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">Rspan</span>&gt;</span>&#123;bonds.height&#125;<span class="tag">&lt;/<span class="name">Rspan</span>&gt;</span></span></div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>It’s not especially pretty so you can add some style on it.</p>
+<p>We also provide the <code>formatBlockNumber</code> function:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> formatBlockNumber = <span class="function">(<span class="params">n</span>) =&gt;</span> <span class="string">'#'</span> + (<span class="string">''</span> + n).replace(<span class="regexp">/(\d)(?=(\d&#123;3&#125;)+$)/g</span>, <span class="string">'$1,'</span>)</div></pre></td></tr></table></figure>
+<p>You can use it through</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; bonds, formatBlockNumber &#125; <span class="keyword">from</span> <span class="string">'oo7-parity'</span></div></pre></td></tr></table></figure>
+<h2 id="Blocks"><a href="#Blocks" class="headerlink" title="Blocks"></a>Blocks</h2><p>The block number is great and all, but perhaps we’re more intereseted in the latest block itself. Parity can help us there with the <code>bonds.blocks</code> object. This is a lazy-evaluated ‘array’ of bonds which can subscribe to. To give yourself an idea of its capabilities, let’s try it out in the console. First we will expose the <code>bonds</code> object to the environment by adding this at the end of our obejct’s constructor:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.bonds = bonds</div></pre></td></tr></table></figure>
+<p>Having reloaded, quickly open the Chrome JS console, alter the environment to 127.0.0.1 and evaluate the block at number 69 with <code>bonds.blocks[69].log()</code></p>
+<p>Note that since it’s all asynchronous, we must use the <code>.log()</code> trick to feed the result into the console (it’s exactly equivalent to <code>.map(console.log)</code>) The result is, of course, the block object representing the 69th mined block on this chain.</p>
+<p>Naturally, <code>bonds.blocks</code> is able to accept any number, even a bond, as its subscript. Let’s make our dapp always give us the timestamp of the latest block.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div&gt;</div><div class="line">  Latest block timestamp is:</div><div class="line">  <span class="xml"><span class="tag">&lt;<span class="name">Rspan</span>&gt;</span>&#123;bonds.blocks[bonds.blocks.height].map(b =&gt; b.timestamp).map(_ =&gt; _.toString())&#125;<span class="tag">&lt;/<span class="name">Rspan</span>&gt;</span></span></div><div class="line">&lt;<span class="regexp">/div&gt;</span></div></pre></td></tr></table></figure>
+<p>That map is a bit cumbersome, the <code>bond</code> API knows about subscripting, which means the <code>.timestamp</code> can be moved out of the <code>map</code></p>
+<p>Furthermore, <code>bonds.blocks[bonds.height]</code> is a fairly common expression. So much so that it has a shorter alias: <code>bonds.head</code>, so in fact the simplest means of expressing this becomes:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123; bonds.head.timestamp.map(<span class="function"><span class="params">_</span> =&gt;</span> _.toString())&#125;</div></pre></td></tr></table></figure>
+<h2 id="Composing-expressions"><a href="#Composing-expressions" class="headerlink" title="Composing expressions"></a>Composing expressions</h2><p>These expressios are sometimes very useful, but often you want to do some blockchain based computation on this information.</p>
+<p>Parity puts various means at your disposal to help you here:</p>
+<ul>
+<li><p><code>bonds.balance(address)</code>: evaluates to the current balanece of account at <code>address</code></p>
+</li>
+<li><p><code>bonds.transactionCount(address)</code>: evaluates to the current transaction count (‘nonce’) of account at <code>address</code></p>
+</li>
+<li><p><code>bonds.code(address)</code>: evaluates to the current ‘contract’ code of account at <code>address</code></p>
+</li>
+<li><p><code>bonds.storageAt(address, location)</code>: evaluates to the value in storage <code>location</code> of account at <code>address</code></p>
+</li>
+</ul>
+<p>Use the first one:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;div&gt;</div><div class="line">  Current block authors balance is:</div><div class="line">  <span class="xml"><span class="tag">&lt;<span class="name">Rspan</span>&gt;</span></span></div><div class="line">    &#123;bonds.balance(bonds.head.author).map(formatBalance)&#125;</div><div class="line">  <span class="tag">&lt;/<span class="name">Rspan</span>&gt;</span></div><div class="line">&lt;<span class="regexp">/div&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="Our-balance"><a href="#Our-balance" class="headerlink" title="Our balance"></a>Our balance</h2><p>Parity can help us get information about our own accounts in a reactive manner.</p>
+<p>Some apis like:</p>
+<ul>
+<li><p><code>bonds.coinbase</code>: evaluates to the node’s current block authoring address.</p>
+</li>
+<li><p><code>bonds.accounts</code>: evaluates to the list of accounts available for the dapp to use.</p>
+</li>
+<li><p><code>bonds.me</code>: evaluates to the preferred account for this dapp to use. In parity, this is the account visible in the Parity Signer at the bottom right of the page.</p>
+</li>
+<li><p><code>bonds.accountsInfo</code>: evaluates to the mapping between dapp-visible addresses and account metadata.</p>
+</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Tutorial Part2 of Dapp]]></title>
+      <url>/2017/07/13/Tutorial-Part2-of-Dapp/</url>
+      <content type="html"><![CDATA[<h1 id="oo7-Bonds"><a href="#oo7-Bonds" class="headerlink" title="oo7 Bonds"></a>oo7 Bonds</h1><p>Now we have our basic dapp harness, we can start introducing more interesting functionality. Without too much ado, let’s get started. Head in to <code>src/client/scripts/app.jsx</code>. You will see our basic file:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  render () &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This is a JSX file. Baiscally means that can handle embedded HTML when describing how React components should be rendered.</p>
+<h2 id="Your-first-Bond"><a href="#Your-first-Bond" class="headerlink" title="Your first Bond"></a>Your first <code>Bond</code></h2><p>The first thing we’ll do is introduce the <code>oo7 library</code>. This introduces into Javascript the notion of reactive value known as ‘bonds’. Reactive values are similar to normal variables, except that any places in which they are used will automatically upate themselves as the value changes.</p>
+<p>The oo7 package is still very much in development, as such there might be one or two rough edges in this tutorial.</p>
+<p>Our first example will just demonstrate how <code>Bond</code> can introduce effortless reactivity by dynamically replicating the contents of an editable text field into a <code>&lt;span&gt;</code>.</p>
+<p>Import the needed components by placing three lines at the top of <code>app.jsx</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; Bond &#125; <span class="keyword">from</span> <span class="string">'oo7'</span></div><div class="line"><span class="keyword">import</span> &#123; Rspan &#125; <span class="keyword">from</span> <span class="string">'oo7-react'</span></div><div class="line"><span class="keyword">import</span> &#123; InputBond &#125; <span class="keyword">from</span> <span class="string">'parity-reactive-ui'</span></div></pre></td></tr></table></figure>
+<p>Next we need to introduce a new instance of a <code>Bond</code>. It will represent the current contents of a text field. We will initialize it in our class’s contructor. Insert these lines directly into the <code>App</code> class decalration.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">constructor</span> () &#123;</div><div class="line">  <span class="keyword">super</span> ()</div><div class="line">  <span class="keyword">this</span>.bond = <span class="keyword">new</span> Bond()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Your code should now look like this:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"><span class="keyword">import</span> &#123; Bond &#125; <span class="keyword">from</span> <span class="string">'oo7'</span></div><div class="line"><span class="keyword">import</span> &#123; Rspan &#125; <span class="keyword">from</span> <span class="string">'oo7-react'</span></div><div class="line"><span class="keyword">import</span> &#123; InputBond &#125; <span class="keyword">from</span> <span class="string">'parity-reactive-ui'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span> () &#123;</div><div class="line">    <span class="keyword">super</span> ()</div><div class="line">    <span class="keyword">this</span>.bond = <span class="keyword">new</span> Bond()</div><div class="line">  &#125;</div><div class="line">  render () &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Hello World<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Next we need to create the text entry field and the <code>&lt;span&gt;</code> element(in which the text field’s contents will be reflected). We will use a version of Semantic UI’s <code>Input</code> element which has been specially modified to propagate the value into a named <code>Bond</code>. This is called <code>InputBond</code>.</p>
+<p>Similarly, for the <code>span</code> we will use a special ‘reactive’ version of the <code>span</code> element which is able to accept <code>Bond</code>s as children and values of certain properties. This is known as <code>Rspan</code>.</p>
+<p>Change the <code>&lt;div&gt;Hello World&lt;/div&gt;</code> line to:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div&gt;</div><div class="line">  <span class="xml"><span class="tag">&lt;<span class="name">InputBond</span> <span class="attr">bond</span>=<span class="string">&#123;this.bond&#125;</span> <span class="attr">placeholder</span>=<span class="string">"Go ahead and type some text"</span> /&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">Rspan</span>&gt;</span>&#123;this.bond&#125;<span class="tag">&lt;/<span class="name">Rspan</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>As you see there’s not all that much here, we just tell the text field input <code>InputBond</code> to place its value into <code>this.bond</code> and conversely tell <code>Rspan</code> to display that value from <code>this.bond</code>.</p>
+<p>Run webpack and let it watch your files to ensure your dapp is continuously rebuilt.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm start</div></pre></td></tr></table></figure>
+<h2 id="Transforming-Bonds"><a href="#Transforming-Bonds" class="headerlink" title="Transforming Bonds"></a>Transforming Bonds</h2><p><code>Bond</code>s don’t just have to pass on data; they can also represent transformations on the data.</p>
+<p>One example of a transform on text would be simple upper-casing. A function to upper-case text would be <code>text =&gt; text.toUpperCase()</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Rspan&gt;&#123;<span class="keyword">this</span>.bond.map(<span class="function"><span class="params">t</span> =&gt;</span> t.toUpperCase())&#125;&lt;<span class="regexp">/Rspan&gt;</span></div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Tutorial Par1 of Dapp]]></title>
       <url>/2017/07/13/Tutorial-Par1-of-Dapp/</url>
       <content type="html"><![CDATA[<h1 id="Spawning-a-new-Dapp"><a href="#Spawning-a-new-Dapp" class="headerlink" title="Spawning a new Dapp"></a>Spawning a new Dapp</h1><p>The dapp will use modern JS technologies: NPM, Webpack2, React, Babel, ES6, JSX and oo7.</p>

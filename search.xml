@@ -3,6 +3,138 @@
   
     
     <entry>
+      <title><![CDATA[Some Concepts on BlockChain]]></title>
+      <url>/2017/07/25/Some-Concepts-on-BlockChain/</url>
+      <content type="html"><![CDATA[<h2 id="Getting-BlockChain-Data"><a href="#Getting-BlockChain-Data" class="headerlink" title="Getting BlockChain Data:"></a>Getting BlockChain Data:</h2><ul>
+<li><p>Blocks;</p>
+</li>
+<li><p>Transactions;</p>
+</li>
+<li><p>Sending Transactions;</p>
+</li>
+</ul>
+<h2 id="Cryptocurrency-Functions"><a href="#Cryptocurrency-Functions" class="headerlink" title="Cryptocurrency Functions:"></a>Cryptocurrency Functions:</h2><ul>
+<li><p>Generating Private/Public keys, Hashing, Address Encoding etc;</p>
+</li>
+<li><p>Creating transactions;</p>
+</li>
+<li><p>Signing transactions;</p>
+</li>
+<li><p>Support functions;</p>
+</li>
+</ul>
+<h2 id="Build-A-Block"><a href="#Build-A-Block" class="headerlink" title="Build A Block"></a>Build A Block</h2><ul>
+<li><p>Receive the transaction broadcase;</p>
+</li>
+<li><p>Verify the crypto in the transaction;</p>
+</li>
+<li><p>Add it to the unconfirmed Pool;</p>
+</li>
+<li><p>Do some hard maths on all the transactions in the pool;</p>
+</li>
+<li><p>Broadcast the Block to the network;</p>
+</li>
+<li><p>The Block is added to the blockchain;</p>
+</li>
+</ul>
+<h2 id="Blockchains-as-Distributed-Database"><a href="#Blockchains-as-Distributed-Database" class="headerlink" title="Blockchains as Distributed Database"></a>Blockchains as Distributed Database</h2><ul>
+<li><p>Everyone running the Bitcoin client is part of the network;</p>
+</li>
+<li><p>New blocks are boradcast to the network;</p>
+</li>
+<li><p>Everyone updates their local copy of the blockchain;</p>
+</li>
+<li><p>If you’re behind the current height of the chain, you can ask other nodes for copies of the Blocks needed to catch-up;</p>
+</li>
+</ul>
+<h2 id="Implications"><a href="#Implications" class="headerlink" title="Implications:"></a>Implications:</h2><ul>
+<li><p>Tranactions take time to ‘confirm’;</p>
+</li>
+<li><p>Each transaction, once it’s in an accepted block has a height;</p>
+</li>
+<li><p>Each increase in blockchain height is called a confirmation;</p>
+</li>
+<li><p>A transaction 5 blocks below the top of the chain is said to have ‘6 confirmations’;</p>
+</li>
+<li><p>The merchant cant decide how many confirmations is sensible to warit for;</p>
+</li>
+<li><p>Current default is it wait for 6 confirmations for anything of value;</p>
+</li>
+<li><p>Blocks store data, in Bitcoin, it’s the transactions, but it could be any digital data;</p>
+</li>
+<li><p>Blocks are created periodically(on average, 10mins for Bitcoin) by a process called ‘mining’;</p>
+</li>
+<li><p>A block represents a set of events that have occurred over a particular time frame(ususally, since the previous block);</p>
+</li>
+<li><p>Block aren’t identified by their height, but by their id; (may be multiple blocks at same height)</p>
+</li>
+<li><p>Block id is the hash of the metadata in the block;</p>
+</li>
+<li><p>Block id is a digial fingerprint of that block;</p>
+</li>
+<li><p>Some metadata:</p>
+<ul>
+<li><p>A version number of the block format;</p>
+</li>
+<li><p>A link to the previous block that came immediately before it;</p>
+</li>
+<li><p>Merkle root of all the transactions in the block;</p>
+</li>
+<li><p>Timestamp of when the block was created;</p>
+</li>
+<li><p>Mining difficulty;</p>
+</li>
+<li><p>Nonce for Proof-of-Work;</p>
+</li>
+</ul>
+</li>
+<li><p>All the transactions that were recorded in this block;</p>
+</li>
+<li><p>All the transactions in the block are used to create the Merkle Root Hash;</p>
+</li>
+<li><p>It’s added to the other metadata in the header, with a nonce;</p>
+</li>
+<li><p>We hash the whole thing, look at the resulting hash, if it starts with a required number of leading ‘0’(which means the hash need to be small enough), we’ve solved the block and broadcast it;</p>
+</li>
+<li><p>If not, we increment the nonce and try again;</p>
+</li>
+<li><p>Repeat until we find the leading zero;</p>
+</li>
+<li><p>Difficulty defines how many leading zeros when solveing the block;</p>
+</li>
+<li><p>The more zeros we need to find, the more attemps at hashing we need.</p>
+</li>
+<li><p>More hashing power becomes the driving force amongst miners;</p>
+</li>
+<li><p>Miner insert a special transaction at the beginning of block called ‘coinbase’ transaction. This ‘pays’ the miner for the work they did, and collects the transaction fees from all the transactions;</p>
+</li>
+</ul>
+<h2 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h2><ul>
+<li><p>Transactions tranfer control of coins from inputs to outputs;</p>
+</li>
+<li><p>Control is enforced by cryptography;</p>
+</li>
+</ul>
+<h2 id="Construct-A-Transaction"><a href="#Construct-A-Transaction" class="headerlink" title="Construct A Transaction"></a>Construct A Transaction</h2><ul>
+<li><p>You need the address of the person you’re going to pay;</p>
+</li>
+<li><p>Find UTXO’s Unspent Transaction Outputs that exceed the amount you wish to pay;</p>
+</li>
+<li><p>Calculate the transaction fee(optional but recommended);</p>
+</li>
+<li><p>Create the outputs with the correct scriptPubKey; scriptPubKey defines who can spend the coin by specifying a small verification program that is run in order to perform that verification.</p>
+</li>
+<li><p>Sign the transaction details;</p>
+</li>
+<li><p>Broadcast the transaction, see if it works;</p>
+</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Some Note on Blockchain]]></title>
       <url>/2017/07/22/Some-Note-on-Blockchain/</url>
       <content type="html"><![CDATA[<h2 id="Getting-BlockChain-Data"><a href="#Getting-BlockChain-Data" class="headerlink" title="Getting BlockChain Data:"></a>Getting BlockChain Data:</h2><ul>

@@ -3,6 +3,46 @@
   
     
     <entry>
+      <title><![CDATA[Cache Object]]></title>
+      <url>/2017/07/29/Cache-Object/</url>
+      <content type="html"><![CDATA[<p>The Cache interface provides a storage mechanism for <code>Request</code> / <code>Response</code> object pairs that are cahced, for example as part of the <code>ServiceWorker</code> lifecycle. Note that the Cache Interface is exposed to windowed scopes as well as workers. You don’t have to use it in conjunction with service workers, even though it is defined in the service worker spec.</p>
+<p>An orgin can have <code>multiple Cache Objects</code>. You are responsible for implementing how your script handles <code>Cache Update</code>. Items in a Cache do not get updated unless explictly requested – they don’t expires unless deleted.</p>
+<p>Use <code>CacheStorage.open(cacheName)</code> to open a specific named cache object and then call any of the cache methods to maintain the cache.</p>
+<blockquote>
+<p>The caching API doesn’t honor HTTP caching headers.</p>
+</blockquote>
+<h3 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h3><ul>
+<li><p>Cache.match(request, options)</p>
+<p>Returns a <code>Promise</code> that resolves to the response associated with the first matching request in the Cache Object.</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cache.match(request).then(<span class="function"><span class="params">response</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">if</span> (response) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<ul>
+<li><p>Cache.matchAll(request, options)</p>
+<p>Returns a <code>Promise</code> that resolves to an array of all matching requests in the Cache Object.</p>
+</li>
+<li><p>Cache.add(request)</p>
+<p>Takes a URL, retrieves it and adds the resulting response object to the given cache. This is functionally equivalent to calling <code>fetch()</code>, then using <code>Cache.put()</code> to add the results to the cache.</p>
+</li>
+<li><p>Cache.addAll(requests)</p>
+<p>Takes an array of URLs, retrieves them, and adds the resulting response objects to the given cache.</p>
+</li>
+<li><p>Cache.put(request, response)</p>
+<p>Takes both a request and its response and adds it to the given cache. // namely cache the Request/Response pair.</p>
+</li>
+<li><p>Cache.delete(request, options)</p>
+<p>Finds the Cache entry whose key is the request, and if found, deletes the Cache entry and returns a <code>Promsie</code> that resolves to <code>true</code>. Otherwise resolve to <code>false</code>.</p>
+</li>
+<li><p>Cache.keys(request, options)</p>
+<p>Returns a <code>Promise</code> that resolves to an array of <code>Cache Key</code>.</p>
+</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Some Concepts on BlockChain]]></title>
       <url>/2017/07/25/Some-Concepts-on-BlockChain/</url>
       <content type="html"><![CDATA[<h2 id="Getting-BlockChain-Data"><a href="#Getting-BlockChain-Data" class="headerlink" title="Getting BlockChain Data:"></a>Getting BlockChain Data:</h2><ul>

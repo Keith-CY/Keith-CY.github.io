@@ -3,6 +3,58 @@
   
     
     <entry>
+      <title><![CDATA[koa-graphql]]></title>
+      <url>/2017/08/06/koa-graphql/</url>
+      <content type="html"><![CDATA[<p>Create a GraphQL HTTP server with Koa.</p>
+<h3 id="Usage-with-Koa-Router"><a href="#Usage-with-Koa-Router" class="headerlink" title="Usage with Koa-Router"></a>Usage with Koa-Router</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</div><div class="line"><span class="keyword">const</span> Router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)</div><div class="line"><span class="keyword">const</span> GraphqlHTTP = <span class="built_in">require</span>(<span class="string">'koa-graphql'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</div><div class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> Router()</div><div class="line"></div><div class="line">router.all(<span class="string">'/graphql'</span>, graphqlHTTP(&#123;</div><div class="line">  <span class="attr">schema</span>: MyGraphQLSchema,</div><div class="line">  <span class="attr">graphiql</span>: ture,</div><div class="line">&#125;))</div><div class="line"></div><div class="line">app.use(router.routes()).use(router.allowedMethods())</div></pre></td></tr></table></figure>
+<h3 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h3><p>The <code>GraphqlHTTP</code> function accpets the following options:</p>
+<ul>
+<li><p><code>schema</code>: A <code>GraphQLSchema</code> instance from <code>graphql.js</code>, required.</p>
+</li>
+<li><p><code>graphiql</code>: If <code>true</code>, presetns <a href="https://github.com/graphql/graphiql" target="_blank" rel="external">GraphiQL</a> when the route with a <code>/graphiql</code> appended is loaded in a browser. We recommended that you set <code>graphiql</code> to <code>ture</code> when your app is in development, because it’s quite useful. You may or may not want it in production.</p>
+</li>
+<li><p><code>rootValue</code>: A value to pass as the <code>rootValue</code> to the <code>graphql()</code> function from <code>graphql.js</code></p>
+</li>
+<li><p><code>context</code>: A value to pass as the <code>context</code> to the <code>graphql()</code> function from <code>graphql.js</code>. If <code>context</code> is not provided, the <code>ctx</code> object is passes as the context.</p>
+</li>
+<li><p><code>pretty</code>: If <code>true</code>, any JSON response will be pretty-printed.</p>
+</li>
+<li><p><code>formatError</code>: An optional function which will be used to format any errors produced by fulfilling a GraphQL operation. If no function is provided, GraphQL’s default spec-compliant <code>formatError</code> function will be used.</p>
+</li>
+<li><p><code>extensions</code>: An optional function for adding additional metadata to the GraphQL response as a key-value object. The result will be added to <code>extensions</code> field in the resulting JSON. This is often useful place to add development time metadata such as the runtime of a query or the amount of resources consumed. This may be an async function. The function is given one object as an argument: <code>{ document, variables, operationName, result }</code></p>
+</li>
+<li><p><code>validationRules</code>: Optional additional validation rules queries must satisfy in addition to those defined by the GraphQL spec.</p>
+</li>
+</ul>
+<h3 id="HTTP-Usage"><a href="#HTTP-Usage" class="headerlink" title="HTTP Usage"></a>HTTP Usage</h3><p>Once installed at a path, <code>koa-graphql</code> will accept requests with the parameters:</p>
+<ul>
+<li><p><code>query</code>: A string GraphQL document to be executed.</p>
+</li>
+<li><p><code>variables</code>: The runtime values to use for any GraphQL query variables as a JSON object.</p>
+</li>
+<li><p><code>operationName</code>: If the provided <code>query</code> contains mutiple named operations, this specifies which operation should be executed. If not provided, a 400 error will be returned if the <code>query</code> contains multiple named operations.</p>
+</li>
+<li><p><code>raw</code>: If the <code>graphql</code> option is enabled and the <code>raw</code> parameter is provided raw JSON will always be returned instead of GraphQL even when loaded from a browser.</p>
+</li>
+</ul>
+<p>GraphQL will first look for each parameter in the URL’s query-string:</p>
+<p><code>/graphql?query=query+getUser($id:ID){user(id:$id){name}}&amp;variables={&quot;id&quot;:&quot;4&quot;}</code></p>
+<p>If not found in the query-string, it will look in the POST request body.</p>
+<p>If the POST body has not been parsed, koa-graphql will interpret it depending on the provided <em>Contetn-Type</em> header:</p>
+<ul>
+<li><p><code>application/json</code>: the POST body will be parsed as a JSON object.</p>
+</li>
+<li><p><code>application/x-www-form-urlencoded</code>: this POST body will be parsed as a url-encoded string of key-value pairs.</p>
+</li>
+<li><p><code>application/graphql</code>: The POST body will be parsed as GraphQL query string, which provides the <code>query</code> parameter.</p>
+</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Note on GraphQL(2)]]></title>
       <url>/2017/08/04/Note-on-GraphQL-2/</url>
       <content type="html"><![CDATA[<h3 id="Execution"><a href="#Execution" class="headerlink" title="Execution"></a>Execution</h3><p>After being validated, a GraphQL query is executed by a GraphQL server which returns a result that mirrors the shape of the requested query, typically as JSON.</p>

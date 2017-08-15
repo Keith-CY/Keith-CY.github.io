@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.4 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            Note on TS2 of edX | 
+        
+        EzCook
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Chen Yu">
+    <meta name="description" content="null">
+    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="EzCook">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Note on TS2 of edX | EzCook">
+    <meta property="og:description" content="null">
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00BCD4;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #00BCD4 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #00BCD4 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #00BCD4 !important;
+  }
+
+  .toTop {
+    background: #000BCD4 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #000BCD4;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #000BCD4;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #000BCD4;
+  }
+
+  .post-toc a:hover {
+    color: #00BCD4;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body {
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text {
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+        <script type="text/javascript">
+            queue.offer(function(){
+                $('body').attr('data-original', 'https://api.i-meto.com/bing?null');
+            });
+        </script>
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Classification-of-types-in-TypeScript"><span class="post-toc-number">1.</span> <span class="post-toc-text">Classification of types in TypeScript</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Basic-or-Primitive-Types"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Basic or Primitive Types</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Complex-or-Non-Primitive-Types"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Complex or Non-Primitive Types</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Type-Assertions"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">Type Assertions</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Complex-Types-in-TypeScript"><span class="post-toc-number">2.</span> <span class="post-toc-text">Complex Types in TypeScript</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Excess-Property"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">Excess Property</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Class-Types"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">Class Types</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Difference-between-the-static-and-instance-sides-of-classes"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">Difference between the static and instance sides of classes</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Function-Types"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">Function Types</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Indexable-Types"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">Indexable Types</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Classes"><span class="post-toc-number">3.</span> <span class="post-toc-text">Classes</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Public-Private-and-Protected-Modifiers"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">Public, Private, and Protected Modifiers</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Parameter-Propertes"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">Parameter Propertes</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Accessors"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">Accessors</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Static-Properties"><span class="post-toc-number">4.</span> <span class="post-toc-text">Static Properties</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Abstract-Classes"><span class="post-toc-number">5.</span> <span class="post-toc-text">Abstract Classes</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Advanced-Techniques"><span class="post-toc-number">6.</span> <span class="post-toc-text">Advanced Techniques</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Constructor-functions"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">Constructor functions</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Using-a-class-as-an-interface"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">Using a class as an interface</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Inheritance"><span class="post-toc-number">7.</span> <span class="post-toc-text">Inheritance</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Interfaces-Extending-Classes"><span class="post-toc-number">7.1.</span> <span class="post-toc-text">Interfaces Extending Classes</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Type-Compatibility"><span class="post-toc-number">8.</span> <span class="post-toc-text">Type Compatibility</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Comparing-Two-Functions"><span class="post-toc-number">8.1.</span> <span class="post-toc-text">Comparing Two Functions</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Enums"><span class="post-toc-number">8.2.</span> <span class="post-toc-text">Enums</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Classes-1"><span class="post-toc-number">8.3.</span> <span class="post-toc-text">Classes</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Contextual-Type"><span class="post-toc-number">8.4.</span> <span class="post-toc-text">Contextual Type</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Functions-and-function-Types"><span class="post-toc-number">9.</span> <span class="post-toc-text">Functions and function Types</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Function-Types-1"><span class="post-toc-number">9.1.</span> <span class="post-toc-text">Function Types</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Context-and-Scope"><span class="post-toc-number">10.</span> <span class="post-toc-text">Context and Scope</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Overloads"><span class="post-toc-number">11.</span> <span class="post-toc-text">Overloads</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Namespaces"><span class="post-toc-number">12.</span> <span class="post-toc-text">Namespaces</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Multi-file-namespaces"><span class="post-toc-number">12.1.</span> <span class="post-toc-text">Multi-file namespaces</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Referencing-namespacing-entities-in-your-code"><span class="post-toc-number">12.2.</span> <span class="post-toc-text">Referencing namespacing entities in your code</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Aliases"><span class="post-toc-number">12.3.</span> <span class="post-toc-text">Aliases</span></a></li></ol></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                Note on TS2 of edX
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="images/avatar.gif" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Chen Yu</strong>
+        <span>Aug 11, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Note on TS2 of edX&url=http://yoursite.com//2017/08/11/Note-on-TS2-of-edX/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Note on TS2 of edX&url=http://yoursite.com//2017/08/11/Note-on-TS2-of-edX/index.html&via=Chen Yu" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/08/11/Note-on-TS2-of-edX/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/08/11/Note-on-TS2-of-edX/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h3 id="Classification-of-types-in-TypeScript"><a href="#Classification-of-types-in-TypeScript" class="headerlink" title="Classification of types in TypeScript"></a>Classification of types in TypeScript</h3><p>Types are classified into two main classes in TypeScript:</p>
+<h4 id="Basic-or-Primitive-Types"><a href="#Basic-or-Primitive-Types" class="headerlink" title="Basic or Primitive Types"></a>Basic or Primitive Types</h4><ul>
+<li><p>boolean</p>
+</li>
+<li><p>number</p>
+</li>
+<li><p>string</p>
+</li>
+<li><p>array: <code>number[]</code>, <code>Array&lt;number&gt;</code></p>
+</li>
+<li><p>tuple: <code>[string, number]</code></p>
+</li>
+<li><p>enum: <code>enum Color {Red, Green = 2, Blue}</code>, <code>let c : Color = Color.blue</code></p>
+</li>
+<li><p>null</p>
+</li>
+<li><p>undefined</p>
+</li>
+<li><p>any</p>
+</li>
+<li><p>void: exists purely to indicate the absence of a value, such as in a function with no return value.</p>
+</li>
+</ul>
+<h4 id="Complex-or-Non-Primitive-Types"><a href="#Complex-or-Non-Primitive-Types" class="headerlink" title="Complex or Non-Primitive Types"></a>Complex or Non-Primitive Types</h4><ul>
+<li><p>classes</p>
+</li>
+<li><p>interface</p>
+</li>
+</ul>
+<h4 id="Type-Assertions"><a href="#Type-Assertions" class="headerlink" title="Type Assertions"></a>Type Assertions</h4><p>Sometimes you’ll end up in a situation where you’ll know more about a value than TypeScript does. Usually this will happen when you know the type of some entity could be more specific than its current type.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> someValue : any = <span class="string">'this is a string'</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> strLength : number = (<span class="xml"><span class="tag">&lt;<span class="name">string</span>&gt;</span>someValue).length</span></div><div class="line">let strLength : numner = (someValue as string).length</div></pre></td></tr></table></figure>
+<h3 id="Complex-Types-in-TypeScript"><a href="#Complex-Types-in-TypeScript" class="headerlink" title="Complex Types in TypeScript"></a>Complex Types in TypeScript</h3><ul>
+<li><p>Interface</p>
+</li>
+<li><p>Class Types</p>
+</li>
+<li><p>Function Types</p>
+</li>
+<li><p>Indexable Types</p>
+</li>
+<li><p>Classes</p>
+</li>
+</ul>
+<h4 id="Excess-Property"><a href="#Excess-Property" class="headerlink" title="Excess Property"></a>Excess Property</h4><p>If <code>SquareConfig</code> can have <code>color</code> and <code>width</code> propertes, but could <em>also</em> have any number of other properties, then we could define it like so:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">interface SquareConfig &#123;</div><div class="line">  color?: string;</div><div class="line">  width?: number;</div><div class="line">  [propName: string]: any;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Class-Types"><a href="#Class-Types" class="headerlink" title="Class Types"></a>Class Types</h4><p>Implementing an interface</p>
+<p>One of the most common use of interfaces in language like C# and java, that of explicitly enforcing that a class meets a particular contract, is also possible in TypeScript.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">interface ClockInterface &#123;</div><div class="line">  <span class="attr">currentTime</span>: <span class="built_in">Date</span>,</div><div class="line">  setTime(d: <span class="built_in">Date</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Clock</span> <span class="title">implements</span> <span class="title">ClockInterface</span> </span>&#123;</div><div class="line">  currentTime: <span class="built_in">Date</span>;</div><div class="line">  setDate(d: <span class="built_in">Date</span>) &#123;</div><div class="line">    <span class="keyword">this</span>.currentTime = d;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">constructor</span> (h: number, m: number) &#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Difference-between-the-static-and-instance-sides-of-classes"><a href="#Difference-between-the-static-and-instance-sides-of-classes" class="headerlink" title="Difference between the static and instance sides of classes"></a>Difference between the static and instance sides of classes</h4><p>When working with classes and interfaces, it helps to keep in mind that a class has <code>two</code> types: the type of the static side and the type of the instance side.</p>
+<p>You may notice that if you create an interface with a constructor signature and try to create a class that implements this interface you get an error:</p>
+<p>This is because when a class implements an interface, only the <strong>instance side</strong> of the class is checked. Since the constructor sits in the static side, it is not included in this check.</p>
+<p>Instead, you would need to work with the static side of the class directly. In this example, we define two interfaces, <code>ClockConstructor</code> for the constructor and <code>Clockinterface</code> for the instance methods.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">interface ClockConstructor &#123;</div><div class="line">  <span class="keyword">new</span> (hour: number, <span class="attr">minute</span>: number): ClockInterface;</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface ClockInterface &#123;</div><div class="line">  tick()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createClock</span>(<span class="params">ctor: ClockConstructor, hour: number, minute: number</span>): <span class="title">ClockInterface</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> ctor(hour, minute)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Function-Types"><a href="#Function-Types" class="headerlink" title="Function Types"></a>Function Types</h4><p>To describe a function type with an interface, we give the interface a call signature. This is like a function declaration with only the parameter list and return type given. Each parameter in the parameters list requires both name and type.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">interface SearchFunc &#123;</div><div class="line">  (source: string, <span class="attr">subString</span>: string): boolean;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Once defined, we can use this function type interface like we would other interfaces.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> mySearch: SearchFunc</div><div class="line">mySearch = <span class="function"><span class="keyword">function</span> (<span class="params">source, subString</span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> result = source.search(subString)</div><div class="line">  <span class="keyword">return</span> result &gt; <span class="number">-1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>For function types to correctly type-check, the names of the parameters do not need to match. We could have, for example, written the above example like this:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> mySearch: SearchFunc</div><div class="line">mySearch = <span class="function"><span class="keyword">function</span> (<span class="params">src: string, sub: string</span>): <span class="title">boolean</span> </span>&#123;</div><div class="line">  <span class="keyword">let</span> result = src.search(sub)</div><div class="line">  <span class="keyword">return</span> result &gt; <span class="number">-1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Function parameters are checked one at a time, with the type in each corresponding parameter position checked against each other. If you do not want to specify types at all, TypeScript’s contextual typing can infer the argument types since the function value is assigned directly to a variable of type <code>SearchFunc</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> mySearch: SearchFunc</div><div class="line">mySearch = <span class="function"><span class="keyword">function</span> (<span class="params">src, sub</span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> result = src.search(sub)</div><div class="line">  <span class="keyword">return</span> result &gt; <span class="number">-1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Indexable-Types"><a href="#Indexable-Types" class="headerlink" title="Indexable Types"></a>Indexable Types</h4><p>Intexable types have an <em>index signature</em> that describes the types we can use to index into the object, along with the corresponding return types when indexing.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">interface StringArray &#123;</div><div class="line">  [index: number]: string;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> myArray: StringArray;</div><div class="line">myArray = [<span class="string">'Bob'</span>, <span class="string">'Fred'</span>];</div></pre></td></tr></table></figure>
+<p>Above we have a StringArray interface that has an index signature. This index signature states that when a StringArray is indexed with a number, it will return a string.</p>
+<p>There are two types of supported index signature: string an number. It is possible to support both types of indexer, but the type returned from a numeric indexer must be a subtype of the type returned from the string indexer. This is because when indexing witha  number, javascript will actually convert that to a string before indexing into a object.</p>
+<h3 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeter</span> </span>&#123;</div><div class="line">  greeting: string;</div><div class="line">  <span class="keyword">constructor</span> (message: string) &#123;</div><div class="line">    <span class="keyword">this</span>.greeting = message</div><div class="line">  &#125;</div><div class="line">  greet () &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">"Hello, "</span> + <span class="keyword">this</span>.greeting;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> greeter = <span class="keyword">new</span> Greeter(<span class="string">'World'</span>)</div></pre></td></tr></table></figure>
+<p>This class has three members: a property called <code>greeting</code>, a constructor, and a method <code>greet</code>.</p>
+<p>In the last line we construct an instance of the Greeter class using <code>new</code>. This calls into the constructor we defined earlier, creating a new object with the Greeter shape, and running the constructor to initialize it.</p>
+<h4 id="Public-Private-and-Protected-Modifiers"><a href="#Public-Private-and-Protected-Modifiers" class="headerlink" title="Public, Private, and Protected Modifiers"></a>Public, Private, and Protected Modifiers</h4><p>Public by default.</p>
+<p>When a member is marked <code>private</code>, it cannot be accessed from outside of its containing class.</p>
+<p>When comparing types that have <code>private</code> and <code>protected</code> members, TypeScript treats these types differently. For two types to be considered compatible, if one of them has a <code>private</code> member, then the other must have a <code>private</code> member that originated in the same declaration.</p>
+<p>The <code>protected</code> modifier acts much like the <code>private</code> modifier with the exectpion the members declared <code>protected</code> can also be accessed by instance of deriving classes.</p>
+<p>A constructor may also be marked <code>protected</code>. This means that the class cannot be instantiated outside of its containing class, but can be extended.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line">  protected name: string;</div><div class="line">  protected <span class="keyword">constructor</span> (theName: string) &#123;</div><div class="line">    <span class="keyword">this</span>.name = theName</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Employee can extend Person</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span> <span class="keyword">extends</span> <span class="title">Person</span> </span>&#123;</div><div class="line">  private department: string;</div><div class="line">  <span class="keyword">constructor</span> (name: string, department: string) &#123;</div><div class="line">    <span class="keyword">super</span>(name)</div><div class="line">    <span class="keyword">this</span>.department = department</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> howard = <span class="keyword">new</span> Employee(<span class="string">'Howard'</span>, <span class="string">'Sales'</span>)</div><div class="line"><span class="keyword">let</span> john = <span class="keyword">new</span> Persno(<span class="string">'john'</span>) <span class="comment">// Error, the 'Person' constructor is protceted.</span></div></pre></td></tr></table></figure>
+<p>You can make properties readonly by using the <code>readonly</code> keyword. Readonly properties must be initilized at their declaration or in the constructor.</p>
+<h4 id="Parameter-Propertes"><a href="#Parameter-Propertes" class="headerlink" title="Parameter Propertes"></a>Parameter Propertes</h4><p><em>Parameter Properties</em> let you create and initialize a member in one place.</p>
+<h4 id="Accessors"><a href="#Accessors" class="headerlink" title="Accessors"></a>Accessors</h4><p>TypeScript supports <strong>getter/setters</strong> as a way of intercepting accesses to a member of an object. This gives you a way of having finer-grained control over how a member is accessed on each object.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> passcode = <span class="string">'secret passcode'</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Employee</span> </span>&#123;</div><div class="line">  private _fullName: string;</div><div class="line">  get fullName(): string &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>._fullName</div><div class="line">  &#125;</div><div class="line">  set fullName (newName: string) &#123;</div><div class="line">    <span class="keyword">if</span> (passcode &amp;&amp; passcode === <span class="string">'secret passcode'</span>) &#123;</div><div class="line">      <span class="keyword">this</span>._fullName = newName</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">'Error: Unauthorized update of employee'</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Accessors with a get and no set are automatically inferred to be <code>readonly</code>.</p>
+<h3 id="Static-Properties"><a href="#Static-Properties" class="headerlink" title="Static Properties"></a>Static Properties</h3><p>Static Members of a class are those visible on class itself rather than on the instance.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Grid</span> </span>&#123;</div><div class="line">  <span class="keyword">static</span> origin = &#123;<span class="attr">x</span>: <span class="number">0</span>, <span class="attr">y</span>: <span class="number">0</span>&#125;</div><div class="line">  calculatedDistanceFromOrigin(point: &#123; <span class="attr">x</span>:number, <span class="attr">y</span>: number &#125;) &#123;</div><div class="line">    <span class="keyword">let</span> xDist = (point.x - Grid.origin.x)</div><div class="line">    <span class="keyword">let</span> yDist = (point.y - Grid.origin.y)</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.sqrt(xDist * xDist + yDist * yDist) / <span class="keyword">this</span>.scale</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">constructor</span> (public scale: number) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> grid1 = <span class="keyword">new</span> Grid(<span class="number">1.0</span>)</div><div class="line"><span class="keyword">let</span> grid2 = <span class="keyword">new</span> Grid(<span class="number">5.0</span>)</div></pre></td></tr></table></figure>
+<h3 id="Abstract-Classes"><a href="#Abstract-Classes" class="headerlink" title="Abstract Classes"></a>Abstract Classes</h3><p>Abstract Classes are base classes from which other classes may be derived. They may not be instantiated directly. Unlike an interface, an abstract class may contain implementation details for its members. The <code>abstract</code> keyword is used to define abstract classes as well as abstract methods within an abstract class.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">abstract <span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</div><div class="line">  abstract makeSound(): <span class="keyword">void</span>;</div><div class="line">   move () : <span class="keyword">void</span> &#123;</div><div class="line">     <span class="built_in">console</span>.log &#123;<span class="string">'roaming the earth...'</span>&#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Methods within an abstract class that are marked as abstract do not contain an implementation and must be implemented in derived classes. Abstract methods share a similar syntax to interface methods. Both define the signature of a method without including a method body. However, abstract methods must include the <code>abstract</code> keyword and may optionally include access modifier.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">abstract <span class="class"><span class="keyword">class</span> <span class="title">Department</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span> (public name: string) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  printName () : <span class="keyword">void</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Department name: '</span> + <span class="keyword">this</span>.name)</div><div class="line">  &#125;</div><div class="line">  abstract printMeeting (): <span class="keyword">void</span> <span class="comment">// must be implemented in derived classes</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AccountingDepartment</span> <span class="keyword">extends</span> <span class="title">Department</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span> () &#123;</div><div class="line">    <span class="keyword">super</span>(<span class="string">'Accounting and Auditing'</span>)</div><div class="line">  &#125;</div><div class="line">  printMeeting () : <span class="keyword">void</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'The Accounting Department meets each Monday at 10am'</span>)</div><div class="line">  &#125;</div><div class="line">  generateReports () : <span class="keyword">void</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Generating accounting reports...'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> department: Department; <span class="comment">// ok to create a reference to an abstract type</span></div><div class="line">department = <span class="keyword">new</span> Department(); <span class="comment">// error: cannot create an instance of an abstract class</span></div><div class="line">department = <span class="keyword">new</span> AccountingDepartment(); <span class="comment">// ok to create and assign a non-abstract subclass</span></div><div class="line">department.printName()</div><div class="line">department.printMeeting()</div><div class="line">department.generateReports()</div></pre></td></tr></table></figure>
+<h3 id="Advanced-Techniques"><a href="#Advanced-Techniques" class="headerlink" title="Advanced Techniques"></a>Advanced Techniques</h3><h4 id="Constructor-functions"><a href="#Constructor-functions" class="headerlink" title="Constructor functions"></a>Constructor functions</h4><p>When you declare a class in TypeScript, you are actually creating multiple delcaration at the same time. The first is the type of the <code>instance</code> of the class</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Greeter</span> </span>&#123;</div><div class="line">  greeting: string;</div><div class="line">  <span class="keyword">constructor</span> (message: string) &#123;</div><div class="line">    <span class="keyword">this</span>.greeting = message</div><div class="line">  &#125;</div><div class="line">  greet () &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'Hello, '</span> + <span class="keyword">this</span>.message</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> greeter: Greeter</div><div class="line">greeter = <span class="keyword">new</span> Greeter(<span class="string">'world'</span>)</div><div class="line"><span class="built_in">console</span>.log(greeter.greet())</div></pre></td></tr></table></figure>
+<p>Here, when we say <code>let greeter: Greeter</code> we’re using <code>Greeter</code> as the type of instance of the class <code>Greeter</code>. This is almost second nature to programmers from other oo language.</p>
+<p>We’re also creating another value that we call the <code>constructor function</code>. This is the function that is called when we <code>new</code> up instance of the class. To see what this looks in practice, let’s take a look at the JavaScript created the above example:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> Greeter = (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">Greeter</span>(<span class="params">message</span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.greeting = message</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  Greeter.prototype.greet = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'Hello, '</span> + <span class="keyword">this</span>.greeting</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> Greeter</div><div class="line">&#125;)()</div><div class="line"></div><div class="line"><span class="keyword">let</span> greeter</div><div class="line">greeter = <span class="keyword">new</span> Greeter(<span class="string">'world'</span>)</div><div class="line"><span class="built_in">console</span>.log(greeter.greet())</div></pre></td></tr></table></figure>
+<p>Here <code>let Greeter</code> is going to be assigned the constructor function. When we call <code>new</code> and run this function, we get an instance of the class. The constructor function also contains all of the static members of the class. Another way to think of each class is that there is an <em>instance</em> side and a <em>static</em> side.</p>
+<h4 id="Using-a-class-as-an-interface"><a href="#Using-a-class-as-an-interface" class="headerlink" title="Using a class as an interface"></a>Using a class as an interface</h4><p>As mentioned above, a class declaration creates two things: a type representing instances of the class, and a constructor function. Because classes creates types, you can use them in the same places you would be able to use interfaces:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> </span>&#123;</div><div class="line">  x: number;</div><div class="line">  y: number;</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface Point3D extends Point &#123;</div><div class="line">  <span class="attr">z</span>: number;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> point3d: Point3D = &#123;</div><div class="line">  <span class="attr">x</span>: <span class="number">1</span>,</div><div class="line">  <span class="attr">y</span>: <span class="number">2</span>,</div><div class="line">  <span class="attr">z</span>: <span class="number">3</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Inheritance"><a href="#Inheritance" class="headerlink" title="Inheritance"></a>Inheritance</h3><p>In TypeScript, we can use common object-orientad pattern. Of course, one of the most fundamental patterns in class-based programming is being able to extend existing classes to create new ones using inheritance.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</div><div class="line">  name: string;</div><div class="line">  <span class="keyword">constructor</span> (theName: string) &#123;</div><div class="line">    <span class="keyword">this</span>.name = theName</div><div class="line">  &#125;</div><div class="line">  move (distanceInMeters: number = <span class="number">0</span>) &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;<span class="keyword">this</span>.name&#125;</span> move <span class="subst">$&#123;distanceInMeters&#125;</span>`</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Snake</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span> (name: string) &#123;</div><div class="line">    <span class="keyword">super</span>(name)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  move (distanceInMeters = <span class="number">5</span>) &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Slithering...'</span>)</div><div class="line">    <span class="keyword">super</span>.move(distanceInMeters)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Horse</span> <span class="keyword">extends</span> <span class="title">Animal</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span> (name: string) &#123;</div><div class="line">    <span class="keyword">super</span>(name)</div><div class="line">  &#125;</div><div class="line">  move (distanceInMeters = <span class="number">45</span>) &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Galloping...'</span>)</div><div class="line">    <span class="keyword">super</span>.move(distanceInMeters)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Derived classes that contain constructor functions must call <code>super()</code> which will execute the constructor function on the base class.</p>
+<h4 id="Interfaces-Extending-Classes"><a href="#Interfaces-Extending-Classes" class="headerlink" title="Interfaces Extending Classes"></a>Interfaces Extending Classes</h4><p>When an interface type extends a class type it inherits the memembers of the class but not their implementations. <strong>It is as if the interface had declared all of the members of the class without providing an implementation.</strong> Interface inherit event the private and protected members of a base class. This means that when you create an interface that extends a class with private or protected memebrs, that interface type can only be implemented by the class or a subclass of it.</p>
+<p>This is useful when you have a large inheritance hierarchy, but want to specify that you code works iwth only subclasses that have certain properties. The subclasses don’t have to be related besides inheriting from the base class.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Control</span> </span>&#123;</div><div class="line">  private state: any;</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface SelectableControl extends Control &#123;</div><div class="line">  select () : <span class="keyword">void</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span> <span class="keyword">extends</span> <span class="title">Control</span> </span>&#123;</div><div class="line">  select () &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextBox</span> <span class="keyword">extends</span> <span class="title">Control</span> </span>&#123;</div><div class="line">  select () &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Image</span> </span>&#123;</div><div class="line">  select () &#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Location</span> </span>&#123;</div><div class="line">  select () &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>In the above example, <code>SelectableControl</code> contains all of the members of Control, including the <code>private state</code> property. Since <code>state</code> is a private member it is only possible for descendants of Control to implement <code>SelectableControl</code>. This is because only descendants of Control will have a <code>state</code> private member that originates in the same declaration, which is a requirement for private members to be compatible.</p>
+<p>Within the <code>Control</code> class it is possible to access the <code>state</code> private member through an instance of <code>SelectableControl</code>. Effectively, a <code>SelectableControl</code> acts like a <code>Control</code> that is known to have a <code>select</code> method. The <code>Button</code> and <code>TextBox</code> classes are subtypes of <code>SelectableControl</code>, but <code>Image</code> and <code>Location</code> are not.</p>
+<h3 id="Type-Compatibility"><a href="#Type-Compatibility" class="headerlink" title="Type Compatibility"></a>Type Compatibility</h3><p>Type compatibility in TypeScript is based on structural subtyping. Structural typing is a way of relating types based on solely on their members. This is in contrast with normal typing.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">interface Named &#123;</div><div class="line">  <span class="attr">name</span>: string;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line">  name: string;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> p: Named;</div><div class="line"></div><div class="line"><span class="comment">// OK, because of structural typing</span></div><div class="line">p = <span class="keyword">new</span> Person()</div></pre></td></tr></table></figure>
+<p>A basic rule for TypeScript’s structural type system is that x is compatible with y if y has at least the same members as x.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">interface Named &#123;</div><div class="line">  <span class="attr">name</span>: string;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> x: Named;</div><div class="line"></div><div class="line"><span class="comment">// y's inferred type is &#123; name: string; location: string; &#125;</span></div><div class="line"><span class="keyword">let</span> y = &#123; <span class="attr">name</span>: <span class="string">'Alice'</span>, <span class="attr">location</span>: <span class="string">'Seattle'</span> &#125;</div><div class="line">x = y</div></pre></td></tr></table></figure>
+<h4 id="Comparing-Two-Functions"><a href="#Comparing-Two-Functions" class="headerlink" title="Comparing Two Functions"></a>Comparing Two Functions</h4><p>While comparing primitive types and object types is relatively straightforward, the question of what kinds of functions should be considered compatible is a bit more involved.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> x = <span class="function">(<span class="params">a: number</span>) =&gt;</span> <span class="number">0</span>;</div><div class="line"><span class="keyword">let</span> y = <span class="function">(<span class="params">b: number, s: string</span>) =&gt;</span> <span class="number">0</span>;</div><div class="line"></div><div class="line">y = x <span class="comment">// ok</span></div><div class="line">x = y <span class="comment">// Error</span></div></pre></td></tr></table></figure>
+<p>To check if x is assignable to y, we first look at the parameter list. Each parameter in x must have a corresponding parameter in y with a compatible type. Note that the name of the parameters are not considered, only their types. In this case, every parameter of x has a corresponding compatible parameter in y, so x is assignable to y.</p>
+<p>To ensure that every parameter in x can be checked in y.</p>
+<h4 id="Enums"><a href="#Enums" class="headerlink" title="Enums"></a>Enums</h4><p>Enums are compatible with numbers, and numers are compatible with enums.</p>
+<p>Enum values from different enum types are considered incompatible.</p>
+<h4 id="Classes-1"><a href="#Classes-1" class="headerlink" title="Classes"></a>Classes</h4><p>Classes work similarly to object literal types and interfaces with one exception: they have both a static and an instance type. When comparing two objects of a class type, only members of the instance are compared. Static memebrs and constructor do not affect compatibility.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span> </span>&#123;</div><div class="line">  feet: number;</div><div class="line">  <span class="keyword">constructor</span> (name: string, numFeet: number) &#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Size</span> </span>&#123;</div><div class="line">  feet: number;</div><div class="line">  <span class="keyword">constructor</span> (numFeet: number) &#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> a: Animal</div><div class="line"><span class="keyword">let</span> s: Size</div><div class="line"></div><div class="line">a = s <span class="comment">// ok</span></div><div class="line">s = a <span class="comment">// ok</span></div></pre></td></tr></table></figure>
+<p>Private and protected members in a class affect their compatibility. When an instance of a class is checked for compatibility, if the target type contains a private member, then the source type must also contain a private member that originated from the same class.</p>
+<h4 id="Contextual-Type"><a href="#Contextual-Type" class="headerlink" title="Contextual Type"></a>Contextual Type</h4><p>Type inference also work in ‘the other direction’ in some cases in TypeScript. This is known as ‘contextual typing’. Contextual typing occurs when the type of an expression is implied by its location.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.onmousedown = <span class="function"><span class="keyword">function</span> (<span class="params">mouseEvent</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(mouseEvent.buton) <span class="comment">// &lt;- Error</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Functions-and-function-Types"><a href="#Functions-and-function-Types" class="headerlink" title="Functions and function Types"></a>Functions and function Types</h3><p>TypeScript functions can be created both as a named function or as an anonymous function. This allows you to choose the most appropriate approach for your application, whether you’re building a list of functions in an API or a one-off function to hand off to another function.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Named Function</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> x + y</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Anonymouse Function</span></div><div class="line"><span class="keyword">let</span> myAdd = <span class="function"><span class="keyword">function</span> (<span class="params">x, y</span>) </span>&#123; <span class="keyword">return</span> x + y &#125;</div></pre></td></tr></table></figure>
+<h4 id="Function-Types-1"><a href="#Function-Types-1" class="headerlink" title="Function Types"></a>Function Types</h4><p>Typing the function.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x: number, y: number</span>): <span class="title">number</span> </span>&#123;</div><div class="line">  <span class="keyword">return</span> x + y</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Writing the function type</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> myAdd: <span class="function">(<span class="params">x: number, y: number</span>) =&gt;</span> number = <span class="function"><span class="keyword">function</span>(<span class="params">x, y</span>) </span>&#123; <span class="keyword">return</span> x + y &#125;</div></pre></td></tr></table></figure>
+<p>A function’s type has the same two parts: the type of the arguments and the return type. When writing out the whole function type, both parts are required.</p>
+<h3 id="Context-and-Scope"><a href="#Context-and-Scope" class="headerlink" title="Context and Scope"></a>Context and Scope</h3><p><code>this</code> and <code>arrow function</code>.</p>
+<p>In JavaScript, <strong><code>this</code> is a variable that’s set when a function is called</strong>. This makes it a very powerful and flexible feature, but it comes at the cost of always having to know about the context that a function is executing in.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> deck = &#123;</div><div class="line">  <span class="attr">suits</span>: [<span class="string">'hearts'</span>, <span class="string">'spades'</span>, <span class="string">'clubs'</span>, <span class="string">'diamonds'</span>],</div><div class="line">  <span class="attr">cards</span>: <span class="built_in">Array</span>(<span class="number">52</span>),</div><div class="line">  <span class="attr">createCardPicker</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">let</span> pickedCard = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">52</span>)</div><div class="line">      <span class="keyword">let</span> pickedSuit = <span class="built_in">Math</span>.floor(pickedCard / <span class="number">13</span>)</div><div class="line">      <span class="keyword">return</span> &#123; <span class="attr">suit</span>: <span class="keyword">this</span>.suits[pickedSuit], <span class="attr">card</span>: pickedCard % <span class="number">13</span> &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Here the function returned by <code>createCardPicker</code> will be called by <code>window</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> deck &#123;</div><div class="line">  <span class="attr">suits</span>: [<span class="string">'hearts'</span>, <span class="string">'spades'</span>, <span class="string">'clubs'</span>, <span class="string">'diamonds'</span>],</div><div class="line">  <span class="attr">cards</span>: <span class="built_in">Array</span>(<span class="number">52</span>),</div><div class="line">  <span class="attr">createCardPicker</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">// <span class="doctag">NOTE:</span> the line below is now an arrow function, which will capture 'this' when then function is declared.</span></div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">      <span class="keyword">let</span> pickedCard = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">52</span>)</div><div class="line">      <span class="keyword">let</span> pickedSuit = <span class="built_in">Math</span>.floor(pickedCard / <span class="number">13</span>)</div><div class="line">      <span class="keyword">return</span> &#123; <span class="attr">suit</span>: <span class="keyword">this</span>.suits[pickedSuit], <span class="attr">card</span>: pickedCard % <span class="number">13</span> &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Overloads"><a href="#Overloads" class="headerlink" title="Overloads"></a>Overloads</h3><p>JavaScript is inherently a very dynamic language. It’s not uncommon for a single JavaScript function to return different types of objects based on the shape of the arguments passed in.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> suits = [<span class="string">'hearts'</span>, <span class="string">'spades'</span>, <span class="string">'clubs'</span>, <span class="string">'diamonds'</span>]</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">pickCard</span>(<span class="params">x</span>): <span class="title">any</span> </span>&#123;</div><div class="line">  <span class="comment">// Check to see if we're working with an object/array</span></div><div class="line">  <span class="comment">// if so, they gave us the deck and we'll pick the card</span></div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> x == <span class="string">'object'</span>) &#123;</div><div class="line">    <span class="keyword">let</span> pickedCard = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * x.length)</div><div class="line">    <span class="keyword">return</span> pickedCard</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> x === <span class="string">'number'</span>) &#123;</div><div class="line">    <span class="keyword">let</span> pickedSuit = <span class="built_in">Math</span>.floor(x / <span class="number">13</span>)</div><div class="line">    <span class="keyword">return</span> &#123; <span class="attr">suit</span>: suits[pickedSuit], <span class="attr">card</span>: x % <span class="number">13</span> &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Here the <code>pickCard</code> function will return two different things based on what the user ahs passed in.</p>
+<p>Use overloads.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> suits = [<span class="string">'hearts'</span>, <span class="string">'spades'</span>, <span class="string">'clubs'</span>, <span class="string">'diamonds'</span>]</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">pickCard</span>(<span class="params">x: &#123; suit: string, card: number &#125;[]</span>): <span class="title">number</span></span></div><div class="line"><span class="title">function</span> <span class="title">pickCard</span>(<span class="params">x: number</span>): &#123; suit: string, <span class="attr">card</span>: number &#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">pickCard</span>(<span class="params">x</span>): <span class="title">any</span> </span>&#123;</div><div class="line">  <span class="comment">// Check to see if we're working with an object/array</span></div><div class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> x === <span class="string">'object'</span>) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> x === <span class="string">'number'</span>) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Note that the <code>function pickCard(x): any</code> is not part of the overload list.</p>
+<h3 id="Namespaces"><a href="#Namespaces" class="headerlink" title="Namespaces"></a>Namespaces</h3><p>Namespaces are used as a way to organize the code so that you can keep track of your types and not worry about name collisions with other object. Instead of putting lots of different names into the global namespace, you can wrap up your object into a namespace. The choice of what objects go in what namespaces is totally up to your organization preference.</p>
+<p>If you want the interfaces and classes in your namespaces to be visible outside the namespace, you need to preface their declaration with <code>export</code> keyword.</p>
+<p>Also keep in mind that classes, interfaces and variable names within a namespace has to be unique.</p>
+<h4 id="Multi-file-namespaces"><a href="#Multi-file-namespaces" class="headerlink" title="Multi-file namespaces"></a>Multi-file namespaces</h4><p>You can split a namespace across many files, even though the fiels a separate, they can each contribute to the same namespace and can be consumed as if they were all defined in one place. Because there are dependencies between files. you will add <code>reference</code> tags to tell the compiler about the relationship between the files.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// ZooAnimals.ts</span></div><div class="line"></div><div class="line">namespace Zoo &#123;</div><div class="line">  interface Animal &#123;</div><div class="line">    <span class="comment">//<span class="doctag">NOTE:</span> we do not need the 'export' here since this interface will only be accessible by enttites from within the Zoo namespace.</span></div><div class="line">    skinType: string;</div><div class="line">    isMammal() : boolean;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ZooWild.ts</span></div><div class="line"><span class="comment">/// &lt;reference path="ZooAnimals.ts" /&gt;</span></div><div class="line">namespace Zoo &#123;</div><div class="line">  <span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">Reptile</span> <span class="title">implements</span> <span class="title">Animal</span> </span>&#123;</div><div class="line">    <span class="comment">// <span class="doctag">NOTE:</span> we need the 'export' here to be able to access this class and instantiate objects of the Reptile type</span></div><div class="line">    skinType: <span class="string">'scales'</span>;</div><div class="line">    isMammal () &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ZooBirds.ts</span></div><div class="line"><span class="comment">/// &lt;reference path="ZooAnimals.ts" /&gt;</span></div><div class="line">namespace Zoo &#123;jkj</div><div class="line">  <span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">Bird</span> <span class="title">implements</span> <span class="title">Animal</span> </span>&#123;</div><div class="line">    skinType: <span class="string">'feather'</span></div><div class="line">    isMammal () &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Once there are multiple fiels involved, we’ll need to make sure all of the compiled code gets loaded, we can use concatenated output using the <code>--outFile</code> flag to compile all of the input files into a single JavaScript output file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tsc --outFile zoo.js ZooAnimal.ts ZooWild.ts ZooBirds.ts</div></pre></td></tr></table></figure>
+<h4 id="Referencing-namespacing-entities-in-your-code"><a href="#Referencing-namespacing-entities-in-your-code" class="headerlink" title="Referencing namespacing entities in your code"></a>Referencing namespacing entities in your code</h4><p>Namespaces can be accessed either in the same file where the namespace is defined or another .ts file. The only control on access is whether you are using the <code>export</code> keyword or not for the namespace entities.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> parrot = <span class="keyword">new</span> Zoo.Bird();</div></pre></td></tr></table></figure>
+<h4 id="Aliases"><a href="#Aliases" class="headerlink" title="Aliases"></a>Aliases</h4><p>You can simplify working with namespaces by using Aliases. You can use <code>import q = x.y.z</code> to create shorter names for commonly-used objects.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> rep = Zoo.Reptitle;</div><div class="line"></div><div class="line"><span class="keyword">let</span> lizard: rep;</div></pre></td></tr></table></figure>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/08/10/Build-GraphQL-Server-with-Koa/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="images/avatar.gif" alt="Chen Yu's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        keithwhisper@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    Archives
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/08/">August 2017<span class="sidebar_archives-count">12</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/07/">July 2017<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/06/">June 2017<span class="sidebar_archives-count">14</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">15</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">April 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">March 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/02/">February 2017<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">3</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/12/">December 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">November 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">October 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">September 2016<span class="sidebar_archives-count">16</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/08/">August 2016<span class="sidebar_archives-count">30</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/07/">July 2016<span class="sidebar_archives-count">43</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/06/">June 2016<span class="sidebar_archives-count">25</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">May 2016<span class="sidebar_archives-count">24</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Soup/">Soup<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Uncategorized/">Uncategorized<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/">github<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/note/">note<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/">note<span class="sidebar_archives-count">141</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/workNote/">workNote<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/categories/workNote/">workNote<span class="sidebar_archives-count">5</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">222</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            Theme - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+    <a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+             sidebar.about_theme
+            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/keithwhisper" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Keith-CY" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.svg);">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+        <a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-linkedin.svg);">
+                <span class="visuallyhidden">LinkedIn</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;EzCook
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script src="/js/smoothscroll.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

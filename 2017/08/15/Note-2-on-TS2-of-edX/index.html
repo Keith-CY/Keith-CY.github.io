@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.4 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            Note(2) on TS2 of edX | 
+        
+        EzCook
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Chen Yu">
+    <meta name="description" content="null">
+    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="EzCook">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Note(2) on TS2 of edX | EzCook">
+    <meta property="og:description" content="null">
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00BCD4;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #00BCD4 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #00BCD4 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #00BCD4 !important;
+  }
+
+  .toTop {
+    background: #000BCD4 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #000BCD4;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #000BCD4;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #000BCD4;
+  }
+
+  .post-toc a:hover {
+    color: #00BCD4;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body {
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text {
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+        <script type="text/javascript">
+            queue.offer(function(){
+                $('body').attr('data-original', 'https://api.i-meto.com/bing?null');
+            });
+        </script>
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Modules"><span class="post-toc-number">1.</span> <span class="post-toc-text">Modules</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Export"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">Export</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Default-exports"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Default exports</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Declaration-Files"><span class="post-toc-number">2.</span> <span class="post-toc-text">Declaration Files</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#d-ts-files-and-ts-files"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">.d.ts files and .ts files</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Working-with-other-JavaScript-Libraries"><span class="post-toc-number">3.</span> <span class="post-toc-text">Working with other JavaScript Libraries.</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Ambient-Modules"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">Ambient Modules</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Module-Resolution"><span class="post-toc-number">4.</span> <span class="post-toc-text">Module Resolution</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Relative-vs-Non-relative-module-imports"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Relative vs Non-relative module imports</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Module-Resolution-Strategies"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">Module Resolution Strategies</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Modules-or-Namespaces"><span class="post-toc-number">5.</span> <span class="post-toc-text">Modules or Namespaces</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Namespaces-vs-Modules"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">Namespaces vs Modules</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#When-to-use-namespaces-and-when-to-use-moduels"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">When to use namespaces and when to use moduels</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Reg-Flags"><span class="post-toc-number">6.</span> <span class="post-toc-text">Reg Flags</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Best-Practice"><span class="post-toc-number">7.</span> <span class="post-toc-text">Best Practice</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Working-with-External-Libraries"><span class="post-toc-number">8.</span> <span class="post-toc-text">Working with External Libraries</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Combine-two-namespaces-with-same-identifier"><span class="post-toc-number">8.1.</span> <span class="post-toc-text">Combine two namespaces with same identifier</span></a></li></ol></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                Note(2) on TS2 of edX
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="images/avatar.gif" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Chen Yu</strong>
+        <span>Aug 15, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Note(2) on TS2 of edX&url=http://yoursite.com//2017/08/15/Note-2-on-TS2-of-edX/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Note(2) on TS2 of edX&url=http://yoursite.com//2017/08/15/Note-2-on-TS2-of-edX/index.html&via=Chen Yu" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/08/15/Note-2-on-TS2-of-edX/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/08/15/Note-2-on-TS2-of-edX/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <h3 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h3><p>Modules are used for code organization as well as code sharing.</p>
+<p>Modules are executed within their own scope, not in the global scope. This means that variables, functions, classes, etc. declared in a module are not visible outside the module unless they are explicitly exported using <code>export</code>. Conversely, to consume a variable, function, class, interface, etc. exported from a different module, it has to be imported using <code>import</code>.</p>
+<p>Modules are declarative.</p>
+<p>In TypeScript any file containing a top-level <code>import</code> or <code>export</code> is considered a module.</p>
+<h4 id="Export"><a href="#Export" class="headerlink" title="Export"></a>Export</h4><p>Exporting a declaration.</p>
+<p>Any declaration(such as variable, function, class, type alias, or interface) can be exported by adding the <code>export</code> keyword.</p>
+<p>A module can wrap one or more modules and combine all their exports using <code>export * from</code> syntax.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// allValidator.ts</span></div><div class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./StringValidator'</span></div><div class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./LetterOnlyValidator'</span></div><div class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./ZipCodeValidator'</span></div></pre></td></tr></table></figure>
+<p>Import can be renamed.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; ZipCodeValidator <span class="keyword">as</span> ZCV &#125; <span class="keyword">from</span> <span class="string">'./ZipCodeValidator'</span></div></pre></td></tr></table></figure>
+<h4 id="Default-exports"><a href="#Default-exports" class="headerlink" title="Default exports"></a>Default exports</h4><p>Each module can optionally export a <code>default</code> export. Default exports are marked with the keyword <code>default</code>, and there can only be one <code>default</code> export per module.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// jQuery.ts</span></div><div class="line">declare <span class="keyword">let</span> $: Jquery;</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> $;</div><div class="line"></div><div class="line"><span class="comment">// App.ts</span></div><div class="line"><span class="keyword">import</span> $ <span class="keyword">from</span> <span class="string">'jQuery'</span></div></pre></td></tr></table></figure>
+<h3 id="Declaration-Files"><a href="#Declaration-Files" class="headerlink" title="Declaration Files"></a>Declaration Files</h3><p>Declarations are used to describe code that exists elsewhere using the <code>declare</code> keyword. The goad of this is to be able to use this code in TypeScript applications without having to rewrite the code in TypeScript.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">declare <span class="keyword">var</span> mynumber: any;</div><div class="line">mynumber = <span class="number">300</span>; <span class="comment">// ok</span></div></pre></td></tr></table></figure>
+<p>You can save these declaration in a <code>.ts</code> file or in a <code>.d.ts</code> file, we call these file with <code>.d.ts</code> extension <strong>declaration files</strong>.</p>
+<p>It’s good practice to keep your declarations in separate <code>.d.ts</code> file.</p>
+<p>If a file has the extension <code>.d.ts</code> then each root level definition must have the <code>declare</code> keyword prefixed to it. This tells the developer that there will be no code emitted by TypeScript. The developer needs to ensure that the declared item will exist at runtime.</p>
+<p>For example, lets assume we have the following JavaScript code(message.js)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">showMessage</span> (<span class="params">message</span>) </span>&#123;</div><div class="line">  alert(message)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>If you want to call the <code>showMessage</code> function in your TypeScript code, TypeScript will not recognize that this function exists. It does not know its name or its parameter. This can be fixed by describing the <code>showMessage</code> function in a definition file as (message.d.ts):</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">declare</span> <span class="keyword">function</span> showMessage(message: string)</div></pre></td></tr></table></figure>
+<p>Now you can use the function <code>showMessage</code> in TypeScript without compile errors.</p>
+<h4 id="d-ts-files-and-ts-files"><a href="#d-ts-files-and-ts-files" class="headerlink" title=".d.ts files and .ts files"></a>.d.ts files and .ts files</h4><p>Anything allowed in a <code>.d.ts</code> file mayu also appear in a <code>.ts</code> file, but not the reverse. Therefore, <code>.d.ts</code> allows a subset of TypeScript features. A <code>.d.ts</code> file is only allowed to contain TypeScript code that doesn’t generate any JavaSAcript code in the output. If you attempt to use any feature of TypeScript that would generate JavaScript, you’ll get an error.</p>
+<p>Interfaces are allowed, because they disappear completely after compilation.</p>
+<p>Const enums are also allowed, unlike ordinary enums which generate an object in the output JavaScript.</p>
+<p>Top level classes, variables, modules, and functions must be prefixed with <code>declare</code>.</p>
+<p>It is a common practice to see a top-lvel <code>declare module</code> and then all definition inside it are therefore also declaraion.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">declare <span class="built_in">module</span> Something &#123;</div><div class="line">  <span class="keyword">var</span> x;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Working-with-other-JavaScript-Libraries"><a href="#Working-with-other-JavaScript-Libraries" class="headerlink" title="Working with other JavaScript Libraries."></a>Working with other JavaScript Libraries.</h3><p>To describe the shape of libraries not written in TypeScript, we need to declare the API that the library exposes.</p>
+<p>We call declarations that don’t define an implementation ‘ambient’. Typically these are defined in <code>.d.ts</code> files.</p>
+<h4 id="Ambient-Modules"><a href="#Ambient-Modules" class="headerlink" title="Ambient Modules"></a>Ambient Modules</h4><p>We can define each module in its own <code>.d.ts</code> file with top-level export declarations, but it’s more convenient to write them as one large <code>.d.ts</code> file. To do so, we use a construct similar to ambient namespaces, but we use the <code>module</code> keyword and the quoted name of the module which will be available to a later import.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// node.d.ts</div><div class="line">declare module &apos;url&apos; &#123;</div><div class="line">  export interface Url &#123;</div><div class="line">    protocol?: string;</div><div class="line">    hostname?: string;</div><div class="line">    pathname?: string;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  export function parse (urlStr: string, parseQueryString?, slashesDenotateHost?): Url</div><div class="line">&#125;</div><div class="line"></div><div class="line">declare module &apos;path&apos; &#123;</div><div class="line">  export function normalize(p: string): string;</div><div class="line">  export function join(...paths: any[]): string;</div><div class="line">  export var sep: string;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Now we can use <code>/// &lt;reference&gt;node.d.ts</code> and then load the modules using <code>import url = require(&#39;url&#39;)</code> or <code>import * as URL from &#39;url&#39;</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// &lt;reference path='node.d.ts' /&gt;</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> URL <span class="keyword">from</span> <span class="string">'url'</span></div><div class="line"><span class="keyword">let</span> myUrl = URL.parse(<span class="string">'http://www.typescriptlang.org'</span>)</div></pre></td></tr></table></figure>
+<h3 id="Module-Resolution"><a href="#Module-Resolution" class="headerlink" title="Module Resolution"></a>Module Resolution</h3><h4 id="Relative-vs-Non-relative-module-imports"><a href="#Relative-vs-Non-relative-module-imports" class="headerlink" title="Relative vs Non-relative module imports"></a>Relative vs Non-relative module imports</h4><p>Module imports are resolved differently based on whether the module reference is relative or non-relative.</p>
+<p>A <em>relative import</em> is one that starts with <code>/, ./, ../</code>.</p>
+<p>Any other import is considered <em>non-relative</em>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> $ <span class="keyword">from</span> <span class="string">'jquery'</span></div><div class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></div></pre></td></tr></table></figure>
+<p>A relative import is resolved relative to the importing file and <em>cannot</em> resolve to an ambient module declaration.</p>
+<p>A non-relative import can be resolved relative to <code>baseUrl</code>, or through path mapping. They can also resolve to ambient module declaations.</p>
+<h4 id="Module-Resolution-Strategies"><a href="#Module-Resolution-Strategies" class="headerlink" title="Module Resolution Strategies"></a>Module Resolution Strategies</h4><p>There are two possible module resolution strategies: <code>Node</code> and <code>Classic</code>.</p>
+<p>You can use the <code>--moduleResolution</code> flag to specify the module resolution strategy. If not specified, the default is <code>Classic</code> for  <code>--module AMD | System | ES2015 | Node</code>.</p>
+<h3 id="Modules-or-Namespaces"><a href="#Modules-or-Namespaces" class="headerlink" title="Modules or Namespaces"></a>Modules or Namespaces</h3><h4 id="Namespaces-vs-Modules"><a href="#Namespaces-vs-Modules" class="headerlink" title="Namespaces vs Modules"></a>Namespaces vs Modules</h4><p>If fact, namespaces were previously refered to as <em>internal modules</em> while modules where refered to as <em>external modules</em>.</p>
+<h4 id="When-to-use-namespaces-and-when-to-use-moduels"><a href="#When-to-use-namespaces-and-when-to-use-moduels" class="headerlink" title="When to use namespaces and when to use moduels"></a>When to use namespaces and when to use moduels</h4><ul>
+<li><p>When first moving to a module-based organization, a common tendency is to wrap exports in an additional layer of namespaces. Modules have their own scope, and only exported declaration are visible from outside the module. With this in mind, namespaces provide very little, if any, value when working with modules.</p>
+</li>
+<li><p>On the oraganization front, namespaces are handy for grouping together logically-related objects and types in the global.</p>
+</li>
+<li><p>Namespaces are important to avoid naming collisions in the scope.</p>
+</li>
+</ul>
+<h3 id="Reg-Flags"><a href="#Reg-Flags" class="headerlink" title="Reg Flags"></a>Reg Flags</h3><p><strong>Dont’t use namespace in modules</strong></p>
+<p>All of the following are reg flags for module structuring.</p>
+<ul>
+<li><p>A file whose only top-level declaration is <code>export namespace Foo { ... }</code>(remove <code>Foo</code> and move everything ‘up’ a level.)</p>
+</li>
+<li><p>A file that has a single <code>export class</code> or <code>export function</code>(consider using <code>export default</code>)</p>
+</li>
+<li><p>Multiple files that have the same <code>export namespace Foo</code> at top-level(don’t think that these are going to combine into one).</p>
+</li>
+</ul>
+<h3 id="Best-Practice"><a href="#Best-Practice" class="headerlink" title="Best Practice"></a>Best Practice</h3><ul>
+<li><p>While <code>namespaces</code> are still available in TypeScript, it is better to use modules as much as possible. This is because in most cases you will need to use external libraries in your application. In that case you will have to deal with modules because modules are the way to go with external none TypeScript libraries. Mixing namespaces and modules in one application is not a recommended practice.</p>
+</li>
+<li><p>Use modules and not namespaces if you are going to share your code as components or libraries to be consumed by other applications.</p>
+</li>
+<li><p>Use namespaces if your application is small and within the same application and when you do have any external dependencies like using external libraries or offering your code to be used by other application. You can still use modules in this case.</p>
+</li>
+</ul>
+<h3 id="Working-with-External-Libraries"><a href="#Working-with-External-Libraries" class="headerlink" title="Working with External Libraries"></a>Working with External Libraries</h3><p>Importing a JavaScript Library.</p>
+<p>There are two options to bring a javascript library in your typescrpt project:</p>
+<ul>
+<li><p>Manual download: this is by manually copying some definitions files for the obejcts used in the JavaScript Libraries into your TypeScript Project so that TypeScript can recognize and be able to support the typings. There is a big effort form the TypeScript community to provide those declaration files for almost all the third party JavaScript Libraries out there for developers to copy and include in their projects without having to rewrite the types themselves. This project is called the definitely typed project.</p>
+</li>
+<li><p>Using TyepSearch: This will automatically install the definition files for the imported libraries. The TypeSearch project that is a Microsoft initiative that uses npm to install lthe library definition files automatically with no need to manually copy any files.</p>
+</li>
+</ul>
+<h4 id="Combine-two-namespaces-with-same-identifier"><a href="#Combine-two-namespaces-with-same-identifier" class="headerlink" title="Combine two namespaces with same identifier"></a>Combine two namespaces with same identifier</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// extendedNamespace_part2.d.ts</span></div><div class="line">namespace ArrayUtilities &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// extendedNamespace_part1.d.ts</span></div><div class="line"><span class="comment">/// &lt;reference path="extendedNamespace_part2.d.t.s" /&gt;</span></div><div class="line">namespace ArrayUtilities &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/08/11/Note-on-TS2-of-edX/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="images/avatar.gif" alt="Chen Yu's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        keithwhisper@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    Archives
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/08/">August 2017<span class="sidebar_archives-count">13</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/07/">July 2017<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/06/">June 2017<span class="sidebar_archives-count">14</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">15</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">April 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">March 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/02/">February 2017<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">3</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/12/">December 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">November 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">October 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">September 2016<span class="sidebar_archives-count">16</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/08/">August 2016<span class="sidebar_archives-count">30</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/07/">July 2016<span class="sidebar_archives-count">43</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/06/">June 2016<span class="sidebar_archives-count">25</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">May 2016<span class="sidebar_archives-count">24</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Soup/">Soup<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Uncategorized/">Uncategorized<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/">github<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/note/">note<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/">note<span class="sidebar_archives-count">141</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/workNote/">workNote<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/categories/workNote/">workNote<span class="sidebar_archives-count">5</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">223</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            Theme - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+    <a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+             sidebar.about_theme
+            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/keithwhisper" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Keith-CY" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.svg);">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+        <a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-linkedin.svg);">
+                <span class="visuallyhidden">LinkedIn</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;EzCook
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script src="/js/smoothscroll.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

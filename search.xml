@@ -3,6 +3,92 @@
   
     
     <entry>
+      <title><![CDATA[Note(2) on TS2 of edX]]></title>
+      <url>/2017/08/15/Note-2-on-TS2-of-edX/</url>
+      <content type="html"><![CDATA[<h3 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h3><p>Modules are used for code organization as well as code sharing.</p>
+<p>Modules are executed within their own scope, not in the global scope. This means that variables, functions, classes, etc. declared in a module are not visible outside the module unless they are explicitly exported using <code>export</code>. Conversely, to consume a variable, function, class, interface, etc. exported from a different module, it has to be imported using <code>import</code>.</p>
+<p>Modules are declarative.</p>
+<p>In TypeScript any file containing a top-level <code>import</code> or <code>export</code> is considered a module.</p>
+<h4 id="Export"><a href="#Export" class="headerlink" title="Export"></a>Export</h4><p>Exporting a declaration.</p>
+<p>Any declaration(such as variable, function, class, type alias, or interface) can be exported by adding the <code>export</code> keyword.</p>
+<p>A module can wrap one or more modules and combine all their exports using <code>export * from</code> syntax.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// allValidator.ts</span></div><div class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./StringValidator'</span></div><div class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./LetterOnlyValidator'</span></div><div class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">'./ZipCodeValidator'</span></div></pre></td></tr></table></figure>
+<p>Import can be renamed.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; ZipCodeValidator <span class="keyword">as</span> ZCV &#125; <span class="keyword">from</span> <span class="string">'./ZipCodeValidator'</span></div></pre></td></tr></table></figure>
+<h4 id="Default-exports"><a href="#Default-exports" class="headerlink" title="Default exports"></a>Default exports</h4><p>Each module can optionally export a <code>default</code> export. Default exports are marked with the keyword <code>default</code>, and there can only be one <code>default</code> export per module.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// jQuery.ts</span></div><div class="line">declare <span class="keyword">let</span> $: Jquery;</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> $;</div><div class="line"></div><div class="line"><span class="comment">// App.ts</span></div><div class="line"><span class="keyword">import</span> $ <span class="keyword">from</span> <span class="string">'jQuery'</span></div></pre></td></tr></table></figure>
+<h3 id="Declaration-Files"><a href="#Declaration-Files" class="headerlink" title="Declaration Files"></a>Declaration Files</h3><p>Declarations are used to describe code that exists elsewhere using the <code>declare</code> keyword. The goad of this is to be able to use this code in TypeScript applications without having to rewrite the code in TypeScript.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">declare <span class="keyword">var</span> mynumber: any;</div><div class="line">mynumber = <span class="number">300</span>; <span class="comment">// ok</span></div></pre></td></tr></table></figure>
+<p>You can save these declaration in a <code>.ts</code> file or in a <code>.d.ts</code> file, we call these file with <code>.d.ts</code> extension <strong>declaration files</strong>.</p>
+<p>It’s good practice to keep your declarations in separate <code>.d.ts</code> file.</p>
+<p>If a file has the extension <code>.d.ts</code> then each root level definition must have the <code>declare</code> keyword prefixed to it. This tells the developer that there will be no code emitted by TypeScript. The developer needs to ensure that the declared item will exist at runtime.</p>
+<p>For example, lets assume we have the following JavaScript code(message.js)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">showMessage</span> (<span class="params">message</span>) </span>&#123;</div><div class="line">  alert(message)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>If you want to call the <code>showMessage</code> function in your TypeScript code, TypeScript will not recognize that this function exists. It does not know its name or its parameter. This can be fixed by describing the <code>showMessage</code> function in a definition file as (message.d.ts):</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">declare</span> <span class="keyword">function</span> showMessage(message: string)</div></pre></td></tr></table></figure>
+<p>Now you can use the function <code>showMessage</code> in TypeScript without compile errors.</p>
+<h4 id="d-ts-files-and-ts-files"><a href="#d-ts-files-and-ts-files" class="headerlink" title=".d.ts files and .ts files"></a>.d.ts files and .ts files</h4><p>Anything allowed in a <code>.d.ts</code> file mayu also appear in a <code>.ts</code> file, but not the reverse. Therefore, <code>.d.ts</code> allows a subset of TypeScript features. A <code>.d.ts</code> file is only allowed to contain TypeScript code that doesn’t generate any JavaSAcript code in the output. If you attempt to use any feature of TypeScript that would generate JavaScript, you’ll get an error.</p>
+<p>Interfaces are allowed, because they disappear completely after compilation.</p>
+<p>Const enums are also allowed, unlike ordinary enums which generate an object in the output JavaScript.</p>
+<p>Top level classes, variables, modules, and functions must be prefixed with <code>declare</code>.</p>
+<p>It is a common practice to see a top-lvel <code>declare module</code> and then all definition inside it are therefore also declaraion.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">declare <span class="built_in">module</span> Something &#123;</div><div class="line">  <span class="keyword">var</span> x;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Working-with-other-JavaScript-Libraries"><a href="#Working-with-other-JavaScript-Libraries" class="headerlink" title="Working with other JavaScript Libraries."></a>Working with other JavaScript Libraries.</h3><p>To describe the shape of libraries not written in TypeScript, we need to declare the API that the library exposes.</p>
+<p>We call declarations that don’t define an implementation ‘ambient’. Typically these are defined in <code>.d.ts</code> files.</p>
+<h4 id="Ambient-Modules"><a href="#Ambient-Modules" class="headerlink" title="Ambient Modules"></a>Ambient Modules</h4><p>We can define each module in its own <code>.d.ts</code> file with top-level export declarations, but it’s more convenient to write them as one large <code>.d.ts</code> file. To do so, we use a construct similar to ambient namespaces, but we use the <code>module</code> keyword and the quoted name of the module which will be available to a later import.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// node.d.ts</div><div class="line">declare module &apos;url&apos; &#123;</div><div class="line">  export interface Url &#123;</div><div class="line">    protocol?: string;</div><div class="line">    hostname?: string;</div><div class="line">    pathname?: string;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  export function parse (urlStr: string, parseQueryString?, slashesDenotateHost?): Url</div><div class="line">&#125;</div><div class="line"></div><div class="line">declare module &apos;path&apos; &#123;</div><div class="line">  export function normalize(p: string): string;</div><div class="line">  export function join(...paths: any[]): string;</div><div class="line">  export var sep: string;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Now we can use <code>/// &lt;reference&gt;node.d.ts</code> and then load the modules using <code>import url = require(&#39;url&#39;)</code> or <code>import * as URL from &#39;url&#39;</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// &lt;reference path='node.d.ts' /&gt;</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> URL <span class="keyword">from</span> <span class="string">'url'</span></div><div class="line"><span class="keyword">let</span> myUrl = URL.parse(<span class="string">'http://www.typescriptlang.org'</span>)</div></pre></td></tr></table></figure>
+<h3 id="Module-Resolution"><a href="#Module-Resolution" class="headerlink" title="Module Resolution"></a>Module Resolution</h3><h4 id="Relative-vs-Non-relative-module-imports"><a href="#Relative-vs-Non-relative-module-imports" class="headerlink" title="Relative vs Non-relative module imports"></a>Relative vs Non-relative module imports</h4><p>Module imports are resolved differently based on whether the module reference is relative or non-relative.</p>
+<p>A <em>relative import</em> is one that starts with <code>/, ./, ../</code>.</p>
+<p>Any other import is considered <em>non-relative</em>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> $ <span class="keyword">from</span> <span class="string">'jquery'</span></div><div class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">'@angular/core'</span></div></pre></td></tr></table></figure>
+<p>A relative import is resolved relative to the importing file and <em>cannot</em> resolve to an ambient module declaration.</p>
+<p>A non-relative import can be resolved relative to <code>baseUrl</code>, or through path mapping. They can also resolve to ambient module declaations.</p>
+<h4 id="Module-Resolution-Strategies"><a href="#Module-Resolution-Strategies" class="headerlink" title="Module Resolution Strategies"></a>Module Resolution Strategies</h4><p>There are two possible module resolution strategies: <code>Node</code> and <code>Classic</code>.</p>
+<p>You can use the <code>--moduleResolution</code> flag to specify the module resolution strategy. If not specified, the default is <code>Classic</code> for  <code>--module AMD | System | ES2015 | Node</code>.</p>
+<h3 id="Modules-or-Namespaces"><a href="#Modules-or-Namespaces" class="headerlink" title="Modules or Namespaces"></a>Modules or Namespaces</h3><h4 id="Namespaces-vs-Modules"><a href="#Namespaces-vs-Modules" class="headerlink" title="Namespaces vs Modules"></a>Namespaces vs Modules</h4><p>If fact, namespaces were previously refered to as <em>internal modules</em> while modules where refered to as <em>external modules</em>.</p>
+<h4 id="When-to-use-namespaces-and-when-to-use-moduels"><a href="#When-to-use-namespaces-and-when-to-use-moduels" class="headerlink" title="When to use namespaces and when to use moduels"></a>When to use namespaces and when to use moduels</h4><ul>
+<li><p>When first moving to a module-based organization, a common tendency is to wrap exports in an additional layer of namespaces. Modules have their own scope, and only exported declaration are visible from outside the module. With this in mind, namespaces provide very little, if any, value when working with modules.</p>
+</li>
+<li><p>On the oraganization front, namespaces are handy for grouping together logically-related objects and types in the global.</p>
+</li>
+<li><p>Namespaces are important to avoid naming collisions in the scope.</p>
+</li>
+</ul>
+<h3 id="Reg-Flags"><a href="#Reg-Flags" class="headerlink" title="Reg Flags"></a>Reg Flags</h3><p><strong>Dont’t use namespace in modules</strong></p>
+<p>All of the following are reg flags for module structuring.</p>
+<ul>
+<li><p>A file whose only top-level declaration is <code>export namespace Foo { ... }</code>(remove <code>Foo</code> and move everything ‘up’ a level.)</p>
+</li>
+<li><p>A file that has a single <code>export class</code> or <code>export function</code>(consider using <code>export default</code>)</p>
+</li>
+<li><p>Multiple files that have the same <code>export namespace Foo</code> at top-level(don’t think that these are going to combine into one).</p>
+</li>
+</ul>
+<h3 id="Best-Practice"><a href="#Best-Practice" class="headerlink" title="Best Practice"></a>Best Practice</h3><ul>
+<li><p>While <code>namespaces</code> are still available in TypeScript, it is better to use modules as much as possible. This is because in most cases you will need to use external libraries in your application. In that case you will have to deal with modules because modules are the way to go with external none TypeScript libraries. Mixing namespaces and modules in one application is not a recommended practice.</p>
+</li>
+<li><p>Use modules and not namespaces if you are going to share your code as components or libraries to be consumed by other applications.</p>
+</li>
+<li><p>Use namespaces if your application is small and within the same application and when you do have any external dependencies like using external libraries or offering your code to be used by other application. You can still use modules in this case.</p>
+</li>
+</ul>
+<h3 id="Working-with-External-Libraries"><a href="#Working-with-External-Libraries" class="headerlink" title="Working with External Libraries"></a>Working with External Libraries</h3><p>Importing a JavaScript Library.</p>
+<p>There are two options to bring a javascript library in your typescrpt project:</p>
+<ul>
+<li><p>Manual download: this is by manually copying some definitions files for the obejcts used in the JavaScript Libraries into your TypeScript Project so that TypeScript can recognize and be able to support the typings. There is a big effort form the TypeScript community to provide those declaration files for almost all the third party JavaScript Libraries out there for developers to copy and include in their projects without having to rewrite the types themselves. This project is called the definitely typed project.</p>
+</li>
+<li><p>Using TyepSearch: This will automatically install the definition files for the imported libraries. The TypeSearch project that is a Microsoft initiative that uses npm to install lthe library definition files automatically with no need to manually copy any files.</p>
+</li>
+</ul>
+<h4 id="Combine-two-namespaces-with-same-identifier"><a href="#Combine-two-namespaces-with-same-identifier" class="headerlink" title="Combine two namespaces with same identifier"></a>Combine two namespaces with same identifier</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// extendedNamespace_part2.d.ts</span></div><div class="line">namespace ArrayUtilities &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// extendedNamespace_part1.d.ts</span></div><div class="line"><span class="comment">/// &lt;reference path="extendedNamespace_part2.d.t.s" /&gt;</span></div><div class="line">namespace ArrayUtilities &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Note on TS2 of edX]]></title>
       <url>/2017/08/11/Note-on-TS2-of-edX/</url>
       <content type="html"><![CDATA[<h3 id="Classification-of-types-in-TypeScript"><a href="#Classification-of-types-in-TypeScript" class="headerlink" title="Classification of types in TypeScript"></a>Classification of types in TypeScript</h3><p>Types are classified into two main classes in TypeScript:</p>

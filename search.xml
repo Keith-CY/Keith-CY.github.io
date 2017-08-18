@@ -3,6 +3,81 @@
   
     
     <entry>
+      <title><![CDATA[Concurrency and Parallelism: Understanding I/O]]></title>
+      <url>/2017/08/18/Concurrency-and-Parallelism-Understanding-I-O/</url>
+      <content type="html"><![CDATA[<p><a href="https://blog.risingstack.com/concurrency-and-parallelism-understanding-i-o/" target="_blank" rel="external">Original Post</a></p>
+<p>Concurrency is much border, genral problem than parallelism. If you have tasks having inputs and outputs, and you want to schedule them so that they produce correct results, you are solving a concurrency problem.</p>
+<p>Take a look at this diagram:</p>
+<p><img src="https://blog-assets.risingstack.com/2017/02/cuncurrency-paralellism-diagram-of-tasks-with-dependencies.png" alt=""></p>
+<p>It shows a data flow with input and output dependencies. Here tasks 2, 3, 4 can run concurrently after 1. There is no specific order between them, so we have multiple alternatives for running it sequetially. Showing only two of them:</p>
+<p><img src="https://blog-assets.risingstack.com/2017/02/concurrent-data-flow-path-13245.png" alt=""></p>
+<p>Alternatively, these tasks can run in parallel, e.g. on another processor core, another processor, or an entirely seperate computer.</p>
+<p>On these diagrams, thread means a computation carried out on dedicated processor core, not an OS thread, as they are not necessarily parallel.</p>
+<p><img src="https://blog-assets.risingstack.com/2017/02/paralellized-tasks-diagram.png" alt=""></p>
+<p>If we only have one processor, why do we even bother with writing concurrent application? The processing time will not get shorter, and we add the overhead of scheduling. As a matter of fact, any modern operating system will also slice up the concurrent tasks and interleave them, so each of the slices will run for a short time.</p>
+<h5 id="There-are-various-reasons-for-this"><a href="#There-are-various-reasons-for-this" class="headerlink" title="There are various reasons for this:"></a>There are various reasons for this:</h5><ul>
+<li><p>We human like to interact with the computer in real time, e.g. as I type this text, I want to see it appearing on the screen immediately, at the same time listening to my favorite tracklist, and getting notifications about my incoming emails. Just imagine that you cannot drag a window while the movie keeps on playing it.</p>
+</li>
+<li><p>Not all operations are carried out on the computer’s CPU. If you want to write to an HDD for example, a lot of time is spent seeking to the position, writing the sectors, etc, and the intermittent time can be spent to do something else.</p>
+</li>
+</ul>
+<p>These require the operating system kernel to run tasks in an interleaved manner, referred to as <code>time-sharing</code>. This is a very important property of modern operating systems.</p>
+<h3 id="Processes-and-Threads"><a href="#Processes-and-Threads" class="headerlink" title="Processes and Threads"></a>Processes and Threads</h3><blockquote>
+<p>A process is a running instance of a computer program. It is what you see in the task manager of your operating system or <code>top</code>.</p>
+</blockquote>
+<p>A process consists of allocated memory which holds the program code, its data, a heap for dynamic memory allocation, and a lot more. However, it is not the unit for multi-tasking in desktop operating systems.</p>
+<blockquote>
+<p>Thread is the default unit - the task - of CPU usage. COde executed in a single thread is what we usually refer to as sequential or synchronous execution.</p>
+</blockquote>
+<p>Threads are supported by nearly all operating systems and can be created with system calls. They have theri own <code>call stack</code>, <code>virual CPU</code> and <code>local storage</code> but share the application’s <code>heap</code>, data, codebase and resources.</p>
+<p>They also serve as the unit of scheduling in the kernel. For this reason, we call them <code>kernel threads</code>, clarifying that they are native to the operating system and scheduled by the kernel, which distinguishes them from use-space threads, also called <code>green threads</code> which are scheduled by some user space schedular such as a library or VM.</p>
+<p><img src="https://blog-assets.risingstack.com/2017/02/kernel-processes-and-threads-1.png" alt=""></p>
+<p>Most desktop and sever operating system kernels use preemptive schedulers, as does the Linux, macOS and Windows kernel. We can assume that threads are preemptive scheduled, distinguishing them from their non-preemptive(cooperative) counterparts, called <code>fiber</code>. This preemptive scheduling is the reason that a hanging process doesn’t stall the whole computer.</p>
+<p>The hanging time slices are interleaved with other processes’ and the OS’ code, so the system as a whole remains responsive.</p>
+<p>Context switching(switching between threads) is done at frequent intervals by the kernel, creating the illusion that our programs are running in parallel, whereas in reality, they are running concurrently but sequentially in short slices.</p>
+<h3 id="CPU-vs-I-O"><a href="#CPU-vs-I-O" class="headerlink" title="CPU vs. I/O"></a>CPU vs. I/O</h3><p>Programs usually don’t only consist of numeric, arithmetic and logic computations, in fact, a lot of times they merely write something to the file system, do network requests or access peripheries such as the console or an external device.</p>
+<p>While the first kind of workload is CPU intensive, the latter requries performing I/O in the majority of the time.</p>
+<p>Doing I/O is a kernel space operation, initiated with a system call, so it results in a privilege context switch.</p>
+<p>When an I/O operation is requested with a blocking  system call, we are talking about <em>blocking I/O</em>.</p>
+<p>This can deteriorate concurrency under implementation, concretely those that use <em>many-to-one mapping</em>. This means that all threads in a process share a common kernel thread, which implies that every thread is blocked when one does blocking I/O.</p>
+<p>No wonder that modern OSes don’t do this. Instead, they use <code>one-to-one</code> mapping, i.e. map a kernel thread to each user-space thread, allowing another thread to run when one makes a blocking system call, which means that they are unaffected by the above adverse effect.</p>
+<h3 id="I-O-favors-Blocking-vs-Non-Blocking-Sycn-vs-Async"><a href="#I-O-favors-Blocking-vs-Non-Blocking-Sycn-vs-Async" class="headerlink" title="I/O favors: Blocking vs. Non-Blocking, Sycn vs. Async"></a>I/O favors: Blocking vs. Non-Blocking, Sycn vs. Async</h3><p>Doing I/O usually consiss of two distinct steps:</p>
+<ul>
+<li><p>checking the device</p>
+<ul>
+<li><p>blocking: waiting for the device to be ready</p>
+</li>
+<li><p>non-blocking: e.g. polling periodically until ready</p>
+</li>
+</ul>
+</li>
+<li><p>transmitting:</p>
+<ul>
+<li><p>synchronous: executing the operation (e.g. read or write) initiated by the program.</p>
+</li>
+<li><p>asynchronous: executing the operation as response to an event from the kernel(asynchronous/event drive)</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>You can mix the two steps in every fashion</p>
+<h3 id="Busy-Waiting-Polling-and-the-Event-Loop"><a href="#Busy-Waiting-Polling-and-the-Event-Loop" class="headerlink" title="Busy-Waiting, Polling, and the Event Loop"></a>Busy-Waiting, Polling, and the Event Loop</h3><p>Busy-waiting is the act of repeatedly checking a resource, such as I/O for availability in a <em>tight loop</em>. The absence of the tight loop is what distinguishes <code>polling</code> for busy-waiting.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// tight-loop example</span></div><div class="line"><span class="keyword">while</span> (pthread_mutex_trylock(&amp;my_mutex) == EBUSY) &#123; &#125;</div><div class="line"><span class="comment">// mutex is unlocked</span></div><div class="line">do_stuff()</div><div class="line"></div><div class="line"><span class="comment">// polling example</span></div><div class="line"><span class="keyword">while</span> (pthread_mutex_trylock(&amp;my_mutex) == EBUSY) &#123;</div><div class="line">  sleep(POLL_INTERVAL)</div><div class="line">&#125;</div><div class="line"><span class="comment">// mutex is unlocked</span></div><div class="line">do_stuff()</div></pre></td></tr></table></figure>
+<p>The difference between the two code is apparent. The <code>sleep</code> function puts the current thread of execution to sleep, yield control to the kernel to schedule something else to run.</p>
+<p>It is also obvious that both of them offer a technique of turning non-blocking code into blocking code, because control won’t pass the loop until the mutex becomes free. This means that <code>do_stuff</code> is blocked.</p>
+<p>Let’s say we have more of thse mutexes or any arbitrary I/O device that can be polled. We can invert control-flow by assigning handlers to be called when the resource is ready. If we periodically check the resources in the llop and execute the associated handlers on completion, we created what is called an <code>event loop</code>.</p>
+<h3 id="TCP-server-example"><a href="#TCP-server-example" class="headerlink" title="TCP server example"></a>TCP server example</h3><p>The following exmaple will illustrate the differences between working with <em>synchronous, blocking</em> and <em>non-blocking</em> network I/O. It is a dead-simple TCP echo server. After the client connects, every line is echoed back to the socket until the client write ‘bye’.</p>
+<h4 id="Single-threaded"><a href="#Single-threaded" class="headerlink" title="Single threaded"></a>Single threaded</h4><p>The first version uses the standard POSIX procedure of <code>sys/socket.h</code>.</p>
+<p>The server is single-threaded, it waits until a client connects.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// wait for a connection, then accept() it</span></div><div class="line"><span class="keyword">if</span> ((conn_s) = accept(list_s, NULL, NULL) &lt; <span class="number">0</span>) &#123;</div><div class="line">  <span class="comment">// exit w err</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Then it reads from the socket each line and echoes it back until the client closes connection or prints the word ‘bye’ on a line.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">bye = <span class="number">0</span></div><div class="line"><span class="keyword">while</span>(!bye) &#123;</div><div class="line">  read_line_from_socket(conn_s, buffer, MAX_LINE - <span class="number">1</span>)</div><div class="line">  <span class="keyword">if</span> (!strncmp(buffer, <span class="string">'bye\n'</span>, MAX_LINE - <span class="number">1</span>)) bye = <span class="number">1</span></div><div class="line">  write_line_to_socket(conn_s, buffer, strlen(buffer))</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> (close(conn_s) &lt; <span class="number">0</span>) &#123;</div><div class="line">  <span class="comment">// exit w err</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Advanced Topics of TS]]></title>
       <url>/2017/08/17/Advanced-Topics-of-TS/</url>
       <content type="html"><![CDATA[<h3 id="Iterators-and-Generators"><a href="#Iterators-and-Generators" class="headerlink" title="Iterators and Generators"></a>Iterators and Generators</h3><p>Iterators are basically objects that can be hold more than one item. Iterators are collections of objects or variables or items that can be iterated on to do some sort of processing on each item in the collection. Arrays are an exmaple of iterators.</p>

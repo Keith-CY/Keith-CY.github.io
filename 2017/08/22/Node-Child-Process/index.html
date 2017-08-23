@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.3.4 -->
+
+    <!-- Title -->
+    
+    <title>
+        
+            Node Child Process | 
+        
+        EzCook
+    </title>
+
+    <!-- Meta & Info -->
+    <meta charset="utf-8">
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    
+    
+    
+    
+    
+    
+
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0097A7">
+    <meta name="author" content="Chen Yu">
+    <meta name="description" content="null">
+    <meta name="keywords" content="EzCook, JavaScript, React, RxJS, Redux">
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" sizes="192x192" href="/img/favicon.png">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!--iOS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-title" content="Title">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="480">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="EzCook">
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Node Child Process | EzCook">
+    <meta property="og:description" content="null">
+    
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import CSS & jQuery -->
+    
+        <link rel="stylesheet" href="/css/material.min.css">
+        <link rel="stylesheet" href="/css/style.min.css">
+        <!-- Config CSS -->
+
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+
+  a {
+    color: #00BCD4;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #00BCD4 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #00BCD4 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #00BCD4 !important;
+  }
+
+  .toTop {
+    background: #000BCD4 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #000BCD4;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #000BCD4;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #000BCD4;
+  }
+
+  .post-toc a:hover {
+    color: #00BCD4;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body {
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text {
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/queue.js"></script>
+    
+
+    <!-- UC Browser Compatible -->
+    <script>
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('ucbrowser')>0) {
+            document.write("<link rel=\"stylesheet\" href=\"/css/uc.css\">");
+            alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+        }
+    </script>
+
+    
+
+    
+
+
+    <!-- Bing Background -->
+    
+        <script type="text/javascript">
+            queue.offer(function(){
+                $('body').attr('data-original', 'https://api.i-meto.com/bing?null');
+            });
+        </script>
+    
+
+    <!-- Custom Head -->
+    
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+    <!-- Left aligned menu below button -->
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#The-Child-Process-Module"><span class="post-toc-number">1.</span> <span class="post-toc-text">The Child Process Module</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Spawned-Child-Process"><span class="post-toc-number">2.</span> <span class="post-toc-text">Spawned Child Process</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Shell-Syntax-and-the-exec-Function"><span class="post-toc-number">3.</span> <span class="post-toc-text">Shell Syntax and the exec Function</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#The-execFile-function"><span class="post-toc-number">4.</span> <span class="post-toc-text">The execFile function</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#The-Sync-Function"><span class="post-toc-number">5.</span> <span class="post-toc-text">The *Sync Function</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#The-fork-function"><span class="post-toc-number">6.</span> <span class="post-toc-text">The fork() function</span></a></li></ol>
+
+        <!--
+        <li class="mdl-menu__item">
+            Some Action
+        </li>
+        -->
+    </ul>
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script>
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                Node Child Process
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="images/avatar.gif" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Chen Yu</strong>
+        <span>Aug 22, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        
+    </ul>
+    
+
+    <!-- Share -->
+    <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Node Child Process&url=http://yoursite.com//2017/08/22/Node-Child-Process/index.html&pic=&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Node Child Process&url=http://yoursite.com//2017/08/22/Node-Child-Process/index.html&via=Chen Yu" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com//2017/08/22/Node-Child-Process/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com//2017/08/22/Node-Child-Process/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <p><img src="https://cdn-images-1.medium.com/max/2000/1*I56pPhzO1VQw8SIsv8wYNA.png" alt=""></p>
+<p>Single-threaded, non-blocking performance in Node works great for a single process. But eventually, one process in one CPU is not going to be enough to handle the increasing workload of your application.</p>
+<p>Using multiple processes is the best way to scale a Node application. Node is designed for building distributed applications with many nodes.</p>
+<h3 id="The-Child-Process-Module"><a href="#The-Child-Process-Module" class="headerlink" title="The Child Process Module"></a>The Child Process Module</h3><p>We can easily spin a child process using Node’s <code>child_process</code> module and those child processes can easily communicate with each other with a messaging system.</p>
+<p>The <code>child_process</code> module enables us to access Operating System functionalities by running any system command inside child process.</p>
+<p>We can control that child process input stream, and listen to its output stream. We can also control the arguments to be passed to the underlying OS command, and we can do whatever we want with that command’s output.</p>
+<p>There are four different ways to create a child process in Node: <code>spawn()</code>, <code>fork()</code>, <code>exec()</code>, <code>execFile()</code>.</p>
+<h3 id="Spawned-Child-Process"><a href="#Spawned-Child-Process" class="headerlink" title="Spawned Child Process"></a>Spawned Child Process</h3><p>The <code>spawn</code> function launches a command in a new process and we can use it to pass that command any arguments. For example, here’s code to spawn a new process that will execute the <code>pwd</code> command.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> &#123; spawn &#125; = <span class="built_in">require</span>(<span class="string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> child = spawn(<span class="string">'pwd'</span>)</div></pre></td></tr></table></figure>
+<p>We simply destructure the <code>spawn</code> function out of the <code>child_process</code> module and execute it with the OS command as the first argument.</p>
+<p>The result of executing the <code>spawn</code> function (the <code>child</code> object above) is a <code>ChildProcess</code> instance, which implements the <code>EventEmitter API</code>. This means we can register handlers for events on this child object directly. For example, we can do something when the child process exits by registering a handler for the <code>exit</code> event.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">child.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">code, signal</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'child process exited with '</span> + <span class="string">`code <span class="subst">$&#123;code&#125;</span> and signal <span class="subst">$&#123;signal&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>The handler above gives us the exit <code>code</code> for the child process and the <code>signal</code>, if any, that was used to terminate the child process. This <code>signal</code> variable is null when the child process exits normally.</p>
+<p>The other events that we can register handlers for with the <code>ChildProcess</code> instances are <code>disconnect</code>, <code>error</code>, <code>close</code>, <code>message</code>.</p>
+<ul>
+<li><p>The <code>disconnect</code> event is emitted when the parent process manually calls the <code>child.disconnect</code> function.</p>
+</li>
+<li><p>The <code>error</code> event is emitted if the process could not be spawned or killed.</p>
+</li>
+<li><p>The <code>close</code> event is emitted when the <code>stdio</code> streams of a child process get closed.</p>
+</li>
+<li><p>The <code>message</code> event is the most important one. It’s emitted when the child process uses the <code>process.send()</code> function to send messages. This is how parent/child processes can communicate with each other.</p>
+</li>
+</ul>
+<p>Every child process also gets the three standard <code>stdio</code> streams, which we can access using <code>child.stdin</code>, <code>child.stdout</code>, <code>child.stderr</code>.</p>
+<p>When those streams get closed, the child process that was using them will emit the <code>close</code> event. This <code>close</code> event is different than the <code>exit</code> event because multiple child processes might share the same <code>stdio</code> streams and so one child process exiting does not mean that the streams got closed.</p>
+<p>Since all streams are event emitters, we can listen to different events on those <code>stdio</code> stream that are attached to every child process. Unlike in a normal process though, in a child process, the <code>stdout</code>/<code>stderr</code> streams are readable streams while the <code>stdin</code> stream is a writable one. This is basically the inverse of those types as found in a main process. The events we can use for those streams are the standard ones. Most importantly, on the readable streams, we can listen to the <code>data</code> event, which will have the output of the command or any errorencoutered while executing the command:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">child.stdout.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`child stdout:\n<span class="subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">child.stderr.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.error(<span class="string">`child \n<span class="subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>The two handlers above will log both cases to the main process <code>stdout</code> and <code>stderr</code>. When we execute the <code>spawn</code> function above, the output of the <code>pwd</code> command gets printed and the child process exits with code <code>0</code>, which means no error occured.</p>
+<p>We can pass arguments to the command that’s executed by the <code>spawn</code> function using the second argument of the <code>spawn</code> function, which is an array of all the arguments to be passed to the command.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> child = spawn(<span class="string">'find'</span>, [<span class="string">'.'</span>, <span class="string">'-type'</span>, <span class="string">'f'</span>])</div></pre></td></tr></table></figure>
+<p>If an error occurs during the execution of the command, for example, if we give find an invalid destination above, the <code>child.stderr</code> <code>data</code> event handler will be triggered and the <code>exit</code> event handler will report an exit code of <code>1</code>, which signifies that an error has occured.</p>
+<p>A child process <code>stdin</code> is a writable stream. We can use it to send a command some input. Just like any writable stream, the easiest way to consume it is using the <code>pipe</code> function. We simply pipe a readable stream into a writable stream. SInce the main process <code>stdin</code> is a readable stream, we can pipe that into a child process <code>stdin</code> stream.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> &#123; spawn &#125; = <span class="built_in">require</span>(<span class="string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> child = spawn(<span class="string">'wc'</span>)</div><div class="line"></div><div class="line">process.stdin.pipe(child.stdin)</div><div class="line"></div><div class="line">child.stdout.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`child stdout:\n<span class="subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>In the example above, the child process invokes the <code>wc</code> command, which count lines, words, and characters in Linux. When we pipe the main process <code>stdin</code>(which is a readable stream) into the child process <code>stdin</code>(which is a writable stream). The result of this combination is that we get a standard input mode where we can type somthing and when we hit <code>Ctrl + D</code>, what we typed will be used as the input of the <code>wc</code> command.</p>
+<p>We can also pipe the standard input/output of multiple processes on each other, just like we can do with Linux commands. For example, we can pipe the <code>stdout</code> of the <code>find</code> command to the <code>stdin</code> of the <code>wc</code> command to count all the files in the current directory:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> &#123; spawn &#125; = <span class="built_in">require</span>(<span class="string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> find = spawn(<span class="string">'find'</span>, [<span class="string">'.'</span>, <span class="string">'-type'</span>, <span class="string">'f'</span>])</div><div class="line"><span class="keyword">const</span> wc = spawn(<span class="string">'wc'</span>, [<span class="string">'-l'</span>])</div><div class="line"></div><div class="line">find.stdout.pipe(wc.stdin)</div><div class="line"></div><div class="line">wc.stdout.on(<span class="string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Number of files <span class="subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Add <code>-l</code> to the <code>wc</code> command to make it count only the lines.</p>
+<h3 id="Shell-Syntax-and-the-exec-Function"><a href="#Shell-Syntax-and-the-exec-Function" class="headerlink" title="Shell Syntax and the exec Function"></a>Shell Syntax and the exec Function</h3><p>By default, the <code>spawn</code> function does not create a <em>shell</em> to execute the command we pass into it. This makes it slightly more efficient than the <code>exec</code> function, which does create a shell. The <code>exec</code> function has one other major difference. It <em>buffers</em> the command’s generated output and passes the whole output value to a callback function(instead of using streams, which is what <code>spawn</code> does).</p>
+<p>Here the is previous <code>find | wc</code> example implemented with an <code>exec</code> function.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> &#123; exec &#125; = <span class="built_in">require</span>(<span class="string">'child_process'</span>)</div><div class="line"></div><div class="line">exec(<span class="string">'find . -type  f | wc -l'</span>, (err, stdout, stderr) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="built_in">console</span>.error(<span class="string">`exec error: <span class="subst">$&#123;err&#125;</span>`</span>)</div><div class="line">    <span class="keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Number of files <span class="subst">$&#123;stdout&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Since the <code>exec</code> function uses a shell to execute the command, we can use the <code>shell syntax</code> directly here making use of the <code>shell pipe</code> feature.</p>
+<p>Note that using the shell syntax comes at a <code>security risk</code> if you’re executing any kind of dynamic input provided externally. A user can simply do a command injection attrack using shell syntax characters like ; and $(For example, <code>commnd + &#39;; rm -rf ~&#39;</code>)</p>
+<p>The <code>exec</code> function buffers the output and passes it to the callback function(the second argument to <code>exec</code>) as the <code>stdout</code> argument there. This <code>stdout</code> argument is the command’s output that we want to print out.</p>
+<p>The <code>exec</code> function is a good choice if you need to use the shell syntax and if the size of the data expected from te command is small(Remember <code>exec</code> will buffer the whole data in memory before returning it).</p>
+<p>The <code>spawn</code> function is a much better choice when the size of the data expected from the command is large, because that data will be streamed with the standard IO objects.</p>
+<p>We can make the spawned child process inherit the standard IO object of its parents if we want to, but also, more importantly, we can ke the <code>spawn</code> function use the shell syntax as well. Here’s the smae <code>find | wc</code> command implemented with the <code>spawn</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> child = spawn(<span class="string">'find . -type f'</span>, &#123;</div><div class="line">  <span class="attr">stdio</span>: <span class="string">'inherit'</span>,</div><div class="line">  <span class="attr">shell</span>: <span class="literal">true</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Because of the <code>stdio: &#39;inherit&#39;</code> option above, when we execute the code, the child process inherits the main process <code>stdin</code>, <code>stdout</code> and <code>stderr</code>. This causes the child process data events handlers to be triggered on the main <code>process.stdout</code> stream, making the script output the result right away.</p>
+<p>Because of the <code>shell: true</code> option above, we were able to use the shell syntax in the passed command, just like we did with <code>exec</code>. But with this code, we still get the advantage of the streaming of data that the <code>spawn</code> function gives us. <em>THis is really the best of both worlds</em>.</p>
+<p>There are a few other good options we can use in the last argument to the <code>child_process</code> function besides <code>shell</code> and <code>stdio</code>. We can, for example, use the <code>cwd</code> option to change the working directory of the script.</p>
+<p>Another option we can use is the <code>env</code> option to specify the environment variables that will be visible to the new child process. The default for this option is <code>process.env</code> which gives any command access to the current process environment. If we want ot override that behavior, we can simple pass an empty object as the <code>env</code> option or new value there to be considered as the only environment variables:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> child = spawn(<span class="string">'echo $ANSWER'</span>, &#123;</div><div class="line">  <span class="attr">stdio</span>: <span class="string">'inherit'</span>,</div><div class="line">  <span class="attr">shell</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">env</span>: &#123;</div><div class="line">    <span class="attr">ANSWER</span>: <span class="number">12</span>,</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>The echo command above does not have access to the parent process’s environment variables. It can’t, for example, access <code>$HOME</code>, but it can accccess <code>$ANSWER</code> because it was passes as a custom environement variable through the <code>env</code> option.</p>
+<p>One last important child process option to explain here is the <code>detached</code> option, which makes the child process run independently of its parent process.</p>
+<p>Assuming we have a file <code>timer.js</code> that keeps the event loop busy:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="comment">// keep the event loop busy</span></div><div class="line">&#125;, <span class="number">20000</span>)</div></pre></td></tr></table></figure>
+<p>We can execute it in the background using the <code>detached</code> option:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> &#123; spawn &#125; = <span class="built_in">require</span>(<span class="string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> child = spawn(<span class="string">'node'</span>, [<span class="string">'timer.js'</span>], &#123;</div><div class="line">  <span class="attr">detached</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">stdio</span>: <span class="string">'ignore'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">child.unref()</div></pre></td></tr></table></figure>
+<p>The exact behavior of detached child process depends on the OS. On windows, the detached child process will have its own console window while on Linux the detached child process will be made the leader of a new process groups and session.</p>
+<p>It the <code>unref</code> function is called on the detached process, the parent process can exit independently of the child. This can be useful if the child is executing a long-running process, but to keep it running in the background the child’s <code>stdio</code> configurations also have to be independent of the parent.</p>
+<p>The example above will run a node script(timer.js) in the background by detaching and also ignoring its parent <code>stdio</code> file descriptors so that the parent can terminate while the child keeps running in the background.</p>
+<h3 id="The-execFile-function"><a href="#The-execFile-function" class="headerlink" title="The execFile function"></a>The execFile function</h3><p>If you need to execute a file without using a shell, the <code>execFile</code> function is what you need. It behaves exactly like the <code>exec</code> function, but does not use a shell, which makes it a bit more efficient. On windows, some files cannot be executed on their own, like <code>.bat</code>, <code>.cmd</code> files. Those files cannot be executed with <code>execFile</code> and either <code>exec</code> or <code>spawn</code> with shell set to true is required to execute them.</p>
+<h3 id="The-Sync-Function"><a href="#The-Sync-Function" class="headerlink" title="The *Sync Function"></a>The *Sync Function</h3><p>The functions <code>spawn</code>, <code>exec</code>, <code>execFile</code> from the <code>child_process</code> module also have synchronous blocking versions that will wait until child process exits.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> &#123;</div><div class="line">  spawnSync,</div><div class="line">  execSync,</div><div class="line">  execFileSync,</div><div class="line">&#125; = <span class="built_in">require</span>(<span class="string">'child_process'</span>)</div></pre></td></tr></table></figure>
+<h3 id="The-fork-function"><a href="#The-fork-function" class="headerlink" title="The fork() function"></a>The fork() function</h3><p>THe <code>fork</code> function is a variation of the <code>spawn</code> function for spawning node processes. The biggest difference between <code>spawn</code> and <code>fork</code> is that a communication channel is established to the child process when using <code>fork</code>, so we can use the <code>send</code> function on the forked along with the global <code>process</code> object itself to exchange messsages between the parent and forked processes. We do this through the <code>EventEmitter</code> module interface.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// parent.js</span></div><div class="line"><span class="keyword">const</span> &#123; fork &#125; = <span class="built_in">require</span>(<span class="string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> forked = fork(<span class="string">'child.js'</span>)</div><div class="line"></div><div class="line">forked.on(<span class="string">'message'</span>, (msg) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Message from child'</span>, msg)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">forked.send(&#123;</div><div class="line">  <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// child.js</span></div><div class="line"></div><div class="line">process.on(<span class="string">'message'</span>, (msg) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Message from parent:'</span>, msg)</div><div class="line">&#125;)</div><div class="line"><span class="keyword">let</span> counter = <span class="number">0</span></div><div class="line"></div><div class="line">setInterval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  process.send(&#123;</div><div class="line">    <span class="attr">counter</span>: counter++</div><div class="line">  &#125;)</div><div class="line">&#125;, <span class="number">1000</span>)</div></pre></td></tr></table></figure>
+<p>In the parent.js we fork <code>child.js</code>(<strong>which will execute the file with the <code>node</code> command</strong>) and then we listen for the <code>message</code> event. The <code>message</code> event will be emitted whenever the child use <code>process.send</code>.</p>
+<p>The pass down messages from the parent to the child, we can execute the <code>send</code> function one the forked object it self, and then, in the child script we can listen to the <code>message</code> event on the global <code>process</code>.</p>
+<p>When executing the <code>parent.js</code> file, it’ll first send down the <code>{hello: &#39;world&#39;}</code> object to be printed by the forked child process and then the forked child process will send an incremental counter value every second to be printed by the parent process.</p>
+<p>Let’s do more practical example about the <code>fork</code> function.</p>
+<p>Let’s say we have an http server that handles two endpoints. One of these endpoints(<code>/compute</code> below) is computationally expensive and will take a few seconds to complete. WE can use a long for loop to simulate that:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> longComputation = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">let</span> sum = <span class="number">0</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e9</span>; i++) &#123;</div><div class="line">    sum += i</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> sum</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> server = http.createServer()</div><div class="line"></div><div class="line">server.on(<span class="string">'request'</span>, (req, res) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (req.url === <span class="string">'/compute'</span>) &#123;</div><div class="line">    <span class="keyword">const</span> sum = longComputation()</div><div class="line">    <span class="keyword">return</span> res.end(<span class="string">`Sum is <span class="subst">$&#123;sum&#125;</span>`</span>)</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    res.end(<span class="string">'OK'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">server.listen(<span class="number">3000</span>)</div></pre></td></tr></table></figure>
+<p>The program has a big problem: when the <code>/compute</code> endpoint is requested, the server will not be able to handle any other requests because the event loop is busy with the long for loop operation.</p>
+<p>There are a few ways which we can solve this problem depending on the nature of the long operation but one solution that works for all operation is to just move the computational operation into another process using <code>fork</code>.</p>
+<p>We first move the whole <code>longComputation</code> function into its own file and make it invoke that function when instructed via a message from the main process:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// compute.js</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> longComputatioin  = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">let</span> sum = <span class="number">0</span></div><div class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e9</span>; i++) &#123;</div><div class="line">    sum += i;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> sum</div><div class="line">&#125;</div><div class="line"></div><div class="line">process.on(<span class="string">'message'</span>, (msg) =&gt; &#123;</div><div class="line">  <span class="keyword">const</span> sum = longComputatioin()</div><div class="line">  process.send(sum)</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// server.js</span></div><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)</div><div class="line"><span class="keyword">const</span> &#123; fork &#125; = <span class="built_in">require</span>(<span class="string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> server = http.createServer()</div><div class="line"></div><div class="line">server.on(<span class="string">'request'</span>, (req, res) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (req.url === <span class="string">'/compute'</span>) &#123;</div><div class="line">    <span class="keyword">const</span> compute = fork(<span class="string">'compute.js'</span>)</div><div class="line">    compute.send(<span class="string">'start'</span>)</div><div class="line">    compute.on(<span class="string">'message'</span>, sum =&gt; &#123;</div><div class="line">      res.end(<span class="string">`Sum is <span class="subst">$&#123;sum&#125;</span>`</span>)</div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    res.end(<span class="string">'OK'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">server.listen(<span class="number">3000</span>)</div></pre></td></tr></table></figure>
+<p>When a request to <code>/compute</code> happens now with the above code, we simply send a message to the forked process to start executing the long operation. The main process’s event loop will not be blocked.</p>
+<p>Once the forked process is done with the long operation, it can send its result back to the parent process using <code>process.send</code>.</p>
+<p>Node’s <code>cluster</code> module is based on this idea of child process forking and load balancing the requests among the many forks.</p>
+
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+
+
+
+
+
+
+
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/08/22/Scaling-Node-js-App/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="images/avatar.gif" alt="Chen Yu's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        keithwhisper@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/" target="_self">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    Archives
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2017/08/">August 2017<span class="sidebar_archives-count">20</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/07/">July 2017<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/06/">June 2017<span class="sidebar_archives-count">14</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/05/">May 2017<span class="sidebar_archives-count">15</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/04/">April 2017<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/03/">March 2017<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/02/">February 2017<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2017/01/">January 2017<span class="sidebar_archives-count">3</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/12/">December 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/11/">November 2016<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/10/">October 2016<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/09/">September 2016<span class="sidebar_archives-count">16</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/08/">August 2016<span class="sidebar_archives-count">30</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/07/">July 2016<span class="sidebar_archives-count">43</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/06/">June 2016<span class="sidebar_archives-count">25</span></a></li><li><a class="sidebar_archives-link" href="/archives/2016/05/">May 2016<span class="sidebar_archives-count">24</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Soup/">Soup<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Uncategorized/">Uncategorized<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/">github<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/categories/github/note/">note<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/">note<span class="sidebar_archives-count">141</span></a></li><li><a class="sidebar_archives-link" href="/categories/note/workNote/">workNote<span class="sidebar_archives-count">19</span></a></li><li><a class="sidebar_archives-link" href="/categories/workNote/">workNote<span class="sidebar_archives-count">5</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">230</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            Theme - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+    <a href="https://blog.viosey.com/index.php/Material.html" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+             sidebar.about_theme
+            <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/keithwhisper" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-facebook.svg);">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Keith-CY" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-github.svg);">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+        <a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn" style="background-image: url(/img/footer/footer_ico-linkedin.svg);">
+                <span class="visuallyhidden">LinkedIn</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;
+            <script type="text/javascript">
+                var fd = new Date();
+                document.write(fd.getFullYear());
+            </script>
+            &nbsp;EzCook
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import File -->
+
+    <script src="/js/lazyload.min.js"></script>
+    <script src="/js/js.min.js"></script>
+
+
+
+    <script src="/js/nprogress.js"></script>
+
+
+<script type="text/javascript">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script src="/js/smoothscroll.js"></script>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Window Load-->
+<script>
+    $(window).load(function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+</script>
+
+<!-- MathJax Load-->
+
+<script>
+    <!-- Offer LazyLoad -->
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    <!-- Start Queue -->
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

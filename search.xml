@@ -3,6 +3,83 @@
   
     
     <entry>
+      <title><![CDATA[Basic Elements in D3]]></title>
+      <url>/2017/08/30/Basic-Elements-in-D3/</url>
+      <content type="html"><![CDATA[<h3 id="Circle"><a href="#Circle" class="headerlink" title="Circle"></a>Circle</h3><ul>
+<li><p><code>cx</code>: The position of the center of the circle in the x direction.</p>
+</li>
+<li><p><code>cy</code>: The position of the center of the circle in the y direction.</p>
+</li>
+<li><p><code>r</code>: The radius of the circle from the <code>cx</code>, <code>cy</code> position to the perimeter of the circle.</p>
+</li>
+</ul>
+<h3 id="Ellipse"><a href="#Ellipse" class="headerlink" title="Ellipse"></a>Ellipse</h3><ul>
+<li><p><code>cx</code>: The position of the center of the ellipse in the x direction.</p>
+</li>
+<li><p><code>cy</code>: The position of the center of the ellipse in the y direction.</p>
+</li>
+<li><p><code>rx</code>: The radius of the ellipse in the x dimension.</p>
+</li>
+<li><p><code>ry</code>: The radius of the ellipse in the y dimension.</p>
+</li>
+</ul>
+<h3 id="Rectangle"><a href="#Rectangle" class="headerlink" title="Rectangle"></a>Rectangle</h3><ul>
+<li><p><code>x</code>: The position on the x axis of the left hand side of the rectangle.</p>
+</li>
+<li><p><code>y</code>: The position on the y axis of the top hand side of the rectangle.</p>
+</li>
+<li><p><code>width</code>: the width in pixel of the rectangle.</p>
+</li>
+<li><p><code>height</code>: the height in pixel of the rectangle.</p>
+</li>
+<li><p><code>rx</code>: the radius curve of the corner of the rectangle in the x dimension</p>
+</li>
+<li><p><code>ry</code>: The radius curve of the corner of the rectangle in the y dimension.</p>
+</li>
+</ul>
+<h3 id="Line"><a href="#Line" class="headerlink" title="Line"></a>Line</h3><ul>
+<li><p><code>x1</code>: The x position of the first end of the line.</p>
+</li>
+<li><p><code>y1</code>: The y position of the first end of the line.</p>
+</li>
+<li><p><code>x2</code>: The x position of the second end of the line.</p>
+</li>
+<li><p><code>y2</code>: The y position of the second end of the line.</p>
+</li>
+</ul>
+<h3 id="polyline"><a href="#polyline" class="headerlink" title="polyline"></a>polyline</h3><p>A polyline is a sequence of connected lines described with a single attribute <code>points</code>.</p>
+<ul>
+<li><code>points</code>: The <code>points</code> attribute is a list of x,y coordinates that are the locations of the connecting points of the polyline.</li>
+</ul>
+<h3 id="polygon"><a href="#polygon" class="headerlink" title="polygon"></a>polygon</h3><p>A polygon is a sequnce of connected lines which form a closed shaped described with a single attribte <code>points</code></p>
+<ul>
+<li><code>points</code>: The <code>points</code> attribute is a list of x,y coordinates that are the locations of the connecting points of the polygon.</li>
+</ul>
+<h3 id="Path"><a href="#Path" class="headerlink" title="Path"></a>Path</h3><p>A path is an outline of an SVG shape which is described with a ‘mini-language’ inside a single attribute.</p>
+<ul>
+<li><code>d</code>: This attribute is a list of instructions that allow a shape to be drawn in a complex way using a ‘mini-language’ of command. These commands are written in a shorthand of single letters such a <code>M</code>-moveto, <code>Z</code>-closepath, <code>L</code>-lineto, <code>C</code>-curveto.</li>
+</ul>
+<h3 id="Clipped-Path-AKA-clipPath"><a href="#Clipped-Path-AKA-clipPath" class="headerlink" title="Clipped Path(AKA clipPath)"></a>Clipped Path(AKA clipPath)</h3><p>A clipPath is the path of a SVG shape that can be used in combination with another shape to remove any parts of the combined shape that doesn’t fall within the clipPath.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">holder.append(<span class="string">'clipPath'</span>)</div><div class="line">    .attr(<span class="string">'id'</span>, <span class="string">'ellipse-clip'</span>)</div><div class="line">  .append(<span class="string">'ellipse'</span>)</div><div class="line">    .attr(<span class="string">'cx'</span>, <span class="number">175</span>)</div><div class="line">    .attr(<span class="string">'cy'</span>, <span class="number">100</span>)</div><div class="line">    .attr(<span class="string">'rx'</span>, <span class="number">100</span>)</div><div class="line">    .attr(<span class="string">'ry'</span>, <span class="number">50</span>)</div><div class="line"></div><div class="line"></div><div class="line">holder.append(<span class="string">'rect'</span>)</div><div class="line">    .attr(<span class="string">'x'</span>, <span class="number">125</span>)</div><div class="line">    .attr(<span class="string">'y'</span>, <span class="number">75</span>)</div><div class="line">    .attr(<span class="string">'clip-path'</span>, <span class="string">'url(#ellipse-clip)'</span>)</div><div class="line">    .style(<span class="string">'fill'</span>, <span class="string">'lightgrey'</span>)</div><div class="line">    .attr(<span class="string">'height'</span>, <span class="number">100</span>)</div><div class="line">    .attr(<span class="string">'width'</span>, <span class="number">200</span>)</div></pre></td></tr></table></figure>
+<h3 id="Text"><a href="#Text" class="headerlink" title="Text"></a>Text</h3><p>A text element is an SVG object which is shaped as text. It is described by two required attributes and three optional ones.</p>
+<ul>
+<li><p><code>x</code>: This attribute designates the anchor point location for the text in the x dimension.</p>
+</li>
+<li><p><code>y</code>: This attribute designates the anchor point location for the text in the y dimension.</p>
+</li>
+<li><p><code>dx</code>: This attribute designates the offset of the text from the anchor point in the x dimension. (ususally set to 0.35em, 0.71em)</p>
+</li>
+<li><p><code>dy</code>: This attribute designates the offset of the text from the anchor point in the y dimension.</p>
+</li>
+<li><p><code>text-anchor</code>: This attribute controls the horizontal text alignment. It has three values: <code>start</code>, <code>middle</code>, <code>end</code>.</p>
+</li>
+</ul>
+]]></content>
+      
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Things we can do with the simple Graph of D3]]></title>
       <url>/2017/08/30/Things-we-can-do-with-the-simple-Graph-of-D3/</url>
       <content type="html"><![CDATA[<p><a href="https://leanpub.com/d3-t-and-t-v4/read#axes" target="_blank" rel="external">origin</a></p>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Notes on TS + React + Redux | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Add Explicit Props Interface from StoreWhen I use react-redux, the TS Compiler always throw an error: 1error TS2339: Property &apos;...&apos; does not exist on type &apos;Readonly&amp;lt;children?: ReactNode; &amp;#125;&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Notes on TS + React + Redux">
+<meta property="og:url" content="http://yoursite.com/2017/09/05/Notes-on-TS-React-Redux/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="Add Explicit Props Interface from StoreWhen I use react-redux, the TS Compiler always throw an error: 1error TS2339: Property &apos;...&apos; does not exist on type &apos;Readonly&amp;lt;children?: ReactNode; &amp;#125;&amp;gt;">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-09-05T03:23:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Notes on TS + React + Redux">
+<meta name="twitter:description" content="Add Explicit Props Interface from StoreWhen I use react-redux, the TS Compiler always throw an error: 1error TS2339: Property &apos;...&apos; does not exist on type &apos;Readonly&amp;lt;children?: ReactNode; &amp;#125;&amp;gt;">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-Notes-on-TS-React-Redux" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Notes on TS + React + Redux
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <h3 id="Add-Explicit-Props-Interface-from-Store"><a href="#Add-Explicit-Props-Interface-from-Store" class="headerlink" title="Add Explicit Props Interface from Store"></a>Add Explicit Props Interface from Store</h3><p>When I use <code>react-redux</code>, the TS Compiler always throw an error:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">error TS2339: Property <span class="string">'...'</span> does not exist on <span class="built_in">type</span> <span class="string">'Readonly&lt;children?: ReactNode; &#125;&gt; &amp; Readonly&lt;&#123;&#125;&gt;'</span>.</div></pre></td></tr></table></figure>
+<p>That’s because Connect was not supplying an explicit interface to the container component, so it was confused by the prop that it was trying to pass.</p>
+<p>So you can add an explicit interface on child component.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">interface PropsFromStore extends React.Props&lt;any&gt; &#123;</div><div class="line">  <span class="attr">propsFromStore</span>: any;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChildComponent</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span>&lt;<span class="title">PropsFromStore</span>, <span class="title">React</span>.<span class="title">State</span>&gt; </span>&#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(mapStateToProps, mapDispatchToProps)(ChildComponent)</div></pre></td></tr></table></figure>
+<h3 id="Add-Enhancer-to-Store-with-TS"><a href="#Add-Enhancer-to-Store-with-TS" class="headerlink" title="Add Enhancer to Store with TS"></a>Add Enhancer to Store with TS</h3><p>When I use an enhancer like:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> enhancer = compose(</div><div class="line">  applyMiddleware(...middlewares),</div><div class="line">  DevTools.instrument(),</div><div class="line">  persistState(</div><div class="line">    <span class="built_in">window</span>.location.href.match(</div><div class="line">      <span class="regexp">/[?&amp;]debug_session=([^&amp;#]+)\b/</span></div><div class="line">    )</div><div class="line">  )</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>I got an error like:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[ts] Argument of <span class="built_in">type</span> <span class="string">'Function'</span> is not assignable to parameter of <span class="built_in">type</span> <span class="string">'Func3&lt;&#123;&#125;, &#123;&#125;, &#123;&#125;, &#123;&#125;, StoreEnhancerStoreCreator&lt;&#123;&#125;&gt;&gt;'</span>.</div><div class="line">Type <span class="string">'Function'</span> provides no match <span class="keyword">for</span> the signature <span class="string">'(a1: &#123;&#125;, a2: &#123;&#125;, a3: &#123;&#125;, ...args: any[]): &#123;&#125;'</span></div></pre></td></tr></table></figure>
+<p>To resolve this, just:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; GenericStoreEnhancer &#125; <span class="keyword">from</span> <span class="string">'redux'</span></div><div class="line"><span class="keyword">const</span> enhancer = compose(</div><div class="line">  applyMiddleware(...middlewares),</div><div class="line">  DevTools.instrument <span class="keyword">as</span> GenericStoreEnhancer,</div><div class="line">  persistState(</div><div class="line">    <span class="built_in">window</span>.location.href.match(</div><div class="line">      <span class="regexp">/[?&amp;]debug_session=([^&amp;#]+)\b/</span></div><div class="line">    )</div><div class="line">  )</div><div class="line">)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2017/09/05/Notes-on-TS-React-Redux/" class="article-date">
+  <time datetime="2017-09-05T01:41:10.000Z" itemprop="datePublished">2017-09-05</time>
+</a>
+
+        </li>
+        
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2017/09/04/AsyncRoute-with-React-Router-v4/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">AsyncRoute with React-Router-v4</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

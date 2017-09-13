@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="EzCook">
 <meta property="og:description" content="A Blockchain is  A distributed database that is used to maintain a continuously growing list of records, called block.  A Block contains following information:  Index(Block #) - Which block is it? (Ge">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-09-07T07:20:30.000Z">
+<meta property="og:updated_time" content="2017-09-08T10:05:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Concept on BlockChain">
 <meta name="twitter:description" content="A Blockchain is  A distributed database that is used to maintain a continuously growing list of records, called block.  A Block contains following information:  Index(Block #) - Which block is it? (Ge">
@@ -96,6 +96,57 @@
 <p>The nocne iterates until the hash is valid.</p>
 <p>The process of finding a nonce that corresponds to a valid hash is <strong>mining</strong>.</p>
 <p>As the difficulty <strong>increase</strong>, the number of possible valid hashes <strong>decrese</strong>. With less possible valid hashes, it takes more processing power to find a valid hash.</p>
+<h3 id="Ethereum-Virtual-Machine-EVM"><a href="#Ethereum-Virtual-Machine-EVM" class="headerlink" title="Ethereum Virtual Machine (EVM)"></a>Ethereum Virtual Machine (EVM)</h3><p>The Ethereum Virtual Machine or EVM is the runtime environment for smart contracts in Ethereum. It is not only sandboxed but actually completely isolated, which means that code running inside the EVM has no access to network, filesystem or other processes. Smart contract even have limited access to other smart contracts.</p>
+<h4 id="Accounts"><a href="#Accounts" class="headerlink" title="Accounts"></a>Accounts</h4><p>There are two kinds of accounts in Ethereum which share the same address space:</p>
+<ul>
+<li><p><code>External Account</code> that are controlled by public-private key pairs(i.e. humans)</p>
+</li>
+<li><p><code>Contract Account</code> that are controlled by the code stored together with accounts</p>
+</li>
+</ul>
+<p>The address of an external account is determined from the public key while the address of a contract is determined at the time the contract is created(it is derived from the creator address and the number of transactions sent from the address, the so-called ‘nonce’).</p>
+<p>Every account has a <strong>persistent key-value store mapping 256-bit words to 256-bit words</strong> called <strong>storage</strong>.</p>
+<p>Every account has a <strong>balance</strong> in Ether(in <em>Wei</em> to be exact) which can be modified by sending transactions that include Ether.</p>
+<h4 id="transactions"><a href="#transactions" class="headerlink" title="transactions"></a>transactions</h4><p>A transaction is a message that is sent from one account to another account(which might be the same or the special <strong>zero-account</strong>). It can include binary data(its payload) and Ether.</p>
+<p>If the target account contains code, that code is executed and the payload is provided as input data.</p>
+<p>If the target account is the <em>zero-account</em>(the account with the address 0), the transaction creates a <strong>new contract</strong>.</p>
+<p>As memtioned, the address of that contract is not the zero address but an address derived from the sender and its number of transactions sent(nonce). <strong>The payload of such a contract creation transaction is taken to be EVM bytecode and executed to generate the new contract</strong></p>
+<p>The output of the bytecode, namely the new contract, is permenantly stored.</p>
+<h4 id="Gas"><a href="#Gas" class="headerlink" title="Gas"></a>Gas</h4><p>Each transaction is charged with a certain with a certain amount of <strong>gas</strong>, whose purpose is to limit the amount of work that is needed to executed the transaction and to pay for this execution.</p>
+<p>While the EVM executes the transaction, the gas is gradually depleted according to specific rules.</p>
+<p>The <code>gas price</code> is a value set by the creator of the transaction, who has to pay <code>gas_price * gas</code>.</p>
+<h4 id="Storage-Memory-and-the-Stack"><a href="#Storage-Memory-and-the-Stack" class="headerlink" title="Storage, Memory and the Stack"></a>Storage, Memory and the Stack</h4><p>Each account has a persistent memory area which is called <strong>storage</strong>. Storage is a <strong>key-value</strong> store taht maps 256-bit word to 256-bit word.</p>
+<p>The second memory area is called <strong>memory</strong>, of which a contract obtains a freshly cleared instance for each message call. Memory is linear and can be addressed at byte level, but reads are limited to a width of 256 bits, white writes can be either 8btis or 256bits wide.</p>
+<p>Memory is expanded by a word(256-bit), when accessing (either reading or writing) a previously untouched memory word. At the time of expansion, the cost in gas must be paid. Memory is more costly the larger it grows(it scales quadratically).</p>
+<p>The EVM is not a register machine but a stack machine, so all computations are performed on an area called the <strong>stack</strong>. It has limited to the top end in the following way:</p>
+<ul>
+<li><p>it is possible to copy one of the topmost 16 elements to the top of the stack or swap the topmost 2(or 1, or more, depending on the opeartion) element fomr the stack and push the result onto the stack.</p>
+</li>
+<li><p>All other operation take the topmost 2(or 1, or more, depending on the operation) elements from the stack and push the result onto the stack.</p>
+</li>
+<li><p>It is possible to move stack elements to storage or memory</p>
+</li>
+<li><p>It is not possible to just access arbitrary elements deeper in the stack without removing the top of the stack.</p>
+</li>
+</ul>
+<h3 id="Instruction-Set"><a href="#Instruction-Set" class="headerlink" title="Instruction Set"></a>Instruction Set</h3><p>The instruction set of the EVM is kept minimal in order to avoid incorrect implementations which could cuase consensus problem. All instructions operate ont he basic data type, 256-bit words.</p>
+<p>The usual arihmetic bit, logical and comparison operations are present. Conditional and unconditional jumps are possible. Furthermore, contracts can access relevant properties of the current block like its number and timestamp.</p>
+<h3 id="Message-Calls"><a href="#Message-Calls" class="headerlink" title="Message Calls"></a>Message Calls</h3><p>Contracts can call other contracts or send Ether to non-contract accounts by the means of the message calls.</p>
+<p>Message calls are similar to transactions, in that tehy have a <strong>source</strong>, a <strong>target</strong>, <strong>data payload</strong>, <strong>Ether</strong>, <strong>gas</strong>, and return <strong>data</strong>.</p>
+<p>In fact, every transaction consists of a top-level message call which in turn can create further message calls.</p>
+<p>A contract can decide how much of its remaining <strong>gas</strong> should be sent with the inner message call and how much it wants to retain. If an out-of-gas exception happens in the inner call(or any other exception), this will be signalled by an error value put onto the stack. In this case, only the gas sent together with the call is used up.</p>
+<p>Summarily, a called contract(which can be the same as caller) will receive a <strong>freshly cleared instance of memoery</strong>, and has access to the call payload - which will be provided in a separate area called the <strong>calldata</strong>. After it has finished execution, it can return data which will be stored at a location in the caller’s memory preallocated by the caller.</p>
+<p>Calls are limited to depth of 1024, which means that for more complex operations, loops should be preferred over recursive calls.</p>
+<h3 id="Delegatecall-Callcode-and-Libraries"><a href="#Delegatecall-Callcode-and-Libraries" class="headerlink" title="Delegatecall / Callcode and Libraries"></a>Delegatecall / Callcode and Libraries</h3><p>There exists a special variant of a message call, named <strong>delegatecall</strong> which is identical to a message call apart from the fact taht the code at the target address is executed in the context of the calling contract and <code>msg.sender</code> and <code>msg.value</code> do not change their values.</p>
+<p>This means that a contract can dynamically load code from a different address at runtime. Storage, current address and balance still refer to the calling contract, only the code is taken from teh called address.</p>
+<p>This makes it possible to implement the ‘library’ feature in Solidity: Reusable library code that can be applied to a contract’s storage to implement a complex data structure.</p>
+<h3 id="Logs"><a href="#Logs" class="headerlink" title="Logs"></a>Logs</h3><p>It is possible to store data in a special indexed data structure that maps all the way up to the block level. This feature called <strong>logs</strong> is used by Solidity in order to implement <strong>events</strong>. Contracts cannot access log data after it has been created, but they can efficiently accessed from outside the blockchain.</p>
+<p>Since some part of the log data is stored in bloom filters, it is possible to search for this data in an efficient and crypographically secure way, so network peers that do not download the whole blockchain(‘light clients’) can still find these logs.</p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><p>Contracts can even create other contract s using a special opcode. The only difference between <strong>create calls</strong> and normal message calls is that the payload data is executed and the result stored as code and the caller/creator receives the address of the new contract on the stack.</p>
+<h3 id="Self-destruct"><a href="#Self-destruct" class="headerlink" title="Self-destruct"></a>Self-destruct</h3><p>The only possible that code is removed from the blockchain is when a contract at that address performs the <code>selfdestruct</code> operation. The remaining Ether stored at that address is sent to a designed target and then the storage and code is removed from the state.</p>
+<blockquote>
+<p>Even if a contract’s code does not contain a call to <code>selfdestruct</code>, it can still perform that operation using <code>delegatecall</code> or <code>callcode</code>.</p>
+</blockquote>
 
       
     </div>

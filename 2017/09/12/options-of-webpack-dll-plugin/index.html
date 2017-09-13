@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>options of webpack dll plugin | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="The DllPlugin and DllReferencePlugin provide means to split bundles in a way that can drastically improve build time performance. DllPluginThis plugin used in a separate webpack config exclusively to">
+<meta name="keywords" content="Webpack, DLL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="options of webpack dll plugin">
+<meta property="og:url" content="http://yoursite.com/2017/09/12/options-of-webpack-dll-plugin/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="The DllPlugin and DllReferencePlugin provide means to split bundles in a way that can drastically improve build time performance. DllPluginThis plugin used in a separate webpack config exclusively to">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-09-13T03:41:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="options of webpack dll plugin">
+<meta name="twitter:description" content="The DllPlugin and DllReferencePlugin provide means to split bundles in a way that can drastically improve build time performance. DllPluginThis plugin used in a separate webpack config exclusively to">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-options-of-webpack-dll-plugin" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      options of webpack dll plugin
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p>The <code>DllPlugin</code> and <code>DllReferencePlugin</code> provide means to split bundles in a way that can drastically improve build time performance.</p>
+<h3 id="DllPlugin"><a href="#DllPlugin" class="headerlink" title="DllPlugin"></a>DllPlugin</h3><p>This plugin used in a separate webpack config exclusively to create a <code>dll-only-bundle</code>.</p>
+<p>It creates a <code>manifest.json</code> file, which is used by the <code>DllReferencePlugin</code> to map dependencies.</p>
+<ul>
+<li><p><code>context</code>: (optional), context of requests in the manifest file(default to the webpack context).</p>
+</li>
+<li><p><code>name</code>: name of the exposed dll function(<code>TemplatePaths</code>: <code>[hash]</code> &amp; <code>[name]</code>)</p>
+</li>
+<li><p><code>path</code>: <strong>absolute path</strong> to the manifest json file(output)</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.DllPlugin(option)</div></pre></td></tr></table></figure>
+<p>Creates a <code>manifest.json</code> which is written to the given <strong>absolute</strong> <code>path</code>.</p>
+<p>It contains <strong>mappings</strong> from require and import requests, to module ids. It is used by the <code>DllReferencePlugin</code>.</p>
+<p><strong>Combine this plugin with <code>output.library</code> option to expose(aka, put into the global scope) the dll function</strong></p>
+<blockquote>
+<p>output.library expose the name to global scope</p>
+<p>DllReferencePlugin.name add the name to the mapping file.</p>
+</blockquote>
+<p>So it’s important to keep <code>output.library</code> and <code>DllReferencePlugin.name</code> same to set a right mapping.</p>
+<h3 id="DllReferencePlugin"><a href="#DllReferencePlugin" class="headerlink" title="DllReferencePlugin"></a>DllReferencePlugin</h3><p>This plugin is used in the primary webpack config, it references the <strong>dll-only-bundle</strong> to require the pre-built dependencies.</p>
+<ul>
+<li><p><code>context</code>: <strong>absolute path</strong>, context of the requests in the manifest(or content property)</p>
+</li>
+<li><p><code>manifest</code>: an object containing <code>content</code> and <code>name</code> or a string to the <strong>absolute path</strong> of the JSON manifest to be loaded upon compilation.</p>
+</li>
+<li><p><code>content</code>: (optional), the mappings from request to module id(default to <code>manifest.content</code>)</p>
+</li>
+<li><p><code>name</code>: (optional), the name where the dll is exposed (default to <code>manifest.name</code>)</p>
+</li>
+<li><p><code>scope</code>: (optional), prefix which is used for accessing the content of the dll</p>
+</li>
+<li><p><code>sourceType</code>: (optional), how the dll is exposed.</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.DllReferencePlugin(options)</div></pre></td></tr></table></figure>
+<p>References a dll manifest file to map dependencies names to module ids, then requires them as needed using the internal <code>__webpack_require__</code> function.</p>
+<blockquote>
+<p>Note: Keep the <code>name</code> consistent with <code>output.library</code></p>
+</blockquote>
+<h3 id="Modes"><a href="#Modes" class="headerlink" title="Modes"></a>Modes</h3><p>This plugin can be used in two different modes, <em>scoped</em> and <em>mapped</em>.</p>
+<h4 id="Scoped-Mode"><a href="#Scoped-Mode" class="headerlink" title="Scoped Mode"></a>Scoped Mode</h4><p>The content of the dll is accessible under a module prefix, i.e. with <code>scope = &#39;xyz&#39;</code> a file named <code>abc</code> in the dll can be access via <code>require(xyz/abc)</code>.</p>
+<h4 id="Mapped-Mode"><a href="#Mapped-Mode" class="headerlink" title="Mapped Mode"></a>Mapped Mode</h4><p>The content of the dll is mapped to the current directory. If a required file matches a file in the dll(after resolving), then the file from the dll is usd instead.</p>
+<p>Because this happens after resolving every file in the dll bundle, the same paths must be available for the consumer of the dll bundle, i.e. if the dll contains <code>lodash</code> and the file <code>abc</code>, <code>require(&#39;lodash&#39;)</code> and <code>require(&#39;./abc&#39;)</code> will be used from the dll, rather than building them into the main bundle.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// webpack.config.dll.js</div><div class="line">new webpack.DllPlugin(&#123;</div><div class="line">  context: __dirname,</div><div class="line">  name: '[name]_[hash]',</div><div class="line">  path: path.join(__dirname', 'manifest.json'),</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</div><div class="line">  <span class="attr">context</span>: __dirname,</div><div class="line">  <span class="attr">manifest</span>: <span class="built_in">require</span>(<span class="string">'./manifest.json'</span>),</div><div class="line">  <span class="attr">name</span>: <span class="string">'./my-dll.js'</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h3><h4 id="Output-library-and-DllPlugin-name"><a href="#Output-library-and-DllPlugin-name" class="headerlink" title="Output.library and DllPlugin.name"></a>Output.library and DllPlugin.name</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">output</span>: &#123;</div><div class="line">    <span class="attr">path</span>: path.resolve(__dirname, <span class="string">'lib'</span>),</div><div class="line">    <span class="attr">filename</span>: <span class="string">'[name]_[hash].js'</span>,</div><div class="line">    <span class="attr">library</span>: <span class="string">'[name]_[hash]'</span>, <span class="comment">// this set the exposed function name to [name]_[hash]</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">plugins</span>: [</div><div class="line">    <span class="keyword">new</span> webpack.DllPlugin(&#123;</div><div class="line">      <span class="attr">path</span>: path.resolve(__dirname, <span class="string">'lib'</span>, <span class="string">'[name]-manifest.json'</span>), <span class="comment">// put the manifest file in lib directory</span></div><div class="line">      name: <span class="string">'[name]_[hash]'</span>, <span class="comment">// be consistent with library name to make the map correct</span></div><div class="line">      context: __dirname,</div><div class="line">    &#125;)</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Context-in-Dev-Config"><a href="#Context-in-Dev-Config" class="headerlink" title="Context in Dev Config"></a>Context in Dev Config</h4><p>Set the DllReferencePlugin.context same as DllPlugin.context so the manifest will bundle and resolve the dll files from the same root directory.</p>
+<h4 id="Add-dll-bundle-to-html"><a href="#Add-dll-bundle-to-html" class="headerlink" title="Add dll bundle to html"></a>Add dll bundle to html</h4><p>After I bundle the dll, I should insert it betore app.js in the html file to provide the <strong>global</strong> function.</p>
+<ul>
+<li>Step 1: Copy the dll files to the dist directory</li>
+</ul>
+<p>I use the <code>copy-webpack-plugin</code> plugin</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// webpack.config.js</span></div><div class="line"><span class="keyword">new</span> CopyPlugin([</div><div class="line">  &#123; <span class="keyword">from</span> <span class="string">'./lib/*.js'</span> &#125; <span class="comment">// default to output.path, so the dll file will be copied to output.path/lib/*.js</span></div><div class="line">])</div></pre></td></tr></table></figure>
+<ul>
+<li>Generate a manifest of the dll files for html-webpack-plugin to insert to the template</li>
+</ul>
+<p>I use the <code>webpack-manifest-plugin</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// webpack.config.dll.js</span></div><div class="line"><span class="keyword">new</span> ManifestPlugin()</div></pre></td></tr></table></figure>
+<p>It will generate the <code>manifest.json</code> in output.path</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"vendor.js"</span>: <span class="string">"vendor_0642aa84a6959d661519.js"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>Insert the Manifest into the html</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//parse the json</div><div class="line">const fs = require('fs)</div><div class="line">const manifest = JSON.parse(fs.readFileSync(require('./lib/manifest.json')))</div><div class="line"></div><div class="line">// insert</div><div class="line">new HtmlPlugin(&#123;</div><div class="line">  //...</div><div class="line">  dll: `./lib/$&#123;manifest['vendor.js']&#125;`, // the dll file locates at ./lib/*.js</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><h3 id="Dll-Config"><a href="#Dll-Config" class="headerlink" title="Dll Config"></a>Dll Config</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</div><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</div><div class="line"><span class="keyword">const</span> ManifestPlugin = <span class="built_in">require</span>(<span class="string">'webpack-manifest-plugin'</span>)</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">entry</span>: &#123;</div><div class="line">    <span class="attr">vendor</span>: [<span class="string">'./src/vendor'</span>],</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">output</span>: &#123;</div><div class="line">    <span class="attr">filename</span>: <span class="string">'[name]_[hash].js'</span>,</div><div class="line">    <span class="attr">path</span>: path.resolve(__dirname, <span class="string">'lib'</span>),</div><div class="line">    <span class="attr">library</span>: <span class="string">'[name]_[hash]'</span>,</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">plugins</span>: [</div><div class="line">    <span class="keyword">new</span> webpack.DllPlugin(&#123;</div><div class="line">      <span class="attr">name</span>: <span class="string">'[name]_[hash]'</span>,</div><div class="line">      <span class="attr">path</span>: path.resolve(__dirname, <span class="string">'lib'</span>, <span class="string">'[name]-manifest.json'</span>),</div><div class="line">    &#125;),</div><div class="line">    <span class="keyword">new</span> ManifestPlugin(),</div><div class="line">  ],</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Dev-Config"><a href="#Dev-Config" class="headerlink" title="Dev Config"></a>Dev Config</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</div><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</div><div class="line"><span class="keyword">const</span> HtmlPlugin = <span class="built_in">require</span>(<span class="string">'html-webpack-plugin'</span>)</div><div class="line"><span class="keyword">const</span> CopyPlugin = <span class="built_in">require</span>(<span class="string">'copy-webpack-plugin'</span>)</div><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> manifest = <span class="built_in">JSON</span>.parse(fs.readFileSync(<span class="string">'./lib/manifest.json'</span>))</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">entry</span>: &#123;</div><div class="line">    <span class="attr">app</span>: [<span class="string">'./src/index'</span>],</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">output</span>: &#123;</div><div class="line">    <span class="attr">filename</span>: <span class="string">'scripts/[name].bundle.js'</span>,</div><div class="line">    <span class="attr">path</span>: path.resolve(__dirname, <span class="string">'dist'</span>),</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">plugins</span>: [</div><div class="line">    <span class="keyword">new</span> HtmlPlugin(&#123;</div><div class="line">      <span class="attr">template</span>: path.resolve(__dirname, <span class="string">'src'</span>, <span class="string">'templates'</span>, <span class="string">'index.html'</span>),</div><div class="line">      <span class="attr">title</span>: <span class="string">'dev'</span>,</div><div class="line">      <span class="attr">dll</span>: <span class="string">`./lib/<span class="subst">$&#123;manifest[<span class="string">'vendor.js'</span>]&#125;</span>`</span>,</div><div class="line">    &#125;),</div><div class="line">    <span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</div><div class="line">      <span class="attr">context</span>: <span class="string">'.'</span>,</div><div class="line">      <span class="attr">manifest</span>: <span class="built_in">require</span>(<span class="string">'./lib/vendor-manifest'</span>),</div><div class="line">    &#125;),</div><div class="line">    <span class="keyword">new</span> CopyPlugin([</div><div class="line">      &#123; <span class="attr">from</span>: <span class="string">'./lib/*.js'</span>&#125;</div><div class="line">    ]),</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2017/09/12/options-of-webpack-dll-plugin/" class="article-date">
+  <time datetime="2017-09-12T06:10:18.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Webpack-DLL/">Webpack, DLL</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2017/09/07/optimize-web-app/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Optimize Web App</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

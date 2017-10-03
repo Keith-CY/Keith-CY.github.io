@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Apollo with TypeScript | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Origin Start with a simple React Component wrapped with the graphql higher order component from React Apollo. 123456789101112131415161718192021222324252627282930313233343536373839404142import React fr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apollo with TypeScript">
+<meta property="og:url" content="http://yoursite.com/2017/10/03/Apollo-with-TypeScript/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="Origin Start with a simple React Component wrapped with the graphql higher order component from React Apollo. 123456789101112131415161718192021222324252627282930313233343536373839404142import React fr">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-10-03T15:26:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apollo with TypeScript">
+<meta name="twitter:description" content="Origin Start with a simple React Component wrapped with the graphql higher order component from React Apollo. 123456789101112131415161718192021222324252627282930313233343536373839404142import React fr">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-Apollo-with-TypeScript" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Apollo with TypeScript
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p><a href="https://dev-blog.apollodata.com/getting-started-with-typescript-and-apollo-a9aa2c7dcf87" target="_blank" rel="external">Origin</a></p>
+<p>Start with a simple React Component wrapped with the <code>graphql</code> higher order component from React Apollo.</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">import React from 'react'</div><div class="line">import gql from 'graphql-tag'</div><div class="line">import &#123; graphql &#125; from 'react-apollo'</div><div class="line"></div><div class="line">export const HERO_QUERY = gql`</div><div class="line">  query GetCharacter($episode: Episodi!) &#123;</div><div class="line">    hero(episode: $episode) &#123;</div><div class="line">      name</div><div class="line">      id</div><div class="line">      friends &#123;</div><div class="line">        name</div><div class="line">        id</div><div class="line">        appearsIn</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">`</div><div class="line"></div><div class="line">export const withCharacter = graphql(HERO_QUER, &#123;</div><div class="line">  options: () =&gt; (&#123;</div><div class="line">    variables: &#123; episode: 'JEDI' &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">export const withCharacter((&#123; data: &#123; loading, hero, error &#125;&#125;) =&gt; &#123;</div><div class="line">  if (loading) &#123;</div><div class="line">    return &lt;div&gt;Loading&lt;/div&gt;</div><div class="line">  &#125;</div><div class="line">  if (error) &#123;</div><div class="line">    return &lt;div&gt;Error&lt;/div&gt;</div><div class="line">  &#125;</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &#123;hero &amp;&amp;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;h3&gt;&#123;hero.name&#125;&lt;/h3&gt;</div><div class="line">          &#123;hero.friends.map(friend =&gt; &lt;h6 key=&#123;friend.i&#125;&gt;&#123;friend.name&#125;&lt;/h6&gt;&#125;&gt;&lt;/h6&gt;)&#125;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &#125;</div><div class="line">    &lt;/div&gt;</div><div class="line">  )</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>The above code pulls some data from a GraphQL API using a query and includes lifecycle information, such as loading and error information.</p>
+<p>With a few minor changes, we can tell TypeScript how to support us in writing code within this render function.</p>
+<ul>
+<li>We need to tell TS what the shape of our data from our graphql server will look like. We manually write the types for our response data.</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> type Hero &#123;</div><div class="line">  <span class="attr">name</span>: string</div><div class="line">  id: string</div><div class="line">  appearsIn: string[]</div><div class="line">  friends: Hero[]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> type Response &#123;</div><div class="line">  <span class="attr">hero</span>: Hero</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> withCharacter = graphql&lt;Response&gt;(HERO_QUERY, &#123;</div><div class="line">  <span class="attr">options</span>: <span class="function">(<span class="params">&#123;episode&#125;</span>) =&gt;</span> (&#123;</div><div class="line">    <span class="attr">variables</span>: &#123; episode &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<ul>
+<li>The last line is where the magic happens. We tell TS what the shape of the result will look like from the server when the graphql enhancer wraps a component.</li>
+</ul>
+<p>If you already had your project set up with TS, and have already typed your response data, all you have to do is add the type to the <code>graphql</code> HOC and you are off!</p>
+<h3 id="Take-Control-of-Your-Tree"><a href="#Take-Control-of-Your-Tree" class="headerlink" title="Take Control of Your Tree"></a>Take Control of Your Tree</h3><p>Wrapped components are almost always exported and used by a component somewhere else in your tree, so if your exported component has prop requirements, we need to tell TS so it can help prevent errors elsewhere in our tree. Since the <code>graphql</code> wrapper suppors polymorphic types, we can use the second type parameter of it to do just that.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> type InputProps = &#123;</div><div class="line">  <span class="attr">episode</span>: string</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> withCharacter = graphql&lt;Response, InputProps&gt;(HERO_QUERY, &#123;</div><div class="line">  <span class="attr">options</span>: <span class="function">(<span class="params">&#123; episode &#125;</span>) =&gt;</span> (&#123;</div><div class="line">    <span class="attr">variables</span>: &#123; episode &#125;,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Then the code looks like:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"><span class="keyword">import</span> ApolloClient, &#123; createNetworkInterface &#125; <span class="keyword">from</span> <span class="string">'apollo-client'</span></div><div class="line"><span class="keyword">import</span> &#123; ApolloProvider &#125; <span class="keyword">from</span> <span class="string">'react-apollo'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> Character <span class="keyword">from</span> <span class="string">'./Character'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> networkInterface = createNetworkInterface(&#123;</div><div class="line">  <span class="attr">uri</span>: <span class="string">'https://mpjk0plp9.lp.gql,zone/graphql'</span>,</div><div class="line">&#125;)</div><div class="line"><span class="keyword">export</span> <span class="keyword">const</span> client = <span class="keyword">new</span> ApolloClient(&#123;</div><div class="line">  networkInterface,</div><div class="line">&#125;)</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> () =&gt; (</div><div class="line">  &lt;ApolloProvider client=&#123;client&#125;&gt;</div><div class="line">    &lt;Character /&gt;</div><div class="line">  &lt;/ApolloProvider&gt;</div><div class="line">)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2017/10/03/Apollo-with-TypeScript/" class="article-date">
+  <time datetime="2017-10-03T14:04:53.000Z" itemprop="datePublished">2017-10-03</time>
+</a>
+
+        </li>
+        
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2017/09/30/source-code-of-koa-static/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">source code of koa-static</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

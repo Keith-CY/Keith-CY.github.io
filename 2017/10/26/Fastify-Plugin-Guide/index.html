@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Fastify Plugin Guide | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="In Fastify everything is a plugin, your routes, your utilities and so on are all plugins. And to add a new plugin, whatever its functionality is, in Fastify Registers1fastify.register(require(&apos;./my-pl">
+<meta name="keywords" content="Node, Fastify">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fastify Plugin Guide">
+<meta property="og:url" content="http://yoursite.com/2017/10/26/Fastify-Plugin-Guide/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="In Fastify everything is a plugin, your routes, your utilities and so on are all plugins. And to add a new plugin, whatever its functionality is, in Fastify Registers1fastify.register(require(&apos;./my-pl">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-10-26T03:52:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fastify Plugin Guide">
+<meta name="twitter:description" content="In Fastify everything is a plugin, your routes, your utilities and so on are all plugins. And to add a new plugin, whatever its functionality is, in Fastify Registers1fastify.register(require(&apos;./my-pl">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-Fastify-Plugin-Guide" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Fastify Plugin Guide
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p>In Fastify everything is a plugin, your routes, your utilities and so on are all plugins. And to add a new plugin, whatever its functionality is, in Fastify</p>
+<h3 id="Registers"><a href="#Registers" class="headerlink" title="Registers"></a>Registers</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.register(<span class="built_in">require</span>(<span class="string">'./my-plugin'</span>, opts, callback))</div></pre></td></tr></table></figure>
+<p>Register creates a new Fastify context, this means that if you do any change to the Fastify instance, that change will not be reflected into the context’s ancestors. In other words, encapsulated!</p>
+<p>Required Plugins must expose a single function with the following signature:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params">instance, opts, next</span>) </span>&#123;&#125;</div></pre></td></tr></table></figure>
+<p>The Fastify’s plugin module is fully reentrant and graph-based, it handles without any kind of problem asynchronous code and it guarantees the load order of the plugins, even the close order.</p>
+<h3 id="Decorators"><a href="#Decorators" class="headerlink" title="Decorators"></a>Decorators</h3><p>Fastify offers you a way nice and elegant to wrote an utility: decorator.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="string">'util'</span>, (a, b) =&gt; a + b)</div></pre></td></tr></table></figure>
+<p>Now you can access your utility by doing <code>fastify.util</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fastify.register(<span class="function">(<span class="params">instance, opts, next</span>)=&gt;</span> &#123;</div><div class="line">  instance.decorate(<span class="string">'util'</span>, (a, b) =&gt; a + b)</div><div class="line">  next()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Hooks"><a href="#Hooks" class="headerlink" title="Hooks"></a>Hooks</h3><p>Execute your utility.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">fastify.register(<span class="function">(<span class="params">instance, opts, next</span>) =&gt;</span> &#123;</div><div class="line">  instance.decorate(<span class="string">'util'</span>, (req, key, value) =&gt; &#123; req.key = value &#125;)</div><div class="line"></div><div class="line">  instance.addHook(<span class="string">'preHandler'</span>, (req, reply, done) =&gt; &#123;</div><div class="line">    instance.util(req, <span class="string">'timestamp'</span>, <span class="keyword">new</span> <span class="built_in">Date</span>())</div><div class="line">    done()</div><div class="line">  &#125;)</div><div class="line"></div><div class="line">  instance.get(<span class="string">'/plugin1'</span>, (req, reply) =&gt; &#123;</div><div class="line">    reply.send(req)</div><div class="line">  &#125;)</div><div class="line"></div><div class="line">  next()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.get(<span class="string">'/plugin2'</span>, (req, reply) =&gt; &#123;</div><div class="line">  reply.send(req)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2017/10/26/Fastify-Plugin-Guide/" class="article-date">
+  <time datetime="2017-10-26T03:05:07.000Z" itemprop="datePublished">2017-10-26</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-Fastify/">Node, Fastify</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2017/10/23/Time-to-start-fastify/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Time to start fastify</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Time to start fastify | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Getting StartedInstall1yarn add fastify First Server123456789101112131415// Require the framework and instantiate itconst fastify = require(&apos;fastify&apos;)()// Declare a routefastify.get(&apos;/&apos;, (req, reply)">
+<meta name="keywords" content="Node, Fastify">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Time to start fastify">
+<meta property="og:url" content="http://yoursite.com/2017/10/23/Time-to-start-fastify/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="Getting StartedInstall1yarn add fastify First Server123456789101112131415// Require the framework and instantiate itconst fastify = require(&apos;fastify&apos;)()// Declare a routefastify.get(&apos;/&apos;, (req, reply)">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2017-10-26T03:04:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Time to start fastify">
+<meta name="twitter:description" content="Getting StartedInstall1yarn add fastify First Server123456789101112131415// Require the framework and instantiate itconst fastify = require(&apos;fastify&apos;)()// Declare a routefastify.get(&apos;/&apos;, (req, reply)">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-Time-to-start-fastify" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Time to start fastify
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <h3 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h3><h4 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add fastify</div></pre></td></tr></table></figure>
+<h4 id="First-Server"><a href="#First-Server" class="headerlink" title="First Server"></a>First Server</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Require the framework and instantiate it</span></div><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)()</div><div class="line"></div><div class="line"><span class="comment">// Declare a route</span></div><div class="line">fastify.get(<span class="string">'/'</span>, (req, reply) =&gt; &#123;</div><div class="line">  reply.send(&#123;</div><div class="line">    <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// Run the server</span></div><div class="line">fastify.listen(<span class="number">3000</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Server is running on <span class="subst">$&#123;fastify.server.address().port&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="Schema-Serialization"><a href="#Schema-Serialization" class="headerlink" title="Schema Serialization"></a>Schema Serialization</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)()</div><div class="line"></div><div class="line"><span class="keyword">const</span> opts = &#123;</div><div class="line">  <span class="attr">schema</span>: &#123;</div><div class="line">    <span class="attr">response</span>: &#123;</div><div class="line">      <span class="number">200</span>: &#123;</div><div class="line">        <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">        <span class="attr">properties</span>: &#123;</div><div class="line">          <span class="attr">hello</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Declare a route with an output shcema</span></div><div class="line">fastify.get(<span class="string">'/'</span>, opts, (req, reply) =&gt; &#123;</div><div class="line">  replysend(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.listen(<span class="number">3000</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Server is running on <span class="subst">$&#123;fastify.server.address().port&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h4><p>Register routes in seperate files</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// server.js</span></div><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)()</div><div class="line"></div><div class="line">fastify.register(<span class="built_in">require</span>(<span class="string">'./route'</span>))</div><div class="line"></div><div class="line"><span class="keyword">const</span> opts = &#123;</div><div class="line">  <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">  <span class="attr">something</span>: <span class="literal">true</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">fastify.register([</div><div class="line">  <span class="built_in">require</span>(<span class="string">'./another-route'</span>),</div><div class="line">  <span class="built_in">require</span>(<span class="string">'./yet-another-route'</span>),</div><div class="line">], opts, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.listen(<span class="number">3000</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Server is running on <span class="subst">$&#123;fastify.server.address().port&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// route.js</span></div><div class="line"><span class="built_in">module</span>.exports = (fastify, options, next) &#123;</div><div class="line">  fastify.get(<span class="string">'/'</span>, (req, reply) =&gt; &#123;</div><div class="line">    replysend(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">  &#125;)</div><div class="line">  next()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>or <code>async/await</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="keyword">async</span> (fastify, options) =&gt; &#123;</div><div class="line">  fastify.get(<span class="string">'/'</span>, (req, reply) =&gt; &#123;</div><div class="line">    replysend(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Server-Methods"><a href="#Server-Methods" class="headerlink" title="Server Methods"></a>Server Methods</h3><h4 id="server"><a href="#server" class="headerlink" title="server"></a>server</h4><p><code>fastify.server</code>: The Node Core <code>server</code> object.</p>
+<h4 id="ready"><a href="#ready" class="headerlink" title="ready"></a>ready</h4><p>Function  called when all the plugins has been loaded. It takes an error parameter if something went wrong.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.ready(<span class="function"><span class="params">err</span> =&gt;</span> &#123; <span class="keyword">if</span> (err) <span class="keyword">throw</span> err &#125;)</div></pre></td></tr></table></figure>
+<h4 id="listen"><a href="#listen" class="headerlink" title="listen"></a>listen</h4><p>Starts the server on the given port after all the plugins loaded, internally waits for the <code>.ready()</code> event. The callback is the same as the Node Core.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.listen(<span class="number">3000</span>, err =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Specifying an address is also supported:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.listen(<span class="number">3000</span>, <span class="string">'127.0.0.1'</span>, err =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="route"><a href="#route" class="headerlink" title="route"></a>route</h4><p>Method to add routes to the server, it also have shorthands.</p>
+<h4 id="routes-iterator"><a href="#routes-iterator" class="headerlink" title="routes iterator"></a>routes iterator</h4><p>The fastify instance is an Iterable object with all the registered routes. The route properties are the same the developer has declared.</p>
+<h4 id="close"><a href="#close" class="headerlink" title="close"></a>close</h4><p><code>fastify.close(callback)</code>, call this function to close the server instance and run the <code>onClose</code> hook.</p>
+<h4 id="decorate"><a href="#decorate" class="headerlink" title="decorate*"></a>decorate*</h4><p>Function useful if you need to decorate the fastify instance, Reply or Request.</p>
+<h4 id="register"><a href="#register" class="headerlink" title="register"></a>register</h4><p>Fastify allows the user to extends its functionalities with plugins. A plugin can be a set of routes, a server decorator or whatever.</p>
+<h4 id="use"><a href="#use" class="headerlink" title="use"></a>use</h4><p>Function to add middlewares to Fastify.</p>
+<h4 id="addHook"><a href="#addHook" class="headerlink" title="addHook"></a>addHook</h4><p>Function to add a specific hook in the lifecycle of Fastify.</p>
+<h4 id="logger"><a href="#logger" class="headerlink" title="logger"></a>logger</h4><p>The logger instance.</p>
+<h4 id="Inject"><a href="#Inject" class="headerlink" title="Inject"></a>Inject</h4><p>Fake http injection(for testing purpose).</p>
+<h4 id="setSchemaCompiler"><a href="#setSchemaCompiler" class="headerlink" title="setSchemaCompiler"></a>setSchemaCompiler</h4><p>Set the schema compiler for all routes.</p>
+<h4 id="setNotFoundHandler"><a href="#setNotFoundHandler" class="headerlink" title="setNotFoundHandler"></a>setNotFoundHandler</h4><p><code>fastify.setNotFoundHandler(handler(req, reply))</code>: set the 404 handler. This call is fully encapsulated, so different plugins can set different not found handlers.</p>
+<h4 id="setErrorHandler"><a href="#setErrorHandler" class="headerlink" title="setErrorHandler"></a>setErrorHandler</h4><p><code>fastify.setErrorHandler(handler(err, reply))</code>: set a function that will be called whenever an error happens. The handler is fully encapsulated, so different plugins can set different error handlers.</p>
+<h3 id="Routes"><a href="#Routes" class="headerlink" title="Routes"></a>Routes</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.route(options)</div></pre></td></tr></table></figure>
+<ul>
+<li><p><code>method</code>: currently it supports <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>PATCH</code>, <code>POST</code>, <code>PUT</code>, and <code>OPTIONS</code>, it could be an array of methods.</p>
+</li>
+<li><p><code>url</code>: the path of the url to match this route (alias: <code>path</code>)</p>
+</li>
+<li><p><code>schema</code>: an object containing the schemas for the request and response. They need to be in <code>JSON Schema</code> format.</p>
+<ul>
+<li><p><code>body</code>: validates the body of the request if it is a POST or PUT.</p>
+</li>
+<li><p><code>querystring</code>: validates the querystring. This can be a complete JSON Schema Object, with the property <code>type</code> of <code>object</code> and <code>properties</code> object of parameters, or simply the values of what would be contained in the properties object as shown below.</p>
+</li>
+<li><p><code>params</code>: validates the params.</p>
+</li>
+<li><p><code>response</code>: fitler and generate a schema for the response, setting a schema allows us to have 10-20% more throughput.</p>
+</li>
+</ul>
+</li>
+<li><p><code>beforeHandler(req, res, done)</code>: a function called just before the request handler, useful if you need to perform authentication at route level for example, it could also be and array of functions.</p>
+</li>
+<li><p><code>handler(req, reply)</code>: the function that will handle this request.</p>
+</li>
+<li><p><code>request</code> if defined in <code>Request</code>.</p>
+</li>
+<li><p><code>reply</code> is defined in <code>Reply</code>.</p>
+</li>
+</ul>
+<p>Exmaple</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">fastify.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">url</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">schema</span>: &#123;</div><div class="line">    <span class="attr">querystring</span>: &#123;</div><div class="line">      <span class="attr">name</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">      <span class="attr">excitement</span>: &#123; <span class="attr">type</span>: <span class="string">'integer'</span> &#125;,</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">response</span>: &#123;</div><div class="line">      <span class="number">200</span>: &#123;</div><div class="line">        <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">        <span class="attr">properties</span>: &#123;</div><div class="line">          <span class="attr">hello</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, reply</span>) </span>&#123;</div><div class="line">    reply.send(&#123;</div><div class="line">      <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">url</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">schema</span>: &#123;<span class="comment">/*..*/</span>&#125;,</div><div class="line">  <span class="attr">beforeHandler</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, reply, done</span>) </span>&#123;</div><div class="line">    <span class="comment">// auth</span></div><div class="line">    done()</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span>(<span class="params">req, reply</span>) </span>&#123;</div><div class="line">    reply.send(&#123;</div><div class="line">      <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="ShortHands"><a href="#ShortHands" class="headerlink" title="ShortHands"></a>ShortHands</h4><p><code>fastify.method(path, [options], handler)</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> opts = &#123;</div><div class="line">  <span class="attr">schema</span>: &#123;</div><div class="line">    <span class="attr">response</span>: &#123;</div><div class="line">      <span class="number">200</span>: &#123;</div><div class="line">        <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">        <span class="attr">properites</span>: &#123;</div><div class="line">          <span class="attr">hello</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">fastify.get(<span class="string">'/'</span>, opts, (req, reply) =&gt; &#123;</div><div class="line">  reply.send(&#123;</div><div class="line">    <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><code>fastify.all(path, [options], handler)</code> will add the same handler to all the supported methods.</p>
+<h4 id="Async-Await"><a href="#Async-Await" class="headerlink" title="Async/Await"></a>Async/Await</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fastify.get(<span class="string">'/'</span>, options, <span class="keyword">async</span> (req, reply) =&gt; &#123;</div><div class="line">  <span class="keyword">var</span> data = <span class="keyword">await</span> getData()</div><div class="line">  <span class="keyword">var</span> processed = <span class="keyword">await</span> processData(data)</div><div class="line">  <span class="keyword">return</span> processed</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="Route-Prefixing"><a href="#Route-Prefixing" class="headerlink" title="Route Prefixing"></a>Route Prefixing</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// server.js</span></div><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)()</div><div class="line"></div><div class="line">fastify.register(<span class="built_in">require</span>(<span class="string">'./routes/v1/users'</span>), &#123;</div><div class="line">  <span class="attr">prefix</span>: <span class="string">'/v1'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// routes/v1/users</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params">fastify, opts, next</span>) </span>&#123;</div><div class="line">  fastify.get(<span class="string">'/user'</span>, handler_v1)</div><div class="line">  next()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Now your client can access to <code>/v1/user</code>.</p>
+<p>Be aware that if you use <code>fastify-plugin</code> this option won’t work.</p>
+<h3 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h3><p>Logging is disabled by default, and you can enable it by passing <code>{ logger: true }</code> or <code>{ logger: { level: &#39;info&#39; } }</code> when you create the fastify instance.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)(&#123;</div><div class="line">  <span class="attr">logger</span>: <span class="literal">true</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.get(<span class="string">'/'</span>, options, (req, reply) =&gt; &#123;</div><div class="line">  req.log.info(<span class="string">'Some info about the current request'</span>)</div><div class="line">  reply.send(&#123;</div><div class="line">    <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Middlewares"><a href="#Middlewares" class="headerlink" title="Middlewares"></a>Middlewares</h3><p>Fastify provides out of the box an asynchronous middleare engine compatible with Express and Restify middlewares.</p>
+<p>Fastify middleware don’t support the full syntax <code>middleware(err, req, res, next)</code> because error handling is done inside Fastify.</p>
+<p>Also if you are using a middleware taht bundles different, smaller middlewares such as helmet, we recommand to use the single module to get better performances.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'cors'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'dns-prefetch-control'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'frameguard'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'hide-powered-by'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'hsts'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'ienoopen'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'x-xss-protection'</span>)())</div></pre></td></tr></table></figure>
+<p>If you need to run a middleware only under certain path, just pass the path as first parameter to <code>use</code> and you are done.</p>
+<p>Note that this does not support routes with parameters, (eg: <code>/users/:id/comments</code>) and wildcard is not supported in multiple paths.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> serveStatic = <span class="built_in">require</span>(<span class="string">'serve-static'</span>)</div><div class="line"></div><div class="line"><span class="comment">// single path</span></div><div class="line">fastify.use(<span class="string">'/css'</span>, servveStatic(<span class="string">'/asserts'</span>))</div><div class="line"><span class="comment">// wildcard path</span></div><div class="line">fastify.use(<span class="string">'/css/*'</span>, servveStatic(<span class="string">'/asserts'</span>))</div><div class="line"><span class="comment">// multiple paths</span></div><div class="line">fastify.use([<span class="string">'/css'</span>, <span class="string">'/js'</span>], servveStatic(<span class="string">'/asserts'</span>))</div></pre></td></tr></table></figure>
+<h3 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h3><p>By using the hook you can interact directly inside the lifecycle of Fastify, there are three different Hooks that you can use(in order of execution):</p>
+<ul>
+<li><p><code>onRequest</code></p>
+</li>
+<li><p><code>preHandler</code></p>
+</li>
+<li><p><code>onResponse</code></p>
+</li>
+<li><p><code>onClose</code></p>
+</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="string">'onRequest'</span>, (req, res, next) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  next()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.addHook(<span class="string">'preHandler'</span>, (req, res, next) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  next()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.addHook(<span class="string">'onResponse'</span>, (res, next) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  next()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>If you want to pass a custom error code to the user, just use the <code>reply.code()</code>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="string">'onRequest'</span>, (req, res, next) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  reply.code(<span class="number">400</span>)</div><div class="line">  next(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'some error'</span>))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>The error will be handled by <code>Reply</code></p>
+<p>The unique hook that is not inside the lifecycle is <code>&#39;onClose&#39;</code>, this one is triggered when you call <code>fastify.close()</code> to stop the server, and it is useful if you have some plugins that need a ‘shutdown’ part, such as a connection to database.</p>
+<p>Only for this hook the parameters of the functions changes.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="string">'onClose'</span>, (instance, done) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  done()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h4><p>Except for <code>onClose</code> all the hooks are encapsulated this means that you can decide where your hooks should run by using <code>register</code>.</p>
+<h4 id="beforeHandler"><a href="#beforeHandler" class="headerlink" title="beforeHandler"></a>beforeHandler</h4><p><code>beforeHandler</code> is not a standard hook like <code>preHandler</code>, but is a function that your register right in the route option that will be executed only in the specified route.</p>
+<p><code>beforeHandler</code> is executed always after the <code>preHandler</code> hook.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="string">'preHander'</span>, (req, reply, done) =&gt; &#123;</div><div class="line">  <span class="comment">//  your code</span></div><div class="line">  done()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">url</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">schema</span>: &#123;<span class="comment">/*...*/</span>&#125;,</div><div class="line">  <span class="attr">beforeHandler</span>: <span class="function">(<span class="params">req, reply, done</span>) =&gt;</span> &#123;<span class="comment">/*...*/</span> ;done()&#125;</div><div class="line">  handler: <span class="function">(<span class="params">req, reply</span>) =&gt;</span> &#123; reply.send(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;) &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">url</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">shcema</span>: &#123;<span class="comment">/*...*/</span>&#125;,</div><div class="line">  <span class="attr">beforeHandler</span>: [</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">first</span> (<span class="params">req, reply, done</span>) </span>&#123;</div><div class="line">      done()</div><div class="line">    &#125;,</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">second</span> (<span class="params">req, reply, done</span>) </span>&#123;</div><div class="line">      done()</div><div class="line">    &#125;</div><div class="line">  ],</div><div class="line">  <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, reply</span>) </span>&#123;</div><div class="line">    reply.send(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Decorators"><a href="#Decorators" class="headerlink" title="Decorators"></a>Decorators</h3><p>If you need to add functionalities to the Fastify instance, the <code>decorator</code> api is what you need.</p>
+<p>This api allows you to add new properties to the Fastify instance, a property value is not restricted to be a function, could also be an object or a string for example.</p>
+<h4 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h4><h5 id="decorate-1"><a href="#decorate-1" class="headerlink" title="decorate"></a>decorate</h5><p>Just call the <code>decorate</code> api and pass the name of the new property and its value.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="string">'utility'</span>, () =&gt; &#123;</div><div class="line">  <span class="comment">// something very useful</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>As said above, you can decorate the instance with other values and not only functions:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="string">'conf'</span>, &#123;</div><div class="line">  <span class="attr">db</span>: <span class="string">'some db'</span>,</div><div class="line">  <span class="attr">port</span>: <span class="number">3000</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Once you decorate the instance you can access the value every time you need by using the name you passed as parameter:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">fastify.utility()</div><div class="line"><span class="built_in">console</span>.log(fastify.conf.db)</div></pre></td></tr></table></figure>
+<p>Decorators are not <em>overwritable</em>, if you try to declare a decorator already declared, <code>decorate</code> will throw an exception.</p>
+<h5 id="decorateReply"><a href="#decorateReply" class="headerlink" title="decorateReply"></a>decorateReply</h5><p>As the name suggest, this api is needed if you want to add new methods to the <code>Reply</code> core object. Just call the <code>decorateReply</code> api and pass the name of the new property and its value.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.decorateReply(<span class="string">'utility'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// something very useful</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Note: using an arrow function will break the binding of <code>this</code> to the Fastify <code>reply</code> instance.</p>
+<h5 id="decorateRequest"><a href="#decorateRequest" class="headerlink" title="decorateRequest"></a>decorateRequest</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.decorateRequest(<span class="string">'utility'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// something very useful</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Note: using an arrow function will break the binding of <code>this</code> to the Fastify <code>request</code> instance.</p>
+<h5 id="extendServerError"><a href="#extendServerError" class="headerlink" title="extendServerError"></a>extendServerError</h5><p>If you need to extend the standard <code>server error</code>, this api is what you need.</p>
+<p>You must pass a function that returns an Object, Fastify will extend the server error with the returned object of your function. The function will receive the original error object.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">fastify.extendServerError(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">timestamp</span>: <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">  The resulting object will be: &#123;</div><div class="line">    error: string,</div><div class="line">    message: string,</div><div class="line">    statusCode: number,</div><div class="line">    timestamp: date,</div><div class="line">  &#125;</div><div class="line">*/</div></pre></td></tr></table></figure>
+<h4 id="Sync-and-Async"><a href="#Sync-and-Async" class="headerlink" title="Sync and Async"></a>Sync and Async</h4><p><code>decorate</code> is synchronous API, if you need to add a decorator that has an asynchronous bootstrap, could happen that Fastify boots up before your decorator is ready. To avoid this issue you must use <code>register</code> api in combination with <code>fastify-plugin</code>.</p>
+<h4 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a>Dependencies</h4><p>If your decorator depends on another decorator, you can declare the dependencies of your function, it’s pretty easy, you just need to add an array of strings(representing the names of the decorators your are depending on) as third parameter.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="string">'utility'</span>, fn, [<span class="string">'greet'</span>, <span class="string">'log'</span>])</div></pre></td></tr></table></figure>
+<p>If a dependency is not satisfied, <code>decorate</code> will throw an exception.</p>
+<h4 id="hasDecorator"><a href="#hasDecorator" class="headerlink" title="hasDecorator"></a>hasDecorator</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.hasDecorator(<span class="string">'utility'</span>)</div></pre></td></tr></table></figure>
+<h3 id="Validation-and-Serialize"><a href="#Validation-and-Serialize" class="headerlink" title="Validation and Serialize"></a>Validation and Serialize</h3><p>Fastify uses a schema based approach and even if it is not mandatory we recommend to use JSON Schema to validate you routes and serialize your output, internally Fastify compiles the schema in a highly performance function.</p>
+<h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><p>The route validation internally uses <code>Ajv</code>, which is highly performant JSON validator. Validate the input is very easy, just add the fields that you need inside the route schema and you are done.</p>
+<p>The supported validations are</p>
+<ul>
+<li><p>body: Validates the body of the request if it is a POST or PUT</p>
+</li>
+<li><p>querystring: Validates the querystring. This can be a complete JSON Schema object, with the property type of object and properties object of parameters, or simply the values of what would be contained in the properties object as shown below.</p>
+</li>
+<li><p>params: Validates teh route params.</p>
+</li>
+<li><p>headers: Validates teh request headers.</p>
+</li>
+</ul>
+<p>Example:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> schema = &#123;</div><div class="line">  <span class="attr">body</span>: &#123;</div><div class="line">    <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">    <span class="attr">properties</span>: &#123;</div><div class="line">      <span class="attr">someKey</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span>&#125;,</div><div class="line">      <span class="attr">someOtherKey</span>: &#123; <span class="attr">type</span>: <span class="string">'number'</span> &#125;,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">querystring</span>: &#123;</div><div class="line">    <span class="attr">name</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">    <span class="attr">excitement</span>: &#123; <span class="attr">type</span>: <span class="string">'integer'</span> &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">params</span>: &#123;</div><div class="line">    <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">    <span class="attr">properties</span>: &#123;</div><div class="line">      <span class="attr">par1</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">      <span class="attr">par2</span>: &#123; <span class="attr">type</span>: <span class="string">'number'</span> &#125;,</div><div class="line">    &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">headers</span>: &#123;</div><div class="line">    <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">    <span class="attr">properties</span>: &#123;</div><div class="line">      <span class="string">'x-foo'</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">required</span>: [<span class="string">'x-foo'</span>],</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Schema-Compiler"><a href="#Schema-Compiler" class="headerlink" title="Schema Compiler"></a>Schema Compiler</h4><p>The <code>schemaCompiler</code> is a function that returns a function that validates the body, url parameters, headers and query string.</p>
+<p>The default <code>schemaCompiler</code> returns a function that implements the <code>ajv</code> validation interface. <code>fastify</code> use it internally to speed the valiation up.</p>
+<h4 id="Serialize"><a href="#Serialize" class="headerlink" title="Serialize"></a>Serialize</h4><p>Usually you will send your data to the clients via JSON, and Fastify has a powerful tools to help you: <code>fast-json-stringify</code>, which is used if you have provided an output schema in the route options.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> schema = &#123;</div><div class="line">  <span class="attr">response</span>: &#123;</div><div class="line">    <span class="number">200</span>: &#123;</div><div class="line">      <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">      <span class="attr">properties</span>: &#123;</div><div class="line">        <span class="attr">value</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">        <span class="attr">otherValue</span>: &#123; <span class="attr">type</span>: <span class="string">'boolean'</span> &#125;,</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>As you can see the response schema is based on the status code, if you want to use the same schema for mutliple status code, you can use <code>2xx</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> schema = &#123;</div><div class="line">  <span class="attr">response</span>: &#123;</div><div class="line">    <span class="string">'2xx'</span>: &#123;</div><div class="line">      <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">      <span class="attr">properties</span>: &#123;</div><div class="line">        <span class="attr">value</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">        <span class="attr">otherValue</span>: &#123; <span class="attr">type</span>: <span class="string">'boolean'</span> &#125;,</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="number">201</span>: &#123;</div><div class="line">      <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">      <span class="attr">properties</span>: &#123;</div><div class="line">        <span class="attr">value</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">Incoming Request</div><div class="line">  │</div><div class="line">  └─▶ Instance Logger</div><div class="line">        │</div><div class="line">        └─▶ Routing</div><div class="line">             │</div><div class="line">       404 ◀─┴─▶ onRequest Hook</div><div class="line">                  │</div><div class="line">        4**/5** ◀─┴─▶ run Middlewares</div><div class="line">                        │</div><div class="line">              4**/5** ◀─┴─▶ Parsing</div><div class="line">                             │</div><div class="line">                       415 ◀─┴─▶ Validation</div><div class="line">                                   │</div><div class="line">                             400 ◀─┴─▶ preHandler Hook</div><div class="line">                                         │</div><div class="line">                               4**/5** ◀─┴─▶ beforeHandler</div><div class="line">                                               │</div><div class="line">                                     4**/5** ◀─┴─▶ User Handler</div><div class="line">                                                     │</div><div class="line">                                                     └─▶ Reply</div><div class="line">                                                          │ │</div><div class="line">                                                          │ └─▶ Outgoing Response</div><div class="line">                                                          │</div><div class="line">                                                          └─▶ onResponse Hook</div></pre></td></tr></table></figure>
+<h3 id="Reply"><a href="#Reply" class="headerlink" title="Reply"></a>Reply</h3><p>The second parameter of the handler function is <code>Reply</code>.</p>
+<p>Reply is a core Fastify object that exposes the following functions:</p>
+<ul>
+<li><p>.code(statusCode)</p>
+</li>
+<li><p>.header(name, value)</p>
+</li>
+<li><p>.type(value): Set the header <code>Content-Type</code></p>
+</li>
+<li><p>.redirect([code, ] url): default code 302</p>
+</li>
+<li><p>.serializer(function): Set a custom serializer for the payload</p>
+</li>
+<li><p>.send(payload)</p>
+</li>
+<li><p>.sent: A boolean value that you can use if you need to know it <code>send</code> has already been called.</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fastify.get(<span class="string">'/'</span>, options, (request, reply) =&gt; &#123;</div><div class="line">  reply</div><div class="line">    .code(<span class="number">200</span>)</div><div class="line">    .type(<span class="string">'application/json'</span>)</div><div class="line">    .send(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h4><p>If not set via <code>reply.code</code>, the resulting <code>statusCode</code> will be <code>200</code></p>
+<h4 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h4><p>Sets a custom header to the response.</p>
+<p>If you not set a <code>Content-Type</code> header, Fastify assumes that you are using <code>application/json</code>, unless you are send a stream, in that case Fastify recognize it and sets the <code>Content-Type</code> at <code>application/octet-stream</code>.</p>
+<h4 id="Redirect"><a href="#Redirect" class="headerlink" title="Redirect"></a>Redirect</h4><p>Redirects a request to the specified url, the status code is optional, default to <code>302</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reply.redirect(<span class="string">'/home'</span>)</div></pre></td></tr></table></figure>
+<h4 id="Type"><a href="#Type" class="headerlink" title="Type"></a>Type</h4><p>Sets the content type for the response.</p>
+<p>It’s the shortcut for <code>reply.header(&#39;Content-Type&#39;, &#39;application/json&#39;)</code></p>
+<h4 id="Serializer"><a href="#Serializer" class="headerlink" title="Serializer"></a>Serializer</h4><h4 id="Send"><a href="#Send" class="headerlink" title="Send"></a>Send</h4><h4 id="Objects"><a href="#Objects" class="headerlink" title="Objects"></a>Objects</h4><p>If you are sending JSON Objects, send will serialize the object with <code>fast-json-stringify</code> if you setted an output schema, otherwise <code>fast-safe-stringify</code></p>
+<h4 id="Promises"><a href="#Promises" class="headerlink" title="Promises"></a>Promises</h4><p>Send handle natively the promsies and supports out of the box async-await:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">fastify.get(<span class="string">'/promises'</span>, options, (req, reply) =&gt; &#123;</div><div class="line">  <span class="keyword">const</span> promise = <span class="keyword">new</span> Prmise(<span class="comment">/*...*/</span>)</div><div class="line">  reply</div><div class="line">    .code(<span class="number">200</span>)</div><div class="line">    .send(promise)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.get(<span class="string">'/async-await'</span>, options, <span class="keyword">async</span> (req, reply) =&gt; &#123;</div><div class="line">  <span class="keyword">let</span> res = <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</div><div class="line">    setTimeout(resolve, <span class="number">200</span>, &#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">  &#125;)</div><div class="line">  <span class="keyword">return</span> res</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="Streams"><a href="#Streams" class="headerlink" title="Streams"></a>Streams</h4><p>Send can also handle streams out of box, internally uses <code>pump</code> to avoid leaks of file description. If you are sneding a stream and you have not setted a <code>Content-Type</code> header, send will set it at <code>application/octet-stream</code>.</p>
+<h4 id="Errors"><a href="#Errors" class="headerlink" title="Errors"></a>Errors</h4><p>If you pass to send an object that is an instance of Error, Fastify will automatically create error structured as the following:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">error</span>: string, <span class="comment">// the http error message</span></div><div class="line">  message: string, <span class="comment">// the user error message</span></div><div class="line">  statusCode: number, <span class="comment">// the http status code</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><p>The first parameter of the handler function is <code>Request</code>.</p>
+<p>Request is a core Fastify object containing the following fields: </p>
+<ul>
+<li><p>query</p>
+</li>
+<li><p>body</p>
+</li>
+<li><p>params: the params matching the URL</p>
+</li>
+<li><p>headers</p>
+</li>
+<li><p>req: the incoming HTTP request from Node core</p>
+</li>
+<li><p>log</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fastify.post(<span class="string">'/:params'</span>, options, (req, reply) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(request.body)</div><div class="line">  <span class="built_in">console</span>.log(request.query)</div><div class="line">  <span class="built_in">console</span>.log(request.params)</div><div class="line">  <span class="built_in">console</span>.log(request.headers)</div><div class="line">  <span class="built_in">console</span>.log(request.req)</div><div class="line">  request.log.info(<span class="string">'some info'</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Content-Type-Parser"><a href="#Content-Type-Parser" class="headerlink" title="Content Type Parser"></a>Content Type Parser</h3><p>Natively Fastify supports only <code>application/json</code> content-type. If you need to support different content types you can use the <code>addContentTypeParser</code> api.</p>
+<h4 id="Catch-All"><a href="#Catch-All" class="headerlink" title="Catch All"></a>Catch All</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fastify.addContentTypeParser(<span class="string">'*'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, done</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> data = <span class="string">''</span></div><div class="line">  req.on(<span class="string">'data'</span>, chunk =&gt; &#123;data += chunk&#125;)</div><div class="line">  req.on(<span class="string">'end'</span>, () =&gt; done(data))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h3><p>Fastify allows the user to extend its functionalities with plugins. A plugin can be a set of routes, a server decorator or whatever.</p>
+<p>The API you will need for one or more plugins is <code>register</code>.</p>
+<p>By default, <code>register</code> creates a <strong>new scope</strong>, this means that if you do some changes to the Fastify instance(via decorate), this change will not be reflected to the current context ancestors, but only to its sons.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fastify.register(plugin, [options])</div><div class="line"></div><div class="line">fastify.register([</div><div class="line">  <span class="built_in">require</span>(<span class="string">'./another-route'</span>),</div><div class="line">  <span class="built_in">require</span>(<span class="string">'./yet-another-route'</span>),</div><div class="line">], opts)</div></pre></td></tr></table></figure>
+<h3 id="Craete-a-Plugin"><a href="#Craete-a-Plugin" class="headerlink" title="Craete a Plugin"></a>Craete a Plugin</h3><p>Create a plugin is very easy, you just need to create a function that takes three paremters, the <code>fastify</code> instance, an options object and the next callback.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">fastify, opts, next</span>) =&gt;</span> &#123;</div><div class="line">  fastify.decorate(<span class="string">'utility'</span>, () =&gt; &#123;&#125;)</div><div class="line">  fastify.get(<span class="string">'/'</span>, handler)</div><div class="line">  next()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Handle-the-Scope"><a href="#Handle-the-Scope" class="headerlink" title="Handle the Scope"></a>Handle the Scope</h4><p>You have two ways to tell Fastify to avoid the creation of a new context:</p>
+<ul>
+<li><p>Use the <code>fastify-plugin</code> module</p>
+</li>
+<li><p>Use the <code>skip-override</code> hidden property</p>
+</li>
+</ul>
+<p>We recomended to use the <code>fastify-plugin</code> module, because it solves this problem for you, and you can pass as parameter a version range of Fastify taht your plguin support.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fp = <span class="built_in">require</span>(<span class="string">'fastify-plguin'</span>)</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = fp(<span class="function"><span class="keyword">function</span>(<span class="params">fastify, opts, next</span>) </span>&#123;</div><div class="line">  fastify.decorate(<span class="string">'utility'</span>, () =&gt; &#123;&#125;)</div><div class="line">  next()</div><div class="line">&#125;, <span class="string">'0.x'</span>)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2017/10/23/Time-to-start-fastify/" class="article-date">
+  <time datetime="2017-10-23T06:50:14.000Z" itemprop="datePublished">2017-10-23</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Node-Fastify/">Node, Fastify</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2017/10/03/Apollo-with-TypeScript/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Apollo with TypeScript</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

@@ -3,6 +3,80 @@
   
     
     <entry>
+      <title><![CDATA[Rocket of Rust]]></title>
+      <url>/2017/11/06/Rocket-of-Rust/</url>
+      <content type="html"><![CDATA[<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>Rocket’s design is centered around three core philosophies:</p>
+<ul>
+<li><p><strong>Function declaration and parameter type should contain all necessary information to validate and process a request</strong>. This immediately prohibits APIs where request state is retrieved from a global context. As a result, request handling is <strong>self-contained</strong> in Rocket: handlers are regular functions with regular arguments.</p>
+</li>
+<li><p><strong>All request handling information should be typed</strong>. Because the web and HTTP are themselves untyped(or stringly typed, as some call it), this means that something or someone has to convert strings to native types. Rocket does this for you with zero programming overhead.</p>
+</li>
+<li><p><strong>Decisions should not be forced</strong>. Templates, serialization, sessions and just about everything else are all pluggable, optional components. While Rocket has official support and libraries for each of these, they are completely optional and swappable.</p>
+</li>
+</ul>
+<h3 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cargo new hello-rocket --bin</div></pre></td></tr></table></figure>
+<p>Add Dependencies</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="section">[dependencies]</span></div><div class="line"><span class="attr">rocket</span> = <span class="string">"0.3.3"</span></div><div class="line"><span class="attr">rocket_codegen</span> = <span class="string">"0.3.3"</span></div></pre></td></tr></table></figure>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#![feature(plugin)]</span></div><div class="line"><span class="meta">#![plugin(rocket_codegen)]</span></div><div class="line"></div><div class="line"><span class="keyword">extern</span> <span class="keyword">crate</span> rocket;</div><div class="line"></div><div class="line"><span class="meta">#[get(<span class="meta-string">"/"</span>)]</span></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">index</span></span>() -&gt; &amp;<span class="symbol">'static</span> <span class="built_in">str</span> &#123;</div><div class="line">  <span class="string">"Hello World"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span> </span>() &#123;</div><div class="line">  rocket::ignite().mount(<span class="string">"/"</span>, routes![index]).launch();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>It creates an <code>index</code> route, <em>mount</em> the route at the <code>/</code> path, and launches the application. Compile and run the program with <code>cargo run</code>, you should see the following:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">🔧  Configured <span class="keyword">for</span> development.</div><div class="line">    =&gt; address: localhost</div><div class="line">    =&gt; port: 8000</div><div class="line">    =&gt; <span class="built_in">log</span>: normal</div><div class="line">    =&gt; workers: [core count * 2]</div><div class="line">    =&gt; secret key: generated</div><div class="line">    =&gt; limits: forms = 32KiB</div><div class="line">    =&gt; tls: disabled</div><div class="line">🛰  Mounting <span class="string">'/'</span>:</div><div class="line">    =&gt; GET /</div><div class="line">🚀  Rocket has launched from http://localhost:8000</div></pre></td></tr></table></figure>
+<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>Rocket provides primitives to build web servers and applications with Rust: the rest is up to you. In short, Rocket provides <strong>routing, pre-processing of requests and psot-processing of response</strong>. Your application code instructs Rocket what to pre-process and post-process and fills the gaps between pre-processing and post-processing.</p>
+<h4 id="LifeCycle"><a href="#LifeCycle" class="headerlink" title="LifeCycle"></a>LifeCycle</h4><p>Rocket’s main task is to listen for incoming web prequests, dispatch the request to the application code, and retur a response to the client. We call the process that goes form request to response the ‘lifecycle’. The lifecycle can be summarized as following sequence of steps:</p>
+<ul>
+<li><p><strong>Routing</strong></p>
+<p>Rocket parse an incoming HTTP request into native structure that your code operates on indirectly. Rocket determines which request handler to invoke by matching against route attributes declared in your application.</p>
+</li>
+<li><p><strong>Validation</strong></p>
+<p>Rocket validates the incoming request against types and guards present in the matched route. If validation fails, Rocket <em>forwards</em> the request to the next matching route or calls an <em>error handler</em>.</p>
+</li>
+<li><p><strong>Processing</strong></p>
+<p>The request handler associated with the route is invoked with validated arguments. This is the main business logic of an application. Processing completes by returning a <code>Response</code>.</p>
+</li>
+<li><p><strong>Response</strong></p>
+<p>The returned <code>Response</code> is processed. Rocket generates the appropriate HTTP response and sends it to the client. This completes the lifecycle. Rocket continues listening for requesting, restarting the lifecycle for each incoming request.</p>
+</li>
+</ul>
+<h4 id="Routing"><a href="#Routing" class="headerlink" title="Routing"></a>Routing</h4><p>Rocket applications are centered around routes and handlers. A <em>route</em> is a combination of: </p>
+<ul>
+<li><p>A set of parameters to match an incoming request against.</p>
+</li>
+<li><p>A handler to process the request and return a response.</p>
+</li>
+</ul>
+<p>A handler is simply a function that takes an arbirary number of arguments and returns any arbitrary type.</p>
+<p>The parameters to match against include static paths, dynamic paths, path segments, forms, query string, request format specifiers and body data. Rocket uses attributes, which look like function decoration in other languages to make declaring routes easy. Routes are declared by annotating a function, the handler, with a set of parameters to match against. A complete route declaration looks like this:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#[get(<span class="meta-string">"/world"</span>)]</span></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">world</span></span>() -&gt; &amp;<span class="symbol">'static</span> <span class="built_in">str</span> &#123;</div><div class="line">  <span class="string">"Hello World"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This declare the <code>world</code> route to match against the static path <code>/world</code> on incoming <code>GET</code> requests. The <code>world</code> route is simple, but additional route parameters are necessary when building more interesting application.</p>
+<h4 id="Mounting"><a href="#Mounting" class="headerlink" title="Mounting"></a>Mounting</h4><p>Before Rocket can dispatch requests to a route, the route needs to be <em>mounted</em>. Mounting a route is like namespacing it. Routes are mounted via the <code>mount</code> method on a <code>Rocket</code> instance. A <code>Rocket</code> instance is typically created with the <code>racket::ignite()</code> static method.</p>
+<p>The <code>mount</code> method takes:</p>
+<ul>
+<li><p>A path to namespace a list of routes under.</p>
+</li>
+<li><p>A list of route handlers through the <code>routes!</code> macro, typing Rocket’s code generation to your application.</p>
+</li>
+</ul>
+<p>For instance, to mount the <code>world</code> route we declared above, we can write the following:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rocket::ignite().mount(<span class="string">"/hello"</span>, routes![world]);</div></pre></td></tr></table></figure>
+<p>This create a new <code>Rocket</code> instance via the <code>ignite</code> function and mounts the <code>world</code> route to the <code>/hello</code> path. As a result, <code>GET</code> requests to the <code>/hello/world</code> path will be directed to the <code>world</code> function.</p>
+<h4 id="Namespacing"><a href="#Namespacing" class="headerlink" title="Namespacing"></a>Namespacing</h4><p>When a route is declared inside a module other than the root, you may find yourself with unexpected errors when mounting: </p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">mod</span> other &#123;</div><div class="line">  <span class="meta">#[get(<span class="meta-string">"/world"</span>)]</span></div><div class="line">  <span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">world</span></span>() -&gt; <span class="built_in">String</span> &#123;</div><div class="line">    <span class="string">"Hello World"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span> </span>() &#123;</div><div class="line">  rocket::ignite().mount(<span class="string">"/hello"</span>, routes![world]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This occurs because the <code>routes!</code> macro implicitly converts the route’s name into the name of a structure generated by Rocket’s code generation. The solution is to name the route by a module path instead:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rocket::ignite().mount(<span class="string">"/hello"</span>, routes![other::world]);</div></pre></td></tr></table></figure>
+<h4 id="Launching"><a href="#Launching" class="headerlink" title="Launching"></a>Launching</h4><p>Now that Rocket knows about the route, you can tell Rocket to start accepting requests via the <code>launch</code> method. The method starts up the server and wait for incoming requests. When a request arrives, Rocket finds the matching route and dispatches the requests to the route’s handler.</p>
+<p>We typically call <code>launch</code> from the <code>main</code> function. Our complete <em>Hello World</em> application thus looks like:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#![feature(plugin)]</span></div><div class="line"><span class="meta">#![plugin(rocket_codegen)]</span></div><div class="line"></div><div class="line"><span class="keyword">extern</span> <span class="keyword">crate</span> rocket;</div><div class="line"></div><div class="line"><span class="meta">#[get(<span class="meta-string">"/world"</span>)]</span></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">world</span></span>() -&gt; <span class="built_in">String</span> &#123;</div><div class="line">  <span class="string">"Hello World"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span> </span>() &#123;</div><div class="line">  rocket::ignite().mount(<span class="string">"/hello"</span>, routes![world]).launch();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Rust, Rocket </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Fastify Plugin Guide]]></title>
       <url>/2017/10/26/Fastify-Plugin-Guide/</url>
       <content type="html"><![CDATA[<p>In Fastify everything is a plugin, your routes, your utilities and so on are all plugins. And to add a new plugin, whatever its functionality is, in Fastify</p>

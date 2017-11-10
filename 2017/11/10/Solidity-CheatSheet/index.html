@@ -14,7 +14,7 @@
 <meta property="og:description" content="Global VariablesBlock block.coinbase: address - current block miner’s address  block.difficulty: uint - current block difficulty  block.gaslimit: uint - current block gaslimit  block.number: uint - cu">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://s3-eu-west-1.amazonaws.com/b9-academy-assets/public/solidity-cheatsheet.png">
-<meta property="og:updated_time" content="2017-11-10T07:27:02.000Z">
+<meta property="og:updated_time" content="2017-11-10T07:50:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Solidity CheatSheet">
 <meta name="twitter:description" content="Global VariablesBlock block.coinbase: address - current block miner’s address  block.difficulty: uint - current block difficulty  block.gaslimit: uint - current block gaslimit  block.number: uint - cu">
@@ -100,11 +100,19 @@
 </li>
 </ul>
 <h3 id="Global-Functions"><a href="#Global-Functions" class="headerlink" title="Global Functions"></a>Global Functions</h3><ul>
+<li><p>assert(bool condition): abort execution and revert state changes if condition is <code>false</code>(use for internal error)</p>
+</li>
+<li><p>require(bool condition): abort execution and revert state changes if condition is <code>false</code>(use for malformed input or error in external component)</p>
+</li>
+<li><p>revert(): abort execution and revert state changes</p>
+</li>
 <li><p>block.blockhash(uint blockNumber) returns (bytes32): hash of the given block - only works for 256 most recent blocks</p>
 </li>
-<li><p>sha3(…) returns (bytes32): compute the Ethereum-SHA-3(KEC-CAK-256) hash of the (tightly packed) arguments</p>
-</li>
 <li><p>sha256(…) returns (bytes32): compute the SHA-256 hash of the (tightly packed) arguments</p>
+</li>
+<li><p>keccak256(…) returns (bytes32): compute the Ethereum-SHA-3(Keccak-256) hash of the (tightly packed) arguments</p>
+</li>
+<li><p>sha3(…) returns (bytes32): alias for keccak256</p>
 </li>
 <li><p>ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address): recover address associated with the public key from elliptic curve signature</p>
 </li>
@@ -113,6 +121,14 @@
 <li><p>mulmod(uint x, uint y, uint k) returns (uint): compute <code>(x * y) % k</code> where the addition is performed with arbitrary precision and does not wrap around 2 ** 256</p>
 </li>
 <li><p>selfdestruct(address recipient): destroy the current contract, sending its funds to the given address</p>
+</li>
+<li><p>suicide(address recipient): alias for selfdestruct</p>
+</li>
+<li><p><address>.balance: uint256: balance of the Address in Wei</address></p>
+</li>
+<li><p><address>.send(uint256 amount) returns (bool): send given amount of Wei to Address, returns <code>false</code> on failure</address></p>
+</li>
+<li><p><address>.transfer(uint256 amount): send given amount of Wei to Address, throws on failure.</address></p>
 </li>
 </ul>
 <h3 id="Scope-Variables"><a href="#Scope-Variables" class="headerlink" title="Scope Variables"></a>Scope Variables</h3><ul>
@@ -129,6 +145,22 @@
 <li><p>external: only visible externally(only for functions) - i.e. can only be message-called)</p>
 </li>
 <li><p>internal: only visible internally</p>
+</li>
+</ul>
+<h3 id="Modifiers"><a href="#Modifiers" class="headerlink" title="Modifiers"></a>Modifiers</h3><ul>
+<li><p>pure: for function - disallows modification or access of state - this is not enforced yet</p>
+</li>
+<li><p>view: for function - disallows modifiction of state - this is not enforced yet</p>
+</li>
+<li><p>payable: for function - allows them to receive Ether together with a call</p>
+</li>
+<li><p>constant: for state variable - disallow assignment(except initialization), does not occupy storage slot</p>
+</li>
+<li><p>contant: for function - same as view</p>
+</li>
+<li><p>anonymous: for events - does not store event signature as topic</p>
+</li>
+<li><p>indexed: for event parameters - store the parameter as topic</p>
 </li>
 </ul>
 <p><img src="https://s3-eu-west-1.amazonaws.com/b9-academy-assets/public/solidity-cheatsheet.png" alt=""></p>

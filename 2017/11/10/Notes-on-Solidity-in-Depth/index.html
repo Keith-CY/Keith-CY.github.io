@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="EzCook">
 <meta property="og:description" content="Layout of a Solidity Source FileVersion Pragma1pragma solidity ^0.4.11; Importing other Source File1234567import &quot;filename&quot;;import * as symbolName from &quot;filename&quot;;import &amp;#123; symbol as alias, symbol">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2017-11-13T09:49:53.000Z">
+<meta property="og:updated_time" content="2017-11-13T14:44:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Notes on Solidity in Depth">
 <meta name="twitter:description" content="Layout of a Solidity Source FileVersion Pragma1pragma solidity ^0.4.11; Importing other Source File1234567import &quot;filename&quot;;import * as symbolName from &quot;filename&quot;;import &amp;#123; symbol as alias, symbol">
@@ -219,7 +219,7 @@
 <p>It is possible to mark mapping <code>public</code> and have Solidity create a getter. The <code>_keyType</code> will become a required parameter for the getter and it will return <code>_valueType</code>.</p>
 <p>Mappings are not iterable, but it is possible to implement a data structure on top of them.</p>
 <h4 id="Operators-Involving-LValues"><a href="#Operators-Involving-LValues" class="headerlink" title="Operators Involving LValues"></a>Operators Involving LValues</h4><p>LValue, i.e. a variable or something that can be assigned to.</p>
-<h5 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h5><p><code>delete a</code> assigns the initial value for the type to <code>a</code>. I.e., for integers, it is equivalent to <code>a = 0</code>.</p>
+<h5 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h5><p><code>delete a</code> assigns the initial value for the type to a. I.e., for integers, it is equivalent to <code>a = 0</code>.</p>
 <p><code>delete</code> has no effect on whole mappints. So if you delete a struct, it will reset all members that are not mappings and also recurse into the memebers unless they are mappings. However, individual keys and what they map to can be deleted.</p>
 <p>It’s really important to note that <code>delete a</code> really behaves like an assignment to <code>a</code>, it stores a new object in <code>a</code>.</p>
 <h4 id="Conversions-between-Elementary-Types"><a href="#Conversions-between-Elementary-Types" class="headerlink" title="Conversions between Elementary Types."></a>Conversions between Elementary Types.</h4><h5 id="Implicit-Conversions"><a href="#Implicit-Conversions" class="headerlink" title="Implicit Conversions"></a>Implicit Conversions</h5><p>In general, an implicit conversion between value-types is possible if it makes sense semantically and no information is lost: <code>uint8</code> is convertible to <code>uint16</code>, but <code>uint16</code> is not convertible to <code>uint8</code>. And <code>int8</code> is not convertible to <code>uint256</code>(because <code>uint256</code> cannot hold hold e.g. <code>-1</code>).</p>
@@ -232,7 +232,7 @@
 <h4 id="Time-Units"><a href="#Time-Units" class="headerlink" title="Time Units"></a>Time Units</h4><p>Suffixes like <code>seconds</code>, <code>minutes</code>, <code>hours</code>, <code>days</code>, <code>weeks</code> and <code>years</code> after literal numbers can be used to convert between units of time where seconds are the base unit.</p>
 <p>Take care if you perform calendar calculations using these units, because not every year equals 365 days and not even every day has 24 hours because of leap seconds. Due to the fact that leap seconds cannot be predicted, an exact calendar library has to be updated by an external oracle.</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">unit start, unit dayAfter</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (now &gt;= start + dayAfter + <span class="number">1</span> days) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Other Global Variables and Functions: </p>
+<p>Other Global Variables and Functions:</p>
 <p><a href="http://ezcook.de/2017/11/10/Solidity-CheatSheet/" target="_blank" rel="external">Post</a></p>
 
       
@@ -264,7 +264,14 @@
     
 <nav id="article-nav" class="article-nav">
   
-    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+    <a href="/2017/11/14/Solidity-Style-Guide/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Solidity Style Guide
+        
+      </div>
+    </a>
   
   
     <a href="/2017/11/10/Solidity-CheatSheet/" id="article-nav-older" class="article-nav-link-wrap older">

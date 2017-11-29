@@ -3,6 +3,21 @@
   
     
     <entry>
+      <title><![CDATA[Caution on Int8Array]]></title>
+      <url>/2017/11/29/Caution-on-Int8Array/</url>
+      <content type="html"><![CDATA[<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> t = crypto.getRandomValues(<span class="keyword">new</span> <span class="built_in">Int8Array</span>(<span class="number">3</span>))</div><div class="line"><span class="comment">// Int8Array(3) [-15, -17, -90]</span></div><div class="line"></div><div class="line"><span class="comment">// t is not typeof Array</span></div><div class="line"><span class="built_in">Array</span>.isArray(t)</div><div class="line"><span class="comment">// false</span></div><div class="line"></div><div class="line"><span class="comment">// element in Int8Array must be type Int8</span></div><div class="line"><span class="comment">// method map returns array of same type as origin array</span></div><div class="line"><span class="keyword">let</span> _t = []</div><div class="line">t.map(<span class="function"><span class="params">i</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">let</span> _tmp = i.toString(<span class="number">16</span>)</div><div class="line">  _t.push(_tmp)</div><div class="line">  <span class="keyword">return</span> _tmp</div><div class="line">&#125;)</div><div class="line"><span class="comment">// Int8Array(3) [0, -11, 0]</span></div><div class="line"><span class="comment">// _t: ['-f', '-11', '-5a']</span></div><div class="line"></div><div class="line">t[<span class="number">0</span>] = <span class="string">'a'</span></div><div class="line"><span class="comment">// t: Int8Array(3) [0, -17, -90]</span></div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Int8Array </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Client Wallet Inspection]]></title>
       <url>/2017/11/23/Client-Wallet-Inspection/</url>
       <content type="html"><![CDATA[<iframe width="853" height="800" src="https://embed.coggle.it/diagram/WhaB3hE2BAABznZF/065e922ba0f89869d4682bb60d9e426164106f817068fedc350e1193c7322293" frameborder="0" allowfullscreen></iframe>

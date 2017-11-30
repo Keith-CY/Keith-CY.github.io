@@ -3,6 +3,54 @@
   
     
     <entry>
+      <title><![CDATA[Generate Ethereum keys and wallet address]]></title>
+      <url>/2017/11/30/Generate-Ethereum-keys-and-wallet-address/</url>
+      <content type="html"><![CDATA[<p><a href="https://kobl.one/blog/create-full-ethereum-keypair-and-address/" target="_blank" rel="external">Origin</a></p>
+<p>This article is a guide on how to generate an <strong>ECDSA</strong> private key and derives<br>its Ethereum address.</p>
+<p>Use Openssl and keccak-256sum from a terminal.</p>
+<blockquote>
+<p>SHA3 != keccak. Ethereum is using the <strong>keccak-256</strong> algorithm and not the<br>standard sha3.</p>
+</blockquote>
+<h3 id="Generate-the-EC-private-key"><a href="#Generate-the-EC-private-key" class="headerlink" title="Generate the EC private key"></a>Generate the EC private key</h3><p>First of all we use <strong>Openssl</strong> ecparam command to generate an elliptic curve<br>private key. Ethereum standard is to use the <strong>secp256k1</strong> curve. The same curve<br>is used in Bitcion.</p>
+<p>This command will print the private key in BEM format(using the wonderful ASN.1<br>key structure) on stdout.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt; openssl ecparam -name secp256k1 -genkey -noout</div><div class="line">-----BEGIN EC PRIVATE KEY-----</div><div class="line">MHQCAQEEIFDLYO9KuwsC4ej2UsdA4SYk7s3lb8aZuW+B8rjugrMmoAcGBSuBBAAK</div><div class="line">oUQDQgAEsNjwhFoLKLXGBxfpMv3ILhzg2FeySRlFhtjfi3s8YFZzJtmckVR3N/YL</div><div class="line">JLnUV7w3orZUyAz77k0ebug0ILd1lQ==</div><div class="line">-----END EC PRIVATE KEY-----</div></pre></td></tr></table></figure>
+<p>On its own this command is not very useful for us, but if you pipe it with the<br>ec command it will display both private and public part in hexadecimal format,<br>and this is what we want.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&gt; openssl ecparam -name secp256k1 -genkey -noout | openssl ec -text -noout</div><div class="line"><span class="built_in">read</span> EC key</div><div class="line">Private-Key: (256 bit)</div><div class="line">priv:</div><div class="line">    20:80:65:a2:47:ed:be:5d:f4:d8:6f:bd:c0:17:13:</div><div class="line">    03:f2:3a:76:96:1b:e9:f6:01:38:50:dd:2b:dc:75:</div><div class="line">    9b:bb</div><div class="line">pub:</div><div class="line">    04:83:6b:35:a0:26:74:3e:82:3a:90:a0:ee:3b:91:</div><div class="line">    bf:61:5c:6a:75:7e:2b:60:b9:e1:dc:18:26:fd:0d:</div><div class="line">    d1:61:06:f7:bc:1e:81:79:f6:65:01:5f:43:c6:c8:</div><div class="line">    1f:39:06:2f:c2:08:6e:d8:49:62:5c:06:e0:46:97:</div><div class="line">    69:8b:21:85:5e</div><div class="line">ASN1 OID: secp256k1</div></pre></td></tr></table></figure>
+<p>This command decodes the ASN.1 structure and derives the public key from the<br>private one.</p>
+<p>Sometimes, Openssl is adding a null byte(0x00) in front of the private part, I<br>don’t know why it does that but you have to <strong>trim any leading zero bytes</strong> in<br>order to use it with Ethereum.</p>
+<blockquote>
+<p>The private key <strong>must be 32 bytes and not begin with 0x00</strong> and the public<br>one <strong>must be uncompressed and 64 bytes long</strong> or 65 with the constant (0x04)<br>prefix.</p>
+</blockquote>
+<h3 id="Derive-the-Ethereum-address-from-the-public-key"><a href="#Derive-the-Ethereum-address-from-the-public-key" class="headerlink" title="Derive the Ethereum address from the public key"></a>Derive the Ethereum address from the public key</h3><p>The public key is what we need in order to derive its Ethereum address. Every EC<br>Public key begins with ‘0x04’ prefix byte in order to hash it correctly.</p>
+<blockquote>
+<p>This prefix represents the encoding of the public key:</p>
+<ul>
+<li>0x04 - both x and y of the elliptic curve point follows</li>
+<li>0x02, 0x03 - only x follows (y is either odd or even depending on the<br>prefix)</li>
+</ul>
+</blockquote>
+<p>Use any method you like to get it in the form of an hexadecimal string(without<br>line return nor semicolon)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Extract the public key and remove the EC prefix 0x04</span></div><div class="line">&gt; cat Key | grep pub -A 5 | tail -n +2 |</div><div class="line">            tr <span class="_">-d</span> <span class="string">'\n[:space:]:'</span> | sed <span class="string">'s/^04//'</span> &gt; pub</div><div class="line">836b35a026743e823a90a0ee3b91bf615c6a757e2b60b9e1dc1826fd0dd16106f7bc1e8179f665015f43c6c81f39062<span class="built_in">fc</span>2086ed849625c06e04697698b21855e</div></pre></td></tr></table></figure>
+<p>The pub file now contains the hexadecimal value of the public key without the<br>0x04 prefix.</p>
+<p>An Ethereum address is made of 20 bytes(40 hex characters), it is commonly<br>represented by adding the 0x prefix. In order to derive it, one should take the<br>keccak-256 hash of the hexadecimal form of a public key, then <strong>keep only the<br>last 20 bytes</strong> (aka get rid of the first 12 bytes)</p>
+<p>Simply pass the file containing the public key in hexadecimal format to the<br>keccak-256sum command. <strong>Do not forget to use the ‘-x’ option</strong> in order to<br>interpret it as hexadecimal and not a simple string.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Generate the hash and take the address part</span></div><div class="line">&gt; cat pub | keccak-256sum -x <span class="_">-l</span> | tr <span class="_">-d</span> <span class="string">' -'</span> | tail -c 41</div><div class="line">0bed7abd61247635c1973eb38474a2516ed1d884</div></pre></td></tr></table></figure>
+<p>Which gives us the Ethereum address<br><code>0x0bed7abd61247635c1973eb38474a2516ed1d884</code>.</p>
+<blockquote>
+<p>CAUTION: if your final address looks like<br><code>0xdcc703c0E500B653Ca82273B7BFAd8045D85a470</code>, this means you have hashed an<br>empty public key. Sending funds to this address will lock them forever.</p>
+</blockquote>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Ethereum </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Caution on Int8Array]]></title>
       <url>/2017/11/29/Caution-on-Int8Array/</url>
       <content type="html"><![CDATA[<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> t = crypto.getRandomValues(<span class="keyword">new</span> <span class="built_in">Int8Array</span>(<span class="number">3</span>))</div><div class="line"><span class="comment">// Int8Array(3) [-15, -17, -90]</span></div><div class="line"></div><div class="line"><span class="comment">// t is not typeof Array</span></div><div class="line"><span class="built_in">Array</span>.isArray(t)</div><div class="line"><span class="comment">// false</span></div><div class="line"></div><div class="line"><span class="comment">// element in Int8Array must be type Int8</span></div><div class="line"><span class="comment">// method map returns array of same type as origin array</span></div><div class="line"><span class="keyword">let</span> _t = []</div><div class="line">t.map(<span class="function"><span class="params">i</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">let</span> _tmp = i.toString(<span class="number">16</span>)</div><div class="line">  _t.push(_tmp)</div><div class="line">  <span class="keyword">return</span> _tmp</div><div class="line">&#125;)</div><div class="line"><span class="comment">// Int8Array(3) [0, -11, 0]</span></div><div class="line"><span class="comment">// _t: ['-f', '-11', '-5a']</span></div><div class="line"></div><div class="line">t[<span class="number">0</span>] = <span class="string">'a'</span></div><div class="line"><span class="comment">// t: Int8Array(3) [0, -17, -90]</span></div></pre></td></tr></table></figure>

@@ -3,6 +3,40 @@
   
     
     <entry>
+      <title><![CDATA[Go Web]]></title>
+      <url>/2017/12/05/Go-Web/</url>
+      <content type="html"><![CDATA[<p><a href="https://gowebexamples.com/hello-world/" target="_blank" rel="external">Origin</a></p>
+<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>Go is a battery included programming language and has a webserver already built<br>in.</p>
+<p>The <code>net/http</code> package from the standard library contains all functionalities<br>about the HTTP protocol.</p>
+<p>This includes an HTTP client and an HTTP server.</p>
+<h3 id="Registering-a-Request-Handler"><a href="#Registering-a-Request-Handler" class="headerlink" title="Registering a Request Handler"></a>Registering a Request Handler</h3><p>First, create a Handler which receives all incoming HTTP connections from<br>browsers, HTTP client or API requests. A handler in Go is a function with this<br>signature.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(w http.ResponseWriter, r *http.Request)</span></span></div></pre></td></tr></table></figure>
+<p>The function receives two parameters:</p>
+<ul>
+<li><p>An <code>http.ResponseWriter</code> which is where you write your text/html response to.</p>
+</li>
+<li><p>An <code>http.Request</code> which contains all information about this HTTP request<br>including like URL or header fields</p>
+</li>
+</ul>
+<p>Registering a request handler to the default HTTP Server is as simple as this:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">http.HandleFunc(<span class="string">"/"</span>, <span class="function"><span class="keyword">func</span> <span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</div><div class="line">  fmt.Fprintf(w, <span class="string">"Hello, you've requested: %s\n"</span>, r.URL.Path)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Listen-for-HTTP-Connections"><a href="#Listen-for-HTTP-Connections" class="headerlink" title="Listen for HTTP Connections"></a>Listen for HTTP Connections</h3><p>The request handler alone can not accept any HTTP connections from the outside.</p>
+<p>An HTTP server has to listen on a port to pass connections on to the request<br>handler. Because port 80 is in most case the default port for HTTP traffic, this<br>server will also listen on it.</p>
+<p>The following code will start Go’s default HTTP server and listen for<br>connections on port 80. You can navigate your browser to <code>http://localhost/</code> and<br>see your server handling yoru request</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http.ListenAndServe(<span class="string">":80"</span>, <span class="literal">nil</span>)</div></pre></td></tr></table></figure>
+<h3 id="The-Code"><a href="#The-Code" class="headerlink" title="The Code"></a>The Code</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">  <span class="string">"fmt"</span></div><div class="line">  <span class="string">"net/http"</span></div><div class="line">)</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span> <span class="params">()</span></span> &#123;</div><div class="line">  http.HandleFunc(<span class="string">"/"</span>, <span class="function"><span class="keyword">func</span> <span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</div><div class="line">    fmt.Fprintf(w, <span class="string">"Hello, you've requested: %s\n"</span>, r.URL.Path)</div><div class="line">  &#125;)</div><div class="line">  http.ListenAndServe(<span class="string">":80"</span>, <span class="literal">nil</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Go, Http, Web </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Generate Ethereum keys and wallet address]]></title>
       <url>/2017/11/30/Generate-Ethereum-keys-and-wallet-address/</url>
       <content type="html"><![CDATA[<p><a href="https://kobl.one/blog/create-full-ethereum-keypair-and-address/" target="_blank" rel="external">Origin</a></p>

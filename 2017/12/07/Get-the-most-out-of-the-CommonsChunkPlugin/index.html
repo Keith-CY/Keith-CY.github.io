@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Get the most out of the CommonsChunkPlugin | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Origin Use webpack-bundle-analyzer to generate a fancy colorful image of all of yourbundles. Case 1: Many vendor bundles with duplicate code Each single-page app is using a new CommonsChunkPlugin that">
+<meta name="keywords" content="Webpack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Get the most out of the CommonsChunkPlugin">
+<meta property="og:url" content="http://yoursite.com/2017/12/07/Get-the-most-out-of-the-CommonsChunkPlugin/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="Origin Use webpack-bundle-analyzer to generate a fancy colorful image of all of yourbundles. Case 1: Many vendor bundles with duplicate code Each single-page app is using a new CommonsChunkPlugin that">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/2000/1*Mt5awEvcigXceRDpZRX4Dw.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*D4m4sa9X1V05y7I7ZCMbZA.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/2000/1*yRCgk_pzDpkMfQGKpCO_HA.jpeg">
+<meta property="og:updated_time" content="2017-12-07T10:52:27.758Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Get the most out of the CommonsChunkPlugin">
+<meta name="twitter:description" content="Origin Use webpack-bundle-analyzer to generate a fancy colorful image of all of yourbundles. Case 1: Many vendor bundles with duplicate code Each single-page app is using a new CommonsChunkPlugin that">
+<meta name="twitter:image" content="https://cdn-images-1.medium.com/max/2000/1*Mt5awEvcigXceRDpZRX4Dw.png">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-Get-the-most-out-of-the-CommonsChunkPlugin" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Get the most out of the CommonsChunkPlugin
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p><a href="https://medium.com/webpack/webpack-bits-getting-the-most-out-of-the-commonschunkplugin-ab389e5f318" target="_blank" rel="external">Origin</a></p>
+<p>Use <code>webpack-bundle-analyzer</code> to generate a fancy colorful image of all of your<br>bundles.</p>
+<h3 id="Case-1-Many-vendor-bundles-with-duplicate-code"><a href="#Case-1-Many-vendor-bundles-with-duplicate-code" class="headerlink" title="Case 1: Many vendor bundles with duplicate code"></a>Case 1: Many vendor bundles with duplicate code</h3><p><img src="https://cdn-images-1.medium.com/max/2000/1*Mt5awEvcigXceRDpZRX4Dw.png" alt=""></p>
+<p>Each single-page app is using a <code>new CommonsChunkPlugin</code> that targets just that<br>entry point, and its vendor code. This creates a bundle with only modules that<br>come from node_modules folder, and another bundle with just application code.</p>
+<p>The configuration portion was provided:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.keys(activeApps).map(</div><div class="line">  <span class="function"><span class="params">app</span> =&gt;</span></div><div class="line">    <span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">      <span class="attr">name</span>: <span class="string">`<span class="subst">$&#123;app&#125;</span>_vendor`</span>,</div><div class="line">      <span class="attr">chunk</span>: [app],</div><div class="line">      <span class="attr">minChunks</span>: isVendor,</div><div class="line">    &#125;),</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>The <code>activeApps</code> variable most likely represents each of the individual entry<br>points.</p>
+<p>Below are a few areas that could use some improvement.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*D4m4sa9X1V05y7I7ZCMbZA.png" alt=""></p>
+<h3 id="“Meta”-caching"><a href="#“Meta”-caching" class="headerlink" title="“Meta” caching"></a>“Meta” caching</h3><p>What we see above is many large libraries like momentjs, lodash, and jquery<br>being used across 6 or more vendor bundles. The strategy for add all vendor into<br>a seperate bundle is good, but we should also apply the same strategy acroll<br><strong>all vendor bundle</strong>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.optimizeCommonsChunkPlugin(&#123;</div><div class="line">  <span class="attr">children</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">minChunks</span>: <span class="number">6</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>We are telling the webpack to follow:</p>
+<blockquote>
+<p>Hey webpack, look across all chunks(including the vendor ones that were<br>generated) and move any modules that occur in at least 6 chunks to a seperate<br>file.</p>
+</blockquote>
+<h3 id="Case-2-duplicate-vendors-across-async-chunks"><a href="#Case-2-duplicate-vendors-across-async-chunks" class="headerlink" title="Case 2: duplicate vendors across async chunks"></a>Case 2: duplicate vendors across async chunks</h3><p><img src="https://cdn-images-1.medium.com/max/2000/1*yRCgk_pzDpkMfQGKpCO_HA.jpeg" alt=""></p>
+<p>As you can see, the same 2-3 components are used across all 40-50 async bundles</p>
+<p><code>CommonsChunkPlugin</code> can solve this.</p>
+<h4 id="Create-an-async-Commons-Chunk"><a href="#Create-an-async-Commons-Chunk" class="headerlink" title="Create an async Commons Chunk"></a>Create an async Commons Chunk</h4><p>The technique will be very simillar to the first, however we will need to set<br>the <code>async</code> property in the configuration option, to <code>true</code> as seen below:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  <span class="attr">async</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">children</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">filename</span>: <span class="string">'commonlazy.js'</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>In the same way – webpack will scan all chunks and look for common modules.<br>Since <code>async: true</code>, only code split bundles will be scanned.</p>
+<p>Because we did not specify <code>minChunks</code>, the value default to 3. so what webpack<br>is being told is:</p>
+<blockquote>
+<p>Hey webpack, look through all normal [aka lazy loaded] chunks and if you find<br>the smae module that appears across 3 or more chunks, then seperate it out<br>into a seperate async commons chunk.</p>
+</blockquote>
+<h3 id="More-Control"><a href="#More-Control" class="headerlink" title="More Control"></a>More Control</h3><h4 id="minChunks-function"><a href="#minChunks-function" class="headerlink" title="minChunks function"></a>minChunks function</h4><p>There are scenario you don’t want to have a single shared bundle because not<br>every lazy/entry chunk may use it. The <code>minChunks</code> property also takes a<br>function. This can be your ‘filtering predicate’ for what modules are added to<br>your newly created bundle.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> webpack.optimize.CommonsChunkPlugin(&#123;</div><div class="line">  <span class="attr">filename</span>: <span class="string">'loash-moment-shared-bundle.js'</span>,</div><div class="line">  <span class="attr">minChunks</span>: <span class="function"><span class="keyword">function</span>(<span class="params">module, count</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="built_in">module</span>.resource &amp;&amp; <span class="regexp">/lodash|moment/</span>.test(<span class="built_in">module</span>.resource) &amp;&amp; count &gt;= <span class="number">3</span></div><div class="line">    )</div><div class="line">  &#125;,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>This example says:</p>
+<blockquote>
+<p>Yo webpack, when you come across a module whos absolute path amtches lodash or<br>moment, and occurs across 3 seperate entries/chunks, then extract those<br>modules into a seperate bundle.</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2017/12/07/Get-the-most-out-of-the-CommonsChunkPlugin/" class="article-date">
+  <time datetime="2017-12-07T08:59:20.000Z" itemprop="datePublished">2017-12-07</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Webpack/">Webpack</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2017/12/05/Go-Web/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go Web</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

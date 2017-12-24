@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Start in Protobuf | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Protocol Buffers are a language-neutral, platform-neutral, extensible way of serializing structured data for use in commnucations protocols, data storage, and more, originally designed at Google. Prot">
+<meta name="keywords" content="Protobuf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Start in Protobuf">
+<meta property="og:url" content="http://yoursite.com/2017/12/22/Start-in-Protobuf/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="Protocol Buffers are a language-neutral, platform-neutral, extensible way of serializing structured data for use in commnucations protocols, data storage, and more, originally designed at Google. Prot">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://camo.githubusercontent.com/f090df881cc6c82ecb7c5d09c9fad550fdfd153e/687474703a2f2f64636f64652e696f2f70726f746f6275662e6a732f746f6f6c7365742e737667">
+<meta property="og:updated_time" content="2017-12-24T16:15:26.138Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Start in Protobuf">
+<meta name="twitter:description" content="Protocol Buffers are a language-neutral, platform-neutral, extensible way of serializing structured data for use in commnucations protocols, data storage, and more, originally designed at Google. Prot">
+<meta name="twitter:image" content="https://camo.githubusercontent.com/f090df881cc6c82ecb7c5d09c9fad550fdfd153e/687474703a2f2f64636f64652e696f2f70726f746f6275662e6a732f746f6f6c7365742e737667">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-Start-in-Protobuf" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Start in Protobuf
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p><strong>Protocol Buffers</strong> are a language-neutral, platform-neutral, extensible way of serializing structured data for use in commnucations protocols, data storage, and more, originally designed at Google.</p>
+<p><strong>Protobuf.js</strong> is a pure JS implementation with <strong>TypeScript</strong> support for node.js and browser. It’s easy to use, blazingly fast and works out of the box with <code>.proto</code> files.</p>
+<h3 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h3><p>Node.js</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install protobufjs</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> protobuf = <span class="built_in">require</span>(<span class="string">'protobufjs'</span>)</div></pre></td></tr></table></figure>
+<p>Browsers</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"../protobuf.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="Distributions"><a href="#Distributions" class="headerlink" title="Distributions"></a>Distributions</h3><p>Where bundle size is a factor, there are additional stripped-down versions of the full-library(~19kb gzipped) available that excldue certain functinality</p>
+<ul>
+<li>when working with JSON descriptor, and/or reflection only, see the light-library(~16kb gzipped) that excludes the parser. CommonJS entry point is:</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> protobuf = <span class="built_in">require</span>(<span class="string">'protobufjs/light'</span>)</div></pre></td></tr></table></figure>
+<p>When working with statically generated code only, see the minimal library(~6.5kb gzipped) that also excludes reflection. CommonJS entry point is:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> protobuf = <span class="built_in">require</span>(<span class="string">'protobufjs/minimal`)</span></div></pre></td></tr></table></figure>
+<h3 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h3><p>Because JS is a dynamically typed language, protobuf.js introduces the concept of a <strong>valid message</strong> in order to provide the best possible performance.</p>
+<h4 id="Valid-Message"><a href="#Valid-Message" class="headerlink" title="Valid Message"></a>Valid Message</h4><blockquote>
+<p>A valid message is an object not missing any required fields and exclusively composed of JS types understood by the wire format writer.</p>
+</blockquote>
+<p>There are two possible types of valid messages and the encoder is able to work with both these for convenience:</p>
+<ul>
+<li><p><strong>Message Instance</strong> (explicit instance of message classes with default values on their prototype) always (have to) satisfy the requirements of a valid message by design.</p>
+</li>
+<li><p><strong>Plain JavaScript Objects</strong> that just so happen to be composed in a way satisfying the requirements of a valid message as well.</p>
+</li>
+</ul>
+<p>In a nutshell, the wire format writer understoods the following types:</p>
+<table>
+<thead>
+<tr>
+<th>Field Type</th>
+<th>Expected JS type(create, encode)</th>
+<th>Conversion (fromObject)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s-/u-/int32<br>s-/fixed32</td>
+<td><code>number</code> (32 bit integer)</td>
+<td>`value</td>
+<td>0<code>if signed&lt;br&gt;</code>value &gt;&gt;&gt; 0` is unsigned</td>
+</tr>
+<tr>
+<td>s-/u-/int64<br>s-/fixed64</td>
+<td><code>Long</code>-like(optimal)<br><code>number</code>(53 bit integer)</td>
+<td><code>Long.fromValue(value)</code> with long.js<br><code>parseInt(value, 10)</code> otherwise</td>
+</tr>
+<tr>
+<td>float<br>double</td>
+<td><code>number</code></td>
+<td><code>Number(value)</code></td>
+</tr>
+<tr>
+<td>bool</td>
+<td><code>boolean</code></td>
+<td><code>Boolean(value)</code></td>
+</tr>
+<tr>
+<td>string</td>
+<td><code>string</code></td>
+<td><code>String(value)</code></td>
+</tr>
+<tr>
+<td>bytes</td>
+<td><code>Uint8Array</code>(optimal)<br><code>Buffer</code>(optimal under node)<br><code>Array.&lt;number&gt;</code>(8 bit integers)</td>
+<td><code>base64.decode(value)</code> if a <code>string</code><br><code>Object</code> with non-zero<code>.length</code> is assumed to be buffer-like</td>
+</tr>
+<tr>
+<td>enum</td>
+<td><code>number</code> (32 bit integer)</td>
+<td>Looks up the numeric id if a <code>string</code></td>
+</tr>
+<tr>
+<td>message</td>
+<td>Valid Message</td>
+<td><code>Message.fromObject(value)</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>Explicit <code>undefined</code> and <code>null</code> are considered as not set if the field is optional</p>
+</li>
+<li><p>Repeated fields are <code>Array.&lt;T&gt;</code></p>
+</li>
+<li><p>Map fields are <code>Object.&lt;string, T&gt;</code> with the key being the string representation of the respective value or an 8 character long binary hash string for <code>Long</code>-likes.</p>
+</li>
+<li><p>Types marked as <em>optimal</em> provide the best performance because no conversion step(i.e. number to low and high bits or base64 string to buffer) is required.</p>
+</li>
+</ul>
+<p>For performance reasons, each message class provides a distinct set of methods with each method doing just one thing. This avoid unnecessary assertions / redundant operations where performance is a concern but also forces a user to perform verification explicityly where necessary.</p>
+<h3 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h3><ul>
+<li><p>Message.verify(message: Object): null | string</p>
+</li>
+<li><p>Message.encode(message: Message | Object[, writer: Writer]): Writer</p>
+</li>
+<li><p>Message.encodeDelimited(message: Message | Object[, writer: Writer]): Writer</p>
+</li>
+<li><p>Message.decode(reader: Reader | Uint8Array): Message</p>
+</li>
+<li><p>Message.toObject(message: Message[, options: ConversionOptions]): Object</p>
+</li>
+<li><p>Message.verify(message: Object): null | string</p>
+<p>Verifies that a plain js object satisfies the requirements of a valid message and thus can be encoded without issues. Instead of throwing, it returns the error message as a string, if any:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> payload = <span class="string">'invalid (not an object)'</span></div><div class="line"><span class="keyword">var</span> err = AwesomeMessage.verify(payload)</div><div class="line"><span class="keyword">if</span> (err) <span class="keyword">throw</span> <span class="built_in">Error</span>(err)</div></pre></td></tr></table></figure>
+</li>
+<li><p>Message.encode(message: Message | Object[, writer: Writer]): Writer</p>
+</li>
+</ul>
+<p>Encodes a message instance or valid plain javascript object. This method does not implicit verify the message and it’s up to user to make sure that the payload is a valid message.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> buffer = AwesomeBuffer.encode(message).finish()</div></pre></td></tr></table></figure>
+<ul>
+<li>Message.encodeDelimited(message: Message | Object[, writer: Writer]): Writer</li>
+</ul>
+<p>Works like <code>Message.encode</code> but additionally prepends the length of the message as a varint.</p>
+<ul>
+<li>Message.decode(reader: Reader): Message</li>
+</ul>
+<p>Decode a buffer to a message instance. If required fields are missing, it throws a <code>util.ProtocolError</code> with an <code>instance</code> property set to the so far decoded message. If the wire format is invalid, it throws an <code>Error</code>.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">  <span class="keyword">var</span> decodedMessage = AwesomeMessage.decode(buffer)</div><div class="line">&#125; cache (e) &#123;</div><div class="line">  <span class="keyword">if</span> (e <span class="keyword">instanceof</span> protobuf.util.ProtocolError) &#123;</div><div class="line">    <span class="comment">// e.instance holds the so far decoded message with missing required fields</span></div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// wire format is invalid</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>Message.decodeDelimited(reader: Reader | Uint8Array): Message</li>
+</ul>
+<p>works like Message.decode but additionally reads the length of the message prepended as a varint</p>
+<ul>
+<li>Message.create(properties: Object): Message</li>
+</ul>
+<p>Creates a new message instance from a set of properties that satisfy the requirements of a valid message. Where applicable, it is recommended to prefer <code>Message.create</code> over <code>Message.fromObject</code> because it doesn’t perform possibly redundant conversion.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> message = AwesomeMessage.create(&#123; <span class="attr">awesomeField</span>: <span class="string">'AwesomeString'</span> &#125;)</div></pre></td></tr></table></figure>
+<ul>
+<li>Message.fromObject(object: Object): Message</li>
+</ul>
+<p>Converts any non-valid plain javascript object to a message instance using the conversion steps outlined within the table above.</p>
+<ul>
+<li>Message.toObject(message: Message[, options: ConversionOptions]): Object</li>
+</ul>
+<p>Converts a message instance to an arbitrary plain javascript object for interoperability with other libraries or storage. The resulting plain javascript object might still satisify the requirements of a vlaid message depending on the actual conversion options specified, but most of the time it does not.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> object = AwesomeMessage.toObject(message, &#123;</div><div class="line">  <span class="attr">enums</span>: <span class="built_in">String</span>,</div><div class="line">  <span class="attr">longs</span>: <span class="built_in">String</span>,</div><div class="line">  <span class="attr">bytes</span>: <span class="built_in">String</span>,</div><div class="line">  <span class="attr">defaults</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">arrays</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">objects</span>: <span class="literal">true</span>,</div><div class="line">  <span class="attr">oneofs</span>: <span class="literal">true</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>For reference, the following diagram aims to display relationships between the different methods and the concepts of a valid message:</p>
+<p><img src="https://camo.githubusercontent.com/f090df881cc6c82ecb7c5d09c9fad550fdfd153e/687474703a2f2f64636f64652e696f2f70726f746f6275662e6a732f746f6f6c7365742e737667" alt=""></p>
+<blockquote>
+<p>In other words: <code>verify</code> indicates that calling <code>create</code> or <code>encode</code> directly on the plain object will [result in a valid message respectively] succeed. <code>fromObject</code>, on the other hand, does conversion from a broader range of plain objects to create valid message.</p>
+</blockquote>
+<h3 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h3><h4 id="Using-proto-files"><a href="#Using-proto-files" class="headerlink" title="Using .proto files"></a>Using .proto files</h4><p>It is possible to load existing .proto files using the full library, which parses and compiles the definitions to ready to use (reflection-based) message classes:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">package awesomepackage</div><div class="line">syntax = <span class="string">"proto3"</span></div><div class="line"></div><div class="line">message AwesomeMessage &#123;</div><div class="line">  string awesome_field = <span class="number">1</span>; becomes awesomeField</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">protobuf.load(<span class="string">'awesome.proto'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, root</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (err) &#123;</div><div class="line">    <span class="keyword">throw</span> err</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// Obtain a message type</span></div><div class="line">  <span class="keyword">var</span> AwesomeMessage = root.lookupType(<span class="string">'awesomepackage.AwesomeMessage'</span>)</div><div class="line"></div><div class="line">  <span class="comment">// Exemplary payload</span></div><div class="line">  <span class="keyword">var</span> payload = &#123; <span class="attr">awesomeField</span>: <span class="string">'AwesomeField'</span> &#125;</div><div class="line"></div><div class="line">  <span class="comment">// Verify the payload if necessary(i.e. when possible incomplete or invalid)</span></div><div class="line">  <span class="keyword">var</span> errMsg = AwesomeMessage.verify(payload)</div><div class="line">  <span class="keyword">if</span> (errMsg) <span class="keyword">throw</span> <span class="built_in">Error</span>(errMsg)</div><div class="line"></div><div class="line">  <span class="comment">// Create a new message</span></div><div class="line">  <span class="keyword">var</span> message = AwesomeMessage.create(payload) <span class="comment">// or use .fromObject if conversion is necessary</span></div><div class="line"></div><div class="line">  <span class="comment">// Encode a message to an Uint8Array(browser) or Buffer (node)</span></div><div class="line">  <span class="keyword">var</span> buffer = AwesomeMessage.encode(message).finish()</div><div class="line"></div><div class="line">  <span class="comment">// ... do something with message</span></div><div class="line"></div><div class="line">  <span class="comment">// Decode an Uint8Array(browser) or Buffer(node) to a message</span></div><div class="line">  <span class="keyword">var</span> message = AwesomeMessage.decode(buffer)</div><div class="line"></div><div class="line">  <span class="comment">// ...do something with message</span></div><div class="line"></div><div class="line">  <span class="comment">// If the application uses length-delimited buffers, there is also encodeDelimited and decodeDelimited.</span></div><div class="line"></div><div class="line">  <span class="comment">// Maybe conver the message back to a plain object</span></div><div class="line"></div><div class="line">  <span class="keyword">var</span> object = AwesomeMessage.toObject(message, &#123;</div><div class="line">    <span class="attr">loings</span>: <span class="built_in">String</span>,</div><div class="line">    <span class="attr">enums</span>: <span class="built_in">String</span>,</div><div class="line">    <span class="attr">bytes</span>: <span class="built_in">String</span>,</div><div class="line">    <span class="comment">// see Conversions</span></div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Additionally, promise syntax can be used by omitting the callback, if preferred:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">protobuf.load(<span class="string">'awesome.proto'</span>).then(<span class="function"><span class="params">root</span> =&gt;</span> &#123;&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Using-JSON-Descriptors"><a href="#Using-JSON-Descriptors" class="headerlink" title="Using JSON Descriptors"></a>Using JSON Descriptors</h3><p>The library utilize JSON descriptor that are equivalent to a .proto definition. For example, the following is identical to the .proto definition seen above:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// awesome.json</div><div class="line">&#123;</div><div class="line">  "nested": &#123;</div><div class="line">    "AwesomeMessage": &#123;</div><div class="line">      "fields": &#123;</div><div class="line">        "awesomeField: &#123;</div><div class="line">          "type": "string",</div><div class="line">          "id", 1</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>JSON descriptor closely resemble the internal reflection structure:</p>
+<p>Exclusively using JSON descriptor instead of .proto files enables the use of just the light library(the parser isn’t requried in this case)</p>
+<p>A JSON descriptor can either be loaded the usual way:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">protobuf.load(<span class="string">'awesome.json'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, root</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> <span class="built_in">Error</span>(err)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>Or it can be loaded inline:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> jsonDescriptor = <span class="built_in">require</span>(<span class="string">'./awesome.json'</span>) <span class="comment">// exemplary for node</span></div><div class="line"><span class="keyword">var</span> root = protobuf.Root.fromJSON(jsonDescriptor)</div><div class="line"></div><div class="line"><span class="comment">// Continue at 'Obtain a message type' above</span></div></pre></td></tr></table></figure>
+<p><a href="https://github.com/dcodeIO/ProtoBuf.js/" target="_blank" rel="external">More Info here</a></p>
+<h3 id="Usage-with-TypeScript"><a href="#Usage-with-TypeScript" class="headerlink" title="Usage with TypeScript"></a>Usage with TypeScript</h3><p>The library ships with its own type definitions and modern editors will automatically detect and use them for code completion.</p>
+<p>The npm package depends on <code>@types/node</code> because of <code>Buffer</code> and <code>@types/long</code> because of <code>Long</code>. If you are not building for node and/or using long.js, it should be safe to exclude them manually.</p>
+<h4 id="Using-the-JS-API"><a href="#Using-the-JS-API" class="headerlink" title="Using the JS API"></a>Using the JS API</h4><p>The API shown above works pretty much the same with TypeScript. However, because everything is typed, accessing fields on instances of dynamically generated message classes requries either using bracket-notation(i.e. message[‘awesomeField’]), or explicit casts.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; load &#125; <span class="keyword">from</span> <span class="string">'protobufjs'</span></div><div class="line"></div><div class="line">load(<span class="string">'awesome.proto'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">err, root</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> <span class="built_in">Error</span>(err)</div><div class="line"></div><div class="line">  <span class="keyword">const</span> AwesomeMessage = root.lookupType(<span class="string">'awesomepackage.AwesomeMessage'</span>)</div><div class="line">  <span class="keyword">let</span> message = AwesomeMessage.create(&#123; <span class="attr">awesomeField</span>: <span class="string">'hello'</span> &#125;)</div><div class="line">  cnosole.log(<span class="string">`message = <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(message)&#125;</span>`</span>)</div><div class="line"></div><div class="line">  <span class="keyword">let</span> buffer = AwesomeMessage.encode(message).finish()</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Buffer = <span class="subst">$&#123;<span class="built_in">Array</span>.prototype.toString.call(buffer)&#125;</span>`</span>)</div><div class="line"></div><div class="line">  <span class="keyword">let</span> decoded = AwesomeMessage.decode(buffer)</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`decoded = <span class="subst">$&#123;<span class="built_in">JSON</span>.stringify(decoded)&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2017/12/22/Start-in-Protobuf/" class="article-date">
+  <time datetime="2017-12-22T09:36:55.000Z" itemprop="datePublished">2017-12-22</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Protobuf/">Protobuf</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2017/12/07/Get-the-most-out-of-the-CommonsChunkPlugin/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Get the most out of the CommonsChunkPlugin</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

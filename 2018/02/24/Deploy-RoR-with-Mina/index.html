@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Deploy RoR with Mina | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Mina SetupLet’s take a look at setting up Mina with Puma. First, you’ll need to add Mina and mina-puma in Gemfile. Then install gems and execute the initial Mina Command for generating a config/deploy">
+<meta name="keywords" content="Ruby, Rails, RoR, Mina">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Deploy RoR with Mina">
+<meta property="og:url" content="http://yoursite.com/2018/02/24/Deploy-RoR-with-Mina/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="Mina SetupLet’s take a look at setting up Mina with Puma. First, you’ll need to add Mina and mina-puma in Gemfile. Then install gems and execute the initial Mina Command for generating a config/deploy">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-02-24T03:31:55.705Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Deploy RoR with Mina">
+<meta name="twitter:description" content="Mina SetupLet’s take a look at setting up Mina with Puma. First, you’ll need to add Mina and mina-puma in Gemfile. Then install gems and execute the initial Mina Command for generating a config/deploy">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-Deploy-RoR-with-Mina" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Deploy RoR with Mina
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <h3 id="Mina-Setup"><a href="#Mina-Setup" class="headerlink" title="Mina Setup"></a>Mina Setup</h3><p>Let’s take a look at setting up Mina with Puma. First, you’ll need to add Mina and mina-puma in Gemfile.</p>
+<p>Then install gems and execute the initial Mina Command for generating a <code>config/deploy.rb</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bundle</div><div class="line">mina init</div></pre></td></tr></table></figure>
+<h3 id="Detailed-Explanations-for-the-Mina-deploy-file"><a href="#Detailed-Explanations-for-the-Mina-deploy-file" class="headerlink" title="Detailed Explanations for the Mina deploy file"></a>Detailed Explanations for the Mina deploy file</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Set the domain or ip address of the remote server.</span></div><div class="line">set <span class="symbol">:domain</span>, <span class="string">'yourdomain'</span></div><div class="line"></div><div class="line"><span class="comment"># Set the folder of the remote server where Mina will deploy your app.</span></div><div class="line">set <span class="symbol">:deploy_to</span>, <span class="string">'path/to/directory'</span></div><div class="line"></div><div class="line"><span class="comment"># Set a link to the repository. Better git protocol.</span></div><div class="line">set <span class="symbol">:repository</span>, <span class="string">'git@...'</span></div><div class="line"></div><div class="line"><span class="comment"># Set the name of a branch you plan to deploy as default master.</span></div><div class="line">set <span class="symbol">:branch</span>, <span class="string">'master'</span></div><div class="line"></div><div class="line"><span class="comment"># Fill in the names of the files and directories that will be symlinks to the shared directory.</span></div><div class="line"><span class="comment"># All folders will be created automatically on Mina Setup.</span></div><div class="line"><span class="comment"># Don't forget to add a path to the uploads folder if you are using Dragonfly or Carrierwaves.</span></div><div class="line"><span class="comment"># Otherwise, you will lose your uploads on each deploy.</span></div><div class="line">set <span class="symbol">:shared_dirs</span>, fetch(<span class="symbol">:shared_dirs</span>, []).push(<span class="string">'log'</span>, <span class="string">'tmp/pids'</span>, <span class="string">'tmp/sockets'</span>, <span class="string">'public/uploads'</span>)</div><div class="line">set <span class="symbol">:shared_files</span>, fetch(<span class="symbol">:shared_files</span>, []).push(<span class="string">'config/database.yml'</span>, <span class="string">'config/secrets.yml'</span>, <span class="string">'config/puma.rb'</span>)</div><div class="line"></div><div class="line"><span class="comment"># Username of ssh for access to the remote server.</span></div><div class="line">set <span class="symbol">:user</span>, <span class="string">'root'</span></div><div class="line"></div><div class="line"><span class="comment"># This is not a required field, you can use it to set an app name for easy recognition.</span></div><div class="line">set <span class="symbol">:application_name</span>, <span class="string">'MyApp'</span></div><div class="line"></div><div class="line"><span class="comment"># Set ruby version. If you have RVM installed globally, you'll also need to set an RVM path,</span></div><div class="line"><span class="comment"># like set:rvm_use_path, '/usr/local/rvm/scripts/rvm'.</span></div><div class="line"><span class="comment"># You can find the RVM location with rvm info command.</span></div><div class="line">task <span class="symbol">:environment</span> <span class="keyword">do</span></div><div class="line">  invoke <span class="symbol">:<span class="string">'rvm:use'</span></span>, <span class="string">'ruby-2.5.1@default'</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>By default, Mina will create all folders mentioned in shared_dirs and shared_files.</p>
+<p>You deploy section in deploy.rb should look like this:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">task <span class="symbol">:deploy</span> <span class="keyword">do</span></div><div class="line">  deploy <span class="keyword">do</span></div><div class="line">    comment <span class="string">"Deploying <span class="subst">#&#123;fetch(<span class="symbol">:application_name</span>)&#125;</span> to <span class="subst">#&#123;fetch(<span class="symbol">:domain</span>)&#125;</span>:<span class="subst">#&#123;fetch(<span class="symbol">:deploy_to</span>)&#125;</span>"</span></div><div class="line">    invoke <span class="symbol">:<span class="string">'git:clone'</span></span></div><div class="line">    invoke <span class="symbol">:<span class="string">'deploy:link_shared_paths'</span></span></div><div class="line">    invoke <span class="symbol">:<span class="string">'rvm:load_env_vars'</span></span></div><div class="line">    invoke <span class="symbol">:<span class="string">'bundle:install'</span></span></div><div class="line">    invoke <span class="symbol">:<span class="string">'rails:db_migrate'</span></span></div><div class="line">    command <span class="string">%&#123;<span class="subst">#&#123;fetch(<span class="symbol">:rails</span>) <span class="symbol">db:</span>seed&#125;</span>&#125;</span></div><div class="line">    invoke <span class="symbol">:<span class="string">'rails:assets_precompile'</span></span></div><div class="line">    invoke <span class="symbol">:<span class="string">'deploy:cleanup'</span></span></div><div class="line"></div><div class="line">    on <span class="symbol">:launch</span> <span class="keyword">do</span></div><div class="line">      invoke <span class="symbol">:<span class="string">'puma:phased_restart'</span></span></div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<h3 id="Puma-Setup"><a href="#Puma-Setup" class="headerlink" title="Puma Setup"></a>Puma Setup</h3><p>Create or fill a puma.rb file in a config folder</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">environment <span class="string">"productino"</span></div><div class="line"></div><div class="line">bind <span class="string">"unix:///&#123;path_to_your_app&#125;/shared/tmp/sockets/puma.sock"</span></div><div class="line">pidfile <span class="string">"/&#123;path_to_your_app&#125;/shared/tmp/pids/puma.pid"</span></div><div class="line">state_path <span class="string">"/&#123;path_to_your_app&#125;/shared/tmp/sockets/puma.state"</span></div><div class="line">directory <span class="string">"/&#123;path_to_your_app&#125;/current"</span></div><div class="line"></div><div class="line">workers <span class="number">2</span></div><div class="line">threads <span class="number">1</span>,<span class="number">2</span></div><div class="line"></div><div class="line">daemonize <span class="literal">true</span></div><div class="line"></div><div class="line">activate_control_app <span class="string">'unix:///&#123;path_to_your_app&#125;/shared/tmp/sockets/pumactl.sock'</span></div><div class="line"></div><div class="line">prune_bundler</div></pre></td></tr></table></figure>
+<h3 id="Fill-database-yml-and-secrets-yml"><a href="#Fill-database-yml-and-secrets-yml" class="headerlink" title="Fill database.yml and secrets.yml"></a>Fill database.yml and secrets.yml</h3><h3 id="Setup-nginx"><a href="#Setup-nginx" class="headerlink" title="Setup nginx"></a>Setup nginx</h3><p>Create file myapp.conf in a <code>/nginx/etc/conf.d</code> folder with similar content.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">upstream mysite &#123;</div><div class="line">  server unix:///home/admin/mysite/shared/tmp/sockets/puma.sock fail_timeout=0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">  listen 80;</div><div class="line">  listen [::]:80;</div><div class="line"></div><div class="line">  server_name mysite.com;</div><div class="line">  root /home/admin/mysite/current/public;</div><div class="line"></div><div class="line">  location ~ ^/assets/ &#123;</div><div class="line">    expires max;</div><div class="line">    gzip_static on;</div><div class="line">    gzip_vary on;</div><div class="line">    add_header Cache-Control public;</div><div class="line">    break;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  location / &#123;</div><div class="line">    proxy_pass http://mysite;</div><div class="line">    proxy_set_header Host $host;</div><div class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  location ~ ^/(500|404|422).html &#123;</div><div class="line">    root /home/admin/mysite/current/public;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  error_page 500 502 503 504 /500.html;</div><div class="line">  error_page 404 /404.html;</div><div class="line">  error_page 422 /422.html;</div><div class="line"></div><div class="line">  client_max_body_size 4G;</div><div class="line">  keepalive_timeout 10;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2018/02/24/Deploy-RoR-with-Mina/" class="article-date">
+  <time datetime="2018-02-24T03:05:49.000Z" itemprop="datePublished">2018-02-24</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ruby-Rails-RoR-Mina/">Ruby, Rails, RoR, Mina</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2018/02/14/What-Blockchain-came-with/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">What Blockchain came with</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

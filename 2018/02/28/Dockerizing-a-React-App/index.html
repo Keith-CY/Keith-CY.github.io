@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Dockerizing a React App | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="origin Project SetupInstall create-react-app 1npm install -g create-react-app@1.5.2 Creating a new app 12create-react-app docker-appcd docker-app DockerAdd a Dockerfile to the project root 12345678910">
+<meta name="keywords" content="React, Docker">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dockerizing a React App">
+<meta property="og:url" content="http://yoursite.com/2018/02/28/Dockerizing-a-React-App/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="origin Project SetupInstall create-react-app 1npm install -g create-react-app@1.5.2 Creating a new app 12create-react-app docker-appcd docker-app DockerAdd a Dockerfile to the project root 12345678910">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-02-28T03:47:21.182Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dockerizing a React App">
+<meta name="twitter:description" content="origin Project SetupInstall create-react-app 1npm install -g create-react-app@1.5.2 Creating a new app 12create-react-app docker-appcd docker-app DockerAdd a Dockerfile to the project root 12345678910">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-Dockerizing-a-React-App" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Dockerizing a React App
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p><a href="http://mherman.org/blog/2017/12/07/dockerizing-a-react-app/" target="_blank" rel="external">origin</a></p>
+<h3 id="Project-Setup"><a href="#Project-Setup" class="headerlink" title="Project Setup"></a>Project Setup</h3><p>Install <code>create-react-app</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install -g create-react-app@1.5.2</div></pre></td></tr></table></figure>
+<p>Creating a new app</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">create-react-app docker-app</div><div class="line"><span class="built_in">cd</span> docker-app</div></pre></td></tr></table></figure>
+<h3 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h3><p>Add a <code>Dockerfile</code> to the project root</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"># base image</div><div class="line">FROM node:9.6.1</div><div class="line"></div><div class="line"># set working directory</div><div class="line">RUN mkdir /usr/src/app</div><div class="line">WORKDIR /usr/src/app</div><div class="line"></div><div class="line"># add `/usr/src/app/node_modules/.bin` to $PATH</div><div class="line">ENV PATH /usr/src/app/node_modules/.bin:$PATH</div><div class="line"></div><div class="line"># install and cache app dependencies</div><div class="line">COPY package.json /usr/src/app/package.json</div><div class="line">RUN npm install</div><div class="line">RUN npm install react-scripts@1.1.1 -g</div><div class="line"></div><div class="line"># start app</div><div class="line">CMP [&quot;npm&quot;, &quot;start&quot;]</div></pre></td></tr></table></figure>
+<p>Add a <code>.dockerignore</code> to speed up the Docker build process as our local dependencies will not be sent to the Docker Daemon</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">node_modules</div></pre></td></tr></table></figure>
+<p>Build and tag the Docker Image</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker build -t docker-app:1.0.0</div></pre></td></tr></table></figure>
+<p>Then spin up the container once the image is built.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -v <span class="variable">$&#123;PWD&#125;</span>:/usr/src/app -v /usr/src/app/node_modules -p 3000:3000 --rm docker-app:1.0.0</div></pre></td></tr></table></figure>
+<p>Now you can visit your app <code>http://localhost:3000</code></p>
+<h3 id="Docker-Compose"><a href="#Docker-Compose" class="headerlink" title="Docker Compose"></a>Docker Compose</h3><p>Add a <code>docker-compose.yml</code> to the project root.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="attr">version:</span> <span class="string">'3.3'</span></div><div class="line"></div><div class="line"><span class="attr">services:</span></div><div class="line"><span class="attr">  docker-app:</span></div><div class="line"><span class="attr">    container_name:</span> <span class="string">docker-app</span></div><div class="line"><span class="attr">    build:</span></div><div class="line"><span class="attr">      context:</span> <span class="string">.</span></div><div class="line"><span class="attr">      dockerfile:</span> <span class="string">Dockerfile</span></div><div class="line"><span class="attr">    volumnes:</span></div><div class="line"><span class="bullet">      -</span> <span class="string">'.:/usr/src/app'</span></div><div class="line"><span class="bullet">      -</span> <span class="string">'/usr/src/app/node_modules'</span></div><div class="line"><span class="attr">    ports:</span></div><div class="line"><span class="bullet">      -</span> <span class="string">'3000:3000'</span></div><div class="line"><span class="attr">    environment:</span></div><div class="line"><span class="bullet">      -</span> <span class="string">NODE_ENV=development</span></div></pre></td></tr></table></figure>
+<p>Take note of the volumes. Without the data volume <code>/usr/src/app/node_modules</code>, the <code>node_modules</code> directory would be overwritten by the mounting of the host directory at runtime that were installed when the container was built.</p>
+<p>BUild the image and fire up the container</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-compose up <span class="_">-d</span> --build</div></pre></td></tr></table></figure>
+<p>Ensure the app is running in the browser.</p>
+<p>Bring down the container before moving on</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-compose stop</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2018/02/28/Dockerizing-a-React-App/" class="article-date">
+  <time datetime="2018-02-28T03:32:11.000Z" itemprop="datePublished">2018-02-28</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React-Docker/">React, Docker</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2018/02/24/Deploy-RoR-with-Mina/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Deploy RoR with Mina</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

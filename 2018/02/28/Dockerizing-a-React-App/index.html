@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="EzCook">
 <meta property="og:description" content="origin Project SetupInstall create-react-app 1npm install -g create-react-app@1.5.2 Creating a new app 12create-react-app docker-appcd docker-app DockerAdd a Dockerfile to the project root 12345678910">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2018-02-28T03:47:21.182Z">
+<meta property="og:updated_time" content="2018-02-28T03:57:40.043Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dockerizing a React App">
 <meta name="twitter:description" content="origin Project SetupInstall create-react-app 1npm install -g create-react-app@1.5.2 Creating a new app 12create-react-app docker-appcd docker-app DockerAdd a Dockerfile to the project root 12345678910">
@@ -88,6 +88,16 @@
 <p>Ensure the app is running in the browser.</p>
 <p>Bring down the container before moving on</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-compose stop</div></pre></td></tr></table></figure>
+<h3 id="Production"><a href="#Production" class="headerlink" title="Production"></a>Production</h3><p>Let’s create a seperate <code>Dockerfile</code> for use in production called <code>Dockerfile-prod</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"># build environment</div><div class="line">FROM node:9.6.1 as builder</div><div class="line">RUN mkdir /usr/src/app</div><div class="line">WORKDIR /usr/src/app</div><div class="line">ENV PATH /usr/src/app/node_moudles/.bin:$PATH</div><div class="line">COPY package.json /usr/src/app/package.json</div><div class="line">RUN npm install</div><div class="line">RUN npm install react-scripts@1.1.1 -g</div><div class="line">COPY . /usr/src/app</div><div class="line">RUN npm run build</div><div class="line"></div><div class="line"># production environment</div><div class="line">FROM nginx:1.13.9-alpine</div><div class="line">COPY --from=builder /usr/src/app/build /usr/share/nginx/html</div><div class="line">EXPOSE 80</div><div class="line">CMD [&quot;nginx&quot;,&quot;-g&quot;,&apos;deamon off;&quot;]</div></pre></td></tr></table></figure>
+<p>Using the production Dockerfile, build and tag the Docker Image:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker build <span class="_">-f</span> Dockerfile-prod -t docker-app-prod .</div></pre></td></tr></table></figure>
+<p>Spin up the container</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker run -it -p 80:80 --rm docker-app-prod</div></pre></td></tr></table></figure>
+<p>Add Prod Docker Compose as `docker-compose-prod.yml’</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="attr">version:</span> <span class="string">"3.3"</span></div><div class="line"></div><div class="line"><span class="attr">services:</span></div><div class="line"><span class="attr">  docker-app-prod:</span></div><div class="line"><span class="attr">    container_name:</span> <span class="string">docker-app-prod</span></div><div class="line"><span class="attr">    build:</span></div><div class="line"><span class="attr">      context:</span> <span class="string">.</span></div><div class="line"><span class="attr">      dockerfile:</span> <span class="string">Dockerfile-prod</span></div><div class="line"><span class="attr">    prots:</span></div><div class="line"><span class="bullet">      -</span> <span class="string">"80:80"</span></div></pre></td></tr></table></figure>
+<p>Fire up the container</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker-compose <span class="_">-f</span> docker-compose-prod.yml up <span class="_">-d</span> --build</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -118,7 +128,14 @@
     
 <nav id="article-nav" class="article-nav">
   
-    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+    <a href="/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Writing Upgradable Contracts in Solidity
+        
+      </div>
+    </a>
   
   
     <a href="/2018/02/24/Deploy-RoR-with-Mina/" id="article-nav-older" class="article-nav-link-wrap older">

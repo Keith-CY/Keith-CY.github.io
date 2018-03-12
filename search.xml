@@ -3,6 +3,51 @@
   
     
     <entry>
+      <title><![CDATA[Constant, View, and Pure in Solidity]]></title>
+      <url>/2018/03/12/Constant-View-and-Pure-in-Solidity/</url>
+      <content type="html"><![CDATA[<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><ul>
+<li><p><code>pure</code> for functions: Disallows modifition or access of state - this is not enforeced yet.</p>
+</li>
+<li><p><code>view</code> for functions: Disallow modifition of state - this is not enforced yet.</p>
+</li>
+<li><p><code>payable</code> for functions: Allows them to receive Ether together with a call.</p>
+</li>
+<li><p><code>constant</code> for <strong>state variables</strong>: Disallow assignment (except initialization), does not occupy storage slot.</p>
+</li>
+<li><p><code>anonymouse</code> for <strong>events</strong>: Does not store event signature as <strong>topic</strong>(indexable).</p>
+</li>
+<li><p><code>indexed</code> for <strong>event parameters</strong>: Stores the parameter as <strong>topic</strong>(indexable).</p>
+</li>
+</ul>
+<p><a href="https://ethereum.stackexchange.com/questions/25200/solidity-what-is-the-difference-between-view-and-constant" target="_blank" rel="external">Question</a></p>
+<blockquote>
+<p>Q: Solidity 0.4.16 introduced the <code>view</code> and <code>constant</code> function modifiers. <a href="http://solidity.readthedocs.io/en/latest/miscellaneous.html#modifiers" target="_blank" rel="external">The documentation</a> says:</p>
+<p>constant for functions: Same as view</p>
+<p>Does this mean <code>view</code> is just an alias for <code>constant</code>?</p>
+</blockquote>
+<p>Answer: This is discussed <a href="https://github.com/ethereum/solidity/issues/992" target="_blank" rel="external">here</a></p>
+<ol>
+<li><p>The keyword <code>view</code> is introduced for functions (it replaces constant). Calling a view cannot alter the behavior of future interaction with any contract. This means such functions cannot use <code>SSTORE</code>, cannot <code>send</code> or <code>receive</code> ether and can only call other <code>view</code> or <code>pure</code> functions.</p>
+</li>
+<li><p>The keyword <code>pure</code> is introduced for functions, they are view functions with the additional restriction that their value only depends on the function arguments(pure function). This means they cannot use <code>SSTORE</code>, <code>SLOAD</code>, cannot <code>send</code> or <code>receive</code> ether, cannot use <code>msg</code> or <code>block</code> and can only call other <code>pure</code> function.</p>
+</li>
+<li><p>The keyword <code>constant</code> is <strong>invalid</strong> on functions</p>
+</li>
+<li><p>The keyword <code>constant</code> on any variable means it cannot be modified (and could be placed into memory or bytecode by the optimiser)</p>
+</li>
+</ol>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Solidity </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Writing Upgradable Contracts in Solidity]]></title>
       <url>/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/</url>
       <content type="html"><![CDATA[<p><a href="https://blog.colony.io/writing-upgradeable-contracts-in-solidity-6743f0eecc88" target="_blank" rel="external">origin</a></p>

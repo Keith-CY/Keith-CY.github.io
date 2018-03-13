@@ -3,6 +3,39 @@
   
     
     <entry>
+      <title><![CDATA[Error Handling in Solidity]]></title>
+      <url>/2018/03/13/Error-Handling-in-Solidity/</url>
+      <content type="html"><![CDATA[<p>Solidity uses state-reverting exceptions to handle errors. Such an exception will undo all changes made to the state in the current call(and all its sub-calls) and also flag an error to the caller. The convenience function <code>assert</code> and <code>require</code> can be used to check for conditions and throw an exception if the condition is not met.</p>
+<p>The <code>assert</code> function should only be used to test for internal errors, and to check invariants.</p>
+<p>The <code>require</code> function should be used to ensure valid conditions, such as inputs, or contract state variables are met, or to validate return values from calls to external contracts.</p>
+<p>If used properly, analysis tools can evaluate your contract to identify the conditions and function calls which will reach a failing <code>assert</code>. Properly functioning code should never reach a failing assert statement. If this happens there is a bug in your contract which you should fix.</p>
+<p>There are two ways to trigger exceptions:</p>
+<ul>
+<li><p>The <code>revert</code> function can be used to flag an error and revert the current call. In the future, it might be possible to also include details about error in a call to <code>revert</code>.</p>
+</li>
+<li><p>The <code>throw</code> keyword can also be used as an alternative to <code>revert()</code></p>
+</li>
+</ul>
+<blockquote>
+<p>From 0.4.13, the <code>throw</code> is deprecated.</p>
+</blockquote>
+<p>When exceptions happen in a sub-call, they ‘bubble up’ automatically. Exceptions to this rule are <code>send</code> and the low-level functions <code>call</code>, <code>delegatecall</code> and <code>callcode</code> – those return <code>false</code> in case of an exception instead of ‘bubble up’.</p>
+<blockquote>
+<p>low-level function <code>call</code>, <code>delegatecall</code>, <code>callcode</code> return false when exceptions occur.</p>
+</blockquote>
+<p>Catch exceptions is not yet possible.</p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Solidity, Error Handling </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Start in Drizzle ]]></title>
       <url>/2018/03/13/Start-in-Drizzle/</url>
       <content type="html"><![CDATA[<p>Drizzle is a collection of front-end libraries that make wirting dapp front-ends easier and more predicable. The core of Drizzle is based on Redux Store, so you can access to the spectacular development tools around Redux. We take care of synchronizing your contract data, transaction data and more. Things stay fast because you declare what to keep in sync.</p>

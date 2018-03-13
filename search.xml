@@ -3,6 +3,91 @@
   
     
     <entry>
+      <title><![CDATA[Start in Drizzle ]]></title>
+      <url>/2018/03/13/Start-in-Drizzle/</url>
+      <content type="html"><![CDATA[<p>Drizzle is a collection of front-end libraries that make wirting dapp front-ends easier and more predicable. The core of Drizzle is based on Redux Store, so you can access to the spectacular development tools around Redux. We take care of synchronizing your contract data, transaction data and more. Things stay fast because you declare what to keep in sync.</p>
+<ul>
+<li><p>Fully reactive contract data, including state, events and transactions</p>
+</li>
+<li><p>Declarative, so you’re not wasting valuable cycles on unneeded data.</p>
+</li>
+<li><p>Maintainer access to underlying functionaliy. Web3 and your contract’s methods are still there, untouched.</p>
+</li>
+</ul>
+<h3 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add drizzle</div></pre></td></tr></table></figure>
+<p>If use React you can use <a href="https://github.com/trufflesuite/drizzle-react" target="_blank" rel="external">drizzle-react</a> and (optionally) its companion <a href="https://github.com/trufflesuite/drizzle-react-components" target="_blank" rel="external">drizzle-react-components</a></p>
+<blockquote>
+<p>Drizzle uses web3 1.0 and web sockets, be sure your development environment can support these.</p>
+</blockquote>
+<ol>
+<li>Import the provider</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; Drizzle, generateStore &#125; <span class="keyword">from</span> <span class="string">'drizzle'</span></div></pre></td></tr></table></figure>
+<ol>
+<li>Create an <code>options</code> object and pass in the desired contract artifacts for Drizzle to instantiate. Other options are available, just keep going on.</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// import contract</span></div><div class="line"><span class="keyword">import</span> SimpleStorage <span class="keyword">from</span> <span class="string">'./../build/contracts/SimpleStorage.json'</span></div><div class="line"><span class="keyword">import</span> TutorialToken <span class="keyword">from</span> <span class="string">'./../build/contracts/TutorialToken.json'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> options = &#123;</div><div class="line">  <span class="attr">contracts</span>: [</div><div class="line">    SimpleStorage</div><div class="line">  ]</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> drizzleStore = generateStore(<span class="keyword">this</span>.props.options)</div><div class="line"><span class="keyword">const</span> drizzle = <span class="keyword">new</span> Drizzle(<span class="keyword">this</span>.props.options, drizzleStore)</div></pre></td></tr></table></figure>
+<h3 id="Contract-Interaction"><a href="#Contract-Interaction" class="headerlink" title="Contract Interaction"></a>Contract Interaction</h3><p>Drizzle provides helpful methods on top of the default web3 Contract methods to keep you calls and transactions in sync with the store.</p>
+<h4 id="cacheCall"><a href="#cacheCall" class="headerlink" title="cacheCall()"></a>cacheCall()</h4><p>Gets contract data. Calling the <code>cacheCall()</code> function on a contract will execute the desired call and return a <strong>corresponding key</strong> so the data can be retrieved from the store.</p>
+<p>When a new block is received, Drizzle will refresh the store automatically <em>if</em> any transactions in the block touched our contract.</p>
+<blockquote>
+<p>Note: We have to check that Drizzle is <strong>initialized before fetching data</strong>. A simple if statement such as below is fine for display a few pieces of data, but a better approach for larger dapps is to use a <code>loading component</code>. Drizzle built one in <code>drizzle-react-component</code> as well.</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Assuming we're observing the store for changes</span></div><div class="line"><span class="keyword">var</span> state = drizzle.store.getState()</div><div class="line"></div><div class="line"><span class="comment">// If Drizzle is initialized (and therefore web3, accounts, and contracts ), continue</span></div><div class="line"><span class="keyword">if</span> (state.drizzleStatus.initialized) &#123;</div><div class="line">  <span class="comment">// Declare this call to be cached and synchornized. We'll receive the store key for recall</span></div><div class="line">  <span class="keyword">const</span> dataKey = drizzle.contracts.SimpleStorage.methods.storedData.cacheCall()</div><div class="line"></div><div class="line">  <span class="comment">// Use the dataKey to display data from the store</span></div><div class="line">  <span class="keyword">return</span> state.contracts.SimpleStorage.methods.storedData[dataKey].value</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// If Drizzle isn't initialized, display some loading indication</span></div><div class="line"><span class="keyword">return</span> <span class="string">'loading'</span></div></pre></td></tr></table></figure>
+<p>The Contract instance has all of its standard web3 properties and methods. For example, you could still call as normal if you don’t want something in the store:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">drizzle.contracts.SimpleStorage.methods.storedData().call() <span class="comment">// different from methods.storedData.cacheCall()</span></div></pre></td></tr></table></figure>
+<h3 id="cacheSend"><a href="#cacheSend" class="headerlink" title="cacheSend()"></a>cacheSend()</h3><p>Sends a contract transaction. Calling the <code>cacheSend()</code> function on a contract will send the desired transaction and return a correnponding hash so the status can be retrieved from the store. The last argument can optionally be an options object with the typical <strong>from, gas, gasPrice</strong> keys. Drizzle will update the transaction’s state in the store(pending, success, error) and store the transaction receipt.</p>
+<blockquote>
+<p>Note: We have to check that Drizzle is initialized before fetching data. A simple if statement such as below is fine for display a few pieces of data, but a better approach for larger dapps is to use a loading component.</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Assuming we're observing the store of changes</span></div><div class="line"><span class="keyword">var</span> state = drizzle.store.getState()</div><div class="line"></div><div class="line"><span class="comment">// if Drizzle is initialized ( and therefore web3, accounts, and contracts ), continue</span></div><div class="line"><span class="keyword">if</span> (state.drizzleStatus.initialized) &#123;</div><div class="line">  <span class="comment">// Declare this transaction to be observed. We'll receive the stackId of reference.</span></div><div class="line">  <span class="keyword">const</span> stackId = drizzle.contracts.SimpleStorage.methods.set.cacacheSend(<span class="number">2</span>, &#123;<span class="attr">from</span>: <span class="string">'0x3f...'</span>&#125;)</div><div class="line"></div><div class="line">  <span class="comment">// Use the dataKey to display the transaction status</span></div><div class="line">  <span class="keyword">if</span> (state.transactionStack[stackId]) &#123;</div><div class="line">    <span class="keyword">const</span> txHash = state.trasnactionStack[stackId]</div><div class="line"></div><div class="line">    <span class="keyword">return</span> state.transactions[txHash].status</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// If Drizzle isn't initialized, display some loading indication.</span></div><div class="line"><span class="keyword">return</span> <span class="string">'loading'</span></div></pre></td></tr></table></figure>
+<p>The contract instance has all of its standard web3 properties and methods.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">drizzle.contracts.SimpleStorage.methods.set(<span class="number">2</span>).send(&#123;<span class="attr">from</span>: <span class="string">'0x3f...'</span>&#125;)</div></pre></td></tr></table></figure>
+<h3 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  contracts,</div><div class="line">  events: &#123;</div><div class="line">    contractsName: [</div><div class="line">      eventName</div><div class="line">    ]</div><div class="line">  &#125;,</div><div class="line">  web3: &#123;</div><div class="line">    fallback: &#123;</div><div class="line">      type</div><div class="line">      url</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>Contracts: Array, Required, an array of contract artifacts files</p>
+</li>
+<li><p>Events: Object, an object consisting of contract names each containing an array of strings of the event names we’d like to listen for and sync with the store</p>
+</li>
+<li><p>Web3: Object, options regarding web3 instantiation</p>
+</li>
+<li><p>Fallback: Object, an object consisting of the type and url of a fallback web3 provider. This is used if no injected provider, such as MetaMask or Mist, is detect.</p>
+<ul>
+<li><p>type: string, the type of web3 fallback, currently <code>ws</code> is the only possibility</p>
+</li>
+<li><p>url: string, the full websocket url. For example, <code>ws://127.0.0.1:8546</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="How-data-stays-fresh"><a href="#How-data-stays-fresh" class="headerlink" title="How data stays fresh"></a>How data stays fresh</h3><ol>
+<li>Once initialized, Drizzle instantiates <code>web3</code> and our desired contracts, then observes the chain by subscribing to new block headers</li>
+</ol>
+<p><img src="https://github.com/trufflesuite/drizzle/blob/master/readme/drizzle-sync1.png?raw=true" alt=""></p>
+<ol>
+<li>Drizzle keeps track of contract calls so it knows what to synchronize</li>
+</ol>
+<p><img src="https://github.com/trufflesuite/drizzle/blob/master/readme/drizzle-sync2.png?raw=true" alt=""></p>
+<ol>
+<li>When a new block header comes in, Drizzle checks that the block isn’t pending, then goes through the transactions looking to see if any of them touched our contracts</li>
+</ol>
+<p><img src="https://github.com/trufflesuite/drizzle/blob/master/readme/drizzle-sync3.png?raw=true" alt=""></p>
+<ol>
+<li>If they did, we replay the calls already in the store to refresh any potentially altered data. If they didn’t we continue with the store data.</li>
+</ol>
+<p><img src="https://github.com/trufflesuite/drizzle/blob/master/readme/drizzle-sync4.png?raw=true" alt=""></p>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> Drizzle, Ethereum, BlockChain </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Constant, View, and Pure in Solidity]]></title>
       <url>/2018/03/12/Constant-View-and-Pure-in-Solidity/</url>
       <content type="html"><![CDATA[<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><ul>

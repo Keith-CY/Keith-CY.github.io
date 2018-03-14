@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <title>Model Generator of Rails | EzCook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Origin Basic Usage1rails g model User email This command will generate user model with email field type of string, migration which creates user table, test for model and factory. If you want to have m">
+<meta name="keywords" content="Ruby, Rails">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Model Generator of Rails">
+<meta property="og:url" content="http://yoursite.com/2018/03/14/Model-Generator-of-Rails/index.html">
+<meta property="og:site_name" content="EzCook">
+<meta property="og:description" content="Origin Basic Usage1rails g model User email This command will generate user model with email field type of string, migration which creates user table, test for model and factory. If you want to have m">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2018-03-14T06:04:47.049Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Model Generator of Rails">
+<meta name="twitter:description" content="Origin Basic Usage1rails g model User email This command will generate user model with email field type of string, migration which creates user table, test for model and factory. If you want to have m">
+  
+    <link rel="alternate" href="/atom.xml" title="EzCook" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/typing.css">
+</head>
+
+  
+    
+      <body class="dark">
+    
+  
+      <div id="container" class="container">
+        <article id="post-Model-Generator-of-Rails" class="article article-type-post" itemscope itemprop="blogPost">
+  <header id="header" class="header">
+  <nav id="main-nav" class="main-nav">
+    
+      <a class="main-nav-link" href="/">Home</a>
+    
+      <a class="main-nav-link" href="/archives">Archives</a>
+    
+      <a class="main-nav-link" href="/about">About</a>
+    
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+    
+  </nav>
+</header>
+
+  <hr/>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Model Generator of Rails
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry typo" itemprop="articleBody">
+      
+        <p><a href="https://railsguides.net/advanced-rails-model-generators/" target="_blank" rel="external">Origin</a></p>
+<h3 id="Basic-Usage"><a href="#Basic-Usage" class="headerlink" title="Basic Usage"></a>Basic Usage</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rails g model User email</div></pre></td></tr></table></figure>
+<p>This command will generate user model with email field type of string, migration which creates user table, test for model and factory.</p>
+<p>If you want to have model with different type of string pass type after field name following by <code>:</code>.</p>
+<p>The whole list of available types:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">integer</div><div class="line">primary_key</div><div class="line">decimal</div><div class="line">float</div><div class="line">boolean</div><div class="line">binary</div><div class="line">string</div><div class="line">text</div><div class="line">date</div><div class="line">time</div><div class="line">datetime</div><div class="line">timestamp</div></pre></td></tr></table></figure>
+<p>You are able to pass -option parameter to generator. It will inherit generating class from passed name to achieve STI(Single Table Inheritance):</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rails g model admin --parent user</div></pre></td></tr></table></figure>
+<p>This example generates model:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Admin</span> &lt; User</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>Interesting fact that if you generate model in some scope passing model like <em>admin/user</em> of <em>Admin::User</em>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rails g model admin/user</div></pre></td></tr></table></figure>
+<p>you will get generated model in scope <code>app/models/admin/user.rb</code>, defined scope <code>app/models/admin.rb</code> which is required to define module.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Admin</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">table_name_prefix</span></span></div><div class="line">   <span class="string">'admin_'</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>It means that generated table name for <em>Admin::User</em> starts with prefix _admin<em>user</em>. This feature allows to have seperated namespaced models as in rails code as in db schema.</p>
+<h3 id="Advantage-useage"><a href="#Advantage-useage" class="headerlink" title="Advantage useage"></a>Advantage useage</h3><p>Sometimes you have to automatically add index for columns in your migration. It’s not a problem.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rails g model user email:index location_id:<span class="built_in">integer</span>:index</div></pre></td></tr></table></figure>
+<p>Or uniq index</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rails g model user pseudo:string:uniq</div></pre></td></tr></table></figure>
+<p>Set limit for field of integer, string, text and binary fields</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rails g model product <span class="string">'price:decimal&#123;10,2&#125;'</span></div></pre></td></tr></table></figure>
+<p>The last useful feature of generators - it’s options to generate reference columns (fields which are used in rails as foreign_key)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rails g model photo album:references</div></pre></td></tr></table></figure>
+<p>This command will generate photos table with integer field _album<em>id</em> and also it will add index for this field automatically.</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CreatePhotos</span> &lt; ActiveRecord::Migration</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">change</span></span></div><div class="line">    create_table <span class="symbol">:photos</span> <span class="keyword">do</span> <span class="params">|t|</span></div><div class="line">      t.references <span class="symbol">:album</span></div><div class="line"></div><div class="line">      t.timestamps</div><div class="line">    <span class="keyword">end</span></div><div class="line"></div><div class="line">    add_index <span class="symbol">:photos</span>, <span class="symbol">:album_id</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <ul class="article-meta">
+        <li>
+          <span class="label">Published Date:</span>
+          <a href="/2018/03/14/Model-Generator-of-Rails/" class="article-date">
+  <time datetime="2018-03-14T05:42:39.000Z" itemprop="datePublished">2018-03-14</time>
+</a>
+
+        </li>
+        
+        
+          <li>
+            <span class="label">Tag:</span>
+            
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ruby-Rails/">Ruby, Rails</a></li></ul>
+
+
+          </li>
+        
+        <hr/>
+      </ul>
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2018/03/13/Error-Handling-in-Solidity/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Error Handling in Solidity</div>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+
+
+
+      </div>
+      
+    <footer id="footer" class="post-footer footer">
+      <hr/>
+      <div id="footerContent" class="footer-content">
+        <p>Write for Archive</p>
+
+
+      </div>
+    </footer>
+
+      
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/typing.js"></script>
+<!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+
+
+
+
+
+
+
+    </div>
+  </body>
+</html>

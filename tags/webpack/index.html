@@ -1,1 +1,3463 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>webpack | EzCook</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">EzCook</h1><a id="logo" href="/.">EzCook</a><p class="description">Code Elegantly</p></div><div id="nav-menu"><a href="/."><i class="fa fa-home"> Home</i></a><a class="current" href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><h1 class="label-title">Reading articles in webpack</h1><div class="post"><div class="post-archive"><!--Use lodash to classify posts. See https://lodash.com/docs#groupBy--><h2>2017</h2><ul class="listing"><li><span class="date">2017/02/01</span><a href="/2017/02/01/e8-a7-a3-e5-86-b3-commonschunkplugin-e7-9a-84-hash-e5-8f-98-e5-8c-96-e9-97-ae-e9-a2-98/" title="解决 CommonsChunkPlugin 的 Hash 变化问题">解决 CommonsChunkPlugin 的 Hash 变化问题</a></li><li><span class="date">2017/01/29</span><a href="/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/" title="Webpack 2 Config 文件入门">Webpack 2 Config 文件入门</a></li><li><span class="date">2017/01/29</span><a href="/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/" title="Webpack 2 起步">Webpack 2 起步</a></li></ul><h2>2016</h2><ul class="listing"><li><span class="date">2016/08/19</span><a href="/2016/08/19/webpack-e5-b8-b8-e7-94-a8-plugin-e5-92-8c-loader/" title="Webpack 常用 Plugin 和 Loader">Webpack 常用 Plugin 和 Loader</a></li><li><span class="date">2016/08/16</span><a href="/2016/08/16/commonchunks-e6-8f-92-e4-bb-b6/" title="CommonChunks 插件">CommonChunks 插件</a></li><li><span class="date">2016/08/16</span><a href="/2016/08/16/webpack-e9-85-8d-e7-bd-ae-reactbabel/" title="Webpack 配置 React/babel">Webpack 配置 React/babel</a></li><li><span class="date">2016/08/15</span><a href="/2016/08/15/webpack-dev-server/" title="Webpack Dev Server">Webpack Dev Server</a></li><li><span class="date">2016/07/25</span><a href="/2016/07/25/webpack-e6-9d-82/" title="Webpack 杂">Webpack 杂</a></li><li><span class="date">2016/07/22</span><a href="/2016/07/22/webpack-e5-bc-80-e5-8f-91-e5-92-8c-e9-83-a8-e7-bd-b2/" title="Webpack 开发和部署">Webpack 开发和部署</a></li><li><span class="date">2016/07/21</span><a href="/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/" title="Webpack简明指南">Webpack简明指南</a></li><li><span class="date">2016/07/21</span><a href="/2016/07/21/webpack-config-js/" title="Webpack.config.js">Webpack.config.js</a></li><li><span class="date">2016/07/21</span><a href="/2016/07/21/webpack-2/" title="Webpack">Webpack</a></li><li><span class="date">2016/07/20</span><a href="/2016/07/20/webpack/" title="Webpack">Webpack</a></li></ul></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/CSS3/" style="font-size: 15px;">CSS3</a> <a href="/tags/Bash/" style="font-size: 15px;">Bash</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/Trick/" style="font-size: 15px;">Trick</a> <a href="/tags/Material-Design/" style="font-size: 15px;">Material Design</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 15px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 15px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Node-CLI/" style="font-size: 15px;">Node, CLI</a> <a href="/tags/Int8Array/" style="font-size: 15px;">Int8Array</a> <a href="/tags/ETH-Wallet/" style="font-size: 15px;">ETH, Wallet</a> <a href="/tags/Contract-Solidity/" style="font-size: 15px;">Contract, Solidity</a> <a href="/tags/Solidity/" style="font-size: 15px;">Solidity</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 15px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 15px;">Smart Contract, Web3</a> <a href="/tags/React-Docker/" style="font-size: 15px;">React, Docker</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 15px;">Solidity, Error Handling</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 15px;">Ethereum, IPFS</a> <a href="/tags/Node-Fastify/" style="font-size: 15px;">Node, Fastify</a> <a href="/tags/Solidity-Public-External/" style="font-size: 15px;">Solidity, Public, External</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 15px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 15px;">Ethereum</a> <a href="/tags/Webpack/" style="font-size: 15px;">Webpack</a> <a href="/tags/Go-Http-Web/" style="font-size: 15px;">Go, Http, Web</a> <a href="/tags/HTTP2-Node/" style="font-size: 15px;">HTTP2, Node</a> <a href="/tags/JSON-RPC/" style="font-size: 15px;">JSON-RPC</a> <a href="/tags/Ruby-Rails/" style="font-size: 15px;">Ruby, Rails</a> <a href="/tags/Rust-Rocket/" style="font-size: 15px;">Rust, Rocket</a> <a href="/tags/DAPP-Solidity/" style="font-size: 15px;">DAPP, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 15px;">D3, Example</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 15px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/Mock-JavaScript/" style="font-size: 15px;">Mock, JavaScript</a> <a href="/tags/Blockchain/" style="font-size: 15px;">Blockchain</a> <a href="/tags/DApp-Solidity/" style="font-size: 15px;">DApp, Solidity</a> <a href="/tags/Redux/" style="font-size: 15px;">Redux</a> <a href="/tags/Javascript/" style="font-size: 15px;">Javascript</a> <a href="/tags/babel/" style="font-size: 15px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 15px;">babel-polyfill</a> <a href="/tags/RxJS/" style="font-size: 15px;">RxJS</a> <a href="/tags/BOOTSTRAP/" style="font-size: 15px;">BOOTSTRAP</a> <a href="/tags/HTML5/" style="font-size: 15px;">HTML5</a> <a href="/tags/commandline/" style="font-size: 15px;">commandline</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/CommonJS/" style="font-size: 15px;">CommonJS</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/ESLint/" style="font-size: 15px;">ESLint</a> <a href="/tags/React-Redux/" style="font-size: 15px;">React-Redux</a> <a href="/tags/DOM/" style="font-size: 15px;">DOM</a> <a href="/tags/NPM/" style="font-size: 15px;">NPM</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/Gulp/" style="font-size: 15px;">Gulp</a> <a href="/tags/github/" style="font-size: 15px;">github</a> <a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/ES6/" style="font-size: 15px;">ES6</a> <a href="/tags/Thunk/" style="font-size: 15px;">Thunk</a> <a href="/tags/测试/" style="font-size: 15px;">测试</a> <a href="/tags/Koa/" style="font-size: 15px;">Koa</a> <a href="/tags/NODE/" style="font-size: 15px;">NODE</a> <a href="/tags/webpack2/" style="font-size: 15px;">webpack2</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 15px;">Elixir, Phoenix, SCSS</a> <a href="/tags/FP/" style="font-size: 15px;">FP</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 15px;">Node, Graphql, Koa</a> <a href="/tags/Closure/" style="font-size: 15px;">Closure</a> <a href="/tags/DevTools/" style="font-size: 15px;">DevTools</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/MDL/" style="font-size: 15px;">MDL</a> <a href="/tags/precache/" style="font-size: 15px;">precache</a> <a href="/tags/Webpack-DLL/" style="font-size: 15px;">Webpack, DLL</a> <a href="/tags/Promise/" style="font-size: 15px;">Promise</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 15px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 15px;">React-Native</a> <a href="/tags/React-Router/" style="font-size: 15px;">React-Router</a> <a href="/tags/RegExp/" style="font-size: 15px;">RegExp</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 15px;">Koa, NPM, Package</a> <a href="/tags/Html-Picture/" style="font-size: 15px;">Html, Picture</a> <a href="/tags/Nock/" style="font-size: 15px;">Nock</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 15px;">Solidity, Smart Contract</a> <a href="/tags/BlockChain/" style="font-size: 15px;">BlockChain</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 15px;">Contract, Ethereum, Web3</a> <a href="/tags/Protobuf/" style="font-size: 15px;">Protobuf</a> <a href="/tags/AJAX/" style="font-size: 15px;">AJAX</a> <a href="/tags/CORS/" style="font-size: 15px;">CORS</a> <a href="/tags/automatic/" style="font-size: 15px;">automatic</a> <a href="/tags/Immutable/" style="font-size: 15px;">Immutable</a> <a href="/tags/Pug-HTML/" style="font-size: 15px;">Pug, HTML</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/03/05/note-on-bit32/">Note on Bit32</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/20/React-Hooks/">React Hooks</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/11/5-tips-in-CRA-2-0/">5 Tips in CRA@2.0</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/08/Assembly-in-Solidity/">Assembly in Solidity</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/10/Analysis-of-Ujo/">Analysis of Ujo</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/27/development-of-neuron-web-extension/">Development of Neuron Web Extension</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Details-in-Web3-Contract/">Details in Web3 -- Contract</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/Declaration-in-TypeScript/">Declaration in TypeScript</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/10/RxjsV6/">RxjsV6</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/17/content-parser-in-cita/">Content Parser in CITA</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://github.com/Keith-CY" title="Github" target="_blank">Github</a><ul></ul><a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" title="LinkedIn" target="_blank">LinkedIn</a><ul></ul><a href="https://www.facebook.com/keithwhisper" title="Facebook" target="_blank">Facebook</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">EzCook.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+<!DOCTYPE html>
+<html  lang="en">
+<head>
+    <meta charset="utf-8">
+<title>Tag: webpack - EzCook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-136207372-1');
+</script>
+
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.png" alt="EzCook" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="Search" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    <div class="card-content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a href="/tags">Tags</a></li>
+            <li class="is-active"><a href="#" aria-current="page">webpack</a></li>
+        </ul>
+        </nav>
+    </div>
+</div>
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-02-01T09:32:28.000Z">2017-02-01</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 325 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/02/01/e8-a7-a3-e5-86-b3-commonschunkplugin-e7-9a-84-hash-e5-8f-98-e5-8c-96-e9-97-ae-e9-a2-98/">解决 CommonsChunkPlugin 的 Hash 变化问题</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="原文"><a href="#原文" class="headerlink" title="原文:"></a>原文:</h3><blockquote>
+<p>Manifest File<br>  But, if we change application code and run webpack again, we see that the hash for the vendor file changes. Even though we achieved separate bundles for vendor and main bundles, we see that the vendor bundle changes when the application code changes. This means that we still don’t reap the benefits of browser caching because the hash for vendor file changes on every build and the browser will have to reload the file.</p>
+<p>  The issue here is that on every build, webpack generates some webpack runtime code, which helps webpack do it’s job. When there is a single bundle, the runtime code resides in it. But when multiple bundles are generated, the runtime code is extracted into the common module, here the vendor file.</p>
+</blockquote>
+<p>To prevent this, we need extract out the runtime into a separate manifest file. Even though we are creating another bundle, the overhead is offset by the long term caching benefits that we obtain on the vendor file.</p>
+<h3 id="非翻译"><a href="#非翻译" class="headerlink" title="非翻译:"></a>非翻译:</h3><p>每次打包时 vendor 文件的 hash 也会变化的原因在于, webpack 打包时必定会产生 runtime code.</p>
+<p>当我们需要打包出 vendor.js 的时候, 尽管公共代码没有变化, 但是 webpack 会生成新的 runtime code 并注入 vendor.js, 导致其 hash 变化.</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法:"></a>解决方法:</h3><p>将 vendor.js 中的 runtime code 单独打包出来, 这样只有 bundle.js 和 runtime code 的 hash 会变化, vendor.js 的代码不会变化.</p>
+<h3 id="具体做法"><a href="#具体做法" class="headerlink" title="具体做法:"></a>具体做法:</h3><pre><code>new webpack.optimize.CommonsChunkPlugin({
+  name: [&apos;vendor&apos;, &apos;manifest&apos;],
+}
+</code></pre><p>这样就可以把 runtime code 打包进 manifest.js, 此后该类操作不会改变 vendor.js 的 hash 了</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-01-29T03:57:13.000Z">2017-01-29</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    19 minutes read (About 2865 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/">Webpack 2 Config 文件入门</a>
+            
+        </h1>
+        <div class="content">
+            <p>webpack 2 config 文件入门</p>
+<h3 id="webpack-config-js-的基本结构"><a href="#webpack-config-js-的基本结构" class="headerlink" title="webpack.config.js 的基本结构"></a>webpack.config.js 的基本结构</h3><pre><code>var path = require(&apos;path&apos;)
+
+module.exports = {
+  entry:  {
+    home: &apos;./home.js&apos;,
+    about: &apos;./about.js&apos;,
+    contact: &apos;./contact.js&apos;,
+  }, // 入口文件
+  // string | [string] | object {&amp;lt;key&amp;gt;: string | [string] }
+  // 一个页面搭配一个入口文件
+  output: {
+    // output 包含一系列关于打包后文件的配置
+    // output.chunkFilename: string, 这个参数确定了加载 chunk 的名称
+    // output.crossOriginLoading: boolean | string, 只在 target 参数指定为 web 的时候使用, 因为此时通过 jsonp 加载模块
+    // crossOriginLoading: false(default) , 禁止跨域加载
+    // crossOriginLoading: &apos;anonymous&apos;, 允许无 credential 的跨域加载
+    // crossOriginLoading: &apos;use-credentials&apos;, 允许有 credential 的跨域加载
+    // 
+    // output.devtoolFallbackModuleFilenameTemplate: string | function(info)
+    // output.hotUpdateChunkFilename: string, 指定热刷新的 chunk 的名称, 仅支持 id 和 hash 占位符
+    // hotUpdateChunkFilename: &apos;[id].[hash].hot-update.js&apos;
+    // output.sourceMapFilename: string, 仅当 devtool 使用 source map 时生效, 默认为[ file].map, 可选占位符有[name], [id], [hash], [chunkhash]
+
+    path: path.resolve(__dirname, &apos;dist&apos;), // 打包后文件存储路径, 必须是绝对路径, 可以用 path 模块生成
+
+    publicPath: /assert/, // 解析文件中相对路径时依赖的根目录
+    // 该字段设定了输出文件的 public Url
+    // 
+    // 默认的, 相对路径会基于 html 文件位置或&amp;lt;base&amp;gt;标签进行解析, 添加 publicPath 后, 各个 loaders 会在每个相对路径前添加 publicPath, 即相对路径基于 publicPath 进行解析
+    // 该值一般以&apos;/&apos;结尾
+    // 默认值为&apos;&apos;
+    // simple rule: 该参数的值为html 页面到 output.path 的相对值
+    // path: path.resolve(__dirname, &apos;public/assets&apos;),
+    // publicPath: &apos;https://cdn.example.com/assets/&apos;,
+    // publicPath 也会对 webpack-dev-server 生效
+    // publicPath: &apos;https://cdn.example.com/assets/&apos; cdn, 并且应该使用 https
+    // publicPath: &apos;//cdn.example.com/assets/&apos;, cdn, 使用相同协议
+    // publicPath: &apos;/assets/&apos;, 相对于服务器根路径
+    // publicPath: &apos;assets/&apos;, 相对于 html 页面
+    // publicPath: &apos;../assets/&apos;, 相对于 html 页面
+    // publicPath: &apos;&apos;, 相对于 html 页面(同一路径)
+
+    filename: &apos;bundle.js&apos;, // 打包后的文件名称
+    // 对于单一入口文件, filename 可以为静态名称&apos;bundle.js&apos;
+    // 对于多入口文件, 可以使用参数生成特定名称
+    // [name], [id], [hash], [chunkhash]
+    // 可以为文件添加路径: &apos;js/[name]/bundle.js&apos;
+
+    library: &apos;MyLibrary&apos;, // 输出库的名称
+
+    libraryTarget: &apos;umd&apos;, // 输出库的类型
+  },
+  module: {
+    // module.noParse: RegExp | [RegExp], 符合正则的字段被 import, require, define 后不会被处理, 可以提高打包速度
+    // noParse: /jquery|lodash/
+    //
+    rules: [
+      // 模块应用规则(loaders, parser 的设定等)
+      // module.rules: array
+      // 一条 Rule 可以分为三部分, Conditions, Results, Nested Rules
+
+      // Conditions, 有两个输入值, 
+      // 1\. The resource: 文件引用的绝对路径经过 resolve 规则解析后的结果
+      // 2\. The issuer: 引用 resource 的模块到文件的绝对路径
+      // 比如, &apos;app.js&apos; 中 &apos;import ./style.css&apos;, resource 是 &apos;/path/to/style.css&apos;, issuer 是 &apos;/path/to/app.js&apos;
+      // 在 rule 中, test, include, exclude 和 resource 作用于resource, 而 issuer 族谱用于 issuer
+
+      // Results
+      // Rule Results 仅在 Rule Conditions 满足时起作用
+      // Rule Results 有二种输出值
+      // Applied Loaders: 一个数组, 其元素是应用于 resource 的 loaders
+      // Parser options: 一个 options 对象, 作为当前 module 的 parser
+      // loader, options, use 用于 loaders,
+      // query, loaders 用于提高兼容性
+      // enforce 属性指定 loader 类型, 可选值有: normal, pre, post
+      // parser 属性影响 parser options
+
+      // Nested Rules
+      // 在 rules 和 oneOf 属性中可以指定 nested rules
+
+      // Rule.enforce: &apos;pre&apos; | &apos;post&apos;, 指定 loader 的类型, 默认为 normal
+      // 还有一种 inline loader 应用于 inline import/require, 
+      // 所有 loaders 按照 post, inline, normal, pre 排序并依次执行
+      // 所有 normal loaders 可以通过在 request 中添加前缀 &apos;!&apos; 进行忽略
+      // 所有 normal 和 pre loaders 可以通过在 request 中添加前缀 &apos;-!&apos; 进行忽略
+      // 所有 normal, post 和 pre loaders 可以通过在 request 前添加 &apos;!!&apos; 进行忽略
+
+      // Rule.exclude
+      // Rule.exclude 是 Rule.resource.exclude 的缩写
+      // 
+      // Rule.include
+      // Rule.include 是 Rule.resource.include 的缩写
+      //
+      // Rule.issuer
+      //
+      // Rule.loader
+      // Rule.loader 是 Rule.use: [{loader}] 的别名
+      // 
+      // Rule.loaders
+      // Rule.loaders 是 Rule.use 的别名, 他的存在仅为了兼容 webpack1, 应使用 Rule.use
+      // 
+      // Rule.oneOf
+      // 一个数组, 其元素为一系列 rules, 仅第一个符合条件的 rule 会起作用
+      // 
+      // Rule.options/ Rule.query
+      // Rule.options 和 Rule.query 都是 Rule.use: [{options}] 的缩写
+      // Rule.query 的存在仅为了兼容 webpack1, 应使用 Rule.options
+      // 
+      // Rule.parser
+      // 一个 parser options 的对象, 所有要使用的 parser options 都集中在此
+      // 每个不同的 parser options 都会创建对应 parser, 并且 plugins 可以根据 parser options 应用.  当 parser options 中没有设置或设置为 true 时, 大部分 plugins 默认只应用他们自己的 parser plugins
+      // parser: {
+      // amd: false, // disable AMD
+      // commonjs: false, // disable CommonJS
+      // harmony: false, // disable ES6 Harmony import/exports
+      // requireInclude: false, // disable require.include
+      // requreEnsure: false, // disable require.ensure
+      // }
+
+      // Rule.resource
+      // Rule.rules, 一个 Rules 组成 的数组
+      // Rule.test, Rule.resource.test 的缩写
+      // Rule.use, 一系列应用于 modules 的 UseEntries, 每一个 entry 指定一个 loader
+      // use: [&apos;style-loader&apos;] 是 use: [{loader: &apos;style-loader&apos;}] 的缩写
+      // 可以链式传入多个 loaders, 从右向左依次执行
+      // use: [
+      //   {loader: &apos;style-loader&apos;},
+      //   {loader: &apos;css-loader&apos;, options: { importLoader: 1}},
+      //   {loader: &apos;less-loader&apos;, options: { noIeCompat: true}},
+      // ]
+
+      // Condition
+      // Condition 可以为以下之一:
+      // String: 比如 exclude: &apos;node_modules&apos;
+      // RegExp: 比如 test: /\.js$/, exclude: /node_modules/
+      // function: 返回 true 或 false
+      // Condition Array: 至少有一个满足时刻认为满足 condition
+      // Object: 所有属性都满足时可认为满足
+      // 
+      // {test: Condition}, {include: Condition}, {exclude: Condition}, {and: [Condition]}, {or: [Condition]}, {not: Condition}
+      // 
+      // UseEntry: object
+      // 该属性必须有一个字符串 loader.
+      // 该属性相对 context 的值解析 loader
+      // 该属性拥有 options 属性, 该属性为 string 或 object, 该属性会作为 loader options 被传给 loader
+      // 考虑到兼容性, 目前仍支持 query 作为 options 的别名
+      // 
+
+      {
+        test: /\.jsx?$/, // 通过正则表达式选择要处理的文件
+        include: [ // 限定文件范围
+          path.resolve(__dirname, &apos;app&apos;)
+        ],
+        exclude: [ // 排除文件范围
+          path.resolve(__dirname, &apos;demo&apos;)
+        ]
+        // 最佳实践
+        // test 中使用正则表达式
+        // include 和 exclude 中使用绝对路径
+        // 优先使用 include 而不是 exclude
+        issuer: { test, include, exclude },
+        // issuer 的应用范围
+        enforce: &apos;pre&apos;,
+        enforce: &apos;post&apos;,
+        loader: &apos;babel-loader&apos;,
+        // 使用 babel-loader 处理符合条件的文件
+        // webpack2 中 -loader 不再可以省略
+        options: {
+          presets: [&apos;es2015&apos;]
+        }
+        // babel-loader 的配置
+      },
+      {
+        test: /\.html$/,
+        use: [
+          // 应用多个 loader 及相关配置
+          &apos;htmllint-loader&apos;,
+          {
+            loader: &apos;html-loader&apos;,
+            options: {
+              // ...
+            }
+          }
+        ]
+      },
+
+      {
+         oneOf: [ /* rules */ ],
+         // 仅应用 rules 数组中的一条规则
+      },
+
+      {
+        rules: [ /* rules */ ],
+        // 应用所有 rules
+      },
+
+      {
+        resource: { and: [ /* conditions */ ]}
+        // 当所有 conditions 都满足时才认为符合条件
+      },
+
+      { resource: { or: [ /* conditions */ ]}, },
+      { resource: [ /* conditions */] },
+      // 当某一 condition 满足时即可认为符合条件
+
+      {
+        resource: { not: /* condition */ }
+        // 当某一 condition 不满足时可认为符合条件
+      }
+    ],
+    // rules 结束
+  },
+  resolve: {
+    // 解析模块 request 时的配置
+    // (不会应用于解析 loader )
+    modules: [
+      &apos;node_modules&apos;,
+      path.resolve(__dirname, &apos;app&apos;)
+    ],
+    // 解析 modules 时的路径
+    extensions: [&apos;.js&apos;, &apos;.json&apos;, &apos;.jsx&apos;, &apos;.css&apos;],
+    // 可以省略的扩展名
+    alias: {
+      // 模块别名
+      // 为 import 或 require 创建别名
+      // Utilities: path.resolve(__dirname, &apos;src/utilities&apos;)
+      // import Utility from &apos;../../utilities/utility&apos; 可以缩写为 
+      // import Utility from &apos;Utilities/utility&apos;
+      // 末尾添加$可以进行精确匹配, 类似正则
+      // 
+      &apos;module&apos;: &apos;new-module&apos;,
+      // 别名 module 可以表示 new-module, 包括文件与路径, 比如 module/path/file 会被解析为 new-module/path/file
+      &apos;only-module$&apos;: &apos;new-module&apos;,
+      // 别名 only-module(处于尾部) 会被解析成 new-module, 因此 module/path/file 不会被解析
+    },
+    // aliasFields: string
+    // 指定一个 field, 比如 browser, 来执行特定的 alias
+    // aliasFields: [&apos;browser&apos;]
+    // 
+    // resolve.descriptionFiles: array
+    // 用于描述的 JSON 文件, 默认为
+    // descriptionFiles: [&apos;package.json&apos;]
+    // 
+    // resolve.enforceExtension: boolean
+    // 如果为 true, webpack 不会处理没有扩展名的文件, 默认为 false, 及允许 require(&apos;./foo&apos;) 这种写法
+    //
+    //resolve.enforceModuleExtension: boolean
+    //默认为 false, 是否允许 modules(loaders) 省略扩展名
+    //
+    //resolve.extensions: array, 自动解析指定的扩展名
+    //默认为
+    // extensions: [&apos;.js&apos;, &apos;.json&apos;]
+    // 因此可以使用 import File from (&apos;../path/to/file&apos;) 这种写法
+    // 
+    // resolve.mainFields: array
+    // 当 import 一个包时, 比如 import * as D3 from &apos;d3&apos;, 这个设置决定package.json中的哪个 field 对应的包的会被检索, 默认值基于 target 的值
+    // 当 target 指定为 webworker, web 或不指定
+    // mainFields: [&apos;browser&apos;, &apos;module&apos;, &apos;main&apos;]
+    // 对于其他 target, 
+    // mainFields [&apos;module&apos;, &apos;main&apos;]
+    // 例如, D3的 package 包括这些 fields
+    // {
+    // ...
+    // main: &apos;build/d3.Node.js&apos;,
+    // browser: &apos;build/d3.js&apos;,
+    // module: &apos;index&apos;
+    // ...
+    // }
+    // 
+    // resolve.mainFiles: array
+    // 这里的 filename 会在解析路径的时候用到, 默认为
+    // mainFiles: [&apos;index&apos;]
+    // 
+    // resolve.modules: array
+    // 限定 webpack 搜索与解析的范围
+    // 可以使用绝对路径偶相对路径, 但是他们的行为有少许不同.
+    // 相对路径的检索方式与 Node 检索 module 相近, 首先检索当前路径及父路径
+    // 绝对路径则只会检索给定路径
+    // 默认值为 modules: [&apos;node_modules&apos;]
+    //
+    // 如果要添加路径, 应当添加在 node_modules 前面
+    // modules: [path.resolve(__dirname, &apos;src&apos;), &apos;node_modules&apos;]
+    // 
+    // resolve.unsafeCache: regex | array | boolean
+    // 默认为 true, 即允许模块缓存, 即使这种行为是不安全的
+    // 
+  },
+
+  performance: {
+    // 此配置决定 webpack 的通知功能
+    // 主要用于对文件尺寸的控制
+    hints: &apos;warning&apos;, // enum
+    // hints: boolean | &apos;error&apos; | &apos;warning&apos;
+    // 设定 webpack 何时显示通知
+    // 默认为 warning
+
+    maxAssetSize: 200000, // int (in bytes)
+    // maxAssetSize: int, 这个选项限制了单个 asset 的尺寸, 默认为250000
+
+    maxEntrypointSize: 400000, // int (in bytes)
+    // maxEntrypointSize: int, 限制初始加载时单个 entry 的最大请求数, 默认为250000
+
+    assetFilter: function (assetFilename) {
+      return assetFilename.endsWith(&apos;.css&apos;) || assetFilename.endsWith(&apos;.js&apos;)
+    }
+    // assetFilter: function, 这个属性允许 webpack 控制使用哪些文件来计算 performance hint, 默认为
+    // function (assertFilename) {
+    //   return !(/\.map$/.test(assetFilename))
+    // }
+    //
+    // 可以自己设定 filter function
+    // assetFilter: function(assetFilename) {
+    //   return assetFilename.endsWith(&apos;.js&apos;)
+    // }
+  },
+
+  devtool: &apos;source-map&apos;, // enum, string | false
+  // 可以提高 debug 的便利性, 但是会影响打包速度
+  // 面向开发有: eval, inline-source-map, eval-source-map, cheap-module-eval-source-map
+  // 面向生产有: source-map, hidden-source-map, cheap-source-map, nosources-source-map
+
+  context: __dirname, // 使用绝对路径
+  // webpack 的根路径, loaders 的配置文件(.babelrc, postcss.config.js)和 entry 都是基于 context 来解析的
+  // 该属性值默认为当前目录, 但是强烈建议书写这一字段, 可以使你的配置文件独立于当前工作目录
+
+  target: &apos;web&apos;, // enum
+  // 打包文件运行环境
+  // webpack 可以针对多个 environment 或 target 编译
+  // target: string, (async-node|electron|electron-renderer|node|node-webkit|web|webworker)
+
+  externals: [&apos;react&apos;, /^@angular\//],
+  // 不必打包的内容
+  // externals: string| RegExp | function | array | object
+  // 例如要使用 jquery 的 cdn, 则可以这样配置
+  // externals: {
+  //   jquery: &apos;jQuery&apos;
+  // }
+  // import $ from &apos;jquery&apos;
+  // 
+  // externals: {
+  //   substract: [&apos;./math&apos;, &apos;substract&apos;]
+  // }
+  // 会形成一个负责结构, ./math 是父模块, 而你的 bundle 仅请求其子模块 substract
+  // 
+  // externals: {
+  //   react: &apos;react&apos;,
+  //   lodash: {
+  //     commonjs: &apos;lodash&apos;,
+  //     amd: &apos;lodash&apos;,
+  //     root: &apos;_&apos;
+  //   }
+  // }
+  // 
+
+  watch: boolean
+  // webpack 可以监控文件并在他们变化时进行重新编译
+  // 默认为 false
+
+  watchOptions: object, 
+  // 配置 watch 的模式
+  // {
+  //   aggregateTimeout: number, 从第一次检测到文件变化到进行重新编译的延迟时间, 这个段时间内的其他变化会被整合进此次编译
+  //   ignored: string | RegExp, 忽视某些文件的变化, 减轻 CPU 负担
+  //   poll: boolean | number, 每隔1000ms 进行一次检测
+  // }
+
+  stats: {
+    // 待补充
+  },
+
+  devServer: {
+    // 这一部分的设置会被 webpack-dev-server 采用
+    contentBase: path.resolve(__dirname, &apos;dist&apos;), // 指定 serve 目录为 dist
+    compress: true, // 开启 gzip 压缩
+    port: 9000, // 指定端口
+    // 当 devServer 启动时, 控制台会打印
+    // http://localhost:9000
+    // webpack result is served from /build/
+    // content is served from dist/
+    // 这几行指出了 server 的位置和 served 内容
+    // 如果你使用了 Node.js API, 那么这部分会被忽略
+    // 
+    // devServer.filename: string, 这个选项可以减少 lazy mode 下的编译次数
+    // 默认的, 在 lazy mode 下, 每一个请求会进行一次新的编译 
+    // 添加 filename 后, devServer 仅在请求 filename 时进行编译, 比如
+    // lazy: true,
+    // filename: bundle.js
+    // 此时, devServer 仅在请求/ bundle.js 时进行编译
+    // filename 仅在 lazy mode 中起作用
+    // devServer.headers: object, 在所有 request 中添加请求头
+    // headers: {
+    //   &apos;X-Custom-Foo&apos;: &apos;bar&apos;
+    // }
+    // 
+    // devServer.historyApiFallback: boolean, object
+    // 当使用 Html5 History Api 时, index.html 可能得到404响应
+    // 
+    // devServer.hot: boolean, 开启 webpack 模块热替换
+    // 
+    // devServer.host - CLI only
+    // 指定 host
+    // 
+    // devServer.https: boolean | object, devServer 默认false, 即使用 http
+    // 
+    // devServer.inline - CLI only
+    // 切换 devServer 的模式, 默认使用 inline 模式, 即脚本会直接注入到你的 bundle 以实现重载, 设置 devServer.inline: false 可以启用 iframe 模式
+    // 
+    // 
+  },
+
+  plugins: [
+    // 待补充
+  ]
+}
+</code></pre>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-01-28T23:25:10.000Z">2017-01-29</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 248 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/">Webpack 2 起步</a>
+            
+        </h1>
+        <div class="content">
+            <p>虽然和 webpack1 一样, 还是过一遍</p>
+<h3 id="创建一个-bundle"><a href="#创建一个-bundle" class="headerlink" title="创建一个 bundle"></a>创建一个 bundle</h3><pre><code>mkdir webpack-demo &amp;amp;&amp;amp; webpack-demo
+
+npm init -y
+
+yarn add --dev webpack@beta
+
+yarn add lodash
+`&lt;/pre&gt;
+
+#### 创建 app/index.js
+
+&lt;pre&gt;`// app/index.js
+import _ from &apos;lodash&apos;
+function component () {
+  let element = document.createElement(&apos;div&apos;);
+
+// use lodash
+  element.innerHtml = _.join([&apos;Hello&apos;, &apos;webpack&apos;], &apos; &apos;)
+
+  return element
+}
+
+document.body.appendChild(component())
+`&lt;/pre&gt;
+
+#### 创建 index.html
+
+&lt;pre&gt;`&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;webpack 2 demo&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;script src=&quot;public/bundle.js&quot;&amp;gt;&amp;gt;/script&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+`&lt;/pre&gt;
+
+#### 创建打包后文件
+
+&lt;pre&gt;`./node_modules/.bin/webpack app/index.js public/bundle.js
+`&lt;/pre&gt;
+
+webpack 会自动处理包的依赖关系
+
+### 添加配置文件
+
+&lt;pre&gt;`var path = require(&apos;path&apos;)
+
+module.exports = {
+  entry: &apos;./app/index.js&apos;,
+  output: {
+    path: path.resolve(__dirname, &apos;public&apos;),
+    filename: &apos;bundle.js&apos;
+  }
+}
+`&lt;/pre&gt;
+
+通过 webpack 命令行进行打包
+
+&lt;pre&gt;`webpack --config webpack.config.js
+`&lt;/pre&gt;
+
+`webpack` 会默认执行名为 `webpack.config.js` 的配置文件, 因此仅输入`webpack` 即可进行打包
+
+### 通过 yarn 执行打包
+
+在 `yarn init` 生成的 `package.json` 中添加
+
+&lt;pre&gt;`{
+  ...
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;webpack&quot;
+  }
+  ...
+}
+</code></pre><p>即可将<code>webpack</code>指令添加进 yarn 的快捷方式, 此时执行 <code>yarn build</code> 即可打包</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-08-19T05:58:43.000Z">2016-08-19</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    a few seconds read (About 60 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/08/19/webpack-e5-b8-b8-e7-94-a8-plugin-e5-92-8c-loader/">Webpack 常用 Plugin 和 Loader</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="常用Loader"><a href="#常用Loader" class="headerlink" title="常用Loader"></a>常用Loader</h3><p>html 相关</p>
+<pre><code>html-loader
+`&lt;/pre&gt;
+
+css 相关
+
+&lt;pre&gt;`style-loader
+css-loader
+autoprefixer-loader
+sass-loader
+`&lt;/pre&gt;
+
+js 相关
+
+&lt;pre&gt;`babel-loader
+babel-core
+babel-preset-es2015
+babel-preset-react
+babel-preset-stage3
+eslint-loader
+`&lt;/pre&gt;
+
+### 常用插件Plugin
+
+#### config 类
+
+&lt;pre&gt;`NormalModuleReplacementPlugin
+ContextReplacementPlugin
+IgnorePlugin
+PrefetchPlugin
+`&lt;/pre&gt;
+
+#### Optimize
+
+&lt;pre&gt;`DedupePlugin
+LimitChunkCountPlugin
+OccurenceOrderPlugin
+UglifyJsPlugin
+CommonsChunkPlugin
+`&lt;/pre&gt;
+
+#### 其他
+
+&lt;pre&gt;`HotModuleReplacementPlugin
+NoErrorPlugin
+ProgressPlugin
+HtmlWebpackPlugin
+</code></pre>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-08-15T23:32:03.000Z">2016-08-16</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 294 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/08/16/commonchunks-e6-8f-92-e4-bb-b6/">CommonChunks 插件</a>
+            
+        </h1>
+        <div class="content">
+            <p>作用就是提取代码中的公共模块, 然后将公共模块打包到一个独立的文件中, 以便在其他的入口和模块中使用.</p>
+<pre><code>// in main.js
+var a = require(&apos;./a&apos;);
+a.sayHello();
+
+var b = require(&apos;./b&apos;);
+b.sayHello();
+
+var c = require(&apos;./c&apos;);
+c.sayHello()
+`&lt;/pre&gt;
+
+&lt;pre&gt;`// in main2.js
+var a = require(&apos;./a&apos;);
+a.sayHello();
+
+var b = require(&apos;./b&apos;);
+b.sayHello();
+`&lt;/pre&gt;
+
+a, b, c 和之前一样, 只有一个 sayHello 方法.
+
+打包后看到`bundle.main.js` 和`bundle.main2.js` 中分别包含了 a, b, c 三个模块, 其中 a, b 是要使用`CommonChunksLoader` 提取出来的公共模块.
+
+### 配置 CommonChunksLoader
+
+&lt;pre&gt;`var webpack = require(&apos;webpack&apos;);
+module.exports = {
+  entry:{
+    main1: &apos;./main&apos;,
+    main2: &apos;./main2&apos;
+  },
+  output:{
+    filename: &apos;bundle.[name].js&apos;
+  },
+  plugins:[
+    new webpack.optimize.CommonsChunkPlugin(&apos;common.js&apos;,[&apos;main1&apos;,&apos;main2&apos;])
+  ]
+} ;
+`&lt;/pre&gt;
+
+第一行中, 添加 webpack 引用, 然后添加`plugins` 选项, 引用`webpack.optimize.CommonsChunkPlugin` 来提取公共模块, 参数`common.js` 表示公共模块的文件名, 后面的数组表示依赖这个模块的入口文件.
+
+重新打包后, 生成三个文件
+
+&lt;pre&gt;`bundle.main1.js,
+bundle.main2.js
+common.js
+</code></pre><p>其中 <code>bundle.main1.js</code> 只包含了<code>c</code>模块, <code>bundle.main2.js</code>则没包含任何模块.</p>
+<p>当然, 生成了<code>common.js</code> 还需要在 html 中进行引用, 而且要先于 main1, main2</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-08-15T20:02:12.000Z">2016-08-16</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    a few seconds read (About 95 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/08/16/webpack-e9-85-8d-e7-bd-ae-reactbabel/">Webpack 配置 React/babel</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="安装-react"><a href="#安装-react" class="headerlink" title="安装 react"></a>安装 react</h3><pre><code>npm install --save react react-dom
+`&lt;/pre&gt;
+
+### 安装 babel-loader
+
+&lt;pre&gt;`npm install --save-dev babel-loader babel-core babel-preset-es2015 babel-preset-react babel-preset-stage-2 
+// 支持 ES2015, JSX, ES7
+`&lt;/pre&gt;
+
+&lt;pre&gt;`npm install --save polyfill
+`&lt;/pre&gt;
+
+&lt;pre&gt;`npm install --save babel-runtime
+npm install --save-dev babel-plugin-transform-runtime
+// 减少打包时候的重复代码
+`&lt;/pre&gt;
+
+### 配置 babel
+
+&lt;pre&gt;`// 在入口添加 polyfill
+entry:[
+  &apos;babel-polyfill&apos;,
+  &apos;webpack/hot/dev-server&apos;,
+  &apos;webpack-dev-server/client?http://localhost:8080&apos;
+]
+`&lt;/pre&gt;
+
+添加`.babalrc`
+
+&lt;pre&gt;`{
+  &quot;presets&quot;:[
+    &quot;es2015&quot;,
+    &quot;react&quot;,
+    &quot;stage-2&quot;
+  ],
+  &quot;plugins&quot;:[
+    &quot;transform-runtime&quot;
+  ]
+}
+</code></pre>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-08-14T21:33:05.000Z">2016-08-15</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 289 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/08/15/webpack-dev-server/">Webpack Dev Server</a>
+            
+        </h1>
+        <div class="content">
+            <p>The webpack-dev-server is a little node.js Express server, which uses the <code>webpack-dev-middleware</code> to serve a webpack bundle. It also has a little runtime which is connected to the server via <code>Socket.IO</code>.</p>
+<p>Let’s say you have the following config file(<code>webpack.config.js</code>)</p>
+<pre><code>var path = require(&apos;path&apos;);
+module.exports = {
+  entry:{
+    app:[&apos;./app/main.js&apos;]
+  },
+  output:{
+    path: path.resolve(__dirname, &apos;build&apos;),
+    publicPath:&apos;/assets/&apos;,
+    filename: &apos;bundle.js&apos;
+  },
+}
+`&lt;/pre&gt;
+
+You have an `app` folder with your initial entry point that webpack will bundle into a `bundle.js` file in the `build` folder.
+
+### Content Base
+
+The webpack-dev-server will serve the files in the **current directory**, unless you configure a specific content base.
+
+&lt;pre&gt;`webpack-dev-server --content-base build/
+`&lt;/pre&gt;
+
+it will serve you `build` folder.
+
+This modified bundle is served from memory at the relative path specified in `publicPath`. Namely your bundle will be available as `localhost:8080/assets/bundle.js`
+
+### Automatic Refresh
+
+The webpack-dev-server supports multiple modes to automatic refresh pages:
+</code></pre><ul>
+<li>Iframe mode(page is embedded in an iframe and reload on change)</li>
+<li><p>Inline mode(as a small webpack-dev-server client entry is added to the bundle which refresh the page on change)</p>
+<h4 id="Inline-Mode"><a href="#Inline-Mode" class="headerlink" title="Inline Mode"></a>Inline Mode</h4><p>To use the inline mode, specify <code>--inline</code> on the command line(you cannot specify it in configuration).</p>
+<h3 id="配置-webpack-dev-server-自动刷新"><a href="#配置-webpack-dev-server-自动刷新" class="headerlink" title="配置 webpack-dev-server 自动刷新"></a>配置 webpack-dev-server 自动刷新</h3><pre>`// webpack.config.js
+entry: [
+    'webpack/hot/dev-server',
+    'webpack-dev-server/client?http://localhost:8080',
+    path.resolve(__dirname, 'app/main.js')
+  ],
+  devServer:{
+    historyApiFallback: true,
+    hot:true,
+    inline:true,
+    progress: true
+  }
+`</pre>
+
+<p><pre>`//package.json</pre></p>
+</li>
+</ul>
+<p>“dev”: “webpack-dev-server –progress –colors –inline –hot –content-base build/“,<br>    “build”: “webpack”<br><code>`</code></p>
+<p>此时访问 localhost:8080 相当于访问 build/, 所以可以省略 index.html</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-07-24T22:09:11.000Z">2016-07-25</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 297 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/07/25/webpack-e6-9d-82/">Webpack 杂</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="loaders"><a href="#loaders" class="headerlink" title="loaders"></a>loaders</h3><p>在 React 里会用到 JSX, ES6, js, 统一使用 .js 作为后缀, 便于 babel 配置</p>
+<pre><code>npm install --save babel-loader
+
+//
+{
+  test: /\.js?$/,
+  exclude: /node_modules/,
+  loader: &apos;babel&apos;,
+  query:{
+    presets: [&apos;es2015&apos;, &apos;react&apos;]
+  }
+}
+`&lt;/pre&gt;
+
+CSS, SCSS, ICONFONT 字体文件
+
+&lt;pre&gt;`npm install --save style-loader css-loader sass-loader node-sass url-loader, file-loader
+//
+{
+  test: /\.scss$/,
+  loader: &apos;style!css!sass&apos;
+},
+{
+  test: /\.(png|jpg)$/,
+  loader: &apos;url?limit-8192&apos;
+}
+</code></pre><h3 id="plugins"><a href="#plugins" class="headerlink" title="plugins"></a>plugins</h3><h4 id="html-webpack-plugin-会由-entry-得配置将入口文件所属的-html-文件作为模板-重新生成一个-html-文件-其中的静态资源都已经根据配置打包好"><a href="#html-webpack-plugin-会由-entry-得配置将入口文件所属的-html-文件作为模板-重新生成一个-html-文件-其中的静态资源都已经根据配置打包好" class="headerlink" title="html-webpack-plugin 会由 entry 得配置将入口文件所属的 html 文件作为模板, 重新生成一个 html 文件, 其中的静态资源都已经根据配置打包好"></a>html-webpack-plugin 会由 entry 得配置将入口文件所属的 html 文件作为模板, 重新生成一个 html 文件, 其中的静态资源都已经根据配置打包好</h4><p>使用 webpack 后, 对文件的版本 hash 会变得非常简单, 在出口文件 filename 中添加[hash]即可; 就目前而言, 清楚资源缓存的最好方法是文件名 hash, 由于每次改动后生成的文件名都不一样, 上线并不会覆盖之前的版本, 只是多了一个版本的文件, 页面即使同步有时间差, 要么访问旧版页面, 要么访问新版页面, 不会存在冲突. 这样服务器就可以放心的对静态资源开启永久强缓存, 并且有利于回滚, 至于静态资源产生的积压, 可以交由运维处理.</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-07-21T22:22:12.000Z">2016-07-22</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/workNote/">workNote</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 minutes read (About 754 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/07/22/webpack-e5-bc-80-e5-8f-91-e5-92-8c-e9-83-a8-e7-bd-b2/">Webpack 开发和部署</a>
+            
+        </h1>
+        <div class="content">
+            <p>Thanks to <a href="https://github.com/vikingmute/webpack-for-fools/blob/master/entries/chapter-2.md" target="_blank" rel="noopener">Webpack 傻瓜指南</a></p>
+<h3 id="启用-Source-Map"><a href="#启用-Source-Map" class="headerlink" title="启用 Source Map"></a>启用 Source Map</h3><p>在 webpack.config.js 中添加字段</p>
+<pre><code>devtool: &apos;eval-source-map&apos;,
+`&lt;/pre&gt;
+
+这样出错后会采用 sourceMap 直接显示出错位置
+
+### 配置 webpack-dev-server
+
+在 webpack.config.js 中添加字段
+
+&lt;pre&gt;`devServer: {
+  historyApiFallback: true,
+  hot: true,
+  inline: true,
+  progress: true,
+}
+`&lt;/pre&gt;
+
+### 使用 preLoaders 和 postLoaders
+
+preLoaders 在 loaders 之前执行, 总体顺序是 preLoader -&gt; loaders -&gt; postLoaders
+
+#### 安装 jshint
+
+&lt;pre&gt;`npm install --save-dev jshint-loader
+`&lt;/pre&gt;
+
+在 config 中配置
+
+&lt;pre&gt;`module:{
+  preloaders:[
+    {
+      test: /\.jsx$/,
+      loader:&apos;jshint-loader&apos;
+    }
+  ]
+}
+jshint:{
+  &apos;esnext&apos;:true
+}
+`&lt;/pre&gt;
+
+### 部署上线
+
+项目开发完成后需要部署上线, 此时应该创建一个新的 config, 因为部署上线使用的 webpack 不需要 dev-tools, dev-server, jshint 等
+
+复制现有的 config 文件, 命名为 webpack.production.config.js, 将里面与开发有关的东西删除, 在 package.json 中添加
+
+&lt;pre&gt;`&quot;scripts&quot;:{
+  &quot;build&quot;: &quot;webpack --progress --profile  --colors --config webpack.production.config.js&quot;
+},
+`&lt;/pre&gt;
+
+上线的时候运行
+
+&lt;pre&gt;`npm run build
+`&lt;/pre&gt;
+
+### 分离第三方库
+
+如果第三方库很多, 会导致最后 bundle 文件很大, 减慢加载速度, 因此需要把第三方库和 app 本身的代码分开
+
+#### 修改 entry 入口文件
+
+&lt;pre&gt;`entry:{
+  app: path.resolve(APP_PATH, &apos;index.js&apos;),
+  //添加要打包在 vendors 里面的库
+  vendors: [&apos;jquery&apos;, [moment]]
+},
+`&lt;/pre&gt;
+
+#### 添加 CommonsChunkPlugin
+
+&lt;pre&gt;`plugins: [
+  //使用 uglifyJs 压缩 js 代码
+  new webpack.optimize.UglifyJsPlugin({minimize: true}),
+  //把入口文件里的数组打包成 vendors.js
+  new webpack.optimize.CommonsChunkPlugin(&apos;vendors&apos;,&apos;vendors.js&apos;),
+  new HtmlWebpackPlugin({title: &apos;Welcome&apos;})
+]
+`&lt;/pre&gt;
+
+运行 build 后会生成 vendor.js
+
+### 生成多页面
+
+假设需求是生成两个页面, 一个叫 index.html, 需要引用 app.js 和 vendors.js 两个文件; 另一个是 mobile.html, 需要应用 mobie.js 和 vendor.js 这两个文件
+
+首先新建一个叫 mobile.js 的文件入口, 比 app.js 简单一些
+
+&lt;pre&gt;`import &apos;./main.scss&apos;;
+import $ from &apos;jquery&apos;;
+import &apos;imports?jQuery=jQuery!./plugin.js&apos;;
+
+$(document).ready(function(){
+  let app = document.createElement(&apos;div&apos;);
+  app.innerHTML = &apos;&amp;lt;h1&amp;gt;Hello World&amp;lt;/h1&amp;gt;&apos;;
+  document.body.appendChild(app);
+  $(&apos;h1&apos;).greenify();
+});
+`&lt;/pre&gt;
+
+在 config 修改入口文件和输出配置
+
+&lt;pre&gt;`entry:{
+  // 三个入口文件: app, mobile, vendors
+  app: path.resolve(APP_PATH, &apos;index.js&apos;),
+  mobile: path.resolve(APP_PATH, &apos;mobile.js&apos;),
+  vendors: [&apos;jquery&apos;,&apos;moment&apos;]
+},
+output:{
+   path: DIST_PATH,
+   filename: &apos;[name].js&apos;
+},
+`&lt;/pre&gt;
+
+为 html-webpack-plugin 设置模板, 并保存于 templates
+
+&lt;pre&gt;`// index.html
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;{%= o.htmlWebpackPlugin.options.title %}&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;h3&amp;gt;Welcome to Index&amp;lt;/h3&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+
+//mobile.html
+&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;{%= o.HtmlWebpackPlugin.options.title %}&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;h3&amp;gt;Welcome to Mobile&amp;lt;/h3&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+`&lt;/pre&gt;
+
+继续配置 config.js, 让 HtmlWebpackPlugin 可以生成多个文件
+
+&lt;pre&gt;`//Templates 的文件夹路径
+var TEM_PATH = path.resolve(ROOT_PATE, &apos;templates&apos;);
+...
+plugins:[
+  //创建两个 HtmlWebpackPlugin 的实例, 生成两个页面
+  new HtmlWebpackPlugin({
+    title: &apos;Hello World App&apos;,
+    template: path.resolve(TEM_PATH, &apos;index.html&apos;),
+    filename: &apos;index.html&apos;
+    //chunks 这个参数告诉插件要引用 chunks 中的那几个入口
+    chunks: [&apos;app&apos;,&apos;vendors&apos;],
+    //scripts 要插入的位置
+    inject: &apos;body&apos;
+  }),
+  new HtmlWebpackPlugin({
+    title: &apos;Hello Mobile App&apos;,
+    template: path.resolve(TEM_PATH, &apos;mobile.html&apos;),
+    filename: &apos;mobile.html&apos;,
+    chunks: [&apos;mobile&apos;,&apos;vendors&apos;],
+    inject: &apos;body&apos;
+  })
+]
+</code></pre><h3 id="生成-hash-名称的-script-来防止缓存"><a href="#生成-hash-名称的-script-来防止缓存" class="headerlink" title="生成 hash 名称的 script 来防止缓存"></a>生成 hash 名称的 script 来防止缓存</h3><p>webpack 基于 md5 可以生成 hash 名称<br><code>`</code><br>output:{<br>  path: DIST_Path,<br>  filename: ‘[name].[hash].js’<br>},</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-07-21T02:10:30.000Z">2016-07-21</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 minutes read (About 773 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/07/21/webpack-e7-ae-80-e6-98-8e-e6-8c-87-e5-8d-97/">Webpack简明指南</a>
+            
+        </h1>
+        <div class="content">
+            <p>Thanks to <a href="https://github.com/vikingmute/webpack-for-fools/blob/master/entries/chapter-1.md" target="_blank" rel="noopener">Webpack 傻瓜式指南</a></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><pre><code>npm install -g webpack
+`&lt;/pre&gt;
+
+### 建立项目
+
+&lt;pre&gt;`mkdir webpack
+cd webpack
+npm init
+touch .gitignore
+`&lt;/pre&gt;
+
+#### 项目结构
+
+&lt;pre&gt;`project
+|
+|---app
+|    |
+|    |---index.js
+|    |---sub.js
+|
+|---package.json
+|
+|---webpack.config.js
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//sub.js
+function generateText(){
+  var element = document.createElement(&apos;h2&apos;);
+  element.innerHTML = &quot;Hello, I&apos;m h2&quot;;
+  return element;
+}
+module.exports = generateText;
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//index.js
+var sub = require(&apos;./sub&apos;);
+var app = document.createElement(&apos;div&apos;);
+app.innerHTML = &quot;&amp;lt;h1&amp;gt;Hello, I&apos;m h1&quot;;
+app.appendChild(sub())
+`&lt;/pre&gt;
+
+### 配置 Webpack
+
+目的是将两个 js 根据依赖关系合并, 然后在 dist 目录创建一个 index.html 并引用合并后的 js.
+
+这里安装一个 plugin, 可以快速生成 HTML
+
+&lt;pre&gt;`npm install --save-dev html-webpack-plugin
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`var path = require(&apos;path&apos;);
+var HtmlWebpackPlugin = require(&apos;html-webpack-plugin&apos;);
+//定义文件夹路径
+var ROOT_PATH = path.resolve(__dirname);
+var APP_PATH = path.resolve(ROOT_PATH, &apos;app&apos;);
+var DIST_PATH = path.resolve(ROOT_PATH, &apos;dist&apos;);
+
+module.exports = {
+  //项目文件夹, 可以直接用文件夹名, 默认寻找 index.js
+  entry: APP_PATH,
+  output: {
+    path: DIST_PATH,
+    filename: &apos;bundle.js&apos;
+  },
+  //添加插件, 自动生成 html
+  plugins: [
+    new HtmlWebpackPlugin({title: &apos;Hello World App&apos;})
+  ]
+};
+`&lt;/pre&gt;
+
+然后在项目目录运行
+
+&lt;pre&gt;`webpack
+`&lt;/pre&gt;
+
+可以看到 html 已经引用了 bundle.js
+
+### 配置 webpack-dev-server
+
+用于自动刷新浏览器
+
+安装webpack-dev-server
+
+&lt;pre&gt;`npm install -g webpack-dev-server
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`module.exports = {
+  ...
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+        inline: true,
+    progress: true,
+  },
+  ...
+}
+
+`&lt;/pre&gt;
+
+修改 package.json
+
+&lt;pre&gt;`...
+&quot;scripts&quot;: {
+  &quot;start&quot;: &quot;webpack-dev-server --hot --inline&quot;
+},
+...
+`&lt;/pre&gt;
+
+在项目目录执行
+
+&lt;pre&gt;`npm start
+`&lt;/pre&gt;
+
+登录 http://localhost:8080
+
+### 添加 CSS 样式
+
+css-loader 会遍历 css 文件, style-loader 会把样式插入到&amp;lt;style&amp;gt;
+
+&lt;pre&gt;`npm install -save-dev css-loader style-laoder
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`...
+module:{
+  loaders: [
+    {
+      test: /\.css$/,
+      loaders: [&apos;style&apos;,&apos;css&apos;],
+      include: APP_PATH
+    }
+  ]
+}
+...
+`&lt;/pre&gt;
+
+注意 loaders 的书写方式, 从右向左执行
+
+添加样式文件 app/main.css
+
+&lt;pre&gt;`h1 {
+  color: red;
+}
+`&lt;/pre&gt;
+
+在入口文件&quot;index.js&quot; 中引用
+
+&lt;pre&gt;`require(&apos;./main.css&apos;)
+`&lt;/pre&gt;
+
+### 使用 sass
+
+这里需要 sass-loader 和 node-sass 一起解析文件
+
+&lt;pre&gt;`npm install --save-dev sass-loader node-sass
+`&lt;/pre&gt;
+
+修改 webpack.config.js
+
+&lt;pre&gt;`//先删除 css 规则
+{
+  test: /\.scss$/,
+  loaders: [&apos;style&apos;,&apos;css&apos;,&apos;sass&apos;],
+  include: APP_PATH
+},
+`&lt;/pre&gt;
+
+添加两个 sass 文件 app/variables.scss 和 app/main.scss
+
+&lt;pre&gt;`//variables.scss
+$red: red;
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//main.scss
+@import &apos;./variables.scss&apos;;
+h1{
+  color: $red;
+}
+`&lt;/pre&gt;
+
+在入口文件 index.js 中引用
+
+&lt;pre&gt;`require(&apos;./main.scss&apos;);
+`&lt;/pre&gt;
+
+### 处理图片
+
+&lt;pre&gt;`npm install --save-dev url-loader
+`&lt;/pre&gt;
+
+配置webpack.config.js
+
+&lt;pre&gt;`{
+  test: /\.(png|jpg)$/,
+  loader: &apos;url?limit=8192&apos;
+}
+`&lt;/pre&gt;
+
+注意, Limit参数制定了小于 8M 的图片会被转为 base64 编码, 可以减轻网络请求.
+
+&lt;pre&gt;`@import &apos;./variabels.scss&apos;
+h1 {
+  color: $red;
+  background-image: url(&apos;./imgs/avatar.jpg&apos;);
+}
+`&lt;/pre&gt;
+
+### 添加第三方库
+
+&lt;pre&gt;`npm install --save-dev jquery moment
+`&lt;/pre&gt;
+
+修改 index.js
+
+&lt;pre&gt;`var sub = require(&apos;./sub&apos;);
+require(&apos;./main.scss&apos;);
+var $ = require(&apos;jquery&apos;);
+var moment = require(&apos;moment&apos;);
+var app = document.createElement(&apos;div&apos;);
+app.innerHTML = &apos;&amp;lt;h1&amp;gt;Hello, h1&apos;;
+document.body.append(app);
+app.appendChild(sub());
+$(&apos;body&apos;).append(&apos;&amp;lt;p&amp;gt;Inserted By Jquery. Now is &apos; + moment().format() + &apos;&amp;lt;/p&amp;gt;&apos;);
+`&lt;/pre&gt;
+
+### 添加 ES6 支持
+
+安装 loader
+
+&lt;pre&gt;`npm install -save-dev babel-loader babel-preset-es2015
+`&lt;/pre&gt;
+
+配置 webpack.config.js
+
+&lt;pre&gt;`...
+{
+  test: /\.jsx$/,
+  loaders: babel,
+  include: APP_PATH,
+  query:{
+    presets: [&apos;es2015&apos;]
+  }
+}
+...
+`&lt;/pre&gt;
+
+es2015 这个参数是 babel 的 plugin, 可以支持最新的 ES6 的特性
+
+现在可以 js 文件改为 ES6 风格
+
+&lt;pre&gt;`//sub.js
+export default function(){
+  var element = document.createElement(&apos;h2&apos;);
+  element.innerHTML = &apos;This is h2&apos;;
+  return element;
+}
+`&lt;/pre&gt;
+
+&lt;pre&gt;`//index.js
+import &apos;./main.scss&apos;;
+import generateText from &apos;./sub&apos;;
+import $ from &apos;jquery&apos;;
+import moment from &apos;moment&apos;;
+
+let app = document.createElement(&apos;div&apos;);
+const myPromise = Promise.resolve(42);
+myPromise.then((number) =&amp;gt; {
+  $(&apos;body&apos;).append(&apos;&amp;lt;p&amp;gt;Promise result is &apos; + number + &apos;now is &apos; + moment().format() + &apos;&amp;lt;/p&amp;gt;&apos;);
+});
+app.innerHTML = &apos;&amp;lt;h1&amp;gt;This is h1&apos;;
+document.body.appendChild(app);
+app.appendChild(generateText());
+</code></pre>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-07-20T23:37:19.000Z">2016-07-21</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 338 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/07/21/webpack-config-js/">Webpack.config.js</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="entry"><a href="#entry" class="headerlink" title="entry"></a>entry</h3><p>The entry point for the bundle.</p>
+<p>If you pass a string: The string is resolved to a module which is loaded upon startup.</p>
+<p>If you pass an array: All modules are loaded upon startup. The last one is exported.</p>
+<pre><code>entry:[&apos;./entry1&apos;,&apos;./entry2&apos;]
+`&lt;/pre&gt;
+
+If you pass an object: Multiple entry bundles are created. The key is the chunk name. The value can be a string or an array
+
+&lt;pre&gt;`{
+  entry:{
+    page1: &apos;./pages1&apos;,
+    page2: [&apos;./entry1&apos;,&apos;./entry2&apos;]
+  },
+  output: {
+    // Make sure to use [name] or [id] in output.filename
+    // when using multiple entry points
+    filename: &apos;[name].bundle.js&apos;,
+    chunkFilename: &apos;[id].bundle.js&apos;
+  }
+}
+`&lt;/pre&gt;
+
+### Output
+
+`output` options tell webpack how to write the compiled files to disk.
+
+Note, that while there can be multiple &apos;entry&apos; points, only &apos;output&apos; configuration is specified.
+
+If you use hashing(`[hash]` or `[chunkhash]`) make sure to have a consistent ordering of modules. Use the `OccurenceOrderPlugin` or `recordsPath`
+
+#### output.filename
+
+Specifies the name of each output file on disk. You must **not** specify an absolute path here! The `output.path` option determines the location on disk the files are written to, `filename` is used solely for naming the individual files.
+
+##### single entry
+
+&lt;pre&gt;`{
+  entry: &apos;./src/app.js&apos;,
+  output: {
+    filename: &apos;bundle.js&apos;,
+    path: &apos;./build&apos;
+  }
+}
+`&lt;/pre&gt;
+
+##### multiple entries
+
+If you configuration creates more than a single &quot;chunk&quot;(as with multiple entry points or when using plugins like CommonsChunkPlugin), you should use substitutions below to ensure that each file has a unique name.
+
+`[name]` is replaced by the name of the chunk
+
+`[hash]` is replaced by the hash of the compilation.
+
+`[chunkhash]` is replaced by the hash of the chunk.
+
+&lt;pre&gt;`{
+  entry:{
+    app: &apos;./src/app.js&apos;,
+    search: &apos;./src/search.js&apos;
+  },
+  output:{
+    filename: [name].js,
+    path: __dirname + &apos;/built&apos;
+  }
+}
+</code></pre><h4 id="output-path"><a href="#output-path" class="headerlink" title="output.path"></a>output.path</h4><p>The output directory as <strong>absolute path</strong>(required).</p>
+<h3 id="Module-loaders"><a href="#Module-loaders" class="headerlink" title="Module.loaders"></a>Module.loaders</h3><p>An array of automatically applied loaders.</p>
+<p>Each item can have there properties: </p>
+<ul>
+<li><code>test</code>: A condition that must be met</li>
+<li><code>exclude</code>: A condition that must not be met</li>
+<li><code>include</code>: A condition that must be met</li>
+<li><code>loader</code>: A string of ‘!’ separated loaders</li>
+<li>‘loaders’: An array of loaders as string</li>
+</ul>
+<h3 id="resolve"><a href="#resolve" class="headerlink" title="resolve"></a>resolve</h3>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-07-20T22:58:43.000Z">2016-07-21</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    4 minutes read (About 614 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/07/21/webpack-2/">Webpack</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="Use-webpack-in-a-project"><a href="#Use-webpack-in-a-project" class="headerlink" title="Use webpack in a project"></a>Use webpack in a project</h3><p>It’s best to have webpack <strong>as a dependency</strong> in your project, through this you can choose a local webpack version and will not be forced to use the single global one.<br>Add a <code>package.json</code> configuration file or <code>npm</code> with:</p>
+<pre><code>$ npm init
+`&lt;/pre&gt;
+
+The answers to the question are not so important if you don&apos;t want to publish your project to npm.
+
+Install and add `webpack` to the `package.json` with:
+
+&lt;pre&gt;`$ npm install --save-dev webpack
+`&lt;/pre&gt;
+
+### Create a modular JavaScript Project
+
+Let&apos;s create some modules in JavaScript, using the CommonJS syntax:
+
+#### cat.js
+
+&lt;pre&gt;`var cats = [&apos;dave&apos;,&apos;henry&apos;,&apos;martha&apos;];
+module.exports = cats;
+`&lt;/pre&gt;
+
+#### app.js(Entry Point)
+
+&lt;pre&gt;`var cats = require(&apos;cats.js&apos;);
+console.log(cats);
+`&lt;/pre&gt;
+
+The **Entry Point** is where your application will start, and where webpack will start tracking dependencies between modules.
+
+Give webpack the entry point(app.js) and specify an output file(app.bundle.js):
+
+&lt;pre&gt;`webpack ./app.js app.bundle.js
+`&lt;/pre&gt;
+
+webpack will read and analyze the entry point and its dependencies(including transitive dependencies). Then it will bundle them into `app.bundle.js`.
+
+Now your bundle is ready to run. Run `node app.bundle.js` and marvel in your abundance of cats.
+
+To gain full access to webpack&apos;s flexibility, we need to create a &quot;configuration file&quot;
+
+### Project Structure
+
+We will put the source files in **src**, and bundled files in **dist**.
+The final project structure will look like this:
+![](https://raw.githubusercontent.com/dtinth/webpack-docs-images/2459637650502958669ea6b11bf49dc0b3b083ae/usage/project-structure.png)
+</code></pre><ol>
+<li><p>Create <code>webpack.config.js</code></p>
+<pre>`module.exports = {
+  entry: './src/app.js',
+  output: {
+    path: './dist',
+    filename: '[name].bundle.js'
+  }
+};
+`</pre>
+
+<p>A webpack configuration file is a CommonJS-Style module. So you can run any kind of code here, as long as a configuration object is exported out of its module.</p>
+</li>
+<li><p>Using loaders<br>Webpack only supports JavaScript modules natively, but most people will be using a transpiler for ES2015, CoffeeScript, TypeScript, etc. They can be used in webpack by using <strong>loaders</strong>.<br>Loaders are special modules webpack uses to ‘load’ other modules(written in another language) into JavaScript(that webpack understands).</p>
+<p>using <code>babel-loader</code><br>1. Install Babel and the presets:</p>
+<pre>`npm install --save-dev babel-loader
+`</pre>
+</li>
+<li><p>Configure Babel to use there presets by add <code>.babelrc</code></p>
+<pre>`{'presets':['es2015']}
+`</pre>
+</li>
+<li><p>Modify <code>webpack.config.js</code> to process all <code>.js</code> files using <code>babel-loader</code>.</p>
+<pre>`module.exports = {
+  entry: './src/app.js',
+  output: {
+    path: './dist',
+    filename: '[name].bundle.js'
+  },
+  module: {
+    loaders: [
+      {test: /\.js$/,exclude: /node_modules/, loader: 'babel-loader',}
+    ]
+  }
+}
+`</pre>
+
+<p>We are excluding <code>node_modules</code> here because otherwise all external libraries will also go through Babel, slowing down compilation.<br>4. Install the libraries you want to use</p>
+<pre>`npm install --save jquery babel-polyfill
+`</pre>
+
+<p>We are using <code>--save</code> instead of <code>--save-dev</code> this time, as there libraries will be used in runtime. <code>-dev</code> means the libraries only used during development.</p>
+</li>
+<li><p>Edit <code>src/app.js</code></p>
+<p><pre>`import ‘babel-polyfill’;<br> import cats from ‘./cats’;<br> import $ from ‘jquery’;</pre></p>
+<p> $(‘&lt;h1&gt;Cats&lt;/h1&gt;’).appendTo(‘body’);<br> const ul = $(‘&lt;ul&gt;&lt;/ul&gt;’).appendTo(‘body’);<br> for (const cat of cats) {</p>
+<pre><code>$(&apos;&amp;lt;li&amp;gt;&amp;lt;/li&amp;gt;&apos;).text(cat).appendTo(ul);
+</code></pre><p> }</p>
+ <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">    6\. Using Plugins</span><br><span class="line">    An example would be minifying your file so that the client can load if faster. This can be done with **plugins**. We&apos;ll add the uglify plugin to our configuration:</span><br><span class="line"></span><br><span class="line">const webwebpack = require(&apos;webpack&apos;);</span><br><span class="line">module.exports = &#123;</span><br><span class="line">  entry: &apos;./src/app.js&apos;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    path: &apos;./dist&apos;,</span><br><span class="line">    filename: &apos;[name].bundle.js&apos;</span><br><span class="line">  &#125;,</span><br><span class="line">  module: &#123;</span><br><span class="line">    loaders: [</span><br><span class="line">      &#123;test: /&amp;#46;jsx?$/, exclude: /node_modules/,loader: &apos;babel-loader&apos;&#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">plugins: [</span><br><span class="line">    new webpack.optimize.UglifyJsPlugin(&#123;</span><br><span class="line">      compress: &#123;</span><br><span class="line">        warning:false,</span><br><span class="line">      &#125;,</span><br><span class="line">      output: &#123;</span><br><span class="line">        comments: false,</span><br><span class="line">      &#125;,</span><br><span class="line">      &#125;),</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>The Uglify plugin is included with webpack so you don’t need to add additional modules, but this may not always be the case.</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-07-19T23:32:41.000Z">2016-07-20</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/note/workNote/">workNote</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 minutes read (About 925 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/07/20/webpack/">Webpack</a>
+            
+        </h1>
+        <div class="content">
+            <p>Webpack 是一款模块加载兼打包工具, 能把各种资源, 例如 JS(X), coffee, css(sass/less), 图片等都作为模块来使用和处理</p>
+<p>可以直接使用 require 的形式来引入各模块, 即时他们可能需要经过编译, webpack 上有各种健全的加载器(loader)会处理这些事情.</p>
+<h3 id="Webpack-优势"><a href="#Webpack-优势" class="headerlink" title="Webpack 优势"></a>Webpack 优势</h3><ol>
+<li>webpack 是一 commonJS 的形式来书写脚本的, 但对 AMD/CMD 的支持也很全面, 方便就项目进行代码迁移</li>
+<li>能被模块化的不仅是 JS 了</li>
+<li>开发便捷, 能替代部分 grunt/gulp 工作, 比如打包, 压缩混淆, 图片转 base64等</li>
+<li>扩展性强, 插件机制完善, 特别支持 React 热拔插(react-hot-loader).</li>
+</ol>
+<h3 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h3><p>常规使用 npm 安装<br><code>$npm install -g webpack</code><br>如果是常规项目, 还是把依赖写入 package.json 更好</p>
+<pre><code>$npm init
+$npm install --save-dev webpack
+`&lt;/pre&gt;
+
+### 配置
+
+每个项目下都必须配置一个 webpack.config.js, 他的作用如同常规的 gulpfile.js, 就是一个配置项, 告诉 webpack 需要做什么
+
+比如:
+
+&lt;pre&gt;`var webpack = require(&apos;webpack&apos;);
+var commonsPlugin = new webpack.optimize.CommonsChunkPlugin(&apos;common.js&apos;);
+
+module.exports = {
+  //插件项
+  plugins: [commonsPlugin],
+
+  //页面入口文件配置
+  entry:{
+    index: &apos;./src/js/page/entry1.js&apos;
+  },
+
+  //文件输出配置
+  output:{
+    path: &apos;dist/js/page&apos;,
+    filename: &apos;[name].js&apos;
+  },
+
+  module:{
+    //加载器配置
+    loaders:[
+      {test: /\.css$/, loader: &apos;style-loader!css-loader&apos;},
+      {test: /\.js$/, loader: &apos;jsx-loader?harmony&apos;},
+      {test: /\.scss$/, loader: &apos;style!css!sass?sourceMap&apos;},
+      {test: /\.(png|jpg)$/, loader: &apos;url-loader?limit-8192&apos;}
+    ]
+  },
+};
+`&lt;/pre&gt;
+
+#### plugins 插件项
+
+这里使用了一个 CommonsChunkPlugin 的插件, 用于提取多个入口文件的公共部分, 然后生成一个 common.js 来访方便多页面之间的复用
+
+#### entry 是页面入口文件配置, output 是输出配置
+
+决定入口文件要生成什么名字的文件, 存放到哪里
+
+&lt;pre&gt;`{
+  entry: {
+    page1: &apos;./page1&apos;,
+    //支持数组, 将加载数组中的所有模块, 但一最后一个模块为输出
+    page2: [&apos;./entry1&apos;,&apos;./entry2&apos;]
+  },
+  output:{
+    path:&apos;dist/js/page&apos;,
+    filename: &apos;[name].bundle.js&apos;
+  }
+}
+`&lt;/pre&gt;
+
+这段代码最终会生成一个page1.bundle.js, 和一个page2.bundle.js, 并存放到./dist/page下
+
+#### module.loaders 是最关键的配置
+
+告诉 webpack 每一种文件都要用什么加载器来处理
+多个 loader 之间用&apos;!&apos;连接
+所有加载器都要通过 npm 来加载
+配置信息的参数&apos;?limit=8192&apos;表示将所有小于8kb的图片都转为 base64格式, 超过8kb 的图片用 url-loader 来处理
+
+### 运行 webpack
+
+`$webpack --display-error-details`
+后面的参数&apos;--display-error-details&apos; 是推荐加上的, 方便出错的时候能查阅更详细的信息
+其他主要参数有
+
+&lt;pre&gt;`$webpack --config XXX.js //使用另一份配置文件
+$webpack --watch //监听变动并自动打包
+$webpack -p //压缩混淆脚本, 这个很重要
+$webpack -d //生成 map 隐射文件, 告知哪些模块被最终打包到哪里
+`&lt;/pre&gt;
+
+### 模块引入
+
+#### HTML
+
+直接在页面&amp;lt;body&amp;gt;中引入 webpack 最终生成的页面脚本即可
+
+&lt;pre&gt;`&amp;lt;body&amp;gt;
+  &amp;lt;script scr = &apos;dist/js/page/common.js&apos;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script scr = &apos;dist/js/page/index.js&apos;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+`&lt;/pre&gt;
+
+可以看到连样式都不需要, 脚本执行的时候会动态生成&amp;lt;style&amp;gt;并注入 head
+
+#### JS
+
+各脚本模块可以直接用 commonJS 来书写, 并可以直接引入未经编译的模块, 比如 JSX, Sass, coffee 等(只要在 webpack.config.js 中配置好加载器)
+看一下编译前的页面入口文件(index.js)
+
+&lt;pre&gt;`require(&apos;../../css/reset.scss&apos;); //加载 Reset 模块
+require(&apos;../../css/allComponent.scss&apos;); //加载组件模块
+var React = require(&apos;react&apos;);
+var AppWrap = require(&apos;redux&apos;).createRedux;
+var Provider = require(&apos;redux/react&apos;).Provider;
+var stores = require(&apos;AppStore&apos;);
+
+var redux = createRedux(stores);
+var App = React.createClass({
+  render: function(){
+    return (
+      &amp;lt;Provider redux = {redux}&amp;gt;
+        {function() {return &amp;lt;AppWrap /&amp;gt;;}}
+      &amp;lt;/Provider&amp;gt;
+    );
+  }
+});
+
+ReactDOM.render(
+  &amp;lt;App /&amp;gt;,document.body
+);
+</code></pre><p>后续的都由 webpack 处理</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.jpg" alt="Keith Chen">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        Keith Chen
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        FE Engineer on Blockchain
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>30°17&#39;37N, 120°9&#39;41E</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        Posts
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        303
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        Categories
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        7
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        Tags
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        88
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/keith-CY" target="_blank">
+                Follow</a>
+        </div>
+        
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            Links
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/keith-CY" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Keith CY</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://www.linkedin.com/in/宇-陈-644b61ba" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Yu Chen</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">www.linkedin.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                Categories
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/Soup/">
+            <span class="level-start">
+                <span class="level-item">Soup</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Uncategorized/">
+            <span class="level-start">
+                <span class="level-item">Uncategorized</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">2</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/github/">
+            <span class="level-start">
+                <span class="level-item">github</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a><ul><li>
+        <a class="level is-marginless" href="/categories/github/note/">
+            <span class="level-start">
+                <span class="level-item">note</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li></ul></li><li>
+        <a class="level is-marginless" href="/categories/note/">
+            <span class="level-start">
+                <span class="level-item">note</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">141</span>
+            </span>
+        </a><ul><li>
+        <a class="level is-marginless" href="/categories/note/workNote/">
+            <span class="level-start">
+                <span class="level-item">workNote</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">19</span>
+            </span>
+        </a></li></ul></li><li>
+        <a class="level is-marginless" href="/categories/workNote/">
+            <span class="level-start">
+                <span class="level-item">workNote</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">5</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            Tag Cloud
+        </h3>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+</div>
+
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            Recent
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/05/note-on-bip32/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Note on Bip32">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-05T05:54:32.000Z">2019-03-05</time></div>
+                    <a href="/2019/03/05/note-on-bip32/" class="has-link-black-ter is-size-6">Note on Bip32</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/20/React-Hooks/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="React Hooks">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-20T09:41:39.000Z">2018-11-20</time></div>
+                    <a href="/2018/11/20/React-Hooks/" class="has-link-black-ter is-size-6">React Hooks</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
+                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
+                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
+                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            Archives
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">12</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">18</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">31</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">19</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">15</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">16</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">30</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">43</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">25</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">24</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            Recent
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/05/note-on-bip32/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Note on Bip32">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-05T05:54:32.000Z">2019-03-05</time></div>
+                    <a href="/2019/03/05/note-on-bip32/" class="has-link-black-ter is-size-6">Note on Bip32</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/20/React-Hooks/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="React Hooks">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-20T09:41:39.000Z">2018-11-20</time></div>
+                    <a href="/2018/11/20/React-Hooks/" class="has-link-black-ter is-size-6">React Hooks</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
+                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
+                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
+                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            Archives
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">12</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">18</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">31</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">19</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">15</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">16</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">30</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">43</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">25</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">24</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.png" alt="EzCook" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2019 Chen Yu&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                Visited by <span id="busuanzi_value_site_uv">0</span> users
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("en");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="Back to Top" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

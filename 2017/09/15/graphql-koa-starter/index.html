@@ -1,12 +1,1527 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>Graphql-Koa-Starter | EzCook</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/1.0.0/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Graphql-Koa-Starter</h1><a id="logo" href="/.">EzCook</a><p class="description">Code Elegantly</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Graphql-Koa-Starter</h1><div class="post-meta">Sep 15, 2017</div><div class="post-content"><h3 id="Init-Project"><a href="#Init-Project" class="headerlink" title="Init Project"></a>Init Project</h3><h3 id="Add-tsconfig"><a href="#Add-tsconfig" class="headerlink" title="Add tsconfig"></a>Add tsconfig</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tsconfig.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"files"</span>: [</span><br><span class="line">    <span class="string">"server.ts"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"compilerOptions"</span>: &#123;</span><br><span class="line">    <span class="string">"outDir"</span>: <span class="string">"./build"</span>,</span><br><span class="line">    <span class="string">"target"</span>: <span class="string">"es2015"</span>,</span><br><span class="line">    <span class="string">"module"</span>: <span class="string">"commonjs"</span>,</span><br><span class="line">    <span class="string">"moduleResolution"</span>: <span class="string">"Node"</span>,</span><br><span class="line">    <span class="string">"sourceMap"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"pretty"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"strictNullChecks"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"lib"</span>: [</span><br><span class="line">      <span class="string">"esnext"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"exclude"</span>: [</span><br><span class="line">    <span class="string">"node_modules"</span>,</span><br><span class="line">    <span class="string">"build"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Add-tslint"><a href="#Add-tslint" class="headerlink" title="Add tslint"></a>Add tslint</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tslint.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"rules"</span>: &#123;</span><br><span class="line">    <span class="string">"align"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"parameters"</span>,</span><br><span class="line">      <span class="string">"arguments"</span>,</span><br><span class="line">      <span class="string">"statements"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"ban"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"class-name"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"curly"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"eofline"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"forin"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"indent"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"spaces"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"interface-name"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"jsdoc-format"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"label-position"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"max-line-length"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      <span class="number">140</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"member-access"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"member-ordering"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"public-before-private"</span>,</span><br><span class="line">      <span class="string">"static-before-instance"</span>,</span><br><span class="line">      <span class="string">"variables-before-functions"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"no-any"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"no-arg"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-bitwise"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-conditional-assignment"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-console"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"debug"</span>,</span><br><span class="line">      <span class="string">"info"</span>,</span><br><span class="line">      <span class="string">"time"</span>,</span><br><span class="line">      <span class="string">"timeEnd"</span>,</span><br><span class="line">      <span class="string">"trace"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"no-construct"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-debugger"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-shadowed-variable"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-duplicate-variable"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-empty"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"no-eval"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-inferrable-types"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"no-internal-module"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-require-imports"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-string-literal"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"no-switch-case-fall-through"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-trailing-whitespace"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"no-var-keyword"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"no-var-requires"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"one-line"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"check-open-brace"</span>,</span><br><span class="line">      <span class="string">"check-catch"</span>,</span><br><span class="line">      <span class="string">"check-else"</span>,</span><br><span class="line">      <span class="string">"check-whitespace"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"quotemark"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"single"</span>,</span><br><span class="line">      <span class="string">"jsx-single"</span>,</span><br><span class="line">      <span class="string">"avoid-escape"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"radix"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"semicolon"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"switch-default"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"triple-equals"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"allow-null-check"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"typedef"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"typedef-whitespace"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="string">"call-signature"</span>: <span class="string">"nospace"</span>,</span><br><span class="line">        <span class="string">"index-signature"</span>: <span class="string">"nospace"</span>,</span><br><span class="line">        <span class="string">"parameter"</span>: <span class="string">"nospace"</span>,</span><br><span class="line">        <span class="string">"property-declaration"</span>: <span class="string">"nospace"</span>,</span><br><span class="line">        <span class="string">"variable-declaration"</span>: <span class="string">"nospace"</span></span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"variable-name"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="string">"whitespace"</span>: [</span><br><span class="line">      <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"check-branch"</span>,</span><br><span class="line">      <span class="string">"check-decl"</span>,</span><br><span class="line">      <span class="string">"check-operator"</span>,</span><br><span class="line">      <span class="string">"check-separator"</span>,</span><br><span class="line">      <span class="string">"check-type"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Add-env"><a href="#Add-env" class="headerlink" title="Add env"></a>Add env</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// env.ts</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> envalid <span class="keyword">from</span> <span class="string">'envalid'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; url, bool, str &#125; = envalid</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> env = envalid.cleanEnv(process.env, &#123;</span><br><span class="line">  SERVICE_URI: str(&#123; <span class="keyword">default</span>: <span class="string">'https://reqres.in/api'</span> &#125;),</span><br><span class="line">  NODE_ENV: str(&#123; devDefault: <span class="string">'development'</span>, <span class="keyword">default</span>: <span class="string">'production'</span> &#125;),</span><br><span class="line">  LOG_LEVEL: str(&#123; <span class="keyword">default</span>: <span class="string">'info'</span> &#125;),</span><br><span class="line">  CORS: bool(&#123; devDefault: <span class="literal">true</span>, <span class="keyword">default</span>: <span class="literal">false</span> &#125;),</span><br><span class="line">  GRAPHIQL: bool(&#123; devDefault: <span class="literal">true</span>, <span class="keyword">default</span>: <span class="literal">true</span> &#125;),</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> env</span><br></pre></td></tr></table></figure>
-<h3 id="Add-Nodemon"><a href="#Add-Nodemon" class="headerlink" title="Add Nodemon"></a>Add Nodemon</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"watch"</span>: [<span class="string">"src"</span>],</span><br><span class="line">  <span class="attr">"ext"</span>: <span class="string">"ts"</span>,</span><br><span class="line">  <span class="attr">"ignore"</span>: [<span class="string">"src/**/*.spec.ts"</span>],</span><br><span class="line">  <span class="attr">"exec"</span>: <span class="string">"ts-node ./server.ts"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Create-Koa-APP"><a href="#Create-Koa-APP" class="headerlink" title="Create Koa APP"></a>Create Koa APP</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/app.ts</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Koa <span class="keyword">from</span> <span class="string">'koa'</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> cors <span class="keyword">from</span> <span class="string">'koa-cors'</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> convert <span class="keyword">from</span> <span class="string">'koa-convert'</span></span><br><span class="line"><span class="keyword">import</span> &#123; apiRouter &#125; <span class="keyword">from</span> <span class="string">'./routers'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (process.env.CORS) &#123;</span><br><span class="line">  app.use(convert(cors()))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.use(apiRouter.routes()).use(apiRouter.allowedMethods())</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> app</span><br></pre></td></tr></table></figure>
-<h3 id="Server-Startup"><a href="#Server-Startup" class="headerlink" title="Server Startup"></a>Server Startup</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// server.ts</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> chalk <span class="keyword">from</span> <span class="string">'chalk'</span></span><br><span class="line"><span class="keyword">import</span> env <span class="keyword">from</span> <span class="string">'./env'</span></span><br><span class="line">process.env = env</span><br><span class="line"><span class="keyword">import</span> app <span class="keyword">from</span> <span class="string">'./src/app'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> port = process.env.PORT || <span class="number">3001</span></span><br><span class="line"></span><br><span class="line">app.listen(port, <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (process.env.NODE_ENV === <span class="string">'development'</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (process.env.GRAPHIQL) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'The GraphiQL App is running at: '</span>)</span><br><span class="line">      <span class="built_in">console</span>.log(chalk.cyan(<span class="string">`http://localhost:<span class="subst">$&#123;port&#125;</span>/api/graphiql`</span>))</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'Koa app is running at: '</span>)</span><br><span class="line">      <span class="built_in">console</span>.log(chalk.cyan(<span class="string">`http://localhost:<span class="subst">$&#123;port&#125;</span>`</span>))</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Koa App is running'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<h3 id="Add-Router"><a href="#Add-Router" class="headerlink" title="Add Router"></a>Add Router</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/routers/graphql.ts</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Router <span class="keyword">from</span> <span class="string">'koa-router'</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> GraphQLHttp <span class="keyword">from</span> <span class="string">'koa-graphql'</span></span><br><span class="line"><span class="keyword">import</span> schema <span class="keyword">from</span> <span class="string">'../graphql/schema'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> Router()</span><br><span class="line"><span class="comment">// console.log(process.env)</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(process.env)</span><br><span class="line">router.all(<span class="string">'/'</span>, GraphQLHttp(&#123;</span><br><span class="line">  schema,</span><br><span class="line">  graphiql: process.env.GRAPHIQL,</span><br><span class="line">  pretty: <span class="literal">true</span>,</span><br><span class="line">  errorFormat: <span class="function"><span class="params">error</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; message, locations, path, stack &#125; = error</span><br><span class="line">    <span class="built_in">console</span>.error(<span class="string">`GraphQL Error: `</span>, &#123;</span><br><span class="line">      message,</span><br><span class="line">      locations,</span><br><span class="line">      path,</span><br><span class="line">      stack,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> router</span><br></pre></td></tr></table></figure>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/routers/index.ts</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Router <span class="keyword">from</span> <span class="string">'koa-router'</span></span><br><span class="line"><span class="keyword">import</span> graphQLRouter <span class="keyword">from</span> <span class="string">'./graphql'</span></span><br><span class="line"><span class="keyword">import</span> testRouter <span class="keyword">from</span> <span class="string">'./test'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> apiRouter = <span class="keyword">new</span> Router(&#123;</span><br><span class="line">  prefix: <span class="string">'/api'</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">apiRouter.use(<span class="string">'/graphql'</span>, graphQLRouter.routes(), graphQLRouter.allowedMethods())</span><br><span class="line">apiRouter.use(<span class="string">'/test'</span>, testRouter.routes(), testRouter.allowedMethods())</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123;</span><br><span class="line">  apiRouter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Config-Graphql"><a href="#Config-Graphql" class="headerlink" title="Config Graphql"></a>Config Graphql</h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/graphql/model.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  GraphQLObjectType,</span><br><span class="line">  GraphQLString,</span><br><span class="line">  GraphQLNonNull,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">'graphql'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> User = <span class="keyword">new</span> GraphQLObjectType(&#123;</span><br><span class="line">  name: <span class="string">'User'</span>,</span><br><span class="line">  description: <span class="string">'A User'</span>,</span><br><span class="line">  fields: <span class="function"><span class="params">()</span> =&gt;</span> (&#123;</span><br><span class="line">    id: &#123;</span><br><span class="line">      <span class="keyword">type</span>: <span class="keyword">new</span> GraphQLNonNull(GraphQLString),</span><br><span class="line">      resolve: <span class="function">(<span class="params">user</span>) =&gt;</span> user.id,</span><br><span class="line">    &#125;,</span><br><span class="line">    firstName: &#123;</span><br><span class="line">      <span class="keyword">type</span>: <span class="keyword">new</span> GraphQLNonNull(GraphQLString),</span><br><span class="line">      resolve: <span class="function"><span class="params">user</span> =&gt;</span> user.first_name</span><br><span class="line">    &#125;,</span><br><span class="line">    lastName: &#123;</span><br><span class="line">      <span class="keyword">type</span>: <span class="keyword">new</span> GraphQLNonNull(GraphQLString),</span><br><span class="line">      resolve: <span class="function"><span class="params">user</span> =&gt;</span> user.last_name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123;</span><br><span class="line">  User</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/graphql/query.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; GraphQLObjectType, GraphQLList &#125; <span class="keyword">from</span> <span class="string">'graphql'</span></span><br><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span></span><br><span class="line"><span class="keyword">import</span> &#123; User &#125; <span class="keyword">from</span> <span class="string">'./model'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> GraphQLObjectType(&#123;</span><br><span class="line">  name: <span class="string">'Query'</span>,</span><br><span class="line">  description: <span class="string">'Query of GraphQL'</span>,</span><br><span class="line">  fields: <span class="function"><span class="params">()</span> =&gt;</span> (&#123;</span><br><span class="line">    users: &#123;</span><br><span class="line">      <span class="keyword">type</span>: <span class="keyword">new</span> GraphQLList(User),</span><br><span class="line">      resolve: <span class="function">(<span class="params">root, args</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> axios(&#123;</span><br><span class="line">          url: <span class="string">'https://reqres.in/api/users'</span>,</span><br><span class="line">        &#125;).then(<span class="function"><span class="params">res</span> =&gt;</span> res.data).then(<span class="function"><span class="params">res</span> =&gt;</span> res.data)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/graphql/schema.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; GraphQLSchema &#125; <span class="keyword">from</span> <span class="string">'graphql'</span></span><br><span class="line"><span class="keyword">import</span> query <span class="keyword">from</span> <span class="string">'./query'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> GraphQLSchema(&#123;</span><br><span class="line">  query</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-</div><div class="tags"><a href="/tags/Node-Graphql-Koa/">Node, Graphql, Koa</a></div><div class="post-nav"><a class="pre" href="/2017/09/25/HTTP-Timings-in-Node-js/">HTTP Timings in Node.js</a><a class="next" href="/2017/09/15/tag-picture-in-html/">Tag Picture in Html</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://yoursite.com"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Soup/">Soup</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Uncategorized/">Uncategorized</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/github/">github</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/github/note/">note</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/note/">note</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/note/workNote/">workNote</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/workNote/">workNote</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/CSS3/" style="font-size: 15px;">CSS3</a> <a href="/tags/Bash/" style="font-size: 15px;">Bash</a> <a href="/tags/jQuery/" style="font-size: 15px;">jQuery</a> <a href="/tags/Trick/" style="font-size: 15px;">Trick</a> <a href="/tags/Material-Design/" style="font-size: 15px;">Material Design</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 15px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 15px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Node-CLI/" style="font-size: 15px;">Node, CLI</a> <a href="/tags/Int8Array/" style="font-size: 15px;">Int8Array</a> <a href="/tags/ETH-Wallet/" style="font-size: 15px;">ETH, Wallet</a> <a href="/tags/Contract-Solidity/" style="font-size: 15px;">Contract, Solidity</a> <a href="/tags/Solidity/" style="font-size: 15px;">Solidity</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 15px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 15px;">Smart Contract, Web3</a> <a href="/tags/React-Docker/" style="font-size: 15px;">React, Docker</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 15px;">Solidity, Error Handling</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 15px;">Ethereum, IPFS</a> <a href="/tags/Node-Fastify/" style="font-size: 15px;">Node, Fastify</a> <a href="/tags/Solidity-Public-External/" style="font-size: 15px;">Solidity, Public, External</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 15px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 15px;">Ethereum</a> <a href="/tags/Webpack/" style="font-size: 15px;">Webpack</a> <a href="/tags/Go-Http-Web/" style="font-size: 15px;">Go, Http, Web</a> <a href="/tags/HTTP2-Node/" style="font-size: 15px;">HTTP2, Node</a> <a href="/tags/JSON-RPC/" style="font-size: 15px;">JSON-RPC</a> <a href="/tags/Ruby-Rails/" style="font-size: 15px;">Ruby, Rails</a> <a href="/tags/Rust-Rocket/" style="font-size: 15px;">Rust, Rocket</a> <a href="/tags/DAPP-Solidity/" style="font-size: 15px;">DAPP, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 15px;">D3, Example</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 15px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/Mock-JavaScript/" style="font-size: 15px;">Mock, JavaScript</a> <a href="/tags/Blockchain/" style="font-size: 15px;">Blockchain</a> <a href="/tags/DApp-Solidity/" style="font-size: 15px;">DApp, Solidity</a> <a href="/tags/Redux/" style="font-size: 15px;">Redux</a> <a href="/tags/Javascript/" style="font-size: 15px;">Javascript</a> <a href="/tags/babel/" style="font-size: 15px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 15px;">babel-polyfill</a> <a href="/tags/RxJS/" style="font-size: 15px;">RxJS</a> <a href="/tags/BOOTSTRAP/" style="font-size: 15px;">BOOTSTRAP</a> <a href="/tags/HTML5/" style="font-size: 15px;">HTML5</a> <a href="/tags/commandline/" style="font-size: 15px;">commandline</a> <a href="/tags/shell/" style="font-size: 15px;">shell</a> <a href="/tags/CommonJS/" style="font-size: 15px;">CommonJS</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/webpack/" style="font-size: 15px;">webpack</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/ESLint/" style="font-size: 15px;">ESLint</a> <a href="/tags/React-Redux/" style="font-size: 15px;">React-Redux</a> <a href="/tags/DOM/" style="font-size: 15px;">DOM</a> <a href="/tags/NPM/" style="font-size: 15px;">NPM</a> <a href="/tags/CSS/" style="font-size: 15px;">CSS</a> <a href="/tags/Gulp/" style="font-size: 15px;">Gulp</a> <a href="/tags/github/" style="font-size: 15px;">github</a> <a href="/tags/Web/" style="font-size: 15px;">Web</a> <a href="/tags/ES6/" style="font-size: 15px;">ES6</a> <a href="/tags/Thunk/" style="font-size: 15px;">Thunk</a> <a href="/tags/测试/" style="font-size: 15px;">测试</a> <a href="/tags/Koa/" style="font-size: 15px;">Koa</a> <a href="/tags/NODE/" style="font-size: 15px;">NODE</a> <a href="/tags/webpack2/" style="font-size: 15px;">webpack2</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 15px;">Elixir, Phoenix, SCSS</a> <a href="/tags/FP/" style="font-size: 15px;">FP</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 15px;">Node, Graphql, Koa</a> <a href="/tags/Closure/" style="font-size: 15px;">Closure</a> <a href="/tags/DevTools/" style="font-size: 15px;">DevTools</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/MDL/" style="font-size: 15px;">MDL</a> <a href="/tags/precache/" style="font-size: 15px;">precache</a> <a href="/tags/Webpack-DLL/" style="font-size: 15px;">Webpack, DLL</a> <a href="/tags/Promise/" style="font-size: 15px;">Promise</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 15px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 15px;">React-Native</a> <a href="/tags/React-Router/" style="font-size: 15px;">React-Router</a> <a href="/tags/RegExp/" style="font-size: 15px;">RegExp</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 15px;">Koa, NPM, Package</a> <a href="/tags/Html-Picture/" style="font-size: 15px;">Html, Picture</a> <a href="/tags/Nock/" style="font-size: 15px;">Nock</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 15px;">Solidity, Smart Contract</a> <a href="/tags/BlockChain/" style="font-size: 15px;">BlockChain</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 15px;">Contract, Ethereum, Web3</a> <a href="/tags/Protobuf/" style="font-size: 15px;">Protobuf</a> <a href="/tags/AJAX/" style="font-size: 15px;">AJAX</a> <a href="/tags/CORS/" style="font-size: 15px;">CORS</a> <a href="/tags/automatic/" style="font-size: 15px;">automatic</a> <a href="/tags/Immutable/" style="font-size: 15px;">Immutable</a> <a href="/tags/Pug-HTML/" style="font-size: 15px;">Pug, HTML</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/03/05/note-on-bit32/">Note on Bit32</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/20/React-Hooks/">React Hooks</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/11/5-tips-in-CRA-2-0/">5 Tips in CRA@2.0</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/08/Assembly-in-Solidity/">Assembly in Solidity</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/09/10/Analysis-of-Ujo/">Analysis of Ujo</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/27/development-of-neuron-web-extension/">Development of Neuron Web Extension</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/21/Details-in-Web3-Contract/">Details in Web3 -- Contract</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/Declaration-in-TypeScript/">Declaration in TypeScript</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/10/RxjsV6/">RxjsV6</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/17/content-parser-in-cita/">Content Parser in CITA</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="https://github.com/Keith-CY" title="Github" target="_blank">Github</a><ul></ul><a href="https://www.linkedin.com/in/%E5%AE%87-%E9%99%88-644b61ba/" title="LinkedIn" target="_blank">LinkedIn</a><ul></ul><a href="https://www.facebook.com/keithwhisper" title="Facebook" target="_blank">Facebook</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2019 <a href="/." rel="nofollow">EzCook.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.2.5/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
+<!DOCTYPE html>
+<html  lang="en">
+<head>
+    <meta charset="utf-8">
+<title>Graphql-Koa-Starter - EzCook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-136207372-1');
+</script>
+
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.png" alt="Graphql-Koa-Starter" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="Search" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-09-15T09:42:37.000Z">2017-09-15</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    4 minutes read (About 657 words)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> visits
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                Graphql-Koa-Starter
+            
+        </h1>
+        <div class="content">
+            <h3 id="Init-Project"><a href="#Init-Project" class="headerlink" title="Init Project"></a>Init Project</h3><h3 id="Add-tsconfig"><a href="#Add-tsconfig" class="headerlink" title="Add tsconfig"></a>Add tsconfig</h3><figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// tsconfig.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="hljs-string">"files"</span>: [</span><br><span class="line">    <span class="hljs-string">"server.ts"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="hljs-string">"compilerOptions"</span>: &#123;</span><br><span class="line">    <span class="hljs-string">"outDir"</span>: <span class="hljs-string">"./build"</span>,</span><br><span class="line">    <span class="hljs-string">"target"</span>: <span class="hljs-string">"es2015"</span>,</span><br><span class="line">    <span class="hljs-string">"module"</span>: <span class="hljs-string">"commonjs"</span>,</span><br><span class="line">    <span class="hljs-string">"moduleResolution"</span>: <span class="hljs-string">"Node"</span>,</span><br><span class="line">    <span class="hljs-string">"sourceMap"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"pretty"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"strictNullChecks"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"lib"</span>: [</span><br><span class="line">      <span class="hljs-string">"esnext"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-string">"exclude"</span>: [</span><br><span class="line">    <span class="hljs-string">"node_modules"</span>,</span><br><span class="line">    <span class="hljs-string">"build"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Add-tslint"><a href="#Add-tslint" class="headerlink" title="Add tslint"></a>Add tslint</h3><figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// tslint.json</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="hljs-string">"rules"</span>: &#123;</span><br><span class="line">    <span class="hljs-string">"align"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      <span class="hljs-string">"parameters"</span>,</span><br><span class="line">      <span class="hljs-string">"arguments"</span>,</span><br><span class="line">      <span class="hljs-string">"statements"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-string">"ban"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"class-name"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"curly"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"eofline"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"forin"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"indent"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      <span class="hljs-string">"spaces"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-string">"interface-name"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"jsdoc-format"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"label-position"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"max-line-length"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      <span class="hljs-number">140</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-string">"member-access"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"member-ordering"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      <span class="hljs-string">"public-before-private"</span>,</span><br><span class="line">      <span class="hljs-string">"static-before-instance"</span>,</span><br><span class="line">      <span class="hljs-string">"variables-before-functions"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-string">"no-any"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"no-arg"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-bitwise"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-conditional-assignment"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-console"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      <span class="hljs-string">"debug"</span>,</span><br><span class="line">      <span class="hljs-string">"info"</span>,</span><br><span class="line">      <span class="hljs-string">"time"</span>,</span><br><span class="line">      <span class="hljs-string">"timeEnd"</span>,</span><br><span class="line">      <span class="hljs-string">"trace"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-string">"no-construct"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-debugger"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-shadowed-variable"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-duplicate-variable"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-empty"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"no-eval"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-inferrable-types"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"no-internal-module"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-require-imports"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-string-literal"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"no-switch-case-fall-through"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-trailing-whitespace"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"no-var-keyword"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"no-var-requires"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"one-line"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      <span class="hljs-string">"check-open-brace"</span>,</span><br><span class="line">      <span class="hljs-string">"check-catch"</span>,</span><br><span class="line">      <span class="hljs-string">"check-else"</span>,</span><br><span class="line">      <span class="hljs-string">"check-whitespace"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-string">"quotemark"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      <span class="hljs-string">"single"</span>,</span><br><span class="line">      <span class="hljs-string">"jsx-single"</span>,</span><br><span class="line">      <span class="hljs-string">"avoid-escape"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-string">"radix"</span>: <span class="hljs-literal">true</span>,</span><br><span class="line">    <span class="hljs-string">"semicolon"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"switch-default"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"triple-equals"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      <span class="hljs-string">"allow-null-check"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-string">"typedef"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"typedef-whitespace"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="hljs-string">"call-signature"</span>: <span class="hljs-string">"nospace"</span>,</span><br><span class="line">        <span class="hljs-string">"index-signature"</span>: <span class="hljs-string">"nospace"</span>,</span><br><span class="line">        <span class="hljs-string">"parameter"</span>: <span class="hljs-string">"nospace"</span>,</span><br><span class="line">        <span class="hljs-string">"property-declaration"</span>: <span class="hljs-string">"nospace"</span>,</span><br><span class="line">        <span class="hljs-string">"variable-declaration"</span>: <span class="hljs-string">"nospace"</span></span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="hljs-string">"variable-name"</span>: <span class="hljs-literal">false</span>,</span><br><span class="line">    <span class="hljs-string">"whitespace"</span>: [</span><br><span class="line">      <span class="hljs-literal">true</span>,</span><br><span class="line">      <span class="hljs-string">"check-branch"</span>,</span><br><span class="line">      <span class="hljs-string">"check-decl"</span>,</span><br><span class="line">      <span class="hljs-string">"check-operator"</span>,</span><br><span class="line">      <span class="hljs-string">"check-separator"</span>,</span><br><span class="line">      <span class="hljs-string">"check-type"</span></span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Add-env"><a href="#Add-env" class="headerlink" title="Add env"></a>Add env</h3><figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// env.ts</span></span><br><span class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> envalid <span class="hljs-keyword">from</span> <span class="hljs-string">'envalid'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> &#123; url, bool, str &#125; = envalid</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> env = envalid.cleanEnv(process.env, &#123;</span><br><span class="line">  SERVICE_URI: str(&#123; <span class="hljs-keyword">default</span>: <span class="hljs-string">'https://reqres.in/api'</span> &#125;),</span><br><span class="line">  NODE_ENV: str(&#123; devDefault: <span class="hljs-string">'development'</span>, <span class="hljs-keyword">default</span>: <span class="hljs-string">'production'</span> &#125;),</span><br><span class="line">  LOG_LEVEL: str(&#123; <span class="hljs-keyword">default</span>: <span class="hljs-string">'info'</span> &#125;),</span><br><span class="line">  CORS: bool(&#123; devDefault: <span class="hljs-literal">true</span>, <span class="hljs-keyword">default</span>: <span class="hljs-literal">false</span> &#125;),</span><br><span class="line">  GRAPHIQL: bool(&#123; devDefault: <span class="hljs-literal">true</span>, <span class="hljs-keyword">default</span>: <span class="hljs-literal">true</span> &#125;),</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> env</span><br></pre></td></tr></table></figure>
+<h3 id="Add-Nodemon"><a href="#Add-Nodemon" class="headerlink" title="Add Nodemon"></a>Add Nodemon</h3><figure class="highlight json hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="hljs-attr">"watch"</span>: [<span class="hljs-string">"src"</span>],</span><br><span class="line">  <span class="hljs-attr">"ext"</span>: <span class="hljs-string">"ts"</span>,</span><br><span class="line">  <span class="hljs-attr">"ignore"</span>: [<span class="hljs-string">"src/**/*.spec.ts"</span>],</span><br><span class="line">  <span class="hljs-attr">"exec"</span>: <span class="hljs-string">"ts-node ./server.ts"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Create-Koa-APP"><a href="#Create-Koa-APP" class="headerlink" title="Create Koa APP"></a>Create Koa APP</h3><figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// src/app.ts</span></span><br><span class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> Koa <span class="hljs-keyword">from</span> <span class="hljs-string">'koa'</span></span><br><span class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> cors <span class="hljs-keyword">from</span> <span class="hljs-string">'koa-cors'</span></span><br><span class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> convert <span class="hljs-keyword">from</span> <span class="hljs-string">'koa-convert'</span></span><br><span class="line"><span class="hljs-keyword">import</span> &#123; apiRouter &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./routers'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> Koa()</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> (process.env.CORS) &#123;</span><br><span class="line">  app.use(convert(cors()))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.use(apiRouter.routes()).use(apiRouter.allowedMethods())</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> app</span><br></pre></td></tr></table></figure>
+<h3 id="Server-Startup"><a href="#Server-Startup" class="headerlink" title="Server Startup"></a>Server Startup</h3><figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// server.ts</span></span><br><span class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> chalk <span class="hljs-keyword">from</span> <span class="hljs-string">'chalk'</span></span><br><span class="line"><span class="hljs-keyword">import</span> env <span class="hljs-keyword">from</span> <span class="hljs-string">'./env'</span></span><br><span class="line">process.env = env</span><br><span class="line"><span class="hljs-keyword">import</span> app <span class="hljs-keyword">from</span> <span class="hljs-string">'./src/app'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> port = process.env.PORT || <span class="hljs-number">3001</span></span><br><span class="line"></span><br><span class="line">app.listen(port, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (process.env.NODE_ENV === <span class="hljs-string">'development'</span>) &#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (process.env.GRAPHIQL) &#123;</span><br><span class="line">      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'The GraphiQL App is running at: '</span>)</span><br><span class="line">      <span class="hljs-built_in">console</span>.log(chalk.cyan(<span class="hljs-string">`http://localhost:<span class="hljs-subst">$&#123;port&#125;</span>/api/graphiql`</span>))</span><br><span class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Koa app is running at: '</span>)</span><br><span class="line">      <span class="hljs-built_in">console</span>.log(chalk.cyan(<span class="hljs-string">`http://localhost:<span class="hljs-subst">$&#123;port&#125;</span>`</span>))</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Koa App is running'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="Add-Router"><a href="#Add-Router" class="headerlink" title="Add Router"></a>Add Router</h3><figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// ./src/routers/graphql.ts</span></span><br><span class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> Router <span class="hljs-keyword">from</span> <span class="hljs-string">'koa-router'</span></span><br><span class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> GraphQLHttp <span class="hljs-keyword">from</span> <span class="hljs-string">'koa-graphql'</span></span><br><span class="line"><span class="hljs-keyword">import</span> schema <span class="hljs-keyword">from</span> <span class="hljs-string">'../graphql/schema'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> router = <span class="hljs-keyword">new</span> Router()</span><br><span class="line"><span class="hljs-comment">// console.log(process.env)</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-built_in">console</span>.log(process.env)</span><br><span class="line">router.all(<span class="hljs-string">'/'</span>, GraphQLHttp(&#123;</span><br><span class="line">  schema,</span><br><span class="line">  graphiql: process.env.GRAPHIQL,</span><br><span class="line">  pretty: <span class="hljs-literal">true</span>,</span><br><span class="line">  errorFormat: <span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="hljs-keyword">const</span> &#123; message, locations, path, stack &#125; = error</span><br><span class="line">    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`GraphQL Error: `</span>, &#123;</span><br><span class="line">      message,</span><br><span class="line">      locations,</span><br><span class="line">      path,</span><br><span class="line">      stack,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> router</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// ./src/routers/index.ts</span></span><br><span class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> Router <span class="hljs-keyword">from</span> <span class="hljs-string">'koa-router'</span></span><br><span class="line"><span class="hljs-keyword">import</span> graphQLRouter <span class="hljs-keyword">from</span> <span class="hljs-string">'./graphql'</span></span><br><span class="line"><span class="hljs-keyword">import</span> testRouter <span class="hljs-keyword">from</span> <span class="hljs-string">'./test'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> apiRouter = <span class="hljs-keyword">new</span> Router(&#123;</span><br><span class="line">  prefix: <span class="hljs-string">'/api'</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">apiRouter.use(<span class="hljs-string">'/graphql'</span>, graphQLRouter.routes(), graphQLRouter.allowedMethods())</span><br><span class="line">apiRouter.use(<span class="hljs-string">'/test'</span>, testRouter.routes(), testRouter.allowedMethods())</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> &#123;</span><br><span class="line">  apiRouter</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Config-Graphql"><a href="#Config-Graphql" class="headerlink" title="Config Graphql"></a>Config Graphql</h3><figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// ./src/graphql/model.ts</span></span><br><span class="line"><span class="hljs-keyword">import</span> &#123;</span><br><span class="line">  GraphQLObjectType,</span><br><span class="line">  GraphQLString,</span><br><span class="line">  GraphQLNonNull,</span><br><span class="line">&#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'graphql'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> User = <span class="hljs-keyword">new</span> GraphQLObjectType(&#123;</span><br><span class="line">  name: <span class="hljs-string">'User'</span>,</span><br><span class="line">  description: <span class="hljs-string">'A User'</span>,</span><br><span class="line">  fields: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> (&#123;</span><br><span class="line">    id: &#123;</span><br><span class="line">      <span class="hljs-keyword">type</span>: <span class="hljs-keyword">new</span> GraphQLNonNull(GraphQLString),</span><br><span class="line">      resolve: <span class="hljs-function">(<span class="hljs-params">user</span>) =&gt;</span> user.id,</span><br><span class="line">    &#125;,</span><br><span class="line">    firstName: &#123;</span><br><span class="line">      <span class="hljs-keyword">type</span>: <span class="hljs-keyword">new</span> GraphQLNonNull(GraphQLString),</span><br><span class="line">      resolve: <span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> user.first_name</span><br><span class="line">    &#125;,</span><br><span class="line">    lastName: &#123;</span><br><span class="line">      <span class="hljs-keyword">type</span>: <span class="hljs-keyword">new</span> GraphQLNonNull(GraphQLString),</span><br><span class="line">      resolve: <span class="hljs-function"><span class="hljs-params">user</span> =&gt;</span> user.last_name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> &#123;</span><br><span class="line">  User</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// ./src/graphql/query.ts</span></span><br><span class="line"><span class="hljs-keyword">import</span> &#123; GraphQLObjectType, GraphQLList &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'graphql'</span></span><br><span class="line"><span class="hljs-keyword">import</span> axios <span class="hljs-keyword">from</span> <span class="hljs-string">'axios'</span></span><br><span class="line"><span class="hljs-keyword">import</span> &#123; User &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./model'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">new</span> GraphQLObjectType(&#123;</span><br><span class="line">  name: <span class="hljs-string">'Query'</span>,</span><br><span class="line">  description: <span class="hljs-string">'Query of GraphQL'</span>,</span><br><span class="line">  fields: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> (&#123;</span><br><span class="line">    users: &#123;</span><br><span class="line">      <span class="hljs-keyword">type</span>: <span class="hljs-keyword">new</span> GraphQLList(User),</span><br><span class="line">      resolve: <span class="hljs-function">(<span class="hljs-params">root, args</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="hljs-keyword">return</span> axios(&#123;</span><br><span class="line">          url: <span class="hljs-string">'https://reqres.in/api/users'</span>,</span><br><span class="line">        &#125;).then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> res.data).then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> res.data)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// ./src/graphql/schema.ts</span></span><br><span class="line"><span class="hljs-keyword">import</span> &#123; GraphQLSchema &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'graphql'</span></span><br><span class="line"><span class="hljs-keyword">import</span> query <span class="hljs-keyword">from</span> <span class="hljs-string">'./query'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">new</span> GraphQLSchema(&#123;</span><br><span class="line">  query</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/Node-Graphql-Koa/">Node, Graphql, Koa</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <div class="buttons is-centered">
+            
+                
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Alipay. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Wechat. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<div class="notification is-danger">
+    You forgot to set the <code>business</code> and <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                
+<div class="notification is-danger">
+    You forgot to set the <code>url</code> Patreon. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/09/25/HTTP-Timings-in-Node-js/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">HTTP Timings in Node.js</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2017/09/15/tag-picture-in-html/">
+                <span class="level-item">Tag Picture in Html</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.jpg" alt="Keith Chen">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        Keith Chen
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        FE Engineer on Blockchain
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>30°17&#39;37N, 120°9&#39;41E</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        Posts
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        303
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        Categories
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        7
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        Tags
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        88
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/keith-CY" target="_blank">
+                Follow</a>
+        </div>
+        
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            Links
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/keith-CY" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Keith CY</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://www.linkedin.com/in/宇-陈-644b61ba" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Yu Chen</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">www.linkedin.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                Categories
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/Soup/">
+            <span class="level-start">
+                <span class="level-item">Soup</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Uncategorized/">
+            <span class="level-start">
+                <span class="level-item">Uncategorized</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">2</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/github/">
+            <span class="level-start">
+                <span class="level-item">github</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a><ul><li>
+        <a class="level is-marginless" href="/categories/github/note/">
+            <span class="level-start">
+                <span class="level-item">note</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li></ul></li><li>
+        <a class="level is-marginless" href="/categories/note/">
+            <span class="level-start">
+                <span class="level-item">note</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">141</span>
+            </span>
+        </a><ul><li>
+        <a class="level is-marginless" href="/categories/note/workNote/">
+            <span class="level-start">
+                <span class="level-item">workNote</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">19</span>
+            </span>
+        </a></li></ul></li><li>
+        <a class="level is-marginless" href="/categories/workNote/">
+            <span class="level-start">
+                <span class="level-item">workNote</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">5</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            Tag Cloud
+        </h3>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+    </div>
+</div>
+
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            Recent
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/05/note-on-bip32/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Note on Bip32">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-05T05:54:32.000Z">2019-03-05</time></div>
+                    <a href="/2019/03/05/note-on-bip32/" class="has-link-black-ter is-size-6">Note on Bip32</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/20/React-Hooks/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="React Hooks">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-20T09:41:39.000Z">2018-11-20</time></div>
+                    <a href="/2018/11/20/React-Hooks/" class="has-link-black-ter is-size-6">React Hooks</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
+                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
+                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
+                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            Archives
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">12</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">18</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">31</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">19</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">15</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">16</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">30</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">43</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">25</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">24</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            Recent
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/03/05/note-on-bip32/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Note on Bip32">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-05T05:54:32.000Z">2019-03-05</time></div>
+                    <a href="/2019/03/05/note-on-bip32/" class="has-link-black-ter is-size-6">Note on Bip32</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/20/React-Hooks/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="React Hooks">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-20T09:41:39.000Z">2018-11-20</time></div>
+                    <a href="/2018/11/20/React-Hooks/" class="has-link-black-ter is-size-6">React Hooks</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
+                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
+                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
+                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            Archives
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">5</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2018/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2018</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">12</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">18</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">31</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">19</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">14</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">15</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">9</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/03/">
+                <span class="level-start">
+                    <span class="level-item">March 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/02/">
+                <span class="level-start">
+                    <span class="level-item">February 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">6</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2017/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2017</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/11/">
+                <span class="level-start">
+                    <span class="level-item">November 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">16</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">30</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/07/">
+                <span class="level-start">
+                    <span class="level-item">July 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">43</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/06/">
+                <span class="level-start">
+                    <span class="level-item">June 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">25</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2016/05/">
+                <span class="level-start">
+                    <span class="level-item">May 2016</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">24</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.png" alt="Graphql-Koa-Starter" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2019 Chen Yu&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                <br>
+                <span id="busuanzi_container_site_uv">
+                Visited by <span id="busuanzi_value_site_uv">0</span> users
+                </span>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("en");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="Back to Top" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

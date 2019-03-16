@@ -148,6 +148,52 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-07-19T02:34:56.000Z">2017-07-19</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 271 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/07/19/Five-Models-in-Smart-Contract/">Five Models in Smart Contract</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="Database-Contracts"><a href="#Database-Contracts" class="headerlink" title="Database Contracts"></a>Database Contracts</h1><p>These are used only as data storage. The only logic they need is functions that allow other contracts to write, update and get data, and some simple way of checking caller permissions.</p>
+<h1 id="Controller-Contracts"><a href="#Controller-Contracts" class="headerlink" title="Controller Contracts"></a>Controller Contracts</h1><p>These contracts operate on the storage contracts. In a flexible system, both controllers and databases can be replaced by other, similar contracts that share the same public api(although this is not always needed).) Controllers can be advanced, and could for example do batched reads/writes, or read from and write to multiple databases instead of just one.</p>
+<h1 id="Contract-Managine-Contracts-CMCs"><a href="#Contract-Managine-Contracts-CMCs" class="headerlink" title="Contract Managine Contracts (CMCs)"></a>Contract Managine Contracts (CMCs)</h1><p>The purpose of these contracts is only to manage other contracts. Their main tasks is to keep track of all the contracts/components of the system, handle the communication between thses components, and to make modular design easier. Keeping this functionality separate from normal business logic should be considered good practice, and has a number of positive effects on the system.</p>
+<h1 id="Application-Logic-Contracts-ALCs"><a href="#Application-Logic-Contracts-ALCs" class="headerlink" title="Application Logic Contracts (ALCs)"></a>Application Logic Contracts (ALCs)</h1><p>Application logic contracts contains application-specific code. Generally speaking, if the contract utilizes controllers and other contracts to perform application specific tasks it’s an ALC.</p>
+<h1 id="Utility-Contracts"><a href="#Utility-Contracts" class="headerlink" title="Utility Contracts"></a>Utility Contracts</h1><p>These type of contracts usually perform a specific task, and can be called by other contracts without restrictions. It could be a contract that hashes strings using some algorithm, provide random numbers or other things. They normally don’t need a log of storage, often have few or no dependencies.</p>
+<p>The rationale for this division will be laid out after we’ve tried to apply it to the fund manager system, as it will be a lot more clear then.</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-07-14T02:32:30.000Z">2017-07-14</time>
                 
                 
@@ -2060,79 +2106,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-06-14T06:11:07.000Z">2017-06-14</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    6 minutes read (About 910 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/06/14/git-merge-and-rebase/">Git Merge and Rebase</a>
-            
-        </h1>
-        <div class="content">
-            <h1 id="Conceptual-Overview"><a href="#Conceptual-Overview" class="headerlink" title="Conceptual Overview"></a>Conceptual Overview</h1><p>The first thing to understand about <code>git rebase</code> is that it solves the same problem as <code>git merge</code>. Both of these commands are designed to integrate changes from one branch into another branch – they just do it in very different ways.</p>
-<p>Consider what happens when you start working on a new feature in a dedicated branch, then another team member updates the <code>master</code> branch with new commits. The results in a forked history which should be familiar to anyone who has used Git as a collaboration tool.</p>
-<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:01b0b04e-64f3-4659-af21-c4d86bc7cb0b/01.svg?cdnVersion=ey" alt=""></p>
-<p>Now, let’s say that the new commits in <code>master</code> are relevant to the feature that you’re working on. To incorporate the new commits into your <code>feature</code> branch, you have two options: <code>mergin</code>or <code>rebasing</code>.</p>
-<h1 id="The-Merge-Option"><a href="#The-Merge-Option" class="headerlink" title="The Merge Option"></a>The Merge Option</h1><p>The easiest option is to merge the <code>master</code> branch into the <code>feature</code> branch using something like the following:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout feature</span><br><span class="line">git merge master</span><br></pre></td></tr></table></figure>
-<p>Or you can condense this to a one-liner:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge master feature</span><br></pre></td></tr></table></figure>
-<p>This creates a new <code>merge commit</code> in the <code>feature</code> branch that ties together the histories of the both branches, giving you a branch structure that looks like this:</p>
-<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:e229fef6-2c2f-4a4f-b270-e1e1baa94055/02.svg?cdnVersion=ey" alt=""></p>
-<p>Merging is nice because it’s a <code>non-destructive</code> operation. The existing branches are not changed in any way. This avoids all of the potential pitfalls of rebasing.</p>
-<p>On the other hand, this also means that the <code>feature</code> branch will have an extraneous merge commit every time you need to incorporate upstream changes. If <code>master</code> is very active, this can pollute your <code>feature</code> branch history quite a bit. While it’s possible to migrate this issue with advanced <code>git log</code> options, it can make it hard to other developers to understand the history of the project.</p>
-<h1 id="The-Rebase-Option"><a href="#The-Rebase-Option" class="headerlink" title="The Rebase Option"></a>The Rebase Option</h1><p>As an alternative to merge, you can rebase the <code>feature</code> branch onto <code>master</code> branch using the following commands:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout feature</span><br><span class="line">git rebase master</span><br></pre></td></tr></table></figure>
-<p>This moves the entire <code>feature</code> branch to begin on the top of the <code>master</code> branch, effectively incorporating all of the new commits in <code>master</code>. But, instead of using a merge commit, rebasing <code>re-writes</code> the project history by creating brand new commits for each commit in the original branch.</p>
-<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:5b153a22-38be-40d0-aec8-5f2fffc771e5/03.svg?cdnVersion=ey" alt=""></p>
-<p>The major benefit of rebasing is that you get a much cleaner project history. First, it eliminates the unnecessary merge commits required by <code>git merge</code>. Second, as you can see in the above diagram, rebasing also results in a perfectly linear project history – you can follow the top of <code>feature</code> all the way to the beginning of the project without any forks. This makes it easier to navigate your project with commands like <code>git log</code>.</p>
-<h1 id="Interactive-Rebasing"><a href="#Interactive-Rebasing" class="headerlink" title="Interactive Rebasing"></a>Interactive Rebasing</h1><p>Interactive rebasing gives you the opportunity to alter commits as they are moved to the new branch. This is even more powerful than an automated rebase, since it offers complete control over the branch’s commit history. Typically, this is used to clean up a messy history before merging a feature branch into <code>master</code>.</p>
-<p>To begin an interactive rebasing session, pass the <code>-i</code> option to the <code>git rebase</code> command.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout feature</span><br><span class="line">git rebase -i master</span><br></pre></td></tr></table></figure>
-<p>This will open a text editor listing all of the commits that are about to be moved:</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pick 33d5b7a Message <span class="hljs-keyword">for</span> commit <span class="hljs-comment">#1</span></span><br><span class="line">pick 9480b3d Message <span class="hljs-keyword">for</span> commit <span class="hljs-comment">#2</span></span><br><span class="line">pick 5c67e61 Message <span class="hljs-keyword">for</span> commit <span class="hljs-comment">#3</span></span><br></pre></td></tr></table></figure>
-<p>This listing defines exactly what the branch will look like after the rebase is performed. By changing the <code>pick</code> command and/or reordering the entries, you can make the branch’s history look like whatever you want.</p>
-<p>For example, if the 2nd commit fixes a small problem in the 1st commit, you can condense them into a single comit with the <code>fixup</code> command:</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pick 33d5b7a Message <span class="hljs-keyword">for</span> commit <span class="hljs-comment">#1</span></span><br><span class="line">fixup 9480b3d Message <span class="hljs-keyword">for</span> commit <span class="hljs-comment">#2</span></span><br><span class="line">pick 5c67e61 Message <span class="hljs-keyword">for</span> commit <span class="hljs-comment">#3</span></span><br></pre></td></tr></table></figure>
-<p>When you save and close the file, Git will perform the rebase according to your instructions, resulting in project history that looks like the following:</p>
-<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:fe6942b4-7a60-4464-9181-b67e59e50788/04.svg?cdnVersion=ey" alt=""></p>
-<p>Eliminating insignificant commits like this makes your feature’s history much easier to understand. <strong>This is something that <code>git merge</code> simply cannot do</strong>.</p>
-<h1 id="The-Golden-Rule-of-Rebasing"><a href="#The-Golden-Rule-of-Rebasing" class="headerlink" title="The Golden Rule of Rebasing"></a>The Golden Rule of Rebasing</h1><p>The Golden Rule of <code>git rebase</code> is to never use it on <em>public</em> branches.</p>
-<p>For example, think about what would happen if you rebased <code>master</code> onto your <code>feature</code> branch.</p>
-<p><img src="https://wac-cdn-a.atlassian.com/dam/jcr:1d22f018-b2c7-4096-9db1-c54940cf4f4e/05.svg?cdnVersion=ey" alt=""></p>
-<p>The rebase moves all of the commits in <code>master</code> onto the tip of <code>feature</code>. The problem is that only happened in <em>your</em> repo. All of the other developers are still working with the origin master. Since rebasing results in brand new commits, Git will think that your <code>master</code> branch’s history has diverged from everybody else’s.</p>
-<p>The only way to synchronize the two <code>master</code> branches is to merge them back together, resulting in an extra merge commit <strong>and</strong> two sets of commits that contain the same changes.</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2205,7 +2178,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        303
+                        304
                     </p>
                 </div>
             </div>
@@ -2373,6 +2346,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2447,25 +2439,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2484,7 +2457,7 @@
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -2833,6 +2806,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2907,25 +2899,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2944,7 +2917,7 @@
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>

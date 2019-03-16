@@ -144,6 +144,101 @@
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
     <div class="card">
     
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    4 minutes read (About 529 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2019/03/16/keystore/">Keystore</a>
+            
+        </h1>
+        <div class="content">
+            <p><a href="https://medium.com/@julien.maffre/what-is-an-ethereum-keystore-file-86c8c5917b97" target="_blank" rel="noopener">origin</a></p>
+<h1 id="What-is-a-keystore-file"><a href="#What-is-a-keystore-file" class="headerlink" title="What is a keystore file"></a>What is a keystore file</h1><p>A keystore file is en encrypted version of your unique private key that you will use to sign your transactions. If you lose this file your lose your assets.</p>
+<h1 id="What-do-keystore-files-look-like"><a href="#What-do-keystore-files-look-like" class="headerlink" title="What do keystore files look like"></a>What do keystore files look like</h1><figure class="highlight json hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="hljs-attr">"crypto"</span>: &#123;</span><br><span class="line">    <span class="hljs-attr">"cipher"</span>: <span class="hljs-string">"aes-128-ctr"</span>,</span><br><span class="line">    <span class="hljs-attr">"cipherparams"</span>: &#123;</span><br><span class="line">      <span class="hljs-attr">"iv"</span>: <span class="hljs-string">"83dbcc02d8ccb40e466191a123791e0e"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="hljs-attr">"ciphertext"</span>: <span class="hljs-string">"d172bf743a674da9cdad04534d56926ef8358534d458fffccd4e6ad2fbde479c"</span>,</span><br><span class="line">    <span class="hljs-attr">"kdf"</span>: <span class="hljs-string">"scrypt"</span>,</span><br><span class="line">    <span class="hljs-attr">"kdfparams"</span>: &#123;</span><br><span class="line">      <span class="hljs-attr">"dklen"</span>: <span class="hljs-number">32</span>,</span><br><span class="line">      <span class="hljs-attr">"n"</span>: <span class="hljs-number">262144</span>,</span><br><span class="line">      <span class="hljs-attr">"r"</span>: <span class="hljs-number">1</span>,</span><br><span class="line">      <span class="hljs-attr">"p"</span>: <span class="hljs-number">8</span>,</span><br><span class="line">      <span class="hljs-attr">"salt"</span>: <span class="hljs-string">"ab0c7876052600dd703518d6fc3fe8984592145b591fc8fb5c6d43190334ba19"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="hljs-attr">"mac"</span>: <span class="hljs-string">"2103ac29920d71da29f15d75b4a16dbe95cfd7ff8faea1056c33131d846e3097"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="hljs-attr">"id"</span>: <span class="hljs-string">"3198bc9c-6672-5ab3-d995-4942343ae5b6"</span>,</span><br><span class="line">  <span class="hljs-attr">"version"</span>: <span class="hljs-number">3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Thses fields mean:</p>
+<ul>
+<li><p>cipher: The name of a symmetric AES algorithm</p>
+</li>
+<li><p>cipherparams: The parameters required for the “cipher” algorithm above</p>
+</li>
+<li><p>ciphertext: The private key encrypted using the “cipher” algorithm above</p>
+</li>
+<li><p>kdf: A key derivation function used to let you encrypt your keystore file with a password</p>
+</li>
+<li><p>kdfparams: The parameters required for the “kdf” algorithm above</p>
+</li>
+<li><p>mac: A code used to verify your password</p>
+</li>
+</ul>
+<h1 id="Work-flow"><a href="#Work-flow" class="headerlink" title="Work flow"></a>Work flow</h1><ol>
+<li>Encrypting your private key</li>
+</ol>
+<p>These symmetric algorithms use a key to encrypt some data. The resulting data is encrypted and can be decrypted with the same method and the same key.</p>
+<p>The relation between cipher, cipherparams, ciphertext:</p>
+<ul>
+<li><p>cipher is the symmetric algorithm used to encrypt the private key.</p>
+</li>
+<li><p>cipherparams are the parameters required for teh symmetric algorithm.</p>
+</li>
+<li><p>ciphertext is the encrypted input of the symmetric input.</p>
+</li>
+</ul>
+<p>You get the decryption-key as the output of the kdf.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*nNI586I7fXesxYNls1pm2A.png" alt=""></p>
+<p>By this, you need to retrieve your decryption-key(namely the key used in encryption) to decrypt your private key.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*3a9LeWT9B9CSu7a3x8GdKw.png" alt=""></p>
+<ol>
+<li>Protect with your passphrase</li>
+</ol>
+<p>To make sure unlocking your account is easy, you don’t need to remember your very long and non-user-friendly decrption-key that is used to decrypt ciphertext. Instead, the developers have opted for a passphrase-based protection.</p>
+<p>The keystore use a kdf(key derivation function) that computes the decryption-key given a passphrase and a list of parameters.</p>
+<ul>
+<li><p>kdf is the key derivation function used to compute the decryption-key from your passphrase.</p>
+</li>
+<li><p>kdfparams are the parameters required for the function</p>
+</li>
+</ul>
+<p>By the passphrase with kdfparams, the kdf returns your decrption-key.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*nNI586I7fXesxYNls1pm2A.png" alt=""></p>
+<ol>
+<li>Make sure your passphrase is right</li>
+</ol>
+<p>We need to guarantee that the passphrase typed to unlock the account is right, that it is the same one as the one entered when the keystore is generated.</p>
+<p>This is where the field mac in the keystore works. Just after the kdf is executed, its result(decryption-key) and ciphertext are processed and compared to mac. If the result is the same as mac, then the passphrase was right and the decrption-key is correct.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*YaBR2RaF0-RulLc-pUmdyQ.png" alt=""></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p><img src="https://cdn-images-1.medium.com/max/1200/1*jHfiOdfCKhyCq5V39vty-A.png" alt=""></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
     <div class="card-image">
         <a href="/2019/03/05/note-on-bip32/" class="image is-7by1">
             <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -1335,76 +1430,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-03-05T06:30:17.000Z">2018-03-05</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 minutes read (About 812 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/">Writing Upgradable Contracts in Solidity</a>
-            
-        </h1>
-        <div class="content">
-            <p><a href="https://blog.colony.io/writing-upgradeable-contracts-in-solidity-6743f0eecc88" target="_blank" rel="noopener">origin</a></p>
-<p>Ethereum contracts are immutable – once deployed to the blockchain they cannot be updated, yet the need to change their logic with time is ultimately necessary.</p>
-<p>During a contract upgrade the following factors need to be considered:</p>
-<ul>
-<li><p>Block gas limit(4712388 for Homestead)</p>
-<p>Upgrade transaction tend to be large due to the amount of processing they have to complete e.g. <em>deploy a contract, move data, move references</em>.</p>
-</li>
-<li><p>Inter-contract dependencies</p>
-<p><em>when a contract is compiled, all of its imports are compiled into the contract thus leading to a ripple effect when you want to swap out a contract which is being referenced by other contract</em>.</p>
-</li>
-</ul>
-<p>These two are related, as having more dependencies affects the size of your deployed contracts and the overall transaction size of the upgrade. The implementation patterns below work to <em>minimise the upgrade gas costs as well as loosening the coupling of contracts without breaking Solidity type safety</em>.</p>
-<p>Note that for the sake of simplying the examples, we have omitted the implementation of security and permission.</p>
-<h3 id="Avoiding-large-data-copy-operations"><a href="#Avoiding-large-data-copy-operations" class="headerlink" title="Avoiding large data copy operations"></a>Avoiding large data copy operations</h3><p>Storing data is expensive(<code>SSTORE</code> operation costs 5000 or 20000 gas) and upgrading contracts containing large storage variables runs the chance of hitting the transaction gas limit during the copying of its data.</p>
-<p><strong>You may therefore want to isolate your datastore from the rest of your code, and make it as flexible as possible, so that it is unlikely to need to be upgrade.</strong></p>
-<p>Depending on your circumstances, how large of a datastore you need and whether you expect its structure to change often, you may choose a strict definition or a loosely typed flat store. Below is an example of the latter which implements support for storing a <em>sha3</em> key and value pairs. It is the more flexible and extensible option. This ensures data schema changes can be implemented without requiring upgrades to the storage contract.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">contract EternalStorage &#123;</span><br><span class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> uint) UIntStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getUIntValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> UIntStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setUIntValue</span>(<span class="hljs-params">bytes32 record, uint value</span>) </span>&#123;</span><br><span class="line">    UIntStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> string) StringStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getStringValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> StringStorage(record);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setStringValue</span>(<span class="hljs-params">bytes32 record, string value</span>) </span>&#123;</span><br><span class="line">    StringStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> address) AddressStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getAddressValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> AddressStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setAddressValue</span>(<span class="hljs-params">bytes32 record, address value</span>) </span>&#123;</span><br><span class="line">    AddressStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> bytes) BytesStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBytesValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> BytesStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setBytesValue</span>(<span class="hljs-params">bytes32 record, bytes value</span>) </span>&#123;</span><br><span class="line">    BytesStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping (<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> bool) BooleanStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBooleanValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> BooleanStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setBooleanValue</span>(<span class="hljs-params">bytes32 record, bool value</span>) </span>&#123;</span><br><span class="line">    BooleanStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping (<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> int) IntStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getIntValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">int</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> IntStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setIntValue</span>(<span class="hljs-params">bytes32 record, int value</span>) </span>&#123;</span><br><span class="line">    IntStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>For upgrades you can then just switch the upgraded contract to point to the new EternalStorage contract instance without having a copy of its data.</p>
-<h3 id="Use-Libraries-to-Encapsulate-Logic"><a href="#Use-Libraries-to-Encapsulate-Logic" class="headerlink" title="Use Libraries to Encapsulate Logic"></a>Use Libraries to Encapsulate Logic</h3><p>Libraries are special form of contracts that are singletons and not allowed any storage variables.</p>
-<p>The advantage of libraries in the context of upgrades is that they allow encapsulation of business logic or data management logic into singleton instance that cost only upgrading one and not many contracts.</p>
-<p>Example below shows a library used for adding a <em>Proposal</em> to storage.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"EternalStorage.sol"</span>;</span><br><span class="line"></span><br><span class="line">library ProposalsLibrary &#123;</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getProposalCount</span>(<span class="hljs-params">address _storageContract</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> EternalStorage(_storageContract).getUIntValue(sha3(<span class="hljs-string">"proposalCount"</span>));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addProposal</span>(<span class="hljs-params">address _storageContract, bytes32 _name</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">var</span> idx = getProposalCount(_storageContract);</span><br><span class="line">    EternalStorage(_storageContract).setBytes32Value(sha3(<span class="hljs-string">"proposal_name"</span>, idx), _name);</span><br><span class="line">    EternalStorage(_storageContract).setUIntValue(sha3(<span class="hljs-string">"proposal_eth"</span>, idx), <span class="hljs-number">0</span>);</span><br><span class="line">    EternalStorage(_storageContract).setUIntValue(sha3(<span class="hljs-string">"ProposalCount"</span>), idx + <span class="hljs-number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Under the cover, library functions are called using <code>delegatecall</code> from the calling contract which has the advantage of passing the <code>msg.sender</code> and <code>msg.value</code> seamlessly. You can therefore write your library code as if it were just part of your contract, without having to worry about the sender or value chagning.</p>
-<p>The example below shows a sample <code>Organization</code> contract using <code>ProposalsLibrary</code> to interact with data storage.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"ProposalsLibrary.sol"</span>;</span><br><span class="line"></span><br><span class="line">contract Organization &#123;</span><br><span class="line">  using ProposalsLibrary <span class="hljs-keyword">for</span> address;</span><br><span class="line">  address public eternalStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Organization</span>(<span class="hljs-params">address _eternalStorage</span>) </span>&#123;</span><br><span class="line">    eternalStorage = _eternalStorage;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addProposal</span>(<span class="hljs-params">bytes32 _name</span>) </span>&#123;</span><br><span class="line">    eternalStorage.addProposal(_name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>With libraries, there is a slight gas overhead on each call. However, it makes deploying a new contract much cheaper.</p>
-<h3 id="Use-‘interface’-to-decouple-inter-contract-communication"><a href="#Use-‘interface’-to-decouple-inter-contract-communication" class="headerlink" title="Use ‘interface’ to decouple inter-contract communication"></a>Use ‘interface’ to decouple inter-contract communication</h3><p>Abstract Contract implementation behind an interface that only define its function siguatures.</p>
-<p>This is a well known pattern in object oriented programming.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"ITokenLedger.sol"</span>;</span><br><span class="line"></span><br><span class="line">contract Organization &#123;</span><br><span class="line">  ITokenLedger public tokenLedger;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Organization</span>(<span class="hljs-params">address _tokenLedger</span>) </span>&#123;</span><br><span class="line">    tokenLedger = ITokenLedger(_tokenLedger);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">generateToekns</span>(<span class="hljs-params">uint256 _amount</span>) </span>&#123;</span><br><span class="line">    tokenLedger.generateTokens(_amount);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Here instead of importing the entire <code>TokenLedger.sol</code> contract, we use an interface containing just the function signatures. This eases any possible upgrades to TokenLedger which don’t affect its interface, too, which with this model can be implemented without redeploying the Organization contract.</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -1471,7 +1496,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        303
+                        304
                     </p>
                 </div>
             </div>
@@ -1639,6 +1664,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -1713,25 +1757,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1750,7 +1775,7 @@
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -2099,6 +2124,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2173,25 +2217,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2210,7 +2235,7 @@
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>

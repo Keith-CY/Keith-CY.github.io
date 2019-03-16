@@ -148,6 +148,151 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-06-22T18:55:10.000Z">2016-06-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    4 minutes read (About 628 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/06/23/css3-filter/">CSS3: Filter</a>
+            
+        </h1>
+        <div class="content">
+            <p>英语原文: <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/filter" target="_blank" rel="noopener">MDN:filter</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>Filter</strong> 属性用于实现”模糊”, “锐化”, “颜色替换”等图像渲染效果.</p>
+<p><strong>Filter</strong> 通常用于调整图像, 背景, 边框的呈现.</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><pre><code>filter: url(&quot;filter.svg#filter-id&quot;);
+filter:blur(5px);
+filter:brightness(.4);
+filter:contrast(200%);
+filter:drop-shadow(16px 16px 20px blue);
+filter:grayscale(50%);
+filter:hue-rotate(90deg);
+filter:invert(75%);
+filter:opacity(25%);
+filter:saturate(30%);
+filter:sepia(60%);
+
+/*Apply multiple filters*/
+filter: contrast(75%) brightness(3%);
+
+/*Global Values*/
+filter: inherit;
+filter:initial;
+filter:unset;
+`&lt;/pre&gt;
+
+### 设置一种函数
+
+&lt;pre&gt;`filter: &amp;lt;filter-function&amp;gt; [&amp;lt;filter-function&amp;gt;]* | none
+`&lt;/pre&gt;
+
+### 给 SVG 元素 &lt;filter&gt; 引用滤镜
+
+&lt;pre&gt;`filter: url(svg-url#element-id)
+`&lt;/pre&gt;
+
+### 实例
+
+&lt;pre&gt;`.mydiv{filter:grayscale(50%)}
+/*gray all images by 50% and blur by 10px*/
+img{
+  filter: grayscale(.5) blur(10px);
+}
+`&lt;/pre&gt;
+
+#### 通过 url 函数引入一个 SVG 资源
+
+&lt;pre&gt;`.target{filter:url(#c1):}
+.mydiv{filter:url(commonfilters.xml#large-blur)}
+`&lt;/pre&gt;
+
+### 函数
+
+参数可以传入百分数或小数, 34%和.34效果相同
+
+&lt;pre&gt;`url(): 接受一个 XML 文件, 该文件设置一个 SVG 滤镜, 并通过锚点确定一个具体的滤镜元素
+filter: url(resource.svg#c1)
+`&lt;/pre&gt;
+
+&lt;pre&gt;`blur(): 接收 radius 值为图像设置高斯模糊, radius 为标准差(px), 默认为0, 不接收百分比
+`&lt;/pre&gt;
+
+&lt;pre&gt;`brightness(): 给图片应用一种线性惩罚, 使其看起来更亮或更暗, 0%对应全黑, 100%对应原图, 超过100%更亮, 默认为1;
+`&lt;/pre&gt;
+
+&lt;pre&gt;`contrast(): 调整图像对比度, 0对应全黑, 1对应原图, 大于1则应用更低的对比度
+`&lt;/pre&gt;
+
+&lt;pre&gt;`drop-shadow(): 给图像设置一个阴影效果, 阴影是合成在图像下方的, 可以设置模糊度, 可以用特定颜色画出遮罩图的偏移版本. 函数能接受&amp;lt;shadow&amp;gt;(在 CSS3 背景中定义)类型的值, 除了 inset 关键字不可使用, 与 box-shadow 属性很相似.
+
+不过通过滤镜, 一些浏览器会提供硬件加速
+
+参数如下:
+
+&amp;lt;offset-x&amp;gt;和&amp;lt;offset-y&amp;gt; (不可省略)
+
+&amp;lt;blur-radius&amp;gt;(可选)
+
+&amp;lt;spread-radius&amp;gt;(可选)
+
+&amp;lt;color&amp;gt;(可选)
+`&lt;/pre&gt;
+
+&lt;pre&gt;`grayscale(): 将图像转为灰度图像, 1对应完全灰度图像, 0对应原图
+`&lt;/pre&gt;
+
+&lt;pre&gt;`hue-rotate(): 给图像应用色相旋转, &quot;angle&quot; 设定图像会被调整的色环角度, 默认为0, 对应无变化.
+`&lt;/pre&gt;
+
+&lt;pre&gt;`invert(): 翻转输入图像, 即反相, 1对应完全反相, 0对应原图
+`&lt;/pre&gt;
+
+&lt;pre&gt;`opacity(): 转换图像的透明程度, 0对应完全透明, 1对应原图
+
+和 CSS3 的 opacity 功能相似, 但是一些浏览器会提供硬件加速
+`&lt;/pre&gt;
+
+&lt;pre&gt;`saturate(): 修改图像饱和度, 0对应完全不饱和, 1对应原图
+`&lt;/pre&gt;
+
+&lt;pre&gt;`sepia(): 将图像转为深褐色, 1对应完全深褐色, 0对应原图
+</code></pre><p>复合函数</p>
+<p><code>filter: contrast(175%) brightness(3%);</code></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2016-06-22T18:04:43.000Z">2016-06-23</time>
                 
                 <div class="level-item">
@@ -1803,56 +1948,6 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-05-29T07:43:01.000Z">2016-05-29</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    a few seconds read (About 50 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/05/29/4-simple-transitions-of-button/">4 Simple Transitions of Button</a>
-            
-        </h1>
-        <div class="content">
-            <h1 id="4-Simple-CSS-Transition-to-Enchance-Your-Buttons"><a href="#4-Simple-CSS-Transition-to-Enchance-Your-Buttons" class="headerlink" title="4 Simple CSS Transition to Enchance Your Buttons"></a>4 Simple CSS Transition to Enchance Your Buttons</h1><h2 id="Darken"><a href="#Darken" class="headerlink" title="Darken"></a>Darken</h2><p>Set a darker shade background color when <code>:hover</code> is activated</p>
-<h2 id="Fade-Out"><a href="#Fade-Out" class="headerlink" title="Fade Out"></a>Fade Out</h2><p>Set opacity to 1 by default, and reduce the opacity when <code>:hover</code> is activated.</p>
-<h2 id="Change-Color"><a href="#Change-Color" class="headerlink" title="Change Color"></a>Change Color</h2><h2 id="Inset-Border"><a href="#Inset-Border" class="headerlink" title="Inset Border"></a>Inset Border</h2><p>To create an inset of border,</p>
-<pre><code>button: hover{
-  box-shadow: inset 0 0 0 5px #darkderColor;
-}
-</code></pre>
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -1923,7 +2018,7 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        303
+                        304
                     </p>
                 </div>
             </div>
@@ -2091,6 +2186,25 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2165,25 +2279,6 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2202,7 +2297,7 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -2551,6 +2646,25 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2625,25 +2739,6 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2662,7 +2757,7 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>

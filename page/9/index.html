@@ -148,6 +148,83 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-01-18T01:18:57.000Z">2017-01-18</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 240 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/01/18/stacking-context-e6-88-90-e5-9b-a0-e5-8f-8a-e7-89-b9-e6-80-a7/">Stacking Context 成因及特性</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="会形成Stacking-Context-的元素"><a href="#会形成Stacking-Context-的元素" class="headerlink" title="会形成Stacking Context 的元素"></a>会形成Stacking Context 的元素</h3><ul>
+<li>root 元素( html )<p></p></li>
+<li><p>position 不是 static 且 z-index 不是 auto 的元素</p>
+</li>
+<li><p>flex item 且 z-index 不是 auto 的元素</p>
+</li>
+<li><p>opacity 小于 1 的元素</p>
+</li>
+<li><p>transform 不是 none 的元素</p>
+</li>
+<li><p>mix-blend-mode 不是 normal 的元素</p>
+</li>
+<li><p>filter 不是 none 的元素</p>
+</li>
+<li><p>isolation 为 isolate 的元素</p>
+</li>
+<li><p>mobile webkit 和 chrome 22+ 上的 fixed 元素</p>
+</li>
+<li><p>在 will-change 属性上指定值为上述任意属性的元素</p>
+</li>
+<li><p>指定 -webkit-overflow-scrolling 为 touch 的元素</p>
+</li>
+</ul>
+<h3 id="Stacking-Context-的特性"><a href="#Stacking-Context-的特性" class="headerlink" title="Stacking Context 的特性"></a>Stacking Context 的特性</h3><ul>
+<li><p>stacking context 可以嵌套</p>
+</li>
+<li><p>每个 Stacking context 相对于兄弟元素都是完全独立的, 其内部规则不会影响到外部</p>
+</li>
+<li><p>每个 stacking context 元素都会被父级 stacking context 视为一个 stacking 规则</p>
+</li>
+</ul>
+<p></p><p>为已经定位的元素( absolute 或 relative) 指定 z-index 可以改变其 parent stacking context 中 z 的偏移量</p>
+<p>一个值得注意的坑: 如果一个元素不是通过absolute 或 relative 实现 stacking context, 那么他的 z-index 为 0 , 仅高于 auto, 且无法改变.</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2016-12-07T20:39:26.000Z">2016-12-08</time>
                 
                 <div class="level-item">
@@ -2312,70 +2389,6 @@ export default Header
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-09-04T05:36:46.000Z">2016-09-04</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    a minute read (About 182 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/09/04/redux-promise/">Redux-Promise</a>
-            
-        </h1>
-        <div class="content">
-            <pre><code>npm install --save redux-promise
-`&lt;/pre&gt;
-
-&lt;pre&gt;`import promiseMiddleWare from &apos;redux-promise&apos;
-`&lt;/pre&gt;
-
-The default export is a middleware function. If it receives a promise, it will dispatch the resolved value of the promise.
-
-It will not dispatch anything if the promise rejects.
-
-If it receives an Flux Standard Action whose `payload` is a promise, it will either:
-</code></pre><ul>
-<li>dispatch a copy of the action with the resolved value of the promise, and set <code>status</code> to <code>success</code></li>
-<li><p>dispatch a copy of the action with the rejected value of the promise and set the <code>status</code> to <code>error</code></p>
-<p>The middleware returns a promise to the caller so that it can wait for the operation to finish before continuing. This is especially useful for server-side rendering. If you find that a promise is not being returned, ensure that all middleware before it in the chain is also returning its <code>next()</code> call to the caller.</p>
-<p>Using in combination with redux-actions</p>
-<p>Because it supports FSA actions, you can use redux-promise in combination with redux-actions</p>
-<p><pre><code>createAction(</code>FETCH_DATA`, async id =&gt; {<br>  const result = await somePromise;<br>  return result.someValue<br>});</pre></p>
-</li>
-</ul>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2448,7 +2461,7 @@ If it receives an Flux Standard Action whose `payload` is a promise, it will eit
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        303
+                        304
                     </p>
                 </div>
             </div>
@@ -2616,6 +2629,25 @@ If it receives an Flux Standard Action whose `payload` is a promise, it will eit
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2690,25 +2722,6 @@ If it receives an Flux Standard Action whose `payload` is a promise, it will eit
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2727,7 +2740,7 @@ If it receives an Flux Standard Action whose `payload` is a promise, it will eit
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -3076,6 +3089,25 @@ If it receives an Flux Standard Action whose `payload` is a promise, it will eit
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -3150,25 +3182,6 @@ If it receives an Flux Standard Action whose `payload` is a promise, it will eit
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3187,7 +3200,7 @@ If it receives an Flux Standard Action whose `payload` is a promise, it will eit
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>

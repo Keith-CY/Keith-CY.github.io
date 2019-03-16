@@ -148,6 +148,69 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-05-08T04:49:30.000Z">2017-05-08</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    4 minutes read (About 529 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/05/08/Rxjs-API/">Rxjs API</a>
+            
+        </h1>
+        <div class="content">
+            <h1 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h1><p>You can create an Observable from scratch by using the <code>Create</code> operator. You pass this operator a function that accepts the observer as its parameter. Write this function so that it behaves as an Observable – by calling the observer’s <code>onNext</code>, <code>onError</code>, and <code>onCompleted</code> methods appropraitely.</p>
+<p>A well-formed finite Observable must attempt to call either the observer’s <code>onCompleted</code> method exactly once or its <code>onError</code> method exactly once, and must not thereafter attempt to call any of the observer’s other methods.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> source = Rx.Observable.create(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">observer</span>) </span>&#123;</span><br><span class="line">  observer.onNext(<span class="hljs-number">32</span>)</span><br><span class="line">  observer.onCompleted()</span><br><span class="line">  <span class="hljs-comment">// this is optional.</span></span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'disposed'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> subscription = source.subscribe(</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">x</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Next: '</span> + x)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Error: '</span> + err)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Completed'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h1 id="Defer"><a href="#Defer" class="headerlink" title="Defer"></a>Defer</h1><p>Do not create the Observable until the observer subscribes, and create a fresh Observable for each observer.</p>
+<p>The <code>Defer</code> operator waits until an observer subscribes to it, and then it generates an Observable, typically with an Observable factory function. It does this afresh for each subsciber, so although each subscriber may think it is subscribing to the same Observable, in fact each subscriber gets its own individual sequence.</p>
+<p>In some circumstances, waiting until the last minute to generate the Observable can ensure that this Observable contains the freshest data.]</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> source = Rx.Observable.defer(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">return</span> Rx.Observable.return(<span class="hljs-number">42</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> subscription = source.subscribe(</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">x</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Next: '</span> + x)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">err</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Error: '</span> + err)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Completed'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h1 id="Empty-Never-Throw"><a href="#Empty-Never-Throw" class="headerlink" title="Empty/Never/Throw"></a>Empty/Never/Throw</h1><p><code>Empty</code> create an Observable that emits no items but terminates normally</p>
+<p><code>Never</code> create an Observable that emits no items and does not terminates</p>
+<p><code>Throw</code> create an Observable that emits no items and terminates with an error</p>
+<p>The <code>Empty</code>, <code>Never</code>, <code>Throw</code> operators generate Observables with very specific and limited behavior. These are useful for testing purposes, and sometimes also for combining with other Observables or as parameters to operators that expect other Observables as parameters.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> source = Rx.Observable.empty()</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> source = Rx.Observable.never()</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">var</span> source = Rx.Observable.return(<span class="hljs-number">52</span>).selectMany(Rx.Observable.throw(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'error'</span>)))</span><br></pre></td></tr></table></figure>
+<h1 id="From"><a href="#From" class="headerlink" title="From"></a>From</h1><p>Convert various other objects and data types into Observables.</p>
+<p>When you work with Observables, it can be more convenient if all of the data you mean to work with can be represented as Observables, rather than as a mixture of Observables and other types. This allows you to use a single set of operators to govern the entire lifespan of the data stream.</p>
+<p>Iterables, for example, can be thought of as a sort of synchronous Observable; Futures, as a sort of Observable that always emits only a single item. By explicitly converting such objects to Observables, you allow them to interact as peers with other Observale.</p>
+<p>In RxJS, the <code>from</code> operator converts an <em>array-like</em> or <em>iterable</em> object into an Observable that emits the items in that array or iterable. A String, in this context, is treated as an array of characters.</p>
+<p>The operator also takes three additional, optional parameters:</p>
+<ul>
+<li><p>a transforming function that takes an item from the array or iterable as input and produces an item to be emmited by the resulting Observable as output</p>
+</li>
+<li><p>a second argument to pass into</p>
+</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-05-02T01:33:21.000Z">2017-05-02</time>
                 
                 
@@ -2104,83 +2167,6 @@ module.exports = {
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-01-18T01:18:57.000Z">2017-01-18</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 minutes read (About 240 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/01/18/stacking-context-e6-88-90-e5-9b-a0-e5-8f-8a-e7-89-b9-e6-80-a7/">Stacking Context 成因及特性</a>
-            
-        </h1>
-        <div class="content">
-            <h3 id="会形成Stacking-Context-的元素"><a href="#会形成Stacking-Context-的元素" class="headerlink" title="会形成Stacking Context 的元素"></a>会形成Stacking Context 的元素</h3><ul>
-<li>root 元素( html )<p></p></li>
-<li><p>position 不是 static 且 z-index 不是 auto 的元素</p>
-</li>
-<li><p>flex item 且 z-index 不是 auto 的元素</p>
-</li>
-<li><p>opacity 小于 1 的元素</p>
-</li>
-<li><p>transform 不是 none 的元素</p>
-</li>
-<li><p>mix-blend-mode 不是 normal 的元素</p>
-</li>
-<li><p>filter 不是 none 的元素</p>
-</li>
-<li><p>isolation 为 isolate 的元素</p>
-</li>
-<li><p>mobile webkit 和 chrome 22+ 上的 fixed 元素</p>
-</li>
-<li><p>在 will-change 属性上指定值为上述任意属性的元素</p>
-</li>
-<li><p>指定 -webkit-overflow-scrolling 为 touch 的元素</p>
-</li>
-</ul>
-<h3 id="Stacking-Context-的特性"><a href="#Stacking-Context-的特性" class="headerlink" title="Stacking Context 的特性"></a>Stacking Context 的特性</h3><ul>
-<li><p>stacking context 可以嵌套</p>
-</li>
-<li><p>每个 Stacking context 相对于兄弟元素都是完全独立的, 其内部规则不会影响到外部</p>
-</li>
-<li><p>每个 stacking context 元素都会被父级 stacking context 视为一个 stacking 规则</p>
-</li>
-</ul>
-<p></p><p>为已经定位的元素( absolute 或 relative) 指定 z-index 可以改变其 parent stacking context 中 z 的偏移量</p>
-<p>一个值得注意的坑: 如果一个元素不是通过absolute 或 relative 实现 stacking context, 那么他的 z-index 为 0 , 仅高于 auto, 且无法改变.</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2253,7 +2239,7 @@ module.exports = {
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        303
+                        304
                     </p>
                 </div>
             </div>
@@ -2421,6 +2407,25 @@ module.exports = {
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2495,25 +2500,6 @@ module.exports = {
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2532,7 +2518,7 @@ module.exports = {
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -2881,6 +2867,25 @@ module.exports = {
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2955,25 +2960,6 @@ module.exports = {
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2992,7 +2978,7 @@ module.exports = {
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>

@@ -148,6 +148,70 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-09-04T05:36:46.000Z">2016-09-04</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    a minute read (About 182 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/09/04/redux-promise/">Redux-Promise</a>
+            
+        </h1>
+        <div class="content">
+            <pre><code>npm install --save redux-promise
+`&lt;/pre&gt;
+
+&lt;pre&gt;`import promiseMiddleWare from &apos;redux-promise&apos;
+`&lt;/pre&gt;
+
+The default export is a middleware function. If it receives a promise, it will dispatch the resolved value of the promise.
+
+It will not dispatch anything if the promise rejects.
+
+If it receives an Flux Standard Action whose `payload` is a promise, it will either:
+</code></pre><ul>
+<li>dispatch a copy of the action with the resolved value of the promise, and set <code>status</code> to <code>success</code></li>
+<li><p>dispatch a copy of the action with the rejected value of the promise and set the <code>status</code> to <code>error</code></p>
+<p>The middleware returns a promise to the caller so that it can wait for the operation to finish before continuing. This is especially useful for server-side rendering. If you find that a promise is not being returned, ensure that all middleware before it in the chain is also returning its <code>next()</code> call to the caller.</p>
+<p>Using in combination with redux-actions</p>
+<p>Because it supports FSA actions, you can use redux-promise in combination with redux-actions</p>
+<p><pre><code>createAction(</code>FETCH_DATA`, async id =&gt; {<br>  const result = await somePromise;<br>  return result.someValue<br>});</pre></p>
+</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2016-09-04T05:22:47.000Z">2016-09-04</time>
                 
                 <div class="level-item">
@@ -3014,137 +3078,6 @@ HtmlWebpackPlugin
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-08-18T21:29:36.000Z">2016-08-19</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    10 minutes read (About 1442 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/08/19/immutablejs-introduction/">ImmutableJS Introduction</a>
-            
-        </h1>
-        <div class="content">
-            <p>Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logic. Persistent data presetns a mutative API which does not update the data in-place, but instead always yields new updated data.</p>
-<p>Immutable.js provides many Persistent Immutable data structures including: <code>List</code>, <code>Stack</code>, <code>Map</code>, <code>OrderedMap</code>, <code>Set</code>, <code>OrderedSet</code> and <code>Record</code>.</p>
-<p>These data structures are highly efficient on modern JavaScript VMs by using structural sharing via ‘hash maps tries’ and ‘vector tries’ as popularized by Clojure and Scala, minimizing the need to copy or cache data.</p>
-<p>Immutable also provides a lazy <code>Seq</code>, allowing efficient chaining of collection methods like <code>map</code> and <code>filter</code> without creating intermediate representations. Create some <code>Seq</code> with <code>Range</code> and <code>Repeat</code>.</p>
-<h3 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h3><p><code>npm install Immutable</code></p>
-<p><code>var Immutable = require(&#39;immutable&#39;);
-  var map1 = Immutable.Map({a:1,b:2,c:3});
-  var map2 = map1.set(&#39;b&#39;,50);
-  map1.get(&#39;b&#39;); //2
-  map2.get(&#39;b&#39;); //50</code></p>
-<h3 id="The-case-for-Immutability"><a href="#The-case-for-Immutability" class="headerlink" title="The case for Immutability"></a>The case for Immutability</h3><p>Much of what makes application development difficult is tracking mutation and maintaining state. Development with immutable data encourages you to think differently about how data flows through your application.</p>
-<p>Subscribing to data event throughout your application.</p>
-<p>Immutable data never change.</p>
-<p>Immutable collections should be treated as <em>value</em> rather than <em>object</em>. While objects represents some thing which could change over time, a value represents the state of that thing at a particular instance of time. This principle is most important to understanding the appropriate use of immutable data. In order to treat Immutable.js collections as values, it’s important to use the <strong>Immutable.is()</strong> function or <strong>.equals()</strong> method to determine value equality instead of <code>===</code> operator which determines object reference identity.</p>
-<p><code>var map1 = Immutable.Map({a:1,b:2,c:3});
-  var map2 = map1.set(&#39;b&#39;,2);
-  assert(map1.equals(map2) === true);
-  var map3 = map1.set(&#39;b&#39;,50);
-  assert(map1.equals(map3) === false);</code></p>
-<p><strong>Note</strong>: As a performance optimization <strong>Immutable</strong> attempts to return the existing collection when an operation would result in an identical collection, allowing for using <code>===</code> reference equality to determine if something definitely has not changed. This can be extremely useful when used within memoization function which would prefer to re-run the function if a deeper equality check could potentially be more costly. The <code>===</code> equality check is also used internally by <strong>Immutable.js</strong> and <code>equals()</code> as a performance as a performance optimization.</p>
-<p>If an object is immutable, it can <strong>be ‘copied’ simply by marking another reference</strong> to it instead of copying the entire object. Because a reference is much smaller than the object itself, this results in memory savings and a potential boost in execution speed for programs which rely on copies(such as an undo-stack).</p>
-<p><code>var map1 = Immutable.Map({&#39;a&#39;:1,&#39;b&#39;:2,&#39;c&#39;:3});
-  var clone = map1;</code></p>
-<h3 id="JavaScript-first-API"><a href="#JavaScript-first-API" class="headerlink" title="JavaScript-first API"></a>JavaScript-first API</h3><p>While <code>immutable</code> is inspired by Clojure, Scala, Haskell and other functional programming environments, it’s designed to bring these powerful concepts to JavaScript, and therefore has an Object-Oriented API that closely mirrors that of <strong>ES6 Array, Map, and Set</strong>.</p>
-<p>The difference for the immutable collections is that methods which would mutate the collection, like <code>push</code>, <code>set</code>, <code>unshift</code>, or <code>splice</code> instead of return a new immutable collection. Methods which return new array like <code>slice</code> or <code>concat</code> instead return new immutable collections.</p>
-<p><code>var list1 = Immutable.List.of(1,2);
-  var list2 = list1.push(3,4,5);
-  var list3 = list2.unshift(0);
-  var list4 = list1.concat(list2,list3);
-  assert(list1.size === 2);
-  assert(list2.size === 5);
-  assert(list3.size === 6);
-  assert(list4.size === 13);
-  assert(list4.get(0) === 1);</code></p>
-<p>Almost all of the methods on <strong>Array</strong> will be found in similar form on <strong>Immutable.List</strong>, those of <strong>Map</strong> found on <strong>Immutable.Map</strong> and those of <strong>Set</strong> found on<strong>Immutable.Set</strong>, including collection operation like <strong>forEach()</strong>, and <strong>map()</strong>.</p>
-<p><code>var alpha = Immutable.Map({a:1,b:2,c:3,d:4});
-  alpha.map((v,k) =&amp;gt; k.toUpperCase()).join();
-  // &#39;A,B,C,D&#39;</code></p>
-<h3 id="Accepts-raw-JavaScript-objects"><a href="#Accepts-raw-JavaScript-objects" class="headerlink" title="Accepts raw JavaScript objects"></a>Accepts raw JavaScript objects</h3><p>  ‘immutable’ accepts plain JavaScript Arrays and Objects anywhere a mehtod expects an <strong>Iterable</strong> with no performance penalty.</p>
-<p><code>var map1 = Immutable.Map({a:1,b:2,c:3,d:4});
-  var map2 = Immutable.Map({c:10,a:20,t:30});
-  var obj = {d:100,o:200,g:300};
-  var map3 = map1.merge(map2,obj);
-  // Map {a:20,b2,c:10,d:100,t:30,o:200,g:300}</code></p>
-<p><strong>Immutable</strong> can treat any JavaScript Array or Object as an Iterable. You can take advantage of this in order to get sophisticated collection methods on JavaScript Objects, which otherwise have a very sparse native API.</p>
-<p><code>var myObject = {a:1,b:2,c:3};
-  Immutable.Seq(myObject).map(x=&amp;gt;x*x).toObject();
-  // {a:1,b:4,c:9};</code></p>
-<p>Keep in Mind, when using JS objects to construct Immutable Maps, that JS Object properties are always <strong>strings</strong>, even if written in a quote-less shorthand, while Immutable Map accept keys of any type.</p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  var obj = &#123;1: &amp;#039;one&amp;#039;&#125;;</span><br><span class="line">  Object.keys(obj); // [&amp;#039;1&amp;#039;]</span><br><span class="line">  obj[1]; // &amp;#039;one&amp;#039;</span><br><span class="line">  obj[&amp;#039;1&amp;#039;]; // &amp;#039;one&amp;#039;</span><br><span class="line"></span><br><span class="line">var map = Immutable.fromJS(obj);</span><br><span class="line">  map.get(&amp;#039;1&amp;#039;); // &amp;#039;one&amp;#039;</span><br><span class="line">  map.get(1); // undefined</span><br></pre></td></tr></table></figure>
-<p>Property access for JS Object first converts the key to a string, but since Immutable Map keys can be of any type the argument to <code>get()</code> is not altered.<br>  Namely Immutable Map will treat ‘1’ and 1 differently.</p>
-<h3 id="Converts-Back-to-Raw-JS-Obejcts"><a href="#Converts-Back-to-Raw-JS-Obejcts" class="headerlink" title="Converts Back to Raw JS Obejcts"></a>Converts Back to Raw JS Obejcts</h3><p>  All <strong>Immutable</strong> Iterable can be converted to plain JS Arrays and Objects shallowly with <code>toArray()</code> and <code>toObject()</code> or deeply with <code>toJS()</code>. All Immutable Iterables also implement <code>toJSON()</code> allowing them to be passed to <code>JSON.stringify()</code> directly.</p>
-<p><code>var deep = Immutable.Map({a:1,b:2,c:Immutable.List.of(3,4,5)});
-  deep.toObject() // {a:1,b:2,c:List [3,4,5]}
-  deep.toArray() // [1,2,List [3,4,5]]
-  deep.toJS() // {a:1,b:2,c:[3,4,5]}
-  JSON.stringify(deep) // &#39;{&quot;a&quot;:1,&quot;b&quot;,&quot;c&quot;:[3,4,5]}&#39;</code></p>
-<h3 id="Embraces-ES6"><a href="#Embraces-ES6" class="headerlink" title="Embraces ES6"></a>Embraces ES6</h3><p>  <code>Immutable</code> takes advantage of features added to JS ES6, the latest standard version of ECMAScript, including <code>Interators</code>,<code>Arrow Function</code>, <code>Classes</code>, and <code>Modules</code>.</p>
-<h3 id="Nested-Structures"><a href="#Nested-Structures" class="headerlink" title="Nested Structures"></a>Nested Structures</h3><p>The collections in <code>immutable</code> are intended to be nested, allowing for deep trees of data, similar to JSON</p>
-<p><code>var nested = Immutable.fromJS({a:{b:{c:[3,4,5]}}})
-  // Map{ a: Map { b: Map { c: List [3,4,5]}}}</code><br>  A few power-tool allow for reading and operating on nested data. The most useful are <code>mergeDeep</code>, <code>getIn</code>, <code>setIn</code> and <code>updateIn</code> found on <code>List</code>, <code>Map</code> and <code>OrderedMap</code></p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  var nested2 = nested.mergeDeep(&#123;a:&#123;b:&#123;d:6&#125;&#125;&#125;)</span><br><span class="line">  // Map &#123;a: Map &#123; b: &#123; c: List [3,4,5], d: 6&#125;&#125;&#125;</span><br><span class="line"></span><br><span class="line">nested2.getIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;]); //6</span><br><span class="line"></span><br><span class="line">var nested3 = nested2.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;], value =&amp;gt; value + 1); d =&amp;gt; 7</span><br><span class="line"></span><br><span class="line">var nest4 = nested3.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;c&amp;#039;], list =&amp;gt; list.push(6)); c =&amp;gt; List [3,4,5,6]</span><br></pre></td></tr></table></figure>
-<h3 id="Lazy-Seq"><a href="#Lazy-Seq" class="headerlink" title="Lazy Seq"></a>Lazy Seq</h3><p>  <strong>Seq</strong> describes a lazy operation, allowing them to efficiently chain use all the Iterable methods.(such as map and filter)</p>
-<p><strong>Seq is immutable</strong> – Once a Seq is created it cannot be changed, appended to, rerranged or otherwise modified. Instead, any mutative method called on a Seq will return a new Seq.</p>
-<p><strong>Seq is lazy</strong> – Seq does as little work as necessary to respond to any method call.</p>
-<p>Once the Seq is used, it performs only the work necessary.</p>
-<p>Any collection can be converted to a lazy Seq with <code>toSeq()</code>.</p>
-<p><code>var seq = Immutable.Map({a:1,b:2,c:3}).toSeq();</code></p>
-<p>Seq allow for the efficient chaining of sequence operations, especially when converting to a different concrete type(such as to a JS Object)</p>
-<p><code>seq.flip().map(k =&amp;gt; k.toUpperCase()).flip().toObject();
-  // Map {A: 1, B:2, C:3}</code></p>
-<h3 id="Equality-treats-Collection-as-Data"><a href="#Equality-treats-Collection-as-Data" class="headerlink" title="Equality treats Collection as Data"></a>Equality treats Collection as Data</h3><p><strong>Immutable</strong> provides equality which treats immutable data structures as pure data, performing a deep equality check if necessary.</p>
-<p><code>var map1 = Immutable.Map({a:1,b:1,c:1});
-  var map2 = Immutable.Map({a:1,b:1,c:1});
-  assert(map1 !== map2) // two different instance, not same address
-  assert(Immutable.is(map1,map2)); // have equivalent values
-  assert(map1.equals(map2)); // alternatively use the equals methods.</code></p>
-<p><strong>Immutable.is()</strong> uses the same measure of equality as <strong>Object.is</strong> including if both are immutable and all keys and values are equal using the same measure of equality.</p>
-<h3 id="Batching-Mutations"><a href="#Batching-Mutations" class="headerlink" title="Batching Mutations"></a>Batching Mutations</h3><p>  Applying a mutation to create a new immutable object results in some overhead, which can add up to a minor performance penalty. If you need to apply a series of mutations locally before returning, <strong>Immutable</strong> gives you the ability to create a temporary mutable(transient) copy of a collection and apply a batch of mutations in a performance manner by using <code>withMutations</code>. In fact, this is exactly how <code>Immutable</code> applies complex mutations itself.</p>
-<p>As an example, building <code>list2</code> results in the creation of 1 , not 3, new immutable Lists<br>  <code>var list1 = Immutable.List.of(1,2,3);
-  var list2 = list1.withMutations(function(list){
-    list.push(4).push(5).push(6)
-  });
-  assert(list1.size === 3);
-  assert(list2.size === 6);</code></p>
-<p><strong>Note</strong>: <strong>Immutable</strong> also provides <code>asMutable</code> and <code>asImmutable</code>, but only encourages their use when <code>withMutations</code> will not suffice. Use caution to not return a mutable copy could result in undesired behavior.</p>
-<p><strong>important</strong>: Only a select few method can be used in <code>withMutations</code> including <code>set</code>, <code>push</code>, <code>pop</code>. These methods can be applied directly against a persistent data-structure where other methods like <code>map</code>,<code>filter</code>,<code>sort</code>and <code>splice</code> will always return new immutable data-structure and never mutate a mutable collection.</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -3217,7 +3150,7 @@ HtmlWebpackPlugin
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        303
+                        304
                     </p>
                 </div>
             </div>
@@ -3385,6 +3318,25 @@ HtmlWebpackPlugin
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -3459,25 +3411,6 @@ HtmlWebpackPlugin
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3496,7 +3429,7 @@ HtmlWebpackPlugin
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -3845,6 +3778,25 @@ HtmlWebpackPlugin
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -3919,25 +3871,6 @@ HtmlWebpackPlugin
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3956,7 +3889,7 @@ HtmlWebpackPlugin
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>

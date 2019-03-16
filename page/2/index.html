@@ -148,6 +148,76 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-03-05T06:30:17.000Z">2018-03-05</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 minutes read (About 812 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/">Writing Upgradable Contracts in Solidity</a>
+            
+        </h1>
+        <div class="content">
+            <p><a href="https://blog.colony.io/writing-upgradeable-contracts-in-solidity-6743f0eecc88" target="_blank" rel="noopener">origin</a></p>
+<p>Ethereum contracts are immutable – once deployed to the blockchain they cannot be updated, yet the need to change their logic with time is ultimately necessary.</p>
+<p>During a contract upgrade the following factors need to be considered:</p>
+<ul>
+<li><p>Block gas limit(4712388 for Homestead)</p>
+<p>Upgrade transaction tend to be large due to the amount of processing they have to complete e.g. <em>deploy a contract, move data, move references</em>.</p>
+</li>
+<li><p>Inter-contract dependencies</p>
+<p><em>when a contract is compiled, all of its imports are compiled into the contract thus leading to a ripple effect when you want to swap out a contract which is being referenced by other contract</em>.</p>
+</li>
+</ul>
+<p>These two are related, as having more dependencies affects the size of your deployed contracts and the overall transaction size of the upgrade. The implementation patterns below work to <em>minimise the upgrade gas costs as well as loosening the coupling of contracts without breaking Solidity type safety</em>.</p>
+<p>Note that for the sake of simplying the examples, we have omitted the implementation of security and permission.</p>
+<h3 id="Avoiding-large-data-copy-operations"><a href="#Avoiding-large-data-copy-operations" class="headerlink" title="Avoiding large data copy operations"></a>Avoiding large data copy operations</h3><p>Storing data is expensive(<code>SSTORE</code> operation costs 5000 or 20000 gas) and upgrading contracts containing large storage variables runs the chance of hitting the transaction gas limit during the copying of its data.</p>
+<p><strong>You may therefore want to isolate your datastore from the rest of your code, and make it as flexible as possible, so that it is unlikely to need to be upgrade.</strong></p>
+<p>Depending on your circumstances, how large of a datastore you need and whether you expect its structure to change often, you may choose a strict definition or a loosely typed flat store. Below is an example of the latter which implements support for storing a <em>sha3</em> key and value pairs. It is the more flexible and extensible option. This ensures data schema changes can be implemented without requiring upgrades to the storage contract.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">contract EternalStorage &#123;</span><br><span class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> uint) UIntStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getUIntValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> UIntStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setUIntValue</span>(<span class="hljs-params">bytes32 record, uint value</span>) </span>&#123;</span><br><span class="line">    UIntStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> string) StringStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getStringValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> StringStorage(record);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setStringValue</span>(<span class="hljs-params">bytes32 record, string value</span>) </span>&#123;</span><br><span class="line">    StringStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> address) AddressStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getAddressValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> AddressStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setAddressValue</span>(<span class="hljs-params">bytes32 record, address value</span>) </span>&#123;</span><br><span class="line">    AddressStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> bytes) BytesStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBytesValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> BytesStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setBytesValue</span>(<span class="hljs-params">bytes32 record, bytes value</span>) </span>&#123;</span><br><span class="line">    BytesStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping (<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> bool) BooleanStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBooleanValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> BooleanStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setBooleanValue</span>(<span class="hljs-params">bytes32 record, bool value</span>) </span>&#123;</span><br><span class="line">    BooleanStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping (<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> int) IntStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getIntValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">int</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> IntStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setIntValue</span>(<span class="hljs-params">bytes32 record, int value</span>) </span>&#123;</span><br><span class="line">    IntStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>For upgrades you can then just switch the upgraded contract to point to the new EternalStorage contract instance without having a copy of its data.</p>
+<h3 id="Use-Libraries-to-Encapsulate-Logic"><a href="#Use-Libraries-to-Encapsulate-Logic" class="headerlink" title="Use Libraries to Encapsulate Logic"></a>Use Libraries to Encapsulate Logic</h3><p>Libraries are special form of contracts that are singletons and not allowed any storage variables.</p>
+<p>The advantage of libraries in the context of upgrades is that they allow encapsulation of business logic or data management logic into singleton instance that cost only upgrading one and not many contracts.</p>
+<p>Example below shows a library used for adding a <em>Proposal</em> to storage.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"EternalStorage.sol"</span>;</span><br><span class="line"></span><br><span class="line">library ProposalsLibrary &#123;</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getProposalCount</span>(<span class="hljs-params">address _storageContract</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> EternalStorage(_storageContract).getUIntValue(sha3(<span class="hljs-string">"proposalCount"</span>));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addProposal</span>(<span class="hljs-params">address _storageContract, bytes32 _name</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">var</span> idx = getProposalCount(_storageContract);</span><br><span class="line">    EternalStorage(_storageContract).setBytes32Value(sha3(<span class="hljs-string">"proposal_name"</span>, idx), _name);</span><br><span class="line">    EternalStorage(_storageContract).setUIntValue(sha3(<span class="hljs-string">"proposal_eth"</span>, idx), <span class="hljs-number">0</span>);</span><br><span class="line">    EternalStorage(_storageContract).setUIntValue(sha3(<span class="hljs-string">"ProposalCount"</span>), idx + <span class="hljs-number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Under the cover, library functions are called using <code>delegatecall</code> from the calling contract which has the advantage of passing the <code>msg.sender</code> and <code>msg.value</code> seamlessly. You can therefore write your library code as if it were just part of your contract, without having to worry about the sender or value chagning.</p>
+<p>The example below shows a sample <code>Organization</code> contract using <code>ProposalsLibrary</code> to interact with data storage.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"ProposalsLibrary.sol"</span>;</span><br><span class="line"></span><br><span class="line">contract Organization &#123;</span><br><span class="line">  using ProposalsLibrary <span class="hljs-keyword">for</span> address;</span><br><span class="line">  address public eternalStorage;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Organization</span>(<span class="hljs-params">address _eternalStorage</span>) </span>&#123;</span><br><span class="line">    eternalStorage = _eternalStorage;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addProposal</span>(<span class="hljs-params">bytes32 _name</span>) </span>&#123;</span><br><span class="line">    eternalStorage.addProposal(_name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>With libraries, there is a slight gas overhead on each call. However, it makes deploying a new contract much cheaper.</p>
+<h3 id="Use-‘interface’-to-decouple-inter-contract-communication"><a href="#Use-‘interface’-to-decouple-inter-contract-communication" class="headerlink" title="Use ‘interface’ to decouple inter-contract communication"></a>Use ‘interface’ to decouple inter-contract communication</h3><p>Abstract Contract implementation behind an interface that only define its function siguatures.</p>
+<p>This is a well known pattern in object oriented programming.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"ITokenLedger.sol"</span>;</span><br><span class="line"></span><br><span class="line">contract Organization &#123;</span><br><span class="line">  ITokenLedger public tokenLedger;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Organization</span>(<span class="hljs-params">address _tokenLedger</span>) </span>&#123;</span><br><span class="line">    tokenLedger = ITokenLedger(_tokenLedger);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">generateToekns</span>(<span class="hljs-params">uint256 _amount</span>) </span>&#123;</span><br><span class="line">    tokenLedger.generateTokens(_amount);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Here instead of importing the entire <code>TokenLedger.sol</code> contract, we use an interface containing just the function signatures. This eases any possible upgrades to TokenLedger which don’t affect its interface, too, which with this model can be implemented without redeploying the Organization contract.</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-02-28T03:32:11.000Z">2018-02-28</time>
                 
                 
@@ -1663,69 +1733,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-07T01:43:53.000Z">2017-11-07</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 minutes read (About 772 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/11/07/HTTP-2-by-Node-js/">HTTP/2 by Node.js</a>
-            
-        </h1>
-        <div class="content">
-            <p><a href="https://dexecure.com/blog/how-to-create-http2-static-file-server-nodejs-with-examples/" target="_blank" rel="noopener">Origin</a></p>
-<p>Websites delivered using HTTP/2 enjoys a wide range of new features including -</p>
-<ul>
-<li><p>fully multiplexed connections: all requests and responses to a domain are fully multiplexed via a single connection, making best use of available bandwidth.</p>
-</li>
-<li><p>header compression: repeated headers are compressed with HPACK compression so that they are not resent with every request and response.</p>
-</li>
-<li><p>PUSH: resources can be pre-emptively pushed by the server to the client, speeding up page load times.</p>
-</li>
-</ul>
-<p>Node.js just launched support(v8.8.1) for HTTP/2 as part of their core. In this post, we will create a simple HTTP/2 server to serve static files and then demonstrate some cool features like HTTP/2 PUSH.</p>
-<h3 id="Get-an-SSL-certificate"><a href="#Get-an-SSL-certificate" class="headerlink" title="Get an SSL certificate"></a>Get an SSL certificate</h3><p>Even though the HTTP/2 spec does not mandate HTTPS, browsers have decided that they will only support HTTP/2 on a HTTPS connection. This would also mitigate interference from older proxies which may not understand newer protocol.</p>
-<p>For your local server, a self-signed certificate will work. You can find how to setup a self-signed certificate <a href="https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-16-04" target="_blank" rel="noopener">here</a></p>
-<h3 id="Building-a-Static-File-Server"><a href="#Building-a-Static-File-Server" class="headerlink" title="Building a Static File Server"></a>Building a Static File Server</h3><p>Let us start with a simple server which just serves static files. Note that if you are using node.js 8.7.0, you need to run node with the <code>--expose-http2</code> flag.</p>
-<p>We will be listening to the <code>stream</code> event and responding to it with the corresponding file from the server root(public, in this case) using the <code>respondWithFile</code> API. We are using the <code>mime-type</code> module to look up the correct mime type to send along with the response.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> http2 = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http2'</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> mime = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mime-types'</span>)</span><br><span class="line"></span><br><span class="line">cosnt &#123;</span><br><span class="line">  HTTP2_HEADER_PATH,</span><br><span class="line">  HTTP2_HEADER_METHOD,</span><br><span class="line">  HTTP_STATUS_NOT_FOUND,</span><br><span class="line">  HTTP_STATUS_INTERNAL_SERVER_ERROR</span><br><span class="line">&#125; = http2.constants</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> options = &#123;</span><br><span class="line">  key: fs.readFileSync(<span class="hljs-string">'./selfsigned.key'</span>),</span><br><span class="line">  cert: fs.readFileSync(<span class="hljs-string">'./selfsigned.crt'</span>),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> server = http2.createSecureServer(options)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> serverRoot = <span class="hljs-string">'./public'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">respondToStreamError</span>(<span class="hljs-params">err, stream</span>) </span>&#123;</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(err)</span><br><span class="line">  <span class="hljs-keyword">if</span> (err.code === <span class="hljs-string">'ENOENT'</span>) &#123;</span><br><span class="line">    stream.respond(&#123;</span><br><span class="line">      <span class="hljs-string">':stats'</span>: HTTPS_STATUS_NOT_FOUND,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">    stream.respond(&#123;</span><br><span class="line">      <span class="hljs-string">':status'</span>: HTTP_STATUS_INTERNAL_SERVER_ERROR,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  stream.end()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server.on(<span class="hljs-string">'stream'</span>, (stream, headers) =&gt; &#123;</span><br><span class="line">  <span class="hljs-keyword">const</span> reqPath = headers[HTTP2_HEADER_PATH]</span><br><span class="line">  <span class="hljs-keyword">const</span> reqMethod = headers[HTTP2_METHOD]</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">const</span> fullPath = path.join(serverRoot, reqPath)</span><br><span class="line">  <span class="hljs-keyword">const</span> responseMimeType = mime.lookup(fullPath)</span><br><span class="line"></span><br><span class="line">  stream.respondWithFile(fullPath, &#123;</span><br><span class="line">    <span class="hljs-string">'content-type'</span>: responseMimeType</span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    onError: <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> respondToStreamError(err, stream)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="hljs-number">443</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="Server-PUSH-Example"><a href="#Server-PUSH-Example" class="headerlink" title="Server PUSH Example"></a>Server PUSH Example</h3><p>Now we have simpel HTTP/2 server running, lets try to use one of the new featues in HTTP/2 - HTTP/2 PUSH. This can lead to significant performance improvements in high latency environments, if done correctly.</p>
-<p>We are loading a simple HTML file pointing to style.css which references to our font file. The request to the font file is only made after css file is discovered in the HTML, downloaded and then parsed. This is how the waterfall would have usually looked like:</p>
-<p><img src="https://dexecure.com//images/blog/waterfall-without-http2.53b722f2.png" alt=""></p>
-<p>You can initate a new PUSH with the <code>pushStream</code> API. Since we know that the browser is going to be requesting the font file in the future, we can PUSH the font file as soon as the server receives the request for the HTML file.</p>
-<p>When the actual request for the font file takes place, it is claimed from the PUSH cache, instead of making a network request then.</p>
-<p><img src="https://dexecure.com//images/blog/waterfall-with-http2.b47218ea.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> http2 = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http2'</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fs'</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> path = <span class="hljs-built_in">require</span>(<span class="hljs-string">'path'</span>)</span><br><span class="line"><span class="hljs-keyword">const</span> mime = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mime-types'</span>)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> &#123;</span><br><span class="line">  HTTP2_HEADER_PATH,</span><br><span class="line">  HTTP2_HEADER_METHOD,</span><br><span class="line">  HTTP_STATUS_NOT_FOUND,</span><br><span class="line">  HTTP_STATUS_INTERNAL_SERVER_ERROR,</span><br><span class="line">&#125; = http2.constants</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> options = &#123;</span><br><span class="line">  key: fs.readFileSync(<span class="hljs-string">'./selfsigned.key'</span>),</span><br><span class="line">  cert: fs.readFileSync(<span class="hljs-string">'./selfsigned.crt'</span>),</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> server = http2.createSecureServer(options)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> serverRoot = <span class="hljs-string">'./public'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">respondToStreamError</span> (<span class="hljs-params">err, stream</span>) </span>&#123;</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(err)</span><br><span class="line">  <span class="hljs-keyword">if</span> (err.code === <span class="hljs-string">'ENOENT'</span>) &#123;</span><br><span class="line">    stream.respond(&#123;</span><br><span class="line">      <span class="hljs-string">':status'</span>: HTTP_STATUS_NOT_FOUND,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">    stream.respond(&#123;</span><br><span class="line">      <span class="hljs-string">':status'</span>: HTTP_STATUS_INTERNAL_SERVER_ERROR,</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  stream.end()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server.on(<span class="hljs-string">'stream'</span>, (stream, headers) =&gt; &#123;</span><br><span class="line">  <span class="hljs-keyword">const</span> reqPath = headers[HTTP2_HEADER_PATH]</span><br><span class="line">  <span class="hljs-keyword">const</span> reqMethod = headers[HTTP2_HEADER_METHOD]</span><br><span class="line">  <span class="hljs-keyword">const</span> fullPath = path.join(serverRoot, reqPath)</span><br><span class="line">  <span class="hljs-keyword">const</span> responseMimeType = mime.lookup(fullPath)</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">if</span> (fullPath.endsWith(<span class="hljs-string">'.html'</span>)) &#123;</span><br><span class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'html'</span>)</span><br><span class="line">    <span class="hljs-comment">// handle the html file</span></span><br><span class="line">    stream.respondWithFile(fullPath, &#123;</span><br><span class="line">      <span class="hljs-string">'content-type'</span>: <span class="hljs-string">'text/html'</span></span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      onError: <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        respondToStreamError(err, stream)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    stream.pushStream(&#123;</span><br><span class="line">      <span class="hljs-string">':path'</span>: <span class="hljs-string">'/font.woff'</span></span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      parent: stream.id,</span><br><span class="line">    &#125;, pushStream =&gt; &#123;</span><br><span class="line">      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'pushing'</span>)</span><br><span class="line">      pushStream.respondWithFile(path.join(serverRoot, <span class="hljs-string">'/font.woff'</span>), &#123;</span><br><span class="line">        <span class="hljs-string">'content-type'</span>: <span class="hljs-string">'text/css'</span>,</span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        onError: <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> &#123;</span><br><span class="line">          respondToStreamError(err, pushStream)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">    <span class="hljs-comment">// handle the static file</span></span><br><span class="line">    <span class="hljs-built_in">console</span>.log(fullPath)</span><br><span class="line">    stream.respondWithFile(fullPath, &#123;</span><br><span class="line">      <span class="hljs-string">'content-type'</span>: responseMimeType,</span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      onError: <span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> respondToStreamError(err, stream)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="hljs-number">443</span>)</span><br></pre></td></tr></table></figure>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -1794,7 +1801,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        303
+                        304
                     </p>
                 </div>
             </div>
@@ -1962,6 +1969,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2036,25 +2062,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2073,7 +2080,7 @@
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -2422,6 +2429,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2496,25 +2522,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2533,7 +2540,7 @@
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>

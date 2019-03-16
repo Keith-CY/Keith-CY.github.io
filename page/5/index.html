@@ -148,6 +148,94 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-08-17T03:23:44.000Z">2017-08-17</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    7 minutes read (About 987 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/08/17/Advanced-Topics-of-TS/">Advanced Topics of TS</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="Iterators-and-Generators"><a href="#Iterators-and-Generators" class="headerlink" title="Iterators and Generators"></a>Iterators and Generators</h3><p>Iterators are basically objects that can be hold more than one item. Iterators are collections of objects or variables or items that can be iterated on to do some sort of processing on each item in the collection. Arrays are an exmaple of iterators.</p>
+<p>In TypeScript, an object is demmed iterable if it has an implementation for <code>Symbol.iterator</code> property. Some built-in types like <strong>Array, Map, Set, String, Int32Array</strong>, etc. have their <code>Symbol.iterator</code> property already implemented.</p>
+<p><code>Symbol.iterator</code> function on an object is responsible for returning the list of values to iterate on.</p>
+<p><code>for...of...</code> statements</p>
+<p><code>for...of...</code> loops over an iterable object will invoke the <code>Symbol.iterable</code> property on the object.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">let</span> someArray = [<span class="hljs-number">1</span>, <span class="hljs-string">'string'</span>, <span class="hljs-literal">false</span>]</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> entry <span class="hljs-keyword">of</span> someArray) &#123;</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(entry) <span class="hljs-comment">// 1, 'string', false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Intersection-Types"><a href="#Intersection-Types" class="headerlink" title="Intersection Types"></a>Intersection Types</h3><p>An intersection type combines multiple types into one. This is allows you to add together existing types to get a single type that has all the features you need.</p>
+<h4 id="Union-Types"><a href="#Union-Types" class="headerlink" title="Union Types"></a>Union Types</h4><p>Union Types are closely related to intersection types, but they are used very differently. Occasionally, you’ll run into a library that expects a parameter to be either a <code>number</code> or a <code>string</code>.</p>
+<h3 id="Type-Guards"><a href="#Type-Guards" class="headerlink" title="Type Guards"></a>Type Guards</h3><p>Union Types are useful for modeling situations when values can overlap in the types they can take on.</p>
+<p>TypeScript has what is called a <code>type guard</code>.</p>
+<p>A type guard is some expression that performs a runtime check that guarantees the type in some scope. To define a type guard, we simply need to define a function whose return type is a <code>type predicate</code>.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isFish</span>(<span class="hljs-params">pet: Fish | Bird</span>): <span class="hljs-title">pet</span> <span class="hljs-title">is</span> <span class="hljs-title">Fish</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">return</span> (&lt;Fish&gt;pet).swim !== undefined</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>pet is Fish</code> is our type predicate in this example. A predicate takes the form <code>parameterName is Type</code>, where <code>parameterName</code> must be the name of a parameter from the current function signature.</p>
+<p>Any time <code>isFish</code> is called with some variable, TypeScript will <code>narrow</code> that variable to that specific type if the original type is compatible.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">if</span> (isFish(pet)) &#123;</span><br><span class="line">  pet.swim()</span><br><span class="line">&#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">  pet.fly()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Notice that TypeScript not only knows that <code>pet is Fish</code> in the if branch, it also knows that in the else branch you <strong>don’t</strong> have a fish, so you must have a <code>Bird</code>.</p>
+<h4 id="typeof-type-guards"><a href="#typeof-type-guards" class="headerlink" title="typeof type guards"></a><code>typeof</code> type guards</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isNumber</span>(<span class="hljs-params">x: any</span>): <span class="hljs-title">x</span> <span class="hljs-title">is</span> <span class="hljs-title">number</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> x === <span class="hljs-string">'number'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isString</span>(<span class="hljs-params">x: any</span>): <span class="hljs-title">x</span> <span class="hljs-title">is</span> <span class="hljs-title">string</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> x === <span class="hljs-string">'string'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">padLeft</span>(<span class="hljs-params">value: string, padding: string | number</span>) </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (isNumber(padding)) &#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-built_in">Array</span>(padding + <span class="hljs-number">1</span>).join(<span class="hljs-string">' '</span>) + value</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="hljs-keyword">if</span> (isString(padding)) &#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> padding + value</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`Expected string or number, got <span class="hljs-subst">$&#123;padding&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>However, having to define a functino to figure out if a typeis a primitive is kind of a pain.</p>
+<p>TypeScript will recognize <code>typeof x === &#39;number&#39;</code> as a type guard on its own. This means we could just write checks inline.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">padLeft</span> (<span class="hljs-params">value: string, padding: number | string </span>) </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> padding === <span class="hljs-string">'number'</span>) &#123;</span><br><span class="line">    <span class="hljs-comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> padding === <span class="hljs-string">'string'</span>) &#123;</span><br><span class="line">    <span class="hljs-comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`Expected string or number, got <span class="hljs-subst">$&#123;padding&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>These <code>typeof</code> <em>type guards</em> are recognized in two different forms: <code>typeof v === &#39;typename&#39;</code> and <code>typeof v !== &#39;typename&#39;</code>.</p>
+<h4 id="instanceof-type-guards"><a href="#instanceof-type-guards" class="headerlink" title="instanceof type guards"></a><code>instanceof</code> type guards</h4><p><code>instanceof</code> <em>type guards</em> are a way of narrowing types using their constructor function.</p>
+<p>The right side of the <code>instanceof</code> needs to be a constructor function, and TypeScript narrow down to:</p>
+<ul>
+<li><p>the type of the function’s <code>prototype</code> property if its type is not any.</p>
+</li>
+<li><p>the union of types returned by that type’s construct signatures.</p>
+</li>
+</ul>
+<p>in that order.</p>
+<h3 id="Generics"><a href="#Generics" class="headerlink" title="Generics"></a>Generics</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">identity</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params">arg: T</span>): <span class="hljs-title">T</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">return</span> arg</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>We add a type variable <code>T</code> to the identity function. This T allows us to capture the type the user of the code provides, so that we can use that information later.</p>
+<p>We say that this version of the <code>identity</code> function is generic, as it works over a range of types.</p>
+<p>Once we’ve written the generic identity function, we can call it in one of two ways.</p>
+<p>The first way is to pass all of the arguments, including the type argument, to the function.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">let</span> output = identity&lt;string&gt;(<span class="hljs-string">'myString'</span>); <span class="hljs-comment">// type of output will be string</span></span><br></pre></td></tr></table></figure>
+<p>Here we explicitly set T to be <code>string</code> as one of the arguments to the function call, denoted using <code>&lt;&gt;</code> around the arguments rather than ().</p>
+<p>The second way is also perphaps the most common. Here we use <em>type argument inference</em> – that is, we want the compiler to set the value of T for us automatically based on the type of the argument we pass in.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">let</span> output = identity(<span class="hljs-string">'myString'</span>); <span class="hljs-comment">// type of output will be 'string'</span></span><br></pre></td></tr></table></figure>
+<h4 id="Working-with-Generic-Type-Variables"><a href="#Working-with-Generic-Type-Variables" class="headerlink" title="Working with Generic Type Variables"></a>Working with Generic Type Variables</h4><p>When you begin to use generics, you’ll notice that when you create generic functinos like <code>identity</code>, the compiler will enfore that you use any generically typed parameters in the body of the function correctly.</p>
+<h4 id="Generic-Types"><a href="#Generic-Types" class="headerlink" title="Generic Types"></a>Generic Types</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">identity</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params">arg: T</span>): <span class="hljs-title">T</span> </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">return</span> arg;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> myIdentity: &lt;T&gt;(arg: T) =&gt; T = identity</span><br><span class="line"></span><br><span class="line">// we can also write the generic type as a call signature of an object literal type:</span><br><span class="line"></span><br><span class="line">let myIdentity: &#123;&lt;T&gt;(arg: T) : T&#125; = identity</span><br><span class="line"></span><br><span class="line">interface GenericIdentityFn &#123;</span><br><span class="line">  &lt;T&gt;(arg: T): T</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// or</span><br><span class="line"></span><br><span class="line">interface GenericIdentityFn&lt;T&gt; &#123;</span><br><span class="line">  (arg: T): T</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let myIdentity: GenericIdentityFn&lt;number&gt; = identity</span><br></pre></td></tr></table></figure>
+<h4 id="Generic-Classes"><a href="#Generic-Classes" class="headerlink" title="Generic Classes"></a>Generic Classes</h4><p>A generic class has a similar shape to a generic interface.</p>
+<p>Generic classes have a generic type parameter list in angle brackets(&lt;&gt;) following the name of the class.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GenericNumber</span>&lt;<span class="hljs-title">T</span>&gt; </span>&#123;</span><br><span class="line">  zeroValue: T;</span><br><span class="line">  add: <span class="hljs-function">(<span class="hljs-params">x: T, y: T</span>) =&gt;</span> T;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">let</span> myGenericNumber = <span class="hljs-keyword">new</span> GenericNumber&lt;number&gt;()</span><br></pre></td></tr></table></figure>
+<p>Generic classes are only generic over their instance side rather than their static side.</p>
+<h3 id="Decorator"><a href="#Decorator" class="headerlink" title="Decorator"></a>Decorator</h3><p>A <em>Decorator</em> is a special kind of declaration that can be attached to a class declaration, method, accessor, property, or parameter.</p>
+<p>Sometimes it is required to have additional features to support annotating or modifying classes and class members. Decorators provide a way to add both annotation and a meta-programming syntax for class declarations and members.</p>
+<p>Decoration use the form <code>@expression</code>, where <code>expression</code> must evaluate to a function that will be called at runtime with information about the decorated declaration.</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-08-15T09:20:51.000Z">2017-08-15</time>
                 
                 
@@ -2025,52 +2113,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-07-19T02:34:56.000Z">2017-07-19</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 minutes read (About 271 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/07/19/Five-Models-in-Smart-Contract/">Five Models in Smart Contract</a>
-            
-        </h1>
-        <div class="content">
-            <h1 id="Database-Contracts"><a href="#Database-Contracts" class="headerlink" title="Database Contracts"></a>Database Contracts</h1><p>These are used only as data storage. The only logic they need is functions that allow other contracts to write, update and get data, and some simple way of checking caller permissions.</p>
-<h1 id="Controller-Contracts"><a href="#Controller-Contracts" class="headerlink" title="Controller Contracts"></a>Controller Contracts</h1><p>These contracts operate on the storage contracts. In a flexible system, both controllers and databases can be replaced by other, similar contracts that share the same public api(although this is not always needed).) Controllers can be advanced, and could for example do batched reads/writes, or read from and write to multiple databases instead of just one.</p>
-<h1 id="Contract-Managine-Contracts-CMCs"><a href="#Contract-Managine-Contracts-CMCs" class="headerlink" title="Contract Managine Contracts (CMCs)"></a>Contract Managine Contracts (CMCs)</h1><p>The purpose of these contracts is only to manage other contracts. Their main tasks is to keep track of all the contracts/components of the system, handle the communication between thses components, and to make modular design easier. Keeping this functionality separate from normal business logic should be considered good practice, and has a number of positive effects on the system.</p>
-<h1 id="Application-Logic-Contracts-ALCs"><a href="#Application-Logic-Contracts-ALCs" class="headerlink" title="Application Logic Contracts (ALCs)"></a>Application Logic Contracts (ALCs)</h1><p>Application logic contracts contains application-specific code. Generally speaking, if the contract utilizes controllers and other contracts to perform application specific tasks it’s an ALC.</p>
-<h1 id="Utility-Contracts"><a href="#Utility-Contracts" class="headerlink" title="Utility Contracts"></a>Utility Contracts</h1><p>These type of contracts usually perform a specific task, and can be called by other contracts without restrictions. It could be a contract that hashes strings using some algorithm, provide random numbers or other things. They normally don’t need a log of storage, often have few or no dependencies.</p>
-<p>The rationale for this division will be laid out after we’ve tried to apply it to the fund manager system, as it will be a lot more clear then.</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2143,7 +2185,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        303
+                        304
                     </p>
                 </div>
             </div>
@@ -2311,6 +2353,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2385,25 +2446,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2422,7 +2464,7 @@
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>
@@ -2771,6 +2813,25 @@
         
         <article class="media">
             
+            <a href="/2019/03/16/keystore/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Keystore">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
+                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/05/note-on-bip32/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
@@ -2845,25 +2906,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/09/10/Analysis-of-Ujo/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Analysis of Ujo">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-09-10T05:26:39.000Z">2018-09-10</time></div>
-                    <a href="/2018/09/10/Analysis-of-Ujo/" class="has-link-black-ter is-size-6">Analysis of Ujo</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2882,7 +2924,7 @@
                     <span class="level-item">March 2019</span>
                 </span>
                 <span class="level-end">
-                    <span class="level-item tag">1</span>
+                    <span class="level-item tag">2</span>
                 </span>
             </a>
         </li>

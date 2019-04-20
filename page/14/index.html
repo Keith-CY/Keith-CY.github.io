@@ -148,6 +148,137 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-06-23T06:12:45.000Z">2016-06-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    a minute read (About 151 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/06/23/distinction-between-nth-child-and-nth-of-type/">Distinction Between &#39;Nth-Child&#39; and &#39;Nth-of-Type&#39;</a>
+            
+        </h1>
+        <div class="content">
+            <p>In HTML</p>
+<pre><code>&amp;lt;p&amp;gt;0&amp;lt;/p&amp;gt;
+&amp;lt;div&amp;gt;1&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;2&amp;lt;/div&amp;gt;
+&amp;lt;p&amp;gt;3&amp;lt;/p&amp;gt;
+&amp;lt;div&amp;gt;4&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;5&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;6&amp;lt;/div&amp;gt;
+</code></pre><p>The Selector <code>div:nth-child(3)</code> will choose the 3rd element from all elements in the level where div is, then check if the 3rd element is a ‘div’. In this case, the 3rd element is a ‘div’, so it works(<code>&amp;lt;div&amp;gt;2&amp;lt;/div&amp;gt;</code>), but Selector <code>div:nth-child(4)</code> will select the 4st element which is ‘p’ (<code>&amp;lt;p&amp;gt;3&amp;lt;/p&amp;gt;</code>), it’s not a ‘div’, so it doesn’t work.</p>
+<p>However, the Selector <code>div:nth-of-type(3)</code> will choose the 3rd ‘div’ from all ‘div’s in the level where div is, so it choose the <code>&amp;lt;div&amp;gt;4&amp;lt;/div&amp;gt;</code>.</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-06-23T00:38:04.000Z">2016-06-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 371 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/06/23/css3-border-image/">CSS3: Border-Image</a>
+            
+        </h1>
+        <div class="content">
+            <h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><pre><code>border-image: none|&amp;lt;image&amp;gt;[&amp;lt;slice&amp;gt;|&amp;lt;width&amp;gt;|&amp;lt;repeat&amp;gt;]
+</code></pre><ul>
+<li><code>border-image-source: url(&quot;…&quot;);</code></li>
+<li><p><code>border-image-slice:[&amp;lt;number&amp;gt;|&amp;lt;percentage]</code></p>
+<pre><code>*   用于分解引入的图片, px 是默认单位, 如果用 number 则一定不能加上 px
+</code></pre><ul>
+<li>percentage 是相对于引入的 image 而言的, 例如 image 的大小为300 x 240, 若设定 slice: 25%, 30%, 15%, 20%, <strong>等于截取了图片外侧的60px, 90px, 36px, 60px 的部分作为边框</strong></li>
+<li><img src="http://cdn1.w3cplus.com/cdn/farfuture/Z78eIzBXIkFO02LKoPUpOhn7DIjZdlGOqeeIiANZiNA/mtime:1341237495/sites/default/files/border-image-slice.jpg" alt="示例图"></li>
+<li>实际上 CSS3 将该图片划分成9个部分, 再根据 width 和 repeat 进行处理后拼接成边框</li>
+<li>四个角不会受到 repeat 的影响而产生变形, 四个边会受到 repeat 的影响而变形.</li>
+</ul>
+</li>
+<li><p><code>border-image-width: [&amp;lt;length&amp;gt;|&amp;lt;percentage&amp;gt;|&amp;lt;number&amp;gt;|auto]</code></p>
+<pre><code>*   border-image-width 就是 border-width, 用于设置边框宽度
+</code></pre><ul>
+<li>如果 slice 截取的宽度正好等于 width, 那么不会发生变形</li>
+</ul>
+</li>
+<li><p><code>border-image-repeat: [stretch|repeat|round]</code></p>
+<pre><code>*   指定四条边的排列方式
+</code></pre><ul>
+<li>最多接受两个参数, 第一个水平方向, 第二个垂直方向</li>
+<li>round -&gt; 平铺</li>
+<li>round 会压缩或伸展 sliced-block, 保证平铺过程中其完整性</li>
+<li><img src="http://cdn2.w3cplus.com/cdn/farfuture/Fnx2B9-7WSVP5CmFE9QNNOMbawlHVGYZ3O1cFF5gQSw/mtime:1341237495/sites/default/files/border-image-round-HV.png" alt=""></li>
+<li>repeat -&gt; 重复</li>
+<li>repeat 不会改变 sliced-block 的完整性, 从中间开始向两边排列</li>
+<li><img src="http://cdn2.w3cplus.com/cdn/farfuture/2-H9Gx7nr6n9NkwQJB0vnOBtrdlI4iRphA7unyN6zto/mtime:1341237494/sites/default/files/border-image-repeat-HV.png" alt=""></li>
+<li>stretch</li>
+<li>拉伸</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2016-06-22T18:55:10.000Z">2016-06-23</time>
                 
                 <div class="level-item">
@@ -1785,169 +1916,6 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-06-13T18:49:11.000Z">2016-06-14</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 minutes read (About 228 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/06/14/css-e6-b7-bb-e5-8a-a0-e6-9d-a1-e7-ba-b9-e8-83-8c-e6-99-af/">CSS 添加条纹背景</a>
-            
-        </h1>
-        <div class="content">
-            <head><br><style><br>.bg{<br>  height:300px;<br>  width:300px;<br>    color:#fff;<br>}<br>.type1{<br>  background: linear-gradient(#fb3 20%, #58a 80%);<br>}<br>.type2{<br>background: linear-gradient(#fb3 50%, #58a 50%);<br>}<br>.type3{<br>background-size:100% 30px;<br>}<br>.type4{<br>  background: linear-gradient(45deg, #fb3 50%, #58a 50%);<br>  background-size:30px 30px;<br>}<br>.type5{<br>  background: repeating-linear-gradient(45deg, #fb3, #58a 30px)<br>}<br>.type6{<br>  background: #58a;<br>  background-image: repeating-linear-gradient(45deg, hsla(0,0%,100%,.1),hsla(0,0%,100%,.1) 15px,transparent 0, transparent 30px);<br>}<br>    </style><br>    </head>
-
-<pre><code>&amp;lt;body&amp;gt;
-&amp;lt;div class=&quot;bg type1&quot;&amp;gt;background: linear-gradient(#fb3 20%, #58a 80%);&amp;lt;br&amp;gt;
-</code></pre><p>整个背景上下各有20%的纯色, 中间是过渡颜色</p>
-<div class="bg type2">background: linear-gradient(#fb3 50%, #58a 50%);<br><br>上下两部分都是纯色</div>
-
-<div class="bg type2 type3">添加 background-size:100% 30px;<br><br>  宽100%, 高30px, 默认 repeat<br></div>
-
-<div class="bg type4">斜向条纹<br><br>修改 linear-gradient 的角度: linear-gradient(45deg, #fb3 50%, #58a 50%)<br><br>添加重复:background-size:30px;</div>
-
-<div class="bg type5">使用 repeat-linear-gradient:<br><br>background: repeating-linear-gradient(45deg, #fb3, #58a 30px)<br></div>
-
-<p>&lt;</p>
-<p>div class=”bg type6”&gt;<br>关于颜色设定, 如果我们希望条纹使用相近的颜色, 可以使用如下方法:</p>
-<p>background: #58a;</p>
-<p>background-image: repeating-linear-gradient(30deg, hsla(0,0%,100%,.1),hsla(0,0%,100%,.1) 15px,transparent 0, transparent 30px);</p>
-<p>其原理是指定背景中最深的颜色, 其他颜色用透明度调整</p>
-<p>&lt;</p>
-<p>div&gt;</p>
-<p></p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-06-13T00:47:23.000Z">2016-06-13</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 minutes read (About 247 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/06/13/css-e4-b8-ad-e7-9a-84-clear/">CSS 中的 Clear</a>
-            
-        </h1>
-        <div class="content">
-            <h3 id="为什么要清除浮动"><a href="#为什么要清除浮动" class="headerlink" title="为什么要清除浮动"></a>为什么要清除浮动</h3><p>一个块级元素的如果没有设置 <code>height</code>, 则其高度由其子元素撑开. 如果所有子元素都是浮动的(脱离标准文档流), 那么父元素就会发生”坍塌”.</p>
-<h3 id="两种情况"><a href="#两种情况" class="headerlink" title="两种情况"></a>两种情况</h3><p>清除浮动包括清除<strong>子元素浮动</strong>和清除<strong>上级元素浮动</strong>, 如果要清除上级元素浮动, 只需要设置 clear:both 即可.<br>如果要清除子元素浮动, 可以用空标签法, clearfix 法或者 overflow 法.</p>
-<h5 id="clear-的用法"><a href="#clear-的用法" class="headerlink" title="clear 的用法"></a>clear 的用法</h5><pre><code>.subElement{
-    clear:both; 
-}
-`&lt;/pre&gt;
-
-##### clearfix(最优浮动闭合方案)
-
-父元素添加 class=clearfix
-简洁版
-
-&lt;pre&gt;`.clearfix:before, .clearfix:after{
-  content:&quot;&quot;;
-    display:table;
-}
-.clearfix:after{
-  clear:both;
-    overflow:hidden;
-}
-.clearfix{
-  zoom:1;
-}
-`&lt;/pre&gt;
-
-经典版
-
-&lt;pre&gt;`.clearfix:after{
-  display:block;
-    content:&quot;&quot;;
-    clear:both;
-    height:0;
-    visibility:hidden
-}
-`&lt;/pre&gt;
-
-使用时在浮动元素的父元素上添加 class=&quot;clearfix&quot;
-
-#### 简单的方法
-
-&lt;pre&gt;`.clearfix{
-  overflow:auto;
-  _height:1%;
-}
-`&lt;/pre&gt;
-
-#### 常用的方法
-
-&lt;pre&gt;`.clearfix{
-  clear:both;
-  height:0;
-  overflow:hidden;
-}
-</code></pre><p>在需要清除浮动的地方加上一个 div.clear 或者 br.clear(不是套上)</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2018,7 +1986,7 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        304
+                        306
                     </p>
                 </div>
             </div>
@@ -2038,7 +2006,7 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        89
+                        90
                     </p>
                 </div>
             </div>
@@ -2169,7 +2137,7 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2183,6 +2151,44 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2241,44 +2247,6 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2290,6 +2258,17 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">
@@ -2646,6 +2625,44 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
         
         <article class="media">
             
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/16/keystore/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/keystore.jpg" alt="Keystore">
@@ -2701,44 +2718,6 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2750,6 +2729,17 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">

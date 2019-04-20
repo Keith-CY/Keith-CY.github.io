@@ -148,6 +148,586 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-01-29T03:57:13.000Z">2017-01-29</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    19 minutes read (About 2865 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/">Webpack 2 Config 文件入门</a>
+            
+        </h1>
+        <div class="content">
+            <p>webpack 2 config 文件入门</p>
+<h3 id="webpack-config-js-的基本结构"><a href="#webpack-config-js-的基本结构" class="headerlink" title="webpack.config.js 的基本结构"></a>webpack.config.js 的基本结构</h3><pre><code>var path = require(&apos;path&apos;)
+
+module.exports = {
+  entry:  {
+    home: &apos;./home.js&apos;,
+    about: &apos;./about.js&apos;,
+    contact: &apos;./contact.js&apos;,
+  }, // 入口文件
+  // string | [string] | object {&amp;lt;key&amp;gt;: string | [string] }
+  // 一个页面搭配一个入口文件
+  output: {
+    // output 包含一系列关于打包后文件的配置
+    // output.chunkFilename: string, 这个参数确定了加载 chunk 的名称
+    // output.crossOriginLoading: boolean | string, 只在 target 参数指定为 web 的时候使用, 因为此时通过 jsonp 加载模块
+    // crossOriginLoading: false(default) , 禁止跨域加载
+    // crossOriginLoading: &apos;anonymous&apos;, 允许无 credential 的跨域加载
+    // crossOriginLoading: &apos;use-credentials&apos;, 允许有 credential 的跨域加载
+    // 
+    // output.devtoolFallbackModuleFilenameTemplate: string | function(info)
+    // output.hotUpdateChunkFilename: string, 指定热刷新的 chunk 的名称, 仅支持 id 和 hash 占位符
+    // hotUpdateChunkFilename: &apos;[id].[hash].hot-update.js&apos;
+    // output.sourceMapFilename: string, 仅当 devtool 使用 source map 时生效, 默认为[ file].map, 可选占位符有[name], [id], [hash], [chunkhash]
+
+    path: path.resolve(__dirname, &apos;dist&apos;), // 打包后文件存储路径, 必须是绝对路径, 可以用 path 模块生成
+
+    publicPath: /assert/, // 解析文件中相对路径时依赖的根目录
+    // 该字段设定了输出文件的 public Url
+    // 
+    // 默认的, 相对路径会基于 html 文件位置或&amp;lt;base&amp;gt;标签进行解析, 添加 publicPath 后, 各个 loaders 会在每个相对路径前添加 publicPath, 即相对路径基于 publicPath 进行解析
+    // 该值一般以&apos;/&apos;结尾
+    // 默认值为&apos;&apos;
+    // simple rule: 该参数的值为html 页面到 output.path 的相对值
+    // path: path.resolve(__dirname, &apos;public/assets&apos;),
+    // publicPath: &apos;https://cdn.example.com/assets/&apos;,
+    // publicPath 也会对 webpack-dev-server 生效
+    // publicPath: &apos;https://cdn.example.com/assets/&apos; cdn, 并且应该使用 https
+    // publicPath: &apos;//cdn.example.com/assets/&apos;, cdn, 使用相同协议
+    // publicPath: &apos;/assets/&apos;, 相对于服务器根路径
+    // publicPath: &apos;assets/&apos;, 相对于 html 页面
+    // publicPath: &apos;../assets/&apos;, 相对于 html 页面
+    // publicPath: &apos;&apos;, 相对于 html 页面(同一路径)
+
+    filename: &apos;bundle.js&apos;, // 打包后的文件名称
+    // 对于单一入口文件, filename 可以为静态名称&apos;bundle.js&apos;
+    // 对于多入口文件, 可以使用参数生成特定名称
+    // [name], [id], [hash], [chunkhash]
+    // 可以为文件添加路径: &apos;js/[name]/bundle.js&apos;
+
+    library: &apos;MyLibrary&apos;, // 输出库的名称
+
+    libraryTarget: &apos;umd&apos;, // 输出库的类型
+  },
+  module: {
+    // module.noParse: RegExp | [RegExp], 符合正则的字段被 import, require, define 后不会被处理, 可以提高打包速度
+    // noParse: /jquery|lodash/
+    //
+    rules: [
+      // 模块应用规则(loaders, parser 的设定等)
+      // module.rules: array
+      // 一条 Rule 可以分为三部分, Conditions, Results, Nested Rules
+
+      // Conditions, 有两个输入值, 
+      // 1\. The resource: 文件引用的绝对路径经过 resolve 规则解析后的结果
+      // 2\. The issuer: 引用 resource 的模块到文件的绝对路径
+      // 比如, &apos;app.js&apos; 中 &apos;import ./style.css&apos;, resource 是 &apos;/path/to/style.css&apos;, issuer 是 &apos;/path/to/app.js&apos;
+      // 在 rule 中, test, include, exclude 和 resource 作用于resource, 而 issuer 族谱用于 issuer
+
+      // Results
+      // Rule Results 仅在 Rule Conditions 满足时起作用
+      // Rule Results 有二种输出值
+      // Applied Loaders: 一个数组, 其元素是应用于 resource 的 loaders
+      // Parser options: 一个 options 对象, 作为当前 module 的 parser
+      // loader, options, use 用于 loaders,
+      // query, loaders 用于提高兼容性
+      // enforce 属性指定 loader 类型, 可选值有: normal, pre, post
+      // parser 属性影响 parser options
+
+      // Nested Rules
+      // 在 rules 和 oneOf 属性中可以指定 nested rules
+
+      // Rule.enforce: &apos;pre&apos; | &apos;post&apos;, 指定 loader 的类型, 默认为 normal
+      // 还有一种 inline loader 应用于 inline import/require, 
+      // 所有 loaders 按照 post, inline, normal, pre 排序并依次执行
+      // 所有 normal loaders 可以通过在 request 中添加前缀 &apos;!&apos; 进行忽略
+      // 所有 normal 和 pre loaders 可以通过在 request 中添加前缀 &apos;-!&apos; 进行忽略
+      // 所有 normal, post 和 pre loaders 可以通过在 request 前添加 &apos;!!&apos; 进行忽略
+
+      // Rule.exclude
+      // Rule.exclude 是 Rule.resource.exclude 的缩写
+      // 
+      // Rule.include
+      // Rule.include 是 Rule.resource.include 的缩写
+      //
+      // Rule.issuer
+      //
+      // Rule.loader
+      // Rule.loader 是 Rule.use: [{loader}] 的别名
+      // 
+      // Rule.loaders
+      // Rule.loaders 是 Rule.use 的别名, 他的存在仅为了兼容 webpack1, 应使用 Rule.use
+      // 
+      // Rule.oneOf
+      // 一个数组, 其元素为一系列 rules, 仅第一个符合条件的 rule 会起作用
+      // 
+      // Rule.options/ Rule.query
+      // Rule.options 和 Rule.query 都是 Rule.use: [{options}] 的缩写
+      // Rule.query 的存在仅为了兼容 webpack1, 应使用 Rule.options
+      // 
+      // Rule.parser
+      // 一个 parser options 的对象, 所有要使用的 parser options 都集中在此
+      // 每个不同的 parser options 都会创建对应 parser, 并且 plugins 可以根据 parser options 应用.  当 parser options 中没有设置或设置为 true 时, 大部分 plugins 默认只应用他们自己的 parser plugins
+      // parser: {
+      // amd: false, // disable AMD
+      // commonjs: false, // disable CommonJS
+      // harmony: false, // disable ES6 Harmony import/exports
+      // requireInclude: false, // disable require.include
+      // requreEnsure: false, // disable require.ensure
+      // }
+
+      // Rule.resource
+      // Rule.rules, 一个 Rules 组成 的数组
+      // Rule.test, Rule.resource.test 的缩写
+      // Rule.use, 一系列应用于 modules 的 UseEntries, 每一个 entry 指定一个 loader
+      // use: [&apos;style-loader&apos;] 是 use: [{loader: &apos;style-loader&apos;}] 的缩写
+      // 可以链式传入多个 loaders, 从右向左依次执行
+      // use: [
+      //   {loader: &apos;style-loader&apos;},
+      //   {loader: &apos;css-loader&apos;, options: { importLoader: 1}},
+      //   {loader: &apos;less-loader&apos;, options: { noIeCompat: true}},
+      // ]
+
+      // Condition
+      // Condition 可以为以下之一:
+      // String: 比如 exclude: &apos;node_modules&apos;
+      // RegExp: 比如 test: /\.js$/, exclude: /node_modules/
+      // function: 返回 true 或 false
+      // Condition Array: 至少有一个满足时刻认为满足 condition
+      // Object: 所有属性都满足时可认为满足
+      // 
+      // {test: Condition}, {include: Condition}, {exclude: Condition}, {and: [Condition]}, {or: [Condition]}, {not: Condition}
+      // 
+      // UseEntry: object
+      // 该属性必须有一个字符串 loader.
+      // 该属性相对 context 的值解析 loader
+      // 该属性拥有 options 属性, 该属性为 string 或 object, 该属性会作为 loader options 被传给 loader
+      // 考虑到兼容性, 目前仍支持 query 作为 options 的别名
+      // 
+
+      {
+        test: /\.jsx?$/, // 通过正则表达式选择要处理的文件
+        include: [ // 限定文件范围
+          path.resolve(__dirname, &apos;app&apos;)
+        ],
+        exclude: [ // 排除文件范围
+          path.resolve(__dirname, &apos;demo&apos;)
+        ]
+        // 最佳实践
+        // test 中使用正则表达式
+        // include 和 exclude 中使用绝对路径
+        // 优先使用 include 而不是 exclude
+        issuer: { test, include, exclude },
+        // issuer 的应用范围
+        enforce: &apos;pre&apos;,
+        enforce: &apos;post&apos;,
+        loader: &apos;babel-loader&apos;,
+        // 使用 babel-loader 处理符合条件的文件
+        // webpack2 中 -loader 不再可以省略
+        options: {
+          presets: [&apos;es2015&apos;]
+        }
+        // babel-loader 的配置
+      },
+      {
+        test: /\.html$/,
+        use: [
+          // 应用多个 loader 及相关配置
+          &apos;htmllint-loader&apos;,
+          {
+            loader: &apos;html-loader&apos;,
+            options: {
+              // ...
+            }
+          }
+        ]
+      },
+
+      {
+         oneOf: [ /* rules */ ],
+         // 仅应用 rules 数组中的一条规则
+      },
+
+      {
+        rules: [ /* rules */ ],
+        // 应用所有 rules
+      },
+
+      {
+        resource: { and: [ /* conditions */ ]}
+        // 当所有 conditions 都满足时才认为符合条件
+      },
+
+      { resource: { or: [ /* conditions */ ]}, },
+      { resource: [ /* conditions */] },
+      // 当某一 condition 满足时即可认为符合条件
+
+      {
+        resource: { not: /* condition */ }
+        // 当某一 condition 不满足时可认为符合条件
+      }
+    ],
+    // rules 结束
+  },
+  resolve: {
+    // 解析模块 request 时的配置
+    // (不会应用于解析 loader )
+    modules: [
+      &apos;node_modules&apos;,
+      path.resolve(__dirname, &apos;app&apos;)
+    ],
+    // 解析 modules 时的路径
+    extensions: [&apos;.js&apos;, &apos;.json&apos;, &apos;.jsx&apos;, &apos;.css&apos;],
+    // 可以省略的扩展名
+    alias: {
+      // 模块别名
+      // 为 import 或 require 创建别名
+      // Utilities: path.resolve(__dirname, &apos;src/utilities&apos;)
+      // import Utility from &apos;../../utilities/utility&apos; 可以缩写为 
+      // import Utility from &apos;Utilities/utility&apos;
+      // 末尾添加$可以进行精确匹配, 类似正则
+      // 
+      &apos;module&apos;: &apos;new-module&apos;,
+      // 别名 module 可以表示 new-module, 包括文件与路径, 比如 module/path/file 会被解析为 new-module/path/file
+      &apos;only-module$&apos;: &apos;new-module&apos;,
+      // 别名 only-module(处于尾部) 会被解析成 new-module, 因此 module/path/file 不会被解析
+    },
+    // aliasFields: string
+    // 指定一个 field, 比如 browser, 来执行特定的 alias
+    // aliasFields: [&apos;browser&apos;]
+    // 
+    // resolve.descriptionFiles: array
+    // 用于描述的 JSON 文件, 默认为
+    // descriptionFiles: [&apos;package.json&apos;]
+    // 
+    // resolve.enforceExtension: boolean
+    // 如果为 true, webpack 不会处理没有扩展名的文件, 默认为 false, 及允许 require(&apos;./foo&apos;) 这种写法
+    //
+    //resolve.enforceModuleExtension: boolean
+    //默认为 false, 是否允许 modules(loaders) 省略扩展名
+    //
+    //resolve.extensions: array, 自动解析指定的扩展名
+    //默认为
+    // extensions: [&apos;.js&apos;, &apos;.json&apos;]
+    // 因此可以使用 import File from (&apos;../path/to/file&apos;) 这种写法
+    // 
+    // resolve.mainFields: array
+    // 当 import 一个包时, 比如 import * as D3 from &apos;d3&apos;, 这个设置决定package.json中的哪个 field 对应的包的会被检索, 默认值基于 target 的值
+    // 当 target 指定为 webworker, web 或不指定
+    // mainFields: [&apos;browser&apos;, &apos;module&apos;, &apos;main&apos;]
+    // 对于其他 target, 
+    // mainFields [&apos;module&apos;, &apos;main&apos;]
+    // 例如, D3的 package 包括这些 fields
+    // {
+    // ...
+    // main: &apos;build/d3.Node.js&apos;,
+    // browser: &apos;build/d3.js&apos;,
+    // module: &apos;index&apos;
+    // ...
+    // }
+    // 
+    // resolve.mainFiles: array
+    // 这里的 filename 会在解析路径的时候用到, 默认为
+    // mainFiles: [&apos;index&apos;]
+    // 
+    // resolve.modules: array
+    // 限定 webpack 搜索与解析的范围
+    // 可以使用绝对路径偶相对路径, 但是他们的行为有少许不同.
+    // 相对路径的检索方式与 Node 检索 module 相近, 首先检索当前路径及父路径
+    // 绝对路径则只会检索给定路径
+    // 默认值为 modules: [&apos;node_modules&apos;]
+    //
+    // 如果要添加路径, 应当添加在 node_modules 前面
+    // modules: [path.resolve(__dirname, &apos;src&apos;), &apos;node_modules&apos;]
+    // 
+    // resolve.unsafeCache: regex | array | boolean
+    // 默认为 true, 即允许模块缓存, 即使这种行为是不安全的
+    // 
+  },
+
+  performance: {
+    // 此配置决定 webpack 的通知功能
+    // 主要用于对文件尺寸的控制
+    hints: &apos;warning&apos;, // enum
+    // hints: boolean | &apos;error&apos; | &apos;warning&apos;
+    // 设定 webpack 何时显示通知
+    // 默认为 warning
+
+    maxAssetSize: 200000, // int (in bytes)
+    // maxAssetSize: int, 这个选项限制了单个 asset 的尺寸, 默认为250000
+
+    maxEntrypointSize: 400000, // int (in bytes)
+    // maxEntrypointSize: int, 限制初始加载时单个 entry 的最大请求数, 默认为250000
+
+    assetFilter: function (assetFilename) {
+      return assetFilename.endsWith(&apos;.css&apos;) || assetFilename.endsWith(&apos;.js&apos;)
+    }
+    // assetFilter: function, 这个属性允许 webpack 控制使用哪些文件来计算 performance hint, 默认为
+    // function (assertFilename) {
+    //   return !(/\.map$/.test(assetFilename))
+    // }
+    //
+    // 可以自己设定 filter function
+    // assetFilter: function(assetFilename) {
+    //   return assetFilename.endsWith(&apos;.js&apos;)
+    // }
+  },
+
+  devtool: &apos;source-map&apos;, // enum, string | false
+  // 可以提高 debug 的便利性, 但是会影响打包速度
+  // 面向开发有: eval, inline-source-map, eval-source-map, cheap-module-eval-source-map
+  // 面向生产有: source-map, hidden-source-map, cheap-source-map, nosources-source-map
+
+  context: __dirname, // 使用绝对路径
+  // webpack 的根路径, loaders 的配置文件(.babelrc, postcss.config.js)和 entry 都是基于 context 来解析的
+  // 该属性值默认为当前目录, 但是强烈建议书写这一字段, 可以使你的配置文件独立于当前工作目录
+
+  target: &apos;web&apos;, // enum
+  // 打包文件运行环境
+  // webpack 可以针对多个 environment 或 target 编译
+  // target: string, (async-node|electron|electron-renderer|node|node-webkit|web|webworker)
+
+  externals: [&apos;react&apos;, /^@angular\//],
+  // 不必打包的内容
+  // externals: string| RegExp | function | array | object
+  // 例如要使用 jquery 的 cdn, 则可以这样配置
+  // externals: {
+  //   jquery: &apos;jQuery&apos;
+  // }
+  // import $ from &apos;jquery&apos;
+  // 
+  // externals: {
+  //   substract: [&apos;./math&apos;, &apos;substract&apos;]
+  // }
+  // 会形成一个负责结构, ./math 是父模块, 而你的 bundle 仅请求其子模块 substract
+  // 
+  // externals: {
+  //   react: &apos;react&apos;,
+  //   lodash: {
+  //     commonjs: &apos;lodash&apos;,
+  //     amd: &apos;lodash&apos;,
+  //     root: &apos;_&apos;
+  //   }
+  // }
+  // 
+
+  watch: boolean
+  // webpack 可以监控文件并在他们变化时进行重新编译
+  // 默认为 false
+
+  watchOptions: object, 
+  // 配置 watch 的模式
+  // {
+  //   aggregateTimeout: number, 从第一次检测到文件变化到进行重新编译的延迟时间, 这个段时间内的其他变化会被整合进此次编译
+  //   ignored: string | RegExp, 忽视某些文件的变化, 减轻 CPU 负担
+  //   poll: boolean | number, 每隔1000ms 进行一次检测
+  // }
+
+  stats: {
+    // 待补充
+  },
+
+  devServer: {
+    // 这一部分的设置会被 webpack-dev-server 采用
+    contentBase: path.resolve(__dirname, &apos;dist&apos;), // 指定 serve 目录为 dist
+    compress: true, // 开启 gzip 压缩
+    port: 9000, // 指定端口
+    // 当 devServer 启动时, 控制台会打印
+    // http://localhost:9000
+    // webpack result is served from /build/
+    // content is served from dist/
+    // 这几行指出了 server 的位置和 served 内容
+    // 如果你使用了 Node.js API, 那么这部分会被忽略
+    // 
+    // devServer.filename: string, 这个选项可以减少 lazy mode 下的编译次数
+    // 默认的, 在 lazy mode 下, 每一个请求会进行一次新的编译 
+    // 添加 filename 后, devServer 仅在请求 filename 时进行编译, 比如
+    // lazy: true,
+    // filename: bundle.js
+    // 此时, devServer 仅在请求/ bundle.js 时进行编译
+    // filename 仅在 lazy mode 中起作用
+    // devServer.headers: object, 在所有 request 中添加请求头
+    // headers: {
+    //   &apos;X-Custom-Foo&apos;: &apos;bar&apos;
+    // }
+    // 
+    // devServer.historyApiFallback: boolean, object
+    // 当使用 Html5 History Api 时, index.html 可能得到404响应
+    // 
+    // devServer.hot: boolean, 开启 webpack 模块热替换
+    // 
+    // devServer.host - CLI only
+    // 指定 host
+    // 
+    // devServer.https: boolean | object, devServer 默认false, 即使用 http
+    // 
+    // devServer.inline - CLI only
+    // 切换 devServer 的模式, 默认使用 inline 模式, 即脚本会直接注入到你的 bundle 以实现重载, 设置 devServer.inline: false 可以启用 iframe 模式
+    // 
+    // 
+  },
+
+  plugins: [
+    // 待补充
+  ]
+}
+</code></pre>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-01-28T23:25:10.000Z">2017-01-29</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 248 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/">Webpack 2 起步</a>
+            
+        </h1>
+        <div class="content">
+            <p>虽然和 webpack1 一样, 还是过一遍</p>
+<h3 id="创建一个-bundle"><a href="#创建一个-bundle" class="headerlink" title="创建一个 bundle"></a>创建一个 bundle</h3><pre><code>mkdir webpack-demo &amp;amp;&amp;amp; webpack-demo
+
+npm init -y
+
+yarn add --dev webpack@beta
+
+yarn add lodash
+`&lt;/pre&gt;
+
+#### 创建 app/index.js
+
+&lt;pre&gt;`// app/index.js
+import _ from &apos;lodash&apos;
+function component () {
+  let element = document.createElement(&apos;div&apos;);
+
+// use lodash
+  element.innerHtml = _.join([&apos;Hello&apos;, &apos;webpack&apos;], &apos; &apos;)
+
+  return element
+}
+
+document.body.appendChild(component())
+`&lt;/pre&gt;
+
+#### 创建 index.html
+
+&lt;pre&gt;`&amp;lt;html&amp;gt;
+  &amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;webpack 2 demo&amp;lt;/title&amp;gt;
+  &amp;lt;/head&amp;gt;
+  &amp;lt;body&amp;gt;
+    &amp;lt;script src=&quot;public/bundle.js&quot;&amp;gt;&amp;gt;/script&amp;gt;
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+`&lt;/pre&gt;
+
+#### 创建打包后文件
+
+&lt;pre&gt;`./node_modules/.bin/webpack app/index.js public/bundle.js
+`&lt;/pre&gt;
+
+webpack 会自动处理包的依赖关系
+
+### 添加配置文件
+
+&lt;pre&gt;`var path = require(&apos;path&apos;)
+
+module.exports = {
+  entry: &apos;./app/index.js&apos;,
+  output: {
+    path: path.resolve(__dirname, &apos;public&apos;),
+    filename: &apos;bundle.js&apos;
+  }
+}
+`&lt;/pre&gt;
+
+通过 webpack 命令行进行打包
+
+&lt;pre&gt;`webpack --config webpack.config.js
+`&lt;/pre&gt;
+
+`webpack` 会默认执行名为 `webpack.config.js` 的配置文件, 因此仅输入`webpack` 即可进行打包
+
+### 通过 yarn 执行打包
+
+在 `yarn init` 生成的 `package.json` 中添加
+
+&lt;pre&gt;`{
+  ...
+  &quot;scripts&quot;: {
+    &quot;build&quot;: &quot;webpack&quot;
+  }
+  ...
+}
+</code></pre><p>即可将<code>webpack</code>指令添加进 yarn 的快捷方式, 此时执行 <code>yarn build</code> 即可打包</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-01-18T01:18:57.000Z">2017-01-18</time>
                 
                 <div class="level-item">
@@ -2014,381 +2594,6 @@ AppRegistry.registerComponent(&quot;Project&quot;, () =&amp;gt; SimpleList)
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-09-06T01:56:38.000Z">2016-09-06</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    a few seconds read (About 28 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/09/06/redux-form-e7-9a-84-e6-b7-b1-e5-9d-91-e6-85-a2-e6-85-a2-e7-a7-af-e7-b4-af/">Redux-Form 的深坑...慢慢积累</a>
-            
-        </h1>
-        <div class="content">
-            <p>如果 Field 无法输入, 注意 state 是否是 immutable 的, 如果是, 则需要</p>
-<pre><code>import { Field, reduxForm } from &apos;redux-form/immutable&apos;
-</code></pre>
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-09-04T23:21:37.000Z">2016-09-05</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 minutes read (About 816 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/09/05/e7-bc-96-e5-86-99-e6-b5-8b-e8-af-95/">编写测试</a>
-            
-        </h1>
-        <div class="content">
-            <h3 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h3><p>使用 Mocha 作为测试引擎<br>注意因为是在 node 环境下运行, 所以不能访问 DOM</p>
-<pre><code>npm install --save-dev mocha
-`&lt;/pre&gt;
-
-若想要结合 Babel 使用, 需要在 package.json 的 script 中加入一段
-
-&lt;pre&gt;`{
-  &quot;scripts&quot;: {
-    ...
-    &quot;test&quot;: &quot;mocha --compilers js:babel/register --recursive&quot;,
-    &quot;test:watch&quot;: &quot;npm test -- --watch&quot;
-  }
-}
-`&lt;/pre&gt;
-
-### Action Creators
-
-Redux 里的 action creators 会返回普通对象, 在测试 action creators 的时候我们要测试的不仅是调用了正确的action creators, 还有是否返回了正确的 action
-
-实例
-
-&lt;pre&gt;`export function addTodo(text){
-  return {
-    type: &apos;ADD_TODO&apos;,
-    text
-  };
-}
-`&lt;/pre&gt;
-
-可以这样测试
-
-&lt;pre&gt;`import expect form &apos;expect&apos;
-import * as actions from &apos;../../actions/TodoActions&apos;;
-import * as types from &apos;../../constants/ActionTypes&apos;;
-
-describe(&apos;actions&apos;, () =&amp;gt; {
-  it(&apos;should create an action to add a todo&apos;, () =&amp;gt; {
-    const text = &apos;Finish docs&apos;;
-    const expectedAction = {
-      type: &apos;ADD_TODO&apos;,
-      text
-    };
-
-    expect(actions.addTodo(text)).toEqual(&apos;expectedAction&apos;);
-  })
-})
-`&lt;/pre&gt;
-
-### 异步 Action Creators
-
-对于使用Redux Thunk 或其他 middleware 的异步 Action Creator, 最好完全模拟 Redux Store 来测试.
-
-可以使用 applyMiddleware() 和一个 mock store, 与可以用 nock 来模拟 HTTP 请求
-
-实例:
-
-&lt;pre&gt;`function fetchTodosRequest () {
-  return {
-    type: FETCH_TODOS_REQUEST
-  }
-}
-
-function fetchTodosSuccess(body) {
-  return {
-    type: FETCH_TODOS_SUCCESS,
-    body
-  }
-}
-
-function fetchTodosFailure(ex) {
-  return {
-    type: FETCH_TODOS_FAILURE,
-    ex
-  }
-}
-
-export function fetchTodo () {
-  return dispatch =&amp;gt; {
-    dispatch(fetchTodosRequest())
-    return fetch(&apos;http://example.com/todos&apos;)
-      .then(res =&amp;gt; res.json())
-      .then(json =&amp;gt; dispatch(fetchTodosSuccess(json.body)))
-      .catch(ex =&amp;gt; dispatch(fetchTodosFailure(ex)))
-  }
-}
-`&lt;/pre&gt;
-
-可以这样测试
-
-&lt;pre&gt;`import expect from &apos;expect&apos;
-import { applyMiddleware } from &apos;redux&apos;
-import thunk from &apos;redux-thunk&apos;
-import * as actions from &apos;../../actions/counter&apos;
-import * as types from &apos;../../constants/ActionTypes&apos;
-import nock from &apos;nock&apos;
-
-const middleware = [thunk]
-
-/**
- * 使用中间件模拟 Redux Store
- */
-
-function mockStore = (getState, expectedActions, done){
-  if(!Array.isArray(expectedActions)){
-    throw new Error(&apos;expectedActions should be an array of expected actions.&apos;)
-  }
-  if( typeof done !== &apos;undefined&apos; &amp;amp;&amp;amp; typeof done !== &apos;function&apos;){
-    throw new Error(&apos;done should either be undefined or function&apos;)
-  }
-
-  function mockStoreWithoutmiddleware(){
-    return {
-      getState(){
-        return typeof getState === &apos;function&apos; ? 
-        getState():
-        getState
-      },
-
-      dispatch(action){
-        const expectedAction = expectedActions.shift()
-
-        try {
-          expect(action).toEqual(expectedAction)
-          if(done&amp;amp;&amp;amp;!expectedActions.length){
-            done()
-          }
-          return action
-        } catch (e) {
-          done(e)
-        }
-      }
-    }
-  }
-
-  const mockStoreWithMiddleware = applyMiddleware(
-    ...middlewares
-  )(mockStoreWithoutMiddleware)
-
-  return mockStoreWithMiddleware()
-}
-
-describe(&apos;async actions&apos;, () =&amp;gt; {
-  afterEach(() =&amp;gt; {
-    nock.clearAll()
-  }) 
-
-  it(&apos;creates FETCH_TODOS_SUCCESS when fetching todos has been done&apos;, (done) =&amp;gt; {
-    nock(&apos;http://example.com&apos;)
-      .get(&apos;./todos&apos;)
-      .reply(200, {todos: [&apos;do something&apos;]})
-
-    const expectedActions = [
-      {type: types.FETCH_TODOS_REQUEST},
-      {type: types.FETCH_TODOS_SUCCESS, body: { todos: [&apos;do something&apos;]}}
-    ]
-    const store = mockStore({todos: []}, expectedActions, done) 
-    store.dispatch(actions.fetchTodos())
-  })
-})
-`&lt;/pre&gt;
-
-### Reducers 测试
-
-Reducer 把 action 应用到当前 state, 并返回新的 state
-
-&lt;pre&gt;`import { ADD_TODO } from &apos;../constants/ActionTypes&apos;;
-
-const initialState = [
-  {
-    text: &apos;Use Redux&apos;,
-    completed: false,
-    id: 0
-  }
-]
-
-export default function todos(state = initialState, action) {
-  switch(action.type) {
-    case ADD_TODO: return [
-      {
-        id: state.reduce((maxID, todo) =&amp;gt; Math.max(todo.id, maxId), -1) + 1, 
-        completed: false,
-        text: action.text
-      },
-      ...state
-    ]
-    default: return state
-  }
-}
-`&lt;/pre&gt;
-
-可以这样测试:
-
-&lt;pre&gt;`import expect from &apos;expect&apos;
-import reducer from &apos;../../reducers/todos&apos;
-import * as types from &apos;../../constants/ActionTypes&apos;
-
-describe(&apos;todos reducer&apos;, () =&amp;gt; {
-  it(&apos;should return the initial state&apos;, () =&amp;gt; {
-    expect(reducer(undefined, {})).toEqual([
-      {
-        text: &apos;Use Redux&apos;,
-        completed: false,
-        id: 0
-      }
-    ])
-  })
-
-  it(&apos;should handle ADD_TODO&apos;, () =&amp;gt; {
-    expect(
-      reducer([],{
-        type: types.ADD_TODO,
-        text: &apos;Run the test&apos;
-      })
-    ).toEqual(
-      [
-        {
-          text: &apos;Run the test&apos;,
-          completed: false,
-          id: 0
-        }
-      ]
-    )
-
-    expect(
-      reducer([
-        {
-          text: &apos;Use Redux&apos;,
-          completed: false,
-          id:0
-        }
-      ], {
-        type: types.ADD_TODO,
-        text: &apos;Run the test&apos;
-      })
-    ).toEqual([
-      {
-        text: &apos;Run the test&apos;,
-        completed: false, 
-        id: 1
-      },
-      {
-        text: &apos;Use Redux&apos;,
-        completed: false,
-        id: 0
-      }
-    ])
-  })
-})
-`&lt;/pre&gt;
-
-### 测试 Components
-
-React Components 的优点是, 一般都很小, 并且依赖于 props, 因此测试起来很容易.
-
-首先安装 React Test Utilities
-
-&lt;pre&gt;`npm install --save-dev react-addons-test-utils
-`&lt;/pre&gt;
-
-要测试 components 我们要创建一个叫`setup()` 的辅助方法, 用来把模拟过的( stubbed ) 回调函数当做 props 传入, 然后使用 React 浅渲染来渲染组建, 这样可以依据`是否调用了回调函数`的断言来写独立的测试
-
-&lt;pre&gt;`import React, { PropTypes, Component } from &apos;react&apos;
-import TodoTextInput from &apos;./TodoTextInput&apos;
-
-class Header extends Component {
-  handleSave(text){
-    if(text.length !==0){
-      this.props.addTodo(text)
-    }
-  }
-  render(){
-    return(
-      &amp;lt;header&amp;gt;
-        &amp;lt;h1&amp;gt;todos&amp;lt;/h1&amp;gt;
-        &amp;lt;TodoTextInput newTodo = {true} onSave ={this.handleSave.bind(this)} placeholder = &apos;what needs to be done?&apos; /&amp;gt;
-      &amp;lt;/header&amp;gt;
-    )
-  }
-}
-
-Header.propTypes = {
-  addTodo: PropTypes.func.isRequired
-}
-
-export default Header
-</code></pre>
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2461,7 +2666,7 @@ export default Header
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        304
+                        306
                     </p>
                 </div>
             </div>
@@ -2481,7 +2686,7 @@ export default Header
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        89
+                        90
                     </p>
                 </div>
             </div>
@@ -2612,7 +2817,7 @@ export default Header
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2626,6 +2831,44 @@ export default Header
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2684,44 +2927,6 @@ export default Header
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2733,6 +2938,17 @@ export default Header
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">
@@ -3089,6 +3305,44 @@ export default Header
         
         <article class="media">
             
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/16/keystore/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/keystore.jpg" alt="Keystore">
@@ -3144,44 +3398,6 @@ export default Header
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3193,6 +3409,17 @@ export default Header
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">

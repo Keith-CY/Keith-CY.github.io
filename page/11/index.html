@@ -148,6 +148,267 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-08-20T08:27:34.000Z">2016-08-20</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 minutes read (About 759 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/08/20/e9-83-a8-e7-bd-b2react-redux-e7-9a-84-web-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83/">部署React + Redux 的 Web 开发环境</a>
+            
+        </h1>
+        <div class="content">
+            <p>好的部署需要做到两点:<br>1. 性能优化: 包括代码执行速度, 页面载入速度<br>2. 自动化: 减少重复工作</p>
+<p>使用 React+Redux 的时候往往会用到其调试工具 Redux DevTools, 在手动配置 DevTools 时需要针对 Store 和 Component 进行一些配置, 然而这些都是为了方便调试的, 生产环境下我们不希望加入这些东西, 所以建议从代码上隔离 development 和 production 环境:</p>
+<pre><code>containers/
+  Root.js
+  Root.dev.js
+  Root.prod.js
+  ...
+
+store/
+  index.js
+  store.dev.js
+  store.prod.js
+`&lt;/pre&gt;
+
+同时采用单独的入口文件, 比如上面的 containers/Root.js, 按需要加载不同环境的代码
+
+&lt;pre&gt;`if (process.env.NODE_ENV === &apos;production&apos;){
+  module.exports = require(&apos;./Root.prod&apos;);
+} else {
+  module.exports = require(&apos;./Root.dev&apos;);
+}
+`&lt;/pre&gt;
+
+有一个细节需要注意: ES6 语法不支持在 if 中书写 import 语句, 所以这里采用了 CommonJS 的模块引入方法 require.
+
+另一个需要注意的地方是按需要 import, 否则可能在打包的时候引入不必要的代码
+
+使用 webpack 进行打包工作
+
+&lt;pre&gt;`webpack --config webpack.config.prod.js --progress
+`&lt;/pre&gt;
+
+注意要为不同的环境准备不同的 webpack 配置文件. 比如 `webpack.config.dev.js` 和 `webpack.config.prod.js` . 看一下比较关键的配置选项
+
+### devtools
+
+启用 source-map, 这样 webpack 会生成两个包
+- bundle.js
+- bundle.js.map
+把用于定位源码的 source map 分离出去, 减少 bundle.js 的体积
+
+source-map 只会在浏览器 devtools 激活时加载, 并不会影响正常页面的饿加载速度.
+
+### plugins
+
+&lt;pre&gt;`plugins:[
+  new webpack.optimize.UglifyJsPlugin({
+    compress:{
+      warning: false
+    }
+  }),
+  new webpack.optimize.DedupePlugin(),
+  new webpack.optimize.OccurenceOrderPlugin()
+]
+`&lt;/pre&gt;
+
+### 不要忽视 NODE_ENV
+
+NODE_ENV 其实就是一个环境变量, 在 Node 中 可以通过`process.env.NODE_ENV`获取, 目前大家汪汪用这个变量区分当前是 development 还是 production.
+
+通过 webpack 的 DefinePlugin 设置环境变量:
+
+&lt;pre&gt;`plugins:[
+  ...
+  new webpack.DefinePlugin({
+    &apos;process.env.NODE_ENV&apos;: JSON.stingify(&apos;production&apos;)
+  })
+]
+
+### 添加 hash
+前端公认的 Best Practice 就是给资源打上 hash 标签, 这对缓存静态资源很有用
+
+1\. 给 bundle.js 添加 hash 标签
+`&lt;/pre&gt;
+
+output{
+  path: ...
+  filename: &apos;bundle.[hash].js&apos;
+}
+
+&lt;pre&gt;`使用 html-webpack-plugin 这个插件自动生成带有
+`&lt;/pre&gt;
+
+&amp;lt;script src=&apos;bundle.[hash].js&gt;&amp;lt;/script&gt;&apos;的 html 文件
+
+&lt;pre&gt;`配置如下:
+`&lt;/pre&gt;
+
+plugins:[
+  ...
+  new HtmlWebpackPlugin({
+    title:&apos;html title&apos;,
+    template:&apos;./template.html&apos;,
+    favicon: &apos;./static/images/logo.ico&apos;
+  })
+]
+
+&lt;pre&gt;`配置 template.html
+`&lt;/pre&gt;
+
+&lt;!DOCTYPE html&gt;
+&amp;lt;html&gt;
+&amp;lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0&quot;&gt;
+&amp;lt;/head&gt;
+&amp;lt;body&gt;
+
+&lt;div id=&quot;react-container&quot;&gt;&lt;/div&gt;
+
+&amp;lt;/body&gt;
+&amp;lt;/html&gt;
+
+&lt;pre&gt;`
+如果需要在 React Component 中添加图片, 建议采用
+`&lt;/pre&gt;
+
+import LOGO.png from &apos;./static/images/logo.png&apos;
+&amp;lt;img src={LOGO.png} alt=&quot;&quot; /&gt;
+
+&lt;pre&gt;`使用 import 或 require 可以让 webpack 对图片进行打包
+
+使用 file-loader 可以对图片添加 hash 标签然后返回相应的 URL
+</code></pre><p>module:{<br>  loaders:[<br>    {<br>      test: /&#46;(png|jpg),<br>      loader:”file?name=[hash].[ext]”<br>    }<br>  ]<br>}<br><code>`</code></p>
+<h3 id="引入-CSS"><a href="#引入-CSS" class="headerlink" title="引入 CSS"></a>引入 CSS</h3><p>可以直接在 js 文件中 <code>require(&#39;./foo.css&#39;)</code>, 然后使用 style-loader 和 css-loader 进行处理, 最终效果是将 css 嵌入到 HTML 的 style 标签中, 这样就不需要使用 hash</p>
+<p>CSS 较大的话, 可以考虑使用 extract-text-webpack-plugin 插件将 CSS 合并后独立为一个文件, 并自定在页面加载的时候添加 link 标签</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-08-19T05:58:43.000Z">2016-08-19</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    a few seconds read (About 60 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/08/19/webpack-e5-b8-b8-e7-94-a8-plugin-e5-92-8c-loader/">Webpack 常用 Plugin 和 Loader</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="常用Loader"><a href="#常用Loader" class="headerlink" title="常用Loader"></a>常用Loader</h3><p>html 相关</p>
+<pre><code>html-loader
+`&lt;/pre&gt;
+
+css 相关
+
+&lt;pre&gt;`style-loader
+css-loader
+autoprefixer-loader
+sass-loader
+`&lt;/pre&gt;
+
+js 相关
+
+&lt;pre&gt;`babel-loader
+babel-core
+babel-preset-es2015
+babel-preset-react
+babel-preset-stage3
+eslint-loader
+`&lt;/pre&gt;
+
+### 常用插件Plugin
+
+#### config 类
+
+&lt;pre&gt;`NormalModuleReplacementPlugin
+ContextReplacementPlugin
+IgnorePlugin
+PrefetchPlugin
+`&lt;/pre&gt;
+
+#### Optimize
+
+&lt;pre&gt;`DedupePlugin
+LimitChunkCountPlugin
+OccurenceOrderPlugin
+UglifyJsPlugin
+CommonsChunkPlugin
+`&lt;/pre&gt;
+
+#### 其他
+
+&lt;pre&gt;`HotModuleReplacementPlugin
+NoErrorPlugin
+ProgressPlugin
+HtmlWebpackPlugin
+</code></pre>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2016-08-18T21:29:36.000Z">2016-08-19</time>
                 
                 <div class="level-item">
@@ -2306,150 +2567,6 @@ return function(done) { // 返回 thunk 函数
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-07-26T22:20:35.000Z">2016-07-27</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    3 minutes read (About 425 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/07/27/css-e5-8a-a8-e7-94-bb-e4-b9-8b-e7-a1-ac-e4-bb-b6-e5-8a-a0-e9-80-9f/">CSS 动画之硬件加速</a>
-            
-        </h1>
-        <div class="content">
-            <h3 id="触发硬件加速的-CSS-属性"><a href="#触发硬件加速的-CSS-属性" class="headerlink" title="触发硬件加速的 CSS 属性"></a>触发硬件加速的 CSS 属性</h3><ul>
-<li>transform</li>
-<li>opacity</li>
-<li>filter</li>
-</ul>
-<h3 id="硬件加速的工作原理"><a href="#硬件加速的工作原理" class="headerlink" title="硬件加速的工作原理"></a>硬件加速的工作原理</h3><p>浏览器解析得到 DOM 树后, 与 CSS 形成渲染树, 渲染树上有大量的渲染元素, 每一个渲染元素都被分到一个图层中, 每个图层被加载到 GPU 形成渲染文理.</p>
-<p>然而, transform 等 CSS 属性不会触发 GPU 的 repaint, 这些使用 transform 属性的图层都会有独立合成器进行处理.</p>
-<p>比如某个元素具有 transform 属性, 那么会为他创建一个新的复合图层, 可以被 GPU 直接用来执行 transform 操作.</p>
-<p>一般浏览器会在以下几种情况下创建一个独立的复合图层: </p>
-<ul>
-<li>3D 或 transform</li>
-<li><code>&amp;lt;video</code> 和<code>&amp;lt;canvas&amp;gt;</code>标签</li>
-<li>CSS Filters</li>
-<li>元素覆盖时(比如 z-index)</li>
-</ul>
-<p>3D 和 2D 的transform 区别在于, 浏览器在页面渲染前为 3D 动画创建独立的复合图层, 而在<strong>运行期间</strong>为 2D 动画创建独立复合图层. 2D transform 在动画开始和结束的时候依旧出现了初始化和删除的 repaint.</p>
-<h3 id="强制使用-GPU-渲染"><a href="#强制使用-GPU-渲染" class="headerlink" title="强制使用 GPU 渲染"></a>强制使用 GPU 渲染</h3><p>为了避免 2D transform 动画的两次 repaint, 我们可以硬编码一些样式来解决这个问题</p>
-<pre><code>.solution1{
-  transform: translateZ(0);
-}
-
-.solution2{
-  transform: rotateZ(360deg)
-}
-</code></pre><p>这段代码让浏览器执行3Dtransform, 进而创建一个独立的复合涂层</p>
-<h3 id="硬件加速缺点"><a href="#硬件加速缺点" class="headerlink" title="硬件加速缺点"></a>硬件加速缺点</h3><ol>
-<li>内存, 如果 GPU 加载了大量文理, 容易发生内存问题</li>
-<li>使用 GUP 渲染会影响字体的抗锯齿效果, 因为 GPU 和 CPU 渲染机制不同. 即使最终硬件加速停止了, 文本还是会在动画期间显得模糊.</li>
-</ol>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-07-26T00:10:57.000Z">2016-07-26</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    a minute read (About 218 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/07/26/e7-94-9f-e6-88-90-e5-99-a8-function/">生成器 Function*</a>
-            
-        </h1>
-        <div class="content">
-            <p>function* 声明定义一个 generator( 生成器), 返回一个 Generator 对象</p>
-<p>语法</p>
-<pre><code>function* name([param[, param[, ...param]]]){ statements }
-`&lt;/pre&gt;
-
-### 描述
-
-Generator 是一种可以从中退出并在之后重新进入的函数, 其环境(绑定的变量)会在每次执行后被保存, 下次进入时可以继续使用
-
-调用一个 Generator 并不马上执行它的主体, 而是返回一个 迭代器对象, 这个迭代器的 next() 方法被调用的时候, Generator 的主体会被执行至下一个 yield 表达式, 该表达式定义了迭代器的返回值
-
-### 示例
-
-&lt;pre&gt;`function* idMaker(){
-  var index = 0;
-  while(index &amp;lt; 3){
-    yield index++;
-  }
-}
-
-var gen = idMaker(); //返回一个迭代器对象
-
-console.log(gen().next().value); // 0
-console.log(gen().next().value); // 1
-console.log(gen().next().value); // 2
-console.log(gen().next().value); // undefined
-</code></pre><p>谨慎使用, 因为其内部变量保持变化, 要每次输出的相互影响</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2522,7 +2639,7 @@ console.log(gen().next().value); // undefined
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        304
+                        306
                     </p>
                 </div>
             </div>
@@ -2542,7 +2659,7 @@ console.log(gen().next().value); // undefined
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        89
+                        90
                     </p>
                 </div>
             </div>
@@ -2673,7 +2790,7 @@ console.log(gen().next().value); // undefined
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2687,6 +2804,44 @@ console.log(gen().next().value); // undefined
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2745,44 +2900,6 @@ console.log(gen().next().value); // undefined
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2794,6 +2911,17 @@ console.log(gen().next().value); // undefined
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">
@@ -3150,6 +3278,44 @@ console.log(gen().next().value); // undefined
         
         <article class="media">
             
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/16/keystore/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/keystore.jpg" alt="Keystore">
@@ -3205,44 +3371,6 @@ console.log(gen().next().value); // undefined
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3254,6 +3382,17 @@ console.log(gen().next().value); // undefined
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">

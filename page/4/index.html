@@ -148,6 +148,99 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-09-05T01:41:10.000Z">2017-09-05</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    a minute read (About 172 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/09/05/Notes-on-TS-React-Redux/">Notes on TS + React + Redux</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="Add-Explicit-Props-Interface-from-Store"><a href="#Add-Explicit-Props-Interface-from-Store" class="headerlink" title="Add Explicit Props Interface from Store"></a>Add Explicit Props Interface from Store</h3><p>When I use <code>react-redux</code>, the TS Compiler always throw an error:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error TS2339: Property <span class="hljs-string">'...'</span> does not exist on <span class="hljs-built_in">type</span> <span class="hljs-string">'Readonly&lt;children?: ReactNode; &#125;&gt; &amp; Readonly&lt;&#123;&#125;&gt;'</span>.</span><br></pre></td></tr></table></figure>
+<p>That’s because Connect was not supplying an explicit interface to the container component, so it was confused by the prop that it was trying to pass.</p>
+<p>So you can add an explicit interface on child component.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">interface PropsFromStore extends React.Props&lt;any&gt; &#123;</span><br><span class="line">  propsFromStore: any;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ChildComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span>&lt;<span class="hljs-title">PropsFromStore</span>, <span class="hljs-title">React</span>.<span class="hljs-title">State</span>&gt; </span>&#123;</span><br><span class="line">  <span class="hljs-comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> connect(mapStateToProps, mapDispatchToProps)(ChildComponent)</span><br></pre></td></tr></table></figure>
+<h3 id="Add-Enhancer-to-Store-with-TS"><a href="#Add-Enhancer-to-Store-with-TS" class="headerlink" title="Add Enhancer to Store with TS"></a>Add Enhancer to Store with TS</h3><p>When I use an enhancer like:</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> enhancer = compose(</span><br><span class="line">  applyMiddleware(...middlewares),</span><br><span class="line">  DevTools.instrument(),</span><br><span class="line">  persistState(</span><br><span class="line">    <span class="hljs-built_in">window</span>.location.href.match(</span><br><span class="line">      /[?&amp;]debug_session=([^&amp;#]+)\b/</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>I got an error like:</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ts] Argument of <span class="hljs-built_in">type</span> <span class="hljs-string">'Function'</span> is not assignable to parameter of <span class="hljs-built_in">type</span> <span class="hljs-string">'Func3&lt;&#123;&#125;, &#123;&#125;, &#123;&#125;, &#123;&#125;, StoreEnhancerStoreCreator&lt;&#123;&#125;&gt;&gt;'</span>.</span><br><span class="line">Type <span class="hljs-string">'Function'</span> provides no match <span class="hljs-keyword">for</span> the signature <span class="hljs-string">'(a1: &#123;&#125;, a2: &#123;&#125;, a3: &#123;&#125;, ...args: any[]): &#123;&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>To resolve this, just:</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> &#123; GenericStoreEnhancer &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'redux'</span></span><br><span class="line"><span class="hljs-keyword">const</span> enhancer = compose(</span><br><span class="line">  applyMiddleware(...middlewares),</span><br><span class="line">  DevTools.instrument <span class="hljs-keyword">as</span> GenericStoreEnhancer,</span><br><span class="line">  persistState(</span><br><span class="line">    <span class="hljs-built_in">window</span>.location.href.match(</span><br><span class="line">      /[?&amp;]debug_session=([^&amp;#]+)\b/</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-09-04T10:08:45.000Z">2017-09-04</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    a few seconds read (About 88 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/09/04/AsyncRoute-with-React-Router-v4/">AsyncRoute With React-Router-V4</a>
+            
+        </h1>
+        <div class="content">
+            <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// AsyncRoute.jsx</span></span><br><span class="line"><span class="hljs-keyword">import</span> React, &#123; Component &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bundle</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>&#123;</span><br><span class="line">  constructur () &#123;</span><br><span class="line">    <span class="hljs-keyword">super</span>()</span><br><span class="line">    <span class="hljs-keyword">this</span>.state = &#123;</span><br><span class="line">      mod: <span class="hljs-literal">null</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  componentWillMount () &#123;</span><br><span class="line">    <span class="hljs-keyword">this</span>.load(<span class="hljs-keyword">this</span>.props)</span><br><span class="line">  &#125;</span><br><span class="line">  componentWillReceiveProps (nextProps) &#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (nextProps.load !== <span class="hljs-keyword">this</span>.props.load) &#123;</span><br><span class="line">      <span class="hljs-keyword">this</span>.load(nextProps)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  load (props) &#123;</span><br><span class="line">    <span class="hljs-keyword">this</span>.setState(&#123;</span><br><span class="line">      mod: <span class="hljs-literal">null</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    props.load(<span class="hljs-function">(<span class="hljs-params">mod</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="hljs-keyword">this</span>.setState(&#123;</span><br><span class="line">        mod: mod.default || mod,</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.state.mod ? <span class="hljs-keyword">this</span>.props.children(<span class="hljs-keyword">this</span>.state.mod) : <span class="hljs-literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-built_in">module</span> =&gt; <span class="hljs-function"><span class="hljs-params">routerProps</span> =&gt;</span> (&lt;Bundle load=&#123;module&#125;&gt;</span><br><span class="line">  &#123;Comp =&gt; Comp ? &lt;Comp &#123;...routerProps&#125; /&gt; : null&#125;</span><br><span class="line">&lt;/Bundle&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// Body.jsx</span></span><br><span class="line"><span class="hljs-keyword">import</span> &#123; Route &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'react-router-dom'</span></span><br><span class="line"><span class="hljs-keyword">import</span> AsyncRoute <span class="hljs-keyword">from</span> <span class="hljs-string">'./AsyncRoute'</span></span><br><span class="line"><span class="hljs-keyword">import</span> Page <span class="hljs-keyword">from</span> <span class="hljs-string">'bundle-loader?lazy!./Page'</span></span><br><span class="line"></span><br><span class="line">&lt;Route component=&#123;AsyncRoute(Page)&#125; /&gt;</span><br></pre></td></tr></table></figure>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-09-04T02:55:34.000Z">2017-09-04</time>
                 
                 
@@ -760,7 +853,7 @@
             
         </h1>
         <div class="content">
-            <p><a href="https://leanpub.com/d3-t-and-t-v4/read#axes" target="_blank" rel="noopener">origin</a></p>
+            <p><a href="https://leanpub.com/d3-t-and-t-v4/read#axes" target="_blank" rel="noopener">Original</a></p>
 <h3 id="Setting-up-and-configuring-the-Axes"><a href="#Setting-up-and-configuring-the-Axes" class="headerlink" title="Setting up and configuring the Axes"></a>Setting up and configuring the Axes</h3><h4 id="Change-the-text-size"><a href="#Change-the-text-size" class="headerlink" title="Change the text size"></a>Change the text size</h4><p>The default size is <strong>10px</strong> with the font type of <strong>sans-serif</strong>.</p>
 <p>There are a couple of different ways that we could change the font size and either one is valid.</p>
 <p>The first way is to specify the font as a style when drawing an individual axis.</p>
@@ -1884,239 +1977,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-08-18T09:49:07.000Z">2017-08-18</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    11 minutes read (About 1706 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/08/18/Requiring-Modules-in-Node-js/">Requiring Modules in Node.js</a>
-            
-        </h1>
-        <div class="content">
-            <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> config = <span class="hljs-built_in">require</span>(<span class="hljs-string">'/path/to/file'</span>)</span><br></pre></td></tr></table></figure>
-<p>The main object exported by the <code>require</code> module is a function. When Node invokes that <code>require()</code> function with a local file path as the function’s only argument, Node goes through the following sequence of steps:</p>
-<ul>
-<li><p><strong>Resolving</strong>: To find the absolute path of the file.</p>
-</li>
-<li><p><strong>Loading</strong>: To determine the type of the file content.</p>
-</li>
-<li><p><strong>Wrapping</strong>: To give the file its private scope. This is what makes both the <code>require</code> and <code>module</code> objects local to every file we require.</p>
-</li>
-<li><p><strong>Evaluating</strong>: This is what the VM eventually does with the loaded code.</p>
-</li>
-<li><p><strong>Caching</strong>: So that when we require this file again, we don’t go over all the steps another time.</p>
-</li>
-</ul>
-<h4 id="Resolving-a-local-path"><a href="#Resolving-a-local-path" class="headerlink" title="Resolving a local path"></a>Resolving a local path</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// in NODE REPL</span></span><br><span class="line">&gt; <span class="hljs-built_in">module</span></span><br><span class="line">Module: &#123;</span><br><span class="line">  id: <span class="hljs-string">'&lt;repl&gt;'</span>,</span><br><span class="line">  exports: &#123;&#125;,</span><br><span class="line">  parent: <span class="hljs-literal">undefined</span>,</span><br><span class="line">  fielname: <span class="hljs-literal">null</span>,</span><br><span class="line">  loaded: <span class="hljs-literal">false</span>,</span><br><span class="line">  children: [],</span><br><span class="line">  paths: [...]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Every module object gets an <code>id</code> property to identify it. This <code>id</code> is usually the full path to the file, but in a REPL session it’s simply <code>&lt;repl&gt;</code>.</p>
-<p>Node modules have a one-to-one relation with files on the file-system. We require a module by loading the content of a file into memory.</p>
-<p>However, since Node allows many ways to require a file(for example, with a relative path or a pre-configured path), before we can load the content of a file into the memory we need to find the absolute location of that file.</p>
-<p>When we require a <code>find-me</code> module, without specifying a path:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">require</span>(<span class="hljs-string">'find-me'</span>)</span><br></pre></td></tr></table></figure>
-<p>Node will look for <code>find-me.js</code> in all the paths specified by <code>module.paths</code> in order.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// in NODE REPL</span></span><br><span class="line">&gt; <span class="hljs-built_in">module</span>.paths</span><br><span class="line">[ <span class="hljs-string">'/Users/samer/learn-node/repl/node_modules'</span>,</span><br><span class="line">  <span class="hljs-string">'/Users/samer/learn-node/node_modules'</span>,</span><br><span class="line">  <span class="hljs-string">'/Users/samer/node_modules'</span>,</span><br><span class="line">  <span class="hljs-string">'/Users/node_modules'</span>,</span><br><span class="line">  <span class="hljs-string">'/node_modules'</span>,</span><br><span class="line">  <span class="hljs-string">'/Users/samer/.node_modules'</span>,</span><br><span class="line">  <span class="hljs-string">'/Users/samer/.node_libraries'</span>,</span><br><span class="line">  <span class="hljs-string">'/usr/local/Cellar/node/7.7.1/lib/node'</span> ]</span><br></pre></td></tr></table></figure>
-<p>The paths list is basically a list of node_modules directories under every directory from the current directory to the root directory. It also includes a few legacy directories whose use is not recommended.</p>
-<p>If Node can’t find <code>find-me.js</code> in any of these paths, it will throw a ‘cannot find module error’.</p>
-<h4 id="Requiring-a-folder"><a href="#Requiring-a-folder" class="headerlink" title="Requiring a folder"></a>Requiring a folder</h4><p>Modules don’t have to be files. We can also create a <code>find-me</code> folder under <code>node_modules</code> and place an <code>index.js</code> file in there. The same <code>require(&#39;fine-me&#39;)</code> line will use that folder’s <code>index.js</code> file.</p>
-<p>An <code>index.js</code> file will be used by default when we require a folder, but we can control what file name to start under the folder using the <code>main</code> property in <code>package.json</code>.</p>
-<h4 id="require-resolve"><a href="#require-resolve" class="headerlink" title="require.resolve"></a>require.resolve</h4><p>If you want to only resolve the module and not execute it, you can use the <code>require.resolve</code> function. This behaves exactly the same as the main <code>require</code> function, but does not execute the file.</p>
-<p><strong>This can be used, for example, to check whether an optional package is installed or not and only use it when it’s available</strong>.</p>
-<h4 id="exports-module-exports-and-asynchronous-loading-of-modules"><a href="#exports-module-exports-and-asynchronous-loading-of-modules" class="headerlink" title="exports, module.exports, and asynchronous loading of modules"></a>exports, module.exports, and asynchronous loading of modules</h4><p>In any module, exports is a special object.</p>
-<p><code>exports</code> variable inside each module is just a reference to <code>module.exports</code> which manages the exported properties.</p>
-<p>When we reassign the <code>exports</code> variable, that reference is lost and we would be introducing a new variable instead of changing the <code>module.exports</code> object.</p>
-<p>The <code>module.exports</code> object in every module is what the <code>require</code> function returns when we require that module.</p>
-<p>Let’s talk about the <code>loaded</code> attribute on every module. The <code>module</code> module use the <code>loaded</code> attribute to track which modules have been loaded(true value) and which modules are still being loaded(false value).</p>
-<p>The <code>exports</code> object becomes complete when Node finishes loading the module(and label it so). The whole process of requiring/loading a module is <em>synchronous</em>. That’s why we were able to see the modules fully loaded after one cycle of the event loop.</p>
-<p>This also means that we cannot change the <code>exports</code> object asynchronously.</p>
-<h4 id="JSON-and-C-C-addons"><a href="#JSON-and-C-C-addons" class="headerlink" title="JSON and C/C++ addons"></a>JSON and C/C++ addons</h4><p>We can natively require JSON files and C++ addon files with the require function. You don’t need to specify the extensions.</p>
-<p>If a file extension was not specified, the first thing Node will try to resolve is a <code>.js</code>, then <code>.json</code>, and it will parse the <code>.json</code> file if found as a JSON text file. After that Node will try to find a binary <code>.node</code> file.</p>
-<p>Requiring JSON file is useful, for example, everything you need to manage in that file is some static configuration values, or some values that you periodically read from an external source. For example, if we had the following <code>config.json</code> file:</p>
-<figure class="highlight json hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="hljs-attr">"host"</span>: <span class="hljs-string">"localhost"</span>,</span><br><span class="line">  <span class="hljs-attr">"port"</span>: <span class="hljs-number">8080</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>We can require it directly like this:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> &#123; host, port &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./config'</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="All-code-you-write-in-Node-will-be-wrapped-in-functions"><a href="#All-code-you-write-in-Node-will-be-wrapped-in-functions" class="headerlink" title="All code you write in Node will be wrapped in functions"></a>All code you write in Node will be wrapped in functions</h3><p>Node’s wrapping of modules is often misunderstood. To understand it, let me remind you about the <code>exports/module.exports</code> relation.</p>
-<p>We can use the <code>exports</code> object to export properties, but we cannot replace the <code>exports</code> object directly because it’s just a reference to <code>module.exports</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">exports.id = <span class="hljs-number">52</span>; <span class="hljs-comment">// This is ok</span></span><br><span class="line">exports = &#123; <span class="hljs-attr">id</span>: <span class="hljs-number">52</span> &#125;; <span class="hljs-comment">// This will not work</span></span><br><span class="line"><span class="hljs-built_in">module</span>.exports = &#123; <span class="hljs-attr">id</span>: <span class="hljs-number">52</span> &#125;; <span class="hljs-comment">// This is ok</span></span><br></pre></td></tr></table></figure>
-<p>How exactly does this <code>exports</code> object, which appears to be global for every module, get defined as a reference on the <code>module</code> object?</p>
-<p>In a browser, when we declare a variable in a script like this:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">var</span> answer = <span class="hljs-number">12</span>;</span><br></pre></td></tr></table></figure>
-<p>That <code>answer</code> variable will be globally available in all scripts after the script that define it.</p>
-<p>This is not the case in Node. When we define a variable in one module, the other module modules in the program will not have access to that variable. So how come variables in Node are magically scoped?</p>
-<p>The answer is simple. Before compiling a module, Node wraps the module code in a function, which we can inspect using the <code>wrapper</code> property of the <code>module</code> module.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">~ $ node</span><br><span class="line">&gt; <span class="hljs-built_in">require</span>(<span class="hljs-string">'module'</span>).wrapper</span><br><span class="line">[ <span class="hljs-string">'(function (exports, require, module, __filename, __dirname) &#123; '</span>,</span><br><span class="line">  <span class="hljs-string">'\n&#125;);'</span> ]</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-<p>Node does not execute any code you write in a file directly. It executes this wrapper function which will have your code in its body.</p>
-<p>This is what keeps the top-level variables that are defined in any module scoped to that module.</p>
-<p>This wrapper function has 5 arguments: <code>exports</code>, <code>require</code>, <code>module</code>, <code>__filename</code>, <code>__dirname</code>. This is what makes them appear to look global when in fact they are specific to each module.</p>
-<p>All of these arguments get their value when Node execute the wrapper function. <code>exports</code> is defined as a reference to <code>module.exports</code> prior to that. <code>require</code> and <code>module</code> are both specific to the function to be executed, and <code>__dirname</code>/<code>__filename</code> variables will contain the wrapped module’s directory path and absolute filename.</p>
-<p>Since every module gets wrapped in a function, we can actually access that function’s arguments with the <code>arguments</code> keyword:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">~<span class="hljs-regexp">/learn-node $ echo "console.log(arguments)" &gt; index.js</span></span><br><span class="line"><span class="hljs-regexp">~/</span>learn-node $ node index.js</span><br><span class="line">&#123; <span class="hljs-string">'0'</span>: &#123;&#125;,</span><br><span class="line">  <span class="hljs-string">'1'</span>:</span><br><span class="line">   &#123; [<span class="hljs-built_in">Function</span>: <span class="hljs-built_in">require</span>]</span><br><span class="line">     resolve: [<span class="hljs-built_in">Function</span>: resolve],</span><br><span class="line">     main:</span><br><span class="line">      Module &#123;</span><br><span class="line">        id: <span class="hljs-string">'.'</span>,</span><br><span class="line">        exports: &#123;&#125;,</span><br><span class="line">        parent: <span class="hljs-literal">null</span>,</span><br><span class="line">        filename: <span class="hljs-string">'/Users/samer/index.js'</span>,</span><br><span class="line">        loaded: <span class="hljs-literal">false</span>,</span><br><span class="line">        children: [],</span><br><span class="line">        paths: [<span class="hljs-built_in">Object</span>] &#125;,</span><br><span class="line">     extensions: &#123; ... &#125;,</span><br><span class="line">     cache: &#123; <span class="hljs-string">'/Users/samer/index.js'</span>: [<span class="hljs-built_in">Object</span>] &#125; &#125;,</span><br><span class="line">  <span class="hljs-string">'2'</span>:</span><br><span class="line">   Module &#123;</span><br><span class="line">     id: <span class="hljs-string">'.'</span>,</span><br><span class="line">     exports: &#123;&#125;,</span><br><span class="line">     parent: <span class="hljs-literal">null</span>,</span><br><span class="line">     filename: <span class="hljs-string">'/Users/samer/index.js'</span>,</span><br><span class="line">     loaded: <span class="hljs-literal">false</span>,</span><br><span class="line">     children: [],</span><br><span class="line">     paths: [ ... ] &#125;,</span><br><span class="line">  <span class="hljs-string">'3'</span>: <span class="hljs-string">'/Users/samer/index.js'</span>,</span><br><span class="line">  <span class="hljs-string">'4'</span>: <span class="hljs-string">'/Users/samer'</span> &#125;</span><br></pre></td></tr></table></figure>
-<p>What happens is roughly equivalent to:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">require, module, __filename, __dirname</span>) </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">let</span> exports = <span class="hljs-built_in">module</span>.exports;</span><br><span class="line">  <span class="hljs-comment">// Your Code...</span></span><br><span class="line">  <span class="hljs-keyword">return</span> <span class="hljs-built_in">module</span>.exports;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>If we change the whole <code>exports</code> object, it would no longer be a reference to <code>module.exports</code>.</p>
-<h4 id="The-require-object"><a href="#The-require-object" class="headerlink" title="The require object"></a>The require object</h4><p>There is nothing special about <code>require</code>. It’s an object that acts mainly as a function that takes a module name or path and return the <code>module.exports</code> object. We can simply override the <code>require</code> object with our own logic if we want to.</p>
-<p>For exmaple, maybe for testing purposes, we want every <code>require</code> call to be mocked by default and just return a fake object instead of the required module exports object.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">require</span> = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">return</span> &#123; <span class="hljs-attr">mocked</span>: <span class="hljs-literal">true</span> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>After doing the above reassignment of <code>require</code>, every <code>require(&#39;something&#39;)</code> call in the script will just return the mocked object.</p>
-<p>The require object also has properties of its own. We’ve seen the <code>resolve</code> property, which is a function that performs only the resolving step of the require process. We’ve also seen <code>require.extensions</code> above.</p>
-<p>There is also <code>require.main</code> which can be helpful to determine if the script is being required or run directly.</p>
-<p>Say, for example, that we have this simple <code>printFrame</code> function in <code>print-in-frame.js</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// In print-in-frame.js</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">const</span> printFrame = <span class="hljs-function">(<span class="hljs-params">size, header</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'*'</span>.repeat(size))</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(header)</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'*'</span>.repeat(size))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>We want to use this file in two ways:</p>
-<ul>
-<li>From the command line directly like this:</li>
-</ul>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node <span class="hljs-built_in">print</span>-in-frame 8 hello</span><br></pre></td></tr></table></figure>
-<ul>
-<li>With <code>require</code></li>
-</ul>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> print = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./print-in-frame.js'</span>)</span><br><span class="line">print(<span class="hljs-number">5</span>, <span class="hljs-string">'hello'</span>)</span><br></pre></td></tr></table></figure>
-<p>Those are two different usages. We need a way to determine if the file is being run as a stand-alone script or if it is being required by other scripts.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> printFrame = <span class="hljs-function">(<span class="hljs-params">size, header</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'*'</span>.repeat(size))</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(header)</span><br><span class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'*'</span>.repeat(size))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">require</span>.main === <span class="hljs-built_in">module</span>) &#123;</span><br><span class="line">  <span class="hljs-comment">// the file is being executed directly</span></span><br><span class="line">  printFrame(process.argv[<span class="hljs-number">2</span>], process.argv[<span class="hljs-number">3</span>])</span><br><span class="line">&#125; <span class="hljs-keyword">else</span> &#123;</span><br><span class="line">  <span class="hljs-built_in">module</span>.exports = printFrame</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="All-module-can-be-cached"><a href="#All-module-can-be-cached" class="headerlink" title="All module can be cached"></a>All module can be cached</h3><p>Caching is important to understand.</p>
-<p>Say that we have the following <code>ascii-art.js</code> file that prints a cool looking header:</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">#####</span></span><br><span class="line"><span class="hljs-comment">#</span></span><br><span class="line"><span class="hljs-comment">#####</span></span><br><span class="line"><span class="hljs-comment">#</span></span><br><span class="line"><span class="hljs-comment">#</span></span><br></pre></td></tr></table></figure>
-<p>We want to display this header every time we <code>require</code> the file, so when we require the file twice, we want the header to show twice:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-built_in">require</span>(<span class="hljs-string">'./ascii-arg'</span>); <span class="hljs-comment">// it will show the header</span></span><br><span class="line"><span class="hljs-built_in">require</span>(<span class="hljs-string">'./ascii-arg'</span>); <span class="hljs-comment">// it won't show the header</span></span><br></pre></td></tr></table></figure>
-<p>The second require will not show the header because of modules’ caching. Node caches the first call and does not load the file on the second call.</p>
-<p>We can see this cache by printing <code>require.cache</code> after the first require. The cache registry is simply an object that has a property for every required module. Those properties values are the <code>module</code> objects used for each module. We can simply delete a property from that <code>require.cache</code> object to invalidate that cache. If we do that, Node will reload the module to recache it.</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-08-18T03:14:46.000Z">2017-08-18</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    9 minutes read (About 1288 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/08/18/Concurrency-and-Parallelism-Understanding-I-O/">Concurrency and Parallelism: Understanding I/O</a>
-            
-        </h1>
-        <div class="content">
-            <p><a href="https://blog.risingstack.com/concurrency-and-parallelism-understanding-i-o/" target="_blank" rel="noopener">Original Post</a></p>
-<p>Concurrency is much border, genral problem than parallelism. If you have tasks having inputs and outputs, and you want to schedule them so that they produce correct results, you are solving a concurrency problem.</p>
-<p>Take a look at this diagram:</p>
-<p><img src="https://blog-assets.risingstack.com/2017/02/cuncurrency-paralellism-diagram-of-tasks-with-dependencies.png" alt=""></p>
-<p>It shows a data flow with input and output dependencies. Here tasks 2, 3, 4 can run concurrently after 1. There is no specific order between them, so we have multiple alternatives for running it sequetially. Showing only two of them:</p>
-<p><img src="https://blog-assets.risingstack.com/2017/02/concurrent-data-flow-path-13245.png" alt=""></p>
-<p>Alternatively, these tasks can run in parallel, e.g. on another processor core, another processor, or an entirely seperate computer.</p>
-<p>On these diagrams, thread means a computation carried out on dedicated processor core, not an OS thread, as they are not necessarily parallel.</p>
-<p><img src="https://blog-assets.risingstack.com/2017/02/paralellized-tasks-diagram.png" alt=""></p>
-<p>If we only have one processor, why do we even bother with writing concurrent application? The processing time will not get shorter, and we add the overhead of scheduling. As a matter of fact, any modern operating system will also slice up the concurrent tasks and interleave them, so each of the slices will run for a short time.</p>
-<h5 id="There-are-various-reasons-for-this"><a href="#There-are-various-reasons-for-this" class="headerlink" title="There are various reasons for this:"></a>There are various reasons for this:</h5><ul>
-<li><p>We human like to interact with the computer in real time, e.g. as I type this text, I want to see it appearing on the screen immediately, at the same time listening to my favorite tracklist, and getting notifications about my incoming emails. Just imagine that you cannot drag a window while the movie keeps on playing it.</p>
-</li>
-<li><p>Not all operations are carried out on the computer’s CPU. If you want to write to an HDD for example, a lot of time is spent seeking to the position, writing the sectors, etc, and the intermittent time can be spent to do something else.</p>
-</li>
-</ul>
-<p>These require the operating system kernel to run tasks in an interleaved manner, referred to as <code>time-sharing</code>. This is a very important property of modern operating systems.</p>
-<h3 id="Processes-and-Threads"><a href="#Processes-and-Threads" class="headerlink" title="Processes and Threads"></a>Processes and Threads</h3><blockquote>
-<p>A process is a running instance of a computer program. It is what you see in the task manager of your operating system or <code>top</code>.</p>
-</blockquote>
-<p>A process consists of allocated memory which holds the program code, its data, a heap for dynamic memory allocation, and a lot more. However, it is not the unit for multi-tasking in desktop operating systems.</p>
-<blockquote>
-<p>Thread is the default unit - the task - of CPU usage. COde executed in a single thread is what we usually refer to as sequential or synchronous execution.</p>
-</blockquote>
-<p>Threads are supported by nearly all operating systems and can be created with system calls. They have theri own <code>call stack</code>, <code>virual CPU</code> and <code>local storage</code> but share the application’s <code>heap</code>, data, codebase and resources.</p>
-<p>They also serve as the unit of scheduling in the kernel. For this reason, we call them <code>kernel threads</code>, clarifying that they are native to the operating system and scheduled by the kernel, which distinguishes them from use-space threads, also called <code>green threads</code> which are scheduled by some user space schedular such as a library or VM.</p>
-<p><img src="https://blog-assets.risingstack.com/2017/02/kernel-processes-and-threads-1.png" alt=""></p>
-<p>Most desktop and sever operating system kernels use preemptive schedulers, as does the Linux, macOS and Windows kernel. We can assume that threads are preemptive scheduled, distinguishing them from their non-preemptive(cooperative) counterparts, called <code>fiber</code>. This preemptive scheduling is the reason that a hanging process doesn’t stall the whole computer.</p>
-<p>The hanging time slices are interleaved with other processes’ and the OS’ code, so the system as a whole remains responsive.</p>
-<p>Context switching(switching between threads) is done at frequent intervals by the kernel, creating the illusion that our programs are running in parallel, whereas in reality, they are running concurrently but sequentially in short slices.</p>
-<h3 id="CPU-vs-I-O"><a href="#CPU-vs-I-O" class="headerlink" title="CPU vs. I/O"></a>CPU vs. I/O</h3><p>Programs usually don’t only consist of numeric, arithmetic and logic computations, in fact, a lot of times they merely write something to the file system, do network requests or access peripheries such as the console or an external device.</p>
-<p>While the first kind of workload is CPU intensive, the latter requries performing I/O in the majority of the time.</p>
-<p>Doing I/O is a kernel space operation, initiated with a system call, so it results in a privilege context switch.</p>
-<p>When an I/O operation is requested with a blocking  system call, we are talking about <em>blocking I/O</em>.</p>
-<p>This can deteriorate concurrency under implementation, concretely those that use <em>many-to-one mapping</em>. This means that all threads in a process share a common kernel thread, which implies that every thread is blocked when one does blocking I/O.</p>
-<p>No wonder that modern OSes don’t do this. Instead, they use <code>one-to-one</code> mapping, i.e. map a kernel thread to each user-space thread, allowing another thread to run when one makes a blocking system call, which means that they are unaffected by the above adverse effect.</p>
-<h3 id="I-O-favors-Blocking-vs-Non-Blocking-Sycn-vs-Async"><a href="#I-O-favors-Blocking-vs-Non-Blocking-Sycn-vs-Async" class="headerlink" title="I/O favors: Blocking vs. Non-Blocking, Sycn vs. Async"></a>I/O favors: Blocking vs. Non-Blocking, Sycn vs. Async</h3><p>Doing I/O usually consiss of two distinct steps:</p>
-<ul>
-<li><p>checking the device</p>
-<ul>
-<li><p>blocking: waiting for the device to be ready</p>
-</li>
-<li><p>non-blocking: e.g. polling periodically until ready</p>
-</li>
-</ul>
-</li>
-<li><p>transmitting:</p>
-<ul>
-<li><p>synchronous: executing the operation (e.g. read or write) initiated by the program.</p>
-</li>
-<li><p>asynchronous: executing the operation as response to an event from the kernel(asynchronous/event drive)</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>You can mix the two steps in every fashion</p>
-<h3 id="Busy-Waiting-Polling-and-the-Event-Loop"><a href="#Busy-Waiting-Polling-and-the-Event-Loop" class="headerlink" title="Busy-Waiting, Polling, and the Event Loop"></a>Busy-Waiting, Polling, and the Event Loop</h3><p>Busy-waiting is the act of repeatedly checking a resource, such as I/O for availability in a <em>tight loop</em>. The absence of the tight loop is what distinguishes <code>polling</code> for busy-waiting.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// tight-loop example</span></span><br><span class="line"><span class="hljs-keyword">while</span> (pthread_mutex_trylock(&amp;my_mutex) == EBUSY) &#123; &#125;</span><br><span class="line"><span class="hljs-comment">// mutex is unlocked</span></span><br><span class="line">do_stuff()</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">// polling example</span></span><br><span class="line"><span class="hljs-keyword">while</span> (pthread_mutex_trylock(&amp;my_mutex) == EBUSY) &#123;</span><br><span class="line">  sleep(POLL_INTERVAL)</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-comment">// mutex is unlocked</span></span><br><span class="line">do_stuff()</span><br></pre></td></tr></table></figure>
-<p>The difference between the two code is apparent. The <code>sleep</code> function puts the current thread of execution to sleep, yield control to the kernel to schedule something else to run.</p>
-<p>It is also obvious that both of them offer a technique of turning non-blocking code into blocking code, because control won’t pass the loop until the mutex becomes free. This means that <code>do_stuff</code> is blocked.</p>
-<p>Let’s say we have more of thse mutexes or any arbitrary I/O device that can be polled. We can invert control-flow by assigning handlers to be called when the resource is ready. If we periodically check the resources in the llop and execute the associated handlers on completion, we created what is called an <code>event loop</code>.</p>
-<h3 id="TCP-server-example"><a href="#TCP-server-example" class="headerlink" title="TCP server example"></a>TCP server example</h3><p>The following exmaple will illustrate the differences between working with <em>synchronous, blocking</em> and <em>non-blocking</em> network I/O. It is a dead-simple TCP echo server. After the client connects, every line is echoed back to the socket until the client write ‘bye’.</p>
-<h4 id="Single-threaded"><a href="#Single-threaded" class="headerlink" title="Single threaded"></a>Single threaded</h4><p>The first version uses the standard POSIX procedure of <code>sys/socket.h</code>.</p>
-<p>The server is single-threaded, it waits until a client connects.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// wait for a connection, then accept() it</span></span><br><span class="line"><span class="hljs-keyword">if</span> ((conn_s) = accept(list_s, NULL, NULL) &lt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">  <span class="hljs-comment">// exit w err</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Then it reads from the socket each line and echoes it back until the client closes connection or prints the word ‘bye’ on a line.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">bye = <span class="hljs-number">0</span></span><br><span class="line"><span class="hljs-keyword">while</span>(!bye) &#123;</span><br><span class="line">  read_line_from_socket(conn_s, buffer, MAX_LINE - <span class="hljs-number">1</span>)</span><br><span class="line">  <span class="hljs-keyword">if</span> (!strncmp(buffer, <span class="hljs-string">'bye\n'</span>, MAX_LINE - <span class="hljs-number">1</span>)) bye = <span class="hljs-number">1</span></span><br><span class="line">  write_line_to_socket(conn_s, buffer, strlen(buffer))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> (close(conn_s) &lt; <span class="hljs-number">0</span>) &#123;</span><br><span class="line">  <span class="hljs-comment">// exit w err</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2189,7 +2049,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        304
+                        306
                     </p>
                 </div>
             </div>
@@ -2209,7 +2069,7 @@
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        89
+                        90
                     </p>
                 </div>
             </div>
@@ -2340,7 +2200,7 @@
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2354,6 +2214,44 @@
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2412,44 +2310,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2461,6 +2321,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">
@@ -2817,6 +2688,44 @@
         
         <article class="media">
             
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/16/keystore/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/keystore.jpg" alt="Keystore">
@@ -2872,44 +2781,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2921,6 +2792,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">

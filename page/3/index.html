@@ -148,6 +148,352 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-10T08:33:02.000Z">2017-11-10</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    16 minutes read (About 2404 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/10/Notes-on-Solidity-in-Depth/">Notes on Solidity in Depth</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="Layout-of-a-Solidity-Source-File"><a href="#Layout-of-a-Solidity-Source-File" class="headerlink" title="Layout of a Solidity Source File"></a>Layout of a Solidity Source File</h3><h4 id="Version-Pragma"><a href="#Version-Pragma" class="headerlink" title="Version Pragma"></a>Version Pragma</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="Importing-other-Source-File"><a href="#Importing-other-Source-File" class="headerlink" title="Importing other Source File"></a>Importing other Source File</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"filename"</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> symbolName <span class="hljs-keyword">from</span> <span class="hljs-string">"filename"</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> &#123; symbol <span class="hljs-keyword">as</span> alias, symbol2 &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">"filename"</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"filename"</span> <span class="hljs-keyword">as</span> symbolName;</span><br></pre></td></tr></table></figure>
+<p>In the above, <code>filename</code> is always treated as a path with <code>/</code> as directory seperator.</p>
+<p>All path names are treated as absolute paths unless thay start with <code>.</code> or <code>..</code>.</p>
+<h5 id="Remapping"><a href="#Remapping" class="headerlink" title="Remapping"></a>Remapping</h5><p>For example, remap <code>github.com/ethereum/dapp-bin/library</code> to <code>/usr/local/dapp-bin/library</code></p>
+<p><strong>solc</strong></p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"github.com/ethereum/dapp-bin/library/iterable_mapping.sol` as it_mapping;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">solc github.com/ethereum/dapp-bin/=/usr/<span class="hljs-built_in">local</span>/dapp-bin/ source.sol</span><br></pre></td></tr></table></figure>
+<h4 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h4><p>Single Line Comments: <code>//</code></p>
+<p>Multi-line Comments: <code>/* ... */</code></p>
+<p>Natspec Comments: <code>///</code> or <code>/** ... */</code></p>
+<p>Natspec should be used directly above function declarations or statements.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">/** @title Shape calculator */</span></span><br><span class="line">contract shapeCaculator &#123;</span><br><span class="line">  <span class="hljs-comment">/** @dev Calculates a rectangle's surface and perimeter.</span></span><br><span class="line"><span class="hljs-comment">    * @param w Width of the rectangle.</span></span><br><span class="line"><span class="hljs-comment">    * @param h Height of the rectangle.</span></span><br><span class="line"><span class="hljs-comment">    * @param s The calculated surface.</span></span><br><span class="line"><span class="hljs-comment">    * @param p The calculated perimeter.</span></span><br><span class="line"><span class="hljs-comment">    */</span></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">rectangle</span>(<span class="hljs-params">uint w, uint h</span>) <span class="hljs-title">returns</span> (<span class="hljs-params">uint s, uint p</span>) </span>&#123;</span><br><span class="line">    s = w * h;</span><br><span class="line">    p = <span class="hljs-number">2</span> * (w + h);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Structure-of-Contract"><a href="#Structure-of-Contract" class="headerlink" title="Structure of Contract"></a>Structure of Contract</h3><p>Contracts in Solidity are similar to classes in object-oriented languages. Each contract can contain declarations of <strong>State Variables</strong>, <strong>Functions</strong>, <strong>Function Modifiers</strong>, <strong>Events</strong>, <strong>Struct Types</strong> and <strong>Enum Types</strong>.</p>
+<h4 id="State-Variables"><a href="#State-Variables" class="headerlink" title="State Variables"></a>State Variables</h4><p>State variables are values which are permanently stored in contract storage.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract SimpleStorage &#123;</span><br><span class="line">  uint storedData; <span class="hljs-comment">// state variable</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Functions"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</h4><p>Functions are executable units of code within a contract.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract SimpleAuction &#123;</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bid</span>(<span class="hljs-params"></span>) <span class="hljs-title">payable</span> </span>&#123;</span><br><span class="line">    <span class="hljs-comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Function-Modifiers"><a href="#Function-Modifiers" class="headerlink" title="Function Modifiers"></a>Function Modifiers</h4><p>Function modifiers can be used to amend the semantics of functions in a declarative way.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract Purchase &#123;</span><br><span class="line">  address public seller;</span><br><span class="line"></span><br><span class="line">  modifier onlySeller () &#123; <span class="hljs-comment">// Modifier</span></span><br><span class="line">    <span class="hljs-built_in">require</span>(msg.sender == seller);</span><br><span class="line">    _;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">abort</span>(<span class="hljs-params"></span>) <span class="hljs-title">onlySeller</span> </span>&#123; <span class="hljs-comment">// Modifier usage</span></span><br><span class="line">    <span class="hljs-comment">//...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Events"><a href="#Events" class="headerlink" title="Events"></a>Events</h4><p>Events are convenience interfaces with the EVM logging facilities.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract SimpleAuction &#123;</span><br><span class="line">  event HighestBidIncreased(address bidder, uint amount);</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bid</span>(<span class="hljs-params"></span>) <span class="hljs-title">payable</span> </span>&#123;</span><br><span class="line">    <span class="hljs-comment">// ...</span></span><br><span class="line">    HighestBidIncreased(msg.sender, msg.value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Struct-Types"><a href="#Struct-Types" class="headerlink" title="Struct Types"></a>Struct Types</h4><p>Structs are custom defined types that can group several variables.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract Ballot &#123;</span><br><span class="line">  struct Voter &#123;</span><br><span class="line">    uint weight;</span><br><span class="line">    bool voted;</span><br><span class="line">    address delegate;</span><br><span class="line">    uint vote;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Enum-Types"><a href="#Enum-Types" class="headerlink" title="Enum Types"></a>Enum Types</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract Purchase &#123;</span><br><span class="line">  enum State &#123;</span><br><span class="line">    Created,</span><br><span class="line">    Locked,</span><br><span class="line">    Inactive</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Types"><a href="#Types" class="headerlink" title="Types"></a>Types</h4><ul>
+<li><p><code>bool</code>: <code>true</code> or <code>false</code></p>
+<ul>
+<li><p><code>!</code> logical negation</p>
+</li>
+<li><p><code>&amp;&amp;</code> logical and</p>
+</li>
+<li><p><code>||</code> logical or</p>
+</li>
+<li><p><code>==</code> logical equality</p>
+</li>
+<li><p><code>!=</code> logical inequality</p>
+</li>
+</ul>
+</li>
+<li><p><code>int/uint</code>: <code>uint8</code> to <code>uint256</code>, <code>int8</code> to <code>int256</code></p>
+<ul>
+<li><p><code>&lt;=</code>, <code>&gt;=</code>, <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code></p>
+</li>
+<li><p><code>&amp;</code>, <code>|</code>, <code>^</code>, <code>~</code>, bit operators</p>
+</li>
+<li><p><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>**</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code></p>
+</li>
+</ul>
+</li>
+<li><p><code>address</code>: holds a 20 bytes value(size of an Ethereum address)</p>
+<ul>
+<li><code>&lt;=</code>, <code>=&gt;</code>, <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Starting with version 0.5.0 contracts do not derive from the <code>address</code> type, but can still be explicitly converted to address.</p>
+</blockquote>
+<h4 id="Members-of-Address"><a href="#Members-of-Address" class="headerlink" title="Members of Address"></a>Members of Address</h4><ul>
+<li><p><code>balance</code></p>
+</li>
+<li><p><code>transfer</code>, address.transfer(value), send value Wei to the address.</p>
+</li>
+<li><p><code>send</code>: Send is the low-level counterpart of <code>transfer</code>. If the execution fails, the current contract will not stop with an exception, but <code>send</code> will return <code>false</code></p>
+</li>
+</ul>
+<blockquote>
+<p>There are some dangers in using <code>send</code>: The transfer fails if the call stack depth is 1024 and it also fails if the recipient runs out of gas. So in order to make safe Ether transfers, always check the return value of <code>send</code>, use <code>transfer</code> or even better.</p>
+</blockquote>
+<ul>
+<li><code>call</code>, <code>callcode</code>, and <code>delegatecall</code></li>
+</ul>
+<p>Furthermore, to interface with contracts that do not adhere to the ABI, the function <code>call</code> is provided which takes an arbitrary number of arguments of any type. The arguments are padding to 32 bytes and concatenated. One exception is the case where the first argument is encoded to exactly four bytes. In this case, it is not padding to allow the use of function signatures here.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">address nameReg = <span class="hljs-string">'0x72ba7d8e73fe8eb666ea66babc8116a41bfb10e2'</span>;</span><br><span class="line">nameReg.call(<span class="hljs-string">'register'</span>, <span class="hljs-string">'MyName'</span>);</span><br><span class="line">nameReg.call(bytes4(keccak256(<span class="hljs-string">"fun(uint256))), );</span></span><br></pre></td></tr></table></figure>
+<p><code>call</code> returns a boolean indicating whether the invoked function terminated (true) or caused an EVM exception (false). It is not possible to access the actual data returned.</p>
+<p>It is possible to adjust the supplied gas with the <code>.gas()</code> modifier:</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameReg.call.gas(<span class="hljs-number">1000000000</span>)(<span class="hljs-string">'register'</span>, <span class="hljs-string">'myName'</span>);</span><br></pre></td></tr></table></figure>
+<p>and supplied Ether value can be controlled too:</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameReg.call.value(<span class="hljs-number">1</span> ether)(<span class="hljs-string">'regiter'</span>, <span class="hljs-string">'myName'</span>);</span><br></pre></td></tr></table></figure>
+<p>Chained</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameReg.call.value(<span class="hljs-number">1</span> ether).gas(<span class="hljs-number">100000000</span>)(<span class="hljs-string">'register'</span>, <span class="hljs-string">'myName'</span>);</span><br></pre></td></tr></table></figure>
+<p>In a similar way, the function <code>delegatecall</code> can be used: the difference is that only the code of the given address is used, all other aspects(storage, balance, …) are taken from the current contract. The purpose of <code>delegatecall</code> is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used. Prior to homestead, only a limited variant called <code>callcode</code> was available that did not provide access to the original <code>msg.sender</code> and <code>msg.value</code>.</p>
+<p>All three functions <code>call</code>, <code>delegatecall</code>, and <code>callcode</code> are very low-level functions and should only be used as a <em>last resort</em> as they break the type-safety of Solidity.</p>
+<p>The <code>.gas()</code> option is available on all three methods, while the <code>.value()</code> option is not supported for <code>delegatecall</code>.</p>
+<blockquote>
+<p>All Contracts inherit the members of address, so it is possible to query the balance of the current contract using <code>this.balance</code>.</p>
+</blockquote>
+<blockquote>
+<p>The use of <code>callcode</code> is discouraged and will be removed in the future.</p>
+</blockquote>
+<h4 id="Fixed-size-byte-array"><a href="#Fixed-size-byte-array" class="headerlink" title="Fixed-size byte array"></a>Fixed-size byte array</h4><ul>
+<li><code>.length</code> yields the fixed length of the byte array(read-only)</li>
+</ul>
+<blockquote>
+<p>It is possible to use an array of bytes as <code>byte[]</code>, but it is wasting a lot of space, 21 bytes every element, to be exact, when passing in calls. It is better to use <code>bytes</code>.</p>
+</blockquote>
+<h4 id="Dynamically-sized-byte-array"><a href="#Dynamically-sized-byte-array" class="headerlink" title="Dynamically-sized byte array"></a>Dynamically-sized byte array</h4><p><code>bytes</code>: dynamically-sized array, see Array, not a value-type.</p>
+<p><code>string</code>: dynamically-sized UTF-8-encoded string, see Array, not a value-type.</p>
+<h4 id="Address-Liberals"><a href="#Address-Liberals" class="headerlink" title="Address Liberals"></a>Address Liberals</h4><p>Hexadecimal literals that pass the address checksum test, for example <code>0xdCad3a6d3569DF655070DEd06cb7A1b2Ccd1D3AF</code> are of <code>address</code> type. Hexadecimal literals that are between 39 and 41 digits long and do not pass the checksum test produce a warning and are treated as regular rational number literals</p>
+<h4 id="Rational-and-Integer-Literals"><a href="#Rational-and-Integer-Literals" class="headerlink" title="Rational and Integer Literals"></a>Rational and Integer Literals</h4><p>Integer literal are formed form a sequence of numbers in the range 0-9. They are interpreted as decimals, for example, <code>69</code> means sixty nine. Octal literals do not exist in Solidity and leading zeros are invalid.</p>
+<p>Decimal fraction literals are formed by a <code>.</code> with at least one number on one side(<code>1.</code>, <code>.2</code>, <code>1.3</code>)</p>
+<p>Scientific notation is also supported, where the base can have fractions, white the exponent cannot(2e10, -2e10, 2e-10, 2.5e10)</p>
+<p>Number literal expressions retains arbitrary precision until they are converted to a non-literal type.</p>
+<p>For example <code>(2**800 + 1) - 2**800</code> result in the constant <code>1</code>, <code>.5 * 8</code> results in the integer <code>4</code></p>
+<blockquote>
+<p>Number literal expressions are converted into a non-literal type as soon as they are used with non-literal expressions. Even though we know that the value of the expression assigned to <code>b</code> in the following example evaluates to an integer, but the partial expression <code>2.5 + a</code> does not type check so the code does not compile.</p>
+</blockquote>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uint128 a = <span class="hljs-number">1</span>;</span><br><span class="line">uint128 b = <span class="hljs-number">2.5</span> + a + <span class="hljs-number">0.5</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="String-Literals"><a href="#String-Literals" class="headerlink" title="String Literals"></a>String Literals</h4><p>String literals are written with either double or sinlge-quotes. They do not imply trailing zeros as in C, <code>&quot;foo&quot;</code> represents three bytes not four.</p>
+<p>String Literal supports escape characters, such as <code>\n</code>, <code>\xNN</code> and <code>\uNNNN</code>.</p>
+<h4 id="Hexadecimal-Literals"><a href="#Hexadecimal-Literals" class="headerlink" title="Hexadecimal Literals"></a>Hexadecimal Literals</h4><p><code>hex&quot;001122FF&quot;</code></p>
+<h4 id="Enums"><a href="#Enums" class="headerlink" title="Enums"></a>Enums</h4><p>Enums are one way to create a user-defined type in Solidity. They are explicitly convertable to and from all integer types but implicit conversion is not allowed. The explicit conversions check the value ranges at runtime, and a failure causes an exception.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract test &#123;</span><br><span class="line">  enum ActionChoices &#123;</span><br><span class="line">    GoLeft,</span><br><span class="line">    GoRight,</span><br><span class="line">    GoStraight,</span><br><span class="line">    GoStill</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ActionChoices choice;</span><br><span class="line">  ActionChoices constant defaultChoice = ActionChoices.GoStraight;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setGoStraight</span>(<span class="hljs-params"></span>) </span>&#123;</span><br><span class="line">    choice = ActionChoices.GoStraight;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getChoice</span>(<span class="hljs-params"></span>) <span class="hljs-title">returns</span> (<span class="hljs-params">ActionChoices</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> choice;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDefaultChoice</span>(<span class="hljs-params"></span>) <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>&#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> uint(defaultChoice);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Function-Types"><a href="#Function-Types" class="headerlink" title="Function Types"></a>Function Types</h4><p>Function types are notated as follows:</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">&lt;parameter types&gt;</span>) </span>&#123;internal|external&#125; [pure|constant|view|payable] [returns (<span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">return</span> <span class="hljs-attr">types</span>&gt;</span>)]</span></span><br></pre></td></tr></table></figure>
+<p>In contrast to the parameter types, the return types cannot be empty - if the function type should not return anything, the whole <code>returns (&lt;return type&gt;)</code> part has to be omitted.</p>
+<p>Public (or external) functions have a special member called <code>selector</code>, which returns the <code>ABI function selector</code>:</p>
+<h4 id="Reference-Types"><a href="#Reference-Types" class="headerlink" title="Reference Types"></a>Reference Types</h4><p>Complex types, i.e. types which do not always fit into 256 bits have to be handled more carefully than than the value-types we have already seen. Since copying them can be quite expensive, we have to think about whether we want them to be store in <strong>memory</strong>(which is not persisting) or <strong>storage</strong>(where the state variables are held).</p>
+<h4 id="Data-location"><a href="#Data-location" class="headerlink" title="Data location"></a>Data location</h4><p>Every complex type, i.e. <em>arrays</em> and <em>structs</em> has an additional annotation, the “data location” about where it is stored in <strong>memory</strong> or in <strong>storage</strong>. Depending on the context, there is always a default, but it can be overrideen by appeding either <code>storage</code> or <code>memory</code> to the type. The default for function parameters(including return parameters) is <strong>memory</strong> the default for local variable is <strong>storage</strong> and the location is forced to <strong>storage</strong> for state variables</p>
+<p>There is also a third data location, <strong>calldata</strong>, which is a non-modificable, non-persistent area where function arguments are stored. Function parameter(not return parameters) of external functions are forced to <strong>calldata</strong> and behave mostly like <strong>memory</strong>.</p>
+<p>Data locations are imortant because they change how assignment behave: assignments between storage and memory and also to a state variable always create an independent copy. Assignments to local storage variables only assign a reference though, and this reference always points to the state variable even if the latter is changed in the meantime. On the other hand, assignments from a memory stoted reference type to another memory-stored reference type do not create a copy.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract C &#123;</span><br><span class="line">  uint[] x; <span class="hljs-comment">// the data location of x is storage</span></span><br><span class="line"></span><br><span class="line">  <span class="hljs-comment">// the data location of memoryArray is memory</span></span><br><span class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">uint[] memoryArray</span>) </span>&#123;</span><br><span class="line">    x = memoryArray; <span class="hljs-comment">// works, copy the whole array to storage</span></span><br><span class="line">    <span class="hljs-keyword">var</span> y = x; <span class="hljs-comment">// works, assigns a pointer, data location of y is storage</span></span><br><span class="line">    y[<span class="hljs-number">7</span>]; <span class="hljs-comment">// fine, returns the 8th element</span></span><br><span class="line">    y.length = <span class="hljs-number">2</span>; <span class="hljs-comment">// fine, modifies x through y</span></span><br><span class="line">    <span class="hljs-keyword">delete</span> x; <span class="hljs-comment">// fine, clears the array, also modifies y</span></span><br><span class="line">    <span class="hljs-comment">// the following does not work; it would need to create a new temporary / unamed array in storage, but storage is 'statically' allocated</span></span><br><span class="line">    <span class="hljs-comment">// y = memoryArray;</span></span><br><span class="line">    <span class="hljs-comment">// This does not work either, since it would 'reset' the pointer, but there is not sensible location it could point to.</span></span><br><span class="line">    <span class="hljs-comment">// delete y;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h5><ul>
+<li><p>Forced data location:</p>
+<ul>
+<li><p>parameters(not return) of external functions: calldata</p>
+</li>
+<li><p>state variables: storage</p>
+</li>
+</ul>
+</li>
+<li><p>Default data location:</p>
+<ul>
+<li><p>parameters(also return) of functions: memory</p>
+</li>
+<li><p>all other local variables: storage</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h4><p>An array of fixed size <code>k</code> and element type <code>T</code> is written as <code>T[k]</code></p>
+<p>An array of dynamic size as <code>T[]</code></p>
+<p>An array of 5 dynamic arrays of <code>uint</code> is <code>uint[][5]</code>. (note that the notation is reversed when compared to some other language). To access the second uint in the third dynamic array, you use <code>x[2][1]</code></p>
+<p>Variables of type <code>bytes</code> and <code>string</code> are special arrays. A <code>bytes</code> is similar to <code>byte[]</code>, but it is packed tightly in calldata. <code>string</code> is equal to <code>bytes</code> but does not allow length or index access(for now).</p>
+<p>So <code>bytes</code> should always be preferred over <code>byte[]</code> because it is cheaper.</p>
+<h4 id="Structs"><a href="#Structs" class="headerlink" title="Structs"></a>Structs</h4><p>Solidity provides a way to define new types in the form of structs, which is shown in the following example:</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract CrowdFunding &#123;</span><br><span class="line">  struct Funder &#123;</span><br><span class="line">    address addr;</span><br><span class="line">    uint amount;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  struct Campaign &#123;</span><br><span class="line">    address beneficiary;</span><br><span class="line">    uint fundingGoal;</span><br><span class="line">    uint numFunders;</span><br><span class="line">    uint amount;</span><br><span class="line">    mapping(<span class="hljs-function"><span class="hljs-params">uint</span> =&gt;</span> Funder) funders;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>It is not possible for a struct to contain a member of its own type, although the struct itself can be the value type of a mapping member. This restriction is necessary, as the size of the struct has to be finite.</p>
+<h4 id="Mappings"><a href="#Mappings" class="headerlink" title="Mappings"></a>Mappings</h4><p>Mapping types are declared as <code>mapping(_keyType =&gt; _valueType)</code>. Here <code>_keyType</code> can be almost any type except for a mapping, a dynamically sized array, a contract, an enum, and a struct. <code>_valueType</code> can actually be any type, including mappings.</p>
+<p>Mappings can be seen as hash tables which are virtually initialized such that every possible key exists and is mapped to a value whose byte-representation is all zeros: a type’s default value.</p>
+<p>Mappings are only allowed for state variables( or as storage reference types in internal function).</p>
+<p>It is possible to mark mapping <code>public</code> and have Solidity create a getter. The <code>_keyType</code> will become a required parameter for the getter and it will return <code>_valueType</code>.</p>
+<p>Mappings are not iterable, but it is possible to implement a data structure on top of them.</p>
+<h4 id="Operators-Involving-LValues"><a href="#Operators-Involving-LValues" class="headerlink" title="Operators Involving LValues"></a>Operators Involving LValues</h4><p>LValue, i.e. a variable or something that can be assigned to.</p>
+<h5 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h5><p><code>delete a</code> assigns the initial value for the type to a. I.e., for integers, it is equivalent to <code>a = 0</code>.</p>
+<p><code>delete</code> has no effect on whole mappints. So if you delete a struct, it will reset all members that are not mappings and also recurse into the memebers unless they are mappings. However, individual keys and what they map to can be deleted.</p>
+<p>It’s really important to note that <code>delete a</code> really behaves like an assignment to <code>a</code>, it stores a new object in <code>a</code>.</p>
+<h4 id="Conversions-between-Elementary-Types"><a href="#Conversions-between-Elementary-Types" class="headerlink" title="Conversions between Elementary Types."></a>Conversions between Elementary Types.</h4><h5 id="Implicit-Conversions"><a href="#Implicit-Conversions" class="headerlink" title="Implicit Conversions"></a>Implicit Conversions</h5><p>In general, an implicit conversion between value-types is possible if it makes sense semantically and no information is lost: <code>uint8</code> is convertible to <code>uint16</code>, but <code>uint16</code> is not convertible to <code>uint8</code>. And <code>int8</code> is not convertible to <code>uint256</code>(because <code>uint256</code> cannot hold hold e.g. <code>-1</code>).</p>
+<h5 id="Explicit-Conversions"><a href="#Explicit-Conversions" class="headerlink" title="Explicit Conversions"></a>Explicit Conversions</h5><p>If the compiler does not allow implicit conversion but you know what you are doing, an explicit type conversion is sometimes possible.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int8 y = <span class="hljs-number">-3</span>;</span><br><span class="line">uint x = uint(y);</span><br></pre></td></tr></table></figure>
+<h4 id="Type-Deduction"><a href="#Type-Deduction" class="headerlink" title="Type Deduction"></a>Type Deduction</h4><p>For convenience, it is not always necessary to explicitly specify the type of a variable, the compiler automatically infers it from the type of the first expression that is assigned to the variable:</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uint24 x = <span class="hljs-number">0x123</span>;</span><br><span class="line"><span class="hljs-keyword">var</span> y = x;</span><br></pre></td></tr></table></figure>
+<h3 id="Units-and-Globally-Available-Variables"><a href="#Units-and-Globally-Available-Variables" class="headerlink" title="Units and Globally Available Variables"></a>Units and Globally Available Variables</h3><h4 id="Ether-Units"><a href="#Ether-Units" class="headerlink" title="Ether Units"></a>Ether Units</h4><p>A literal number can take a suffix of <code>wei</code>, <code>finney</code>, <code>szabo</code>, or <code>ether</code> to convert between the subdenominations of Ether, where Ether currency numbers without a postfix are assumed to be Wei.</p>
+<p><code>2 ether === 2000 finney</code> evaluates to <code>true</code></p>
+<h4 id="Time-Units"><a href="#Time-Units" class="headerlink" title="Time Units"></a>Time Units</h4><p>Suffixes like <code>seconds</code>, <code>minutes</code>, <code>hours</code>, <code>days</code>, <code>weeks</code> and <code>years</code> after literal numbers can be used to convert between units of time where seconds are the base unit.</p>
+<p>Take care if you perform calendar calculations using these units, because not every year equals 365 days and not even every day has 24 hours because of leap seconds. Due to the fact that leap seconds cannot be predicted, an exact calendar library has to be updated by an external oracle.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">unit start, unit dayAfter</span>) </span>&#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (now &gt;= start + dayAfter + <span class="hljs-number">1</span> days) &#123;</span><br><span class="line">    <span class="hljs-comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Other Global Variables and Functions:</p>
+<p><a href="http://ezcook.de/2017/11/10/Solidity-CheatSheet/" target="_blank" rel="noopener">Post</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-11-10T07:02:45.000Z">2017-11-10</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    3 minutes read (About 477 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/11/10/Solidity-CheatSheet/">Solidity CheatSheet</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="Global-Variables"><a href="#Global-Variables" class="headerlink" title="Global Variables"></a>Global Variables</h3><h4 id="Block"><a href="#Block" class="headerlink" title="Block"></a>Block</h4><ul>
+<li><p>block.coinbase: address - current block miner’s address</p>
+</li>
+<li><p>block.difficulty: uint - current block difficulty</p>
+</li>
+<li><p>block.gaslimit: uint - current block gaslimit</p>
+</li>
+<li><p>block.number: uint - current block number</p>
+</li>
+<li><p>block.timestamp: uint - current block timestamp</p>
+</li>
+</ul>
+<h4 id="Msg"><a href="#Msg" class="headerlink" title="Msg"></a>Msg</h4><ul>
+<li><p>msg.data: bytes - complete calldata</p>
+</li>
+<li><p>msg.gas: uint - remaining gas</p>
+</li>
+<li><p>msg.sender: address - sender of the message(current call)</p>
+</li>
+<li><p>msg.value: uint - number of wei sent with the message</p>
+</li>
+</ul>
+<h4 id="Now"><a href="#Now" class="headerlink" title="Now"></a>Now</h4><ul>
+<li>now: uint - current block timestamp(alias for block.timestamp)</li>
+</ul>
+<h4 id="Tx"><a href="#Tx" class="headerlink" title="Tx"></a>Tx</h4><ul>
+<li><p>tx.gasprice: uint - gas price of the transaction</p>
+</li>
+<li><p>tx.origin: address - sender of the transaction (full call chain)</p>
+</li>
+</ul>
+<h3 id="Global-Functions"><a href="#Global-Functions" class="headerlink" title="Global Functions"></a>Global Functions</h3><ul>
+<li><p>assert(bool condition): abort execution and revert state changes if condition is <code>false</code>(use for internal error)</p>
+</li>
+<li><p>require(bool condition): abort execution and revert state changes if condition is <code>false</code>(use for malformed input or error in external component)</p>
+</li>
+<li><p>revert(): abort execution and revert state changes</p>
+</li>
+<li><p>block.blockhash(uint blockNumber) returns (bytes32): hash of the given block - only works for 256 most recent blocks</p>
+</li>
+<li><p>sha256(…) returns (bytes32): compute the SHA-256 hash of the (tightly packed) arguments</p>
+</li>
+<li><p>keccak256(…) returns (bytes32): compute the Ethereum-SHA-3(Keccak-256) hash of the (tightly packed) arguments</p>
+</li>
+<li><p>sha3(…) returns (bytes32): alias for keccak256</p>
+</li>
+<li><p>ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address): recover address associated with the public key from elliptic curve signature</p>
+</li>
+<li><p>addmod(uint x, uint y, uint k) returns (uint): compute <code>(x + y) % k</code> where the addition is performed with arbitrary precision and does not wrap around at 2 ** 256</p>
+</li>
+<li><p>mulmod(uint x, uint y, uint k) returns (uint): compute <code>(x * y) % k</code> where the addition is performed with arbitrary precision and does not wrap around 2 ** 256</p>
+</li>
+<li><p>selfdestruct(address recipient): destroy the current contract, sending its funds to the given address</p>
+</li>
+<li><p>suicide(address recipient): alias for selfdestruct</p>
+</li>
+<li><p><address>.balance: uint256: balance of the Address in Wei</address></p>
+</li>
+<li><p><address>.send(uint256 amount) returns (bool): send given amount of Wei to Address, returns <code>false</code> on failure</address></p>
+</li>
+<li><p><address>.transfer(uint256 amount): send given amount of Wei to Address, throws on failure.</address></p>
+</li>
+</ul>
+<h3 id="Scope-Variables"><a href="#Scope-Variables" class="headerlink" title="Scope Variables"></a>Scope Variables</h3><ul>
+<li><p>this: current contract’s type - the current contract, explicitly convertable to address</p>
+</li>
+<li><p>super: the contract one level higher in the inheritance hierarchy</p>
+</li>
+</ul>
+<h3 id="Function-Visibility-Specifier"><a href="#Function-Visibility-Specifier" class="headerlink" title="Function Visibility Specifier"></a>Function Visibility Specifier</h3><ul>
+<li><p>public: visible externally and internally(creates accessor function for storage/state variables)</p>
+</li>
+<li><p>private: only visible in the current contract</p>
+</li>
+<li><p>external: only visible externally(only for functions) - i.e. can only be message-called)</p>
+</li>
+<li><p>internal: only visible internally</p>
+</li>
+</ul>
+<h3 id="Modifiers"><a href="#Modifiers" class="headerlink" title="Modifiers"></a>Modifiers</h3><ul>
+<li><p>pure: for function - disallows modification or access of state - this is not enforced yet</p>
+</li>
+<li><p>view: for function - disallows modifiction of state - this is not enforced yet</p>
+</li>
+<li><p>payable: for function - allows them to receive Ether together with a call</p>
+</li>
+<li><p>constant: for state variable - disallow assignment(except initialization), does not occupy storage slot</p>
+</li>
+<li><p>contant: for function - same as view</p>
+</li>
+<li><p>anonymous: for events - does not store event signature as topic</p>
+</li>
+<li><p>indexed: for event parameters - store the parameter as topic</p>
+</li>
+</ul>
+<p><img src="https://s3-eu-west-1.amazonaws.com/b9-academy-assets/public/solidity-cheatsheet.png" alt=""></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-11-07T01:43:53.000Z">2017-11-07</time>
                 
                 
@@ -167,7 +513,7 @@
             
         </h1>
         <div class="content">
-            <p><a href="https://dexecure.com/blog/how-to-create-http2-static-file-server-nodejs-with-examples/" target="_blank" rel="noopener">Origin</a></p>
+            <p><a href="https://dexecure.com/blog/how-to-create-http2-static-file-server-nodejs-with-examples/" target="_blank" rel="noopener">Original</a></p>
 <p>Websites delivered using HTTP/2 enjoys a wide range of new features including -</p>
 <ul>
 <li><p>fully multiplexed connections: all requests and responses to a domain are fully multiplexed via a single connection, making best use of available bandwidth.</p>
@@ -627,7 +973,7 @@
             
         </h1>
         <div class="content">
-            <p><a href="https://dev-blog.apollodata.com/getting-started-with-typescript-and-apollo-a9aa2c7dcf87" target="_blank" rel="noopener">Origin</a></p>
+            <p><a href="https://dev-blog.apollodata.com/getting-started-with-typescript-and-apollo-a9aa2c7dcf87" target="_blank" rel="noopener">Original</a></p>
 <p>Start with a simple React Component wrapped with the <code>graphql</code> higher order component from React Apollo.</p>
 <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span></span><br><span class="line"><span class="hljs-keyword">import</span> gql <span class="hljs-keyword">from</span> <span class="hljs-string">'graphql-tag'</span></span><br><span class="line"><span class="hljs-keyword">import</span> &#123; graphql &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'react-apollo'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> HERO_QUERY = gql<span class="hljs-string">`</span></span><br><span class="line"><span class="hljs-string">  query GetCharacter($episode: Episodi!) &#123;</span></span><br><span class="line"><span class="hljs-string">    hero(episode: $episode) &#123;</span></span><br><span class="line"><span class="hljs-string">      name</span></span><br><span class="line"><span class="hljs-string">      id</span></span><br><span class="line"><span class="hljs-string">      friends &#123;</span></span><br><span class="line"><span class="hljs-string">        name</span></span><br><span class="line"><span class="hljs-string">        id</span></span><br><span class="line"><span class="hljs-string">        appearsIn</span></span><br><span class="line"><span class="hljs-string">      &#125;</span></span><br><span class="line"><span class="hljs-string">    &#125;</span></span><br><span class="line"><span class="hljs-string">  &#125;</span></span><br><span class="line"><span class="hljs-string">`</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> withCharacter = graphql(HERO_QUER, &#123;</span><br><span class="line">  options: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> (&#123;</span><br><span class="line">    variables: &#123; <span class="hljs-attr">episode</span>: <span class="hljs-string">'JEDI'</span> &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> withCharacter(<span class="hljs-function">(<span class="hljs-params">&#123; data: &#123; loading, hero, error &#125;&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (loading) &#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> &lt;div&gt;Loading&lt;/div&gt;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="hljs-keyword">if</span> (error) &#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> &lt;div&gt;Error&lt;/div&gt;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="hljs-keyword">return</span> (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;hero &amp;&amp;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">          &lt;h3&gt;&#123;hero.name&#125;&lt;<span class="hljs-regexp">/h3&gt;</span></span><br><span class="line"><span class="hljs-regexp">          &#123;hero.friends.map(friend =&gt; &lt;h6 key=&#123;friend.i&#125;&gt;&#123;friend.name&#125;&lt;/</span>h6&gt;&#125;&gt;&lt;/h6&gt;)&#125;</span><br><span class="line">        &lt;<span class="hljs-regexp">/div&gt;</span></span><br><span class="line"><span class="hljs-regexp">      &#125;</span></span><br><span class="line"><span class="hljs-regexp">    &lt;/</span>div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>The above code pulls some data from a GraphQL API using a query and includes lifecycle information, such as loading and error information.</p>
@@ -795,7 +1141,7 @@
             
         </h1>
         <div class="content">
-            <p><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-switchMap" target="_blank" rel="noopener">Origin</a><br><a href="https://rxviz.com" target="_blank" rel="noopener">Playground</a></p>
+            <p><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-switchMap" target="_blank" rel="noopener">Original</a><br><a href="https://rxviz.com" target="_blank" rel="noopener">Playground</a></p>
 <h3 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h3><h5 id="Direct-Subclass"><a href="#Direct-Subclass" class="headerlink" title="Direct Subclass"></a>Direct Subclass</h5><ul>
 <li><p>ConnectableObservable</p>
 </li>
@@ -1694,7 +2040,7 @@
             
         </h1>
         <div class="content">
-            <p><a href="https://blog.risingstack.com/measuring-http-timings-node-js/" target="_blank" rel="noopener">Origin</a></p>
+            <p><a href="https://blog.risingstack.com/measuring-http-timings-node-js/" target="_blank" rel="noopener">Original</a></p>
 <h3 id="Some-Basic-Concepts"><a href="#Some-Basic-Concepts" class="headerlink" title="Some Basic Concepts:"></a>Some Basic Concepts:</h3><ul>
 <li><p>IP(Internet Protocol): IP is a network-layer protocol, deals with network addressing and routing. IP is responsible for delivering packets from the source host to the destination host based on the packet headers across one or more IP network. It also defines packet structures that encapsulate the data to be delivered.</p>
 </li>
@@ -2438,99 +2784,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-09-05T01:41:10.000Z">2017-09-05</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    a minute read (About 172 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/09/05/Notes-on-TS-React-Redux/">Notes on TS + React + Redux</a>
-            
-        </h1>
-        <div class="content">
-            <h3 id="Add-Explicit-Props-Interface-from-Store"><a href="#Add-Explicit-Props-Interface-from-Store" class="headerlink" title="Add Explicit Props Interface from Store"></a>Add Explicit Props Interface from Store</h3><p>When I use <code>react-redux</code>, the TS Compiler always throw an error:</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error TS2339: Property <span class="hljs-string">'...'</span> does not exist on <span class="hljs-built_in">type</span> <span class="hljs-string">'Readonly&lt;children?: ReactNode; &#125;&gt; &amp; Readonly&lt;&#123;&#125;&gt;'</span>.</span><br></pre></td></tr></table></figure>
-<p>That’s because Connect was not supplying an explicit interface to the container component, so it was confused by the prop that it was trying to pass.</p>
-<p>So you can add an explicit interface on child component.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">interface PropsFromStore extends React.Props&lt;any&gt; &#123;</span><br><span class="line">  propsFromStore: any;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ChildComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span>&lt;<span class="hljs-title">PropsFromStore</span>, <span class="hljs-title">React</span>.<span class="hljs-title">State</span>&gt; </span>&#123;</span><br><span class="line">  <span class="hljs-comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> connect(mapStateToProps, mapDispatchToProps)(ChildComponent)</span><br></pre></td></tr></table></figure>
-<h3 id="Add-Enhancer-to-Store-with-TS"><a href="#Add-Enhancer-to-Store-with-TS" class="headerlink" title="Add Enhancer to Store with TS"></a>Add Enhancer to Store with TS</h3><p>When I use an enhancer like:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">const</span> enhancer = compose(</span><br><span class="line">  applyMiddleware(...middlewares),</span><br><span class="line">  DevTools.instrument(),</span><br><span class="line">  persistState(</span><br><span class="line">    <span class="hljs-built_in">window</span>.location.href.match(</span><br><span class="line">      /[?&amp;]debug_session=([^&amp;#]+)\b/</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>I got an error like:</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ts] Argument of <span class="hljs-built_in">type</span> <span class="hljs-string">'Function'</span> is not assignable to parameter of <span class="hljs-built_in">type</span> <span class="hljs-string">'Func3&lt;&#123;&#125;, &#123;&#125;, &#123;&#125;, &#123;&#125;, StoreEnhancerStoreCreator&lt;&#123;&#125;&gt;&gt;'</span>.</span><br><span class="line">Type <span class="hljs-string">'Function'</span> provides no match <span class="hljs-keyword">for</span> the signature <span class="hljs-string">'(a1: &#123;&#125;, a2: &#123;&#125;, a3: &#123;&#125;, ...args: any[]): &#123;&#125;'</span></span><br></pre></td></tr></table></figure>
-<p>To resolve this, just:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> &#123; GenericStoreEnhancer &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'redux'</span></span><br><span class="line"><span class="hljs-keyword">const</span> enhancer = compose(</span><br><span class="line">  applyMiddleware(...middlewares),</span><br><span class="line">  DevTools.instrument <span class="hljs-keyword">as</span> GenericStoreEnhancer,</span><br><span class="line">  persistState(</span><br><span class="line">    <span class="hljs-built_in">window</span>.location.href.match(</span><br><span class="line">      /[?&amp;]debug_session=([^&amp;#]+)\b/</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-09-04T10:08:45.000Z">2017-09-04</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    a few seconds read (About 88 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/09/04/AsyncRoute-with-React-Router-v4/">AsyncRoute With React-Router-V4</a>
-            
-        </h1>
-        <div class="content">
-            <figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// AsyncRoute.jsx</span></span><br><span class="line"><span class="hljs-keyword">import</span> React, &#123; Component &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Bundle</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>&#123;</span><br><span class="line">  constructur () &#123;</span><br><span class="line">    <span class="hljs-keyword">super</span>()</span><br><span class="line">    <span class="hljs-keyword">this</span>.state = &#123;</span><br><span class="line">      mod: <span class="hljs-literal">null</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  componentWillMount () &#123;</span><br><span class="line">    <span class="hljs-keyword">this</span>.load(<span class="hljs-keyword">this</span>.props)</span><br><span class="line">  &#125;</span><br><span class="line">  componentWillReceiveProps (nextProps) &#123;</span><br><span class="line">    <span class="hljs-keyword">if</span> (nextProps.load !== <span class="hljs-keyword">this</span>.props.load) &#123;</span><br><span class="line">      <span class="hljs-keyword">this</span>.load(nextProps)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  load (props) &#123;</span><br><span class="line">    <span class="hljs-keyword">this</span>.setState(&#123;</span><br><span class="line">      mod: <span class="hljs-literal">null</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    props.load(<span class="hljs-function">(<span class="hljs-params">mod</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="hljs-keyword">this</span>.setState(&#123;</span><br><span class="line">        mod: mod.default || mod,</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  render () &#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.state.mod ? <span class="hljs-keyword">this</span>.props.children(<span class="hljs-keyword">this</span>.state.mod) : <span class="hljs-literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-built_in">module</span> =&gt; <span class="hljs-function"><span class="hljs-params">routerProps</span> =&gt;</span> (&lt;Bundle load=&#123;module&#125;&gt;</span><br><span class="line">  &#123;Comp =&gt; Comp ? &lt;Comp &#123;...routerProps&#125; /&gt; : null&#125;</span><br><span class="line">&lt;/Bundle&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">// Body.jsx</span></span><br><span class="line"><span class="hljs-keyword">import</span> &#123; Route &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'react-router-dom'</span></span><br><span class="line"><span class="hljs-keyword">import</span> AsyncRoute <span class="hljs-keyword">from</span> <span class="hljs-string">'./AsyncRoute'</span></span><br><span class="line"><span class="hljs-keyword">import</span> Page <span class="hljs-keyword">from</span> <span class="hljs-string">'bundle-loader?lazy!./Page'</span></span><br><span class="line"></span><br><span class="line">&lt;Route component=&#123;AsyncRoute(Page)&#125; /&gt;</span><br></pre></td></tr></table></figure>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2601,7 +2854,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        304
+                        306
                     </p>
                 </div>
             </div>
@@ -2621,7 +2874,7 @@
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        89
+                        90
                     </p>
                 </div>
             </div>
@@ -2752,7 +3005,7 @@
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2766,6 +3019,44 @@
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2824,44 +3115,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2873,6 +3126,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">
@@ -3229,6 +3493,44 @@
         
         <article class="media">
             
+            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
+                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
+                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/03/16/keystore/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/keystore.jpg" alt="Keystore">
@@ -3284,44 +3586,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="5 Tips in CRA@2.0">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-11T15:52:25.000Z">2018-11-11</time></div>
-                    <a href="/2018/11/11/5-tips-in-CRA-2-0/" class="has-link-black-ter is-size-6">5 Tips in CRA@2.0</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2018/11/08/Assembly-in-Solidity/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Assembly in Solidity">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-08T03:30:30.000Z">2018-11-08</time></div>
-                    <a href="/2018/11/08/Assembly-in-Solidity/" class="has-link-black-ter is-size-6">Assembly in Solidity</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3333,6 +3597,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">April 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">2</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/03/">

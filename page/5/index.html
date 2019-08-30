@@ -148,6 +148,126 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-08-20T13:54:19.000Z">2017-08-20</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 minutes read (About 910 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/08/20/Analyzing-Runtime-Performacne-with-Chrome-DevTools/">Analyzing Runtime Performacne With Chrome DevTools</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="Get-Started"><a href="#Get-Started" class="headerlink" title="Get Started"></a>Get Started</h3><ul>
+<li><p>Open Chrome in Incognito Mode. Incognito Mode ensures that Chrome runs in a clean state. For example, if you have a lot of extensions installed, those extensions might create noise in you performance meaturements.</p>
+</li>
+<li><p>Load the following page in your Incognito window. This is the demo that you’re going to profile. The page shows a bunch of little blue squares moving up and down.</p>
+</li>
+</ul>
+<p><code>https://googlechrome.github.io/devtools-samples/jank/</code></p>
+<ul>
+<li>Press <code>Command + Option + I</code> in Mac to open DevTools.</li>
+</ul>
+<h3 id="Simulate-a-Mobile-CPU"><a href="#Simulate-a-Mobile-CPU" class="headerlink" title="Simulate a Mobile CPU"></a>Simulate a Mobile CPU</h3><p>Mobile devices have much less CPU power than desktops and laptops. Whenevery you profile a page, use <strong>CPU Throttling</strong> to simulate how your page performs on mobile devices.</p>
+<ul>
+<li><p>In DevTools, click the <strong>Performacne</strong> tab.</p>
+</li>
+<li><p>Make sure that the <strong>Screenshots</strong> checkbox is enabled.</p>
+</li>
+<li><p>Click <strong>Capture Setting</strong>(the gear icon). DevTools reveals settings related to how it captures performances metrics.</p>
+</li>
+<li><p>For <strong>CPU</strong>, select <strong>2x slowdown</strong>. DevTools throttle your CPU so that it’s 2 times slower than usual.</p>
+</li>
+</ul>
+<p><img src="https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/imgs/throttling.svg" alt=""></p>
+<h3 id="Set-up-the-demo"><a href="#Set-up-the-demo" class="headerlink" title="Set up the demo"></a>Set up the demo</h3><ul>
+<li><p>Keep clicking <strong>Add 10</strong> until the blue squares move noticeably slower than before.</p>
+</li>
+<li><p>Click <strong>Optimize</strong>, the blue squares should move faster and more smoothly.</p>
+</li>
+<li><p>Click <strong>Un-Optimize</strong>. The blue squares move slower and with more jank again.</p>
+</li>
+</ul>
+<h3 id="Record-runtime-performance"><a href="#Record-runtime-performance" class="headerlink" title="Record runtime performance."></a>Record runtime performance.</h3><p>When you ran the optimized version of the page, the blue squares move faster. Why is that? Both version are supposed to move each square the same amount of spaces in the same amount of time. Take a recording in the Performance panel to learn how to detect the performance bottlenect in the un-optimized version.</p>
+<ul>
+<li>In DevTools, click <strong>Record</strong> DevTools captures performance metrics as the page run.</li>
+</ul>
+<p><img src="https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/imgs/profiling.png" alt="Profiling the Page"></p>
+<ul>
+<li><p>Wait a few seconds</p>
+</li>
+<li><p>Click <strong>Stop</strong>, DevTools stops recording, processes the data, then displays the results on the Performance panel.</p>
+</li>
+</ul>
+<p><img src="https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/imgs/results.png" alt=""></p>
+<h3 id="Analyze-the-results"><a href="#Analyze-the-results" class="headerlink" title="Analyze the results"></a>Analyze the results</h3><p>The main metrics for measuring the performance of any animation is frames per second (FPS). Users are happy when animations runs at 60 FPS.</p>
+<ul>
+<li>Look at the <strong>FPS</strong> Chart</li>
+</ul>
+<p><img src="https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/imgs/fps-chart.svg" alt=""></p>
+<p>Whenever you see a red bar above <strong>FPS</strong>, it means that the framerate dropped so low that it’s propably harming the user experience. In general, the highter the green bar, the higher the FPS.</p>
+<ul>
+<li>Below the <strong>FPS</strong> chart you see the CPU chart.</li>
+</ul>
+<p><img src="https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/imgs/cpu-summary.svg" alt=""></p>
+<p>The colors in the CPU chart corresponds to the colors in the Summary tab, at the bottom of the Performance panel. The fact that the CPU chart is full of color means that the CPU was maxed out during the recording.</p>
+<ul>
+<li><p>Hover your mouse over the <strong>FPS</strong>, <strong>CPU</strong>, or <strong>NET</strong> charts. DevTools shows a screenshot of the page at that point in time. Move your mouse left and right to replay the recoding. This is called srubbing, and it’s useful for manually analyzing the progression of animations.</p>
+</li>
+<li><p>In <strong>Frames</strong> section, hover your mouse over one of the green squares, DevTools shows you the FPS for that particular frame.</p>
+</li>
+</ul>
+<p>Of course, with this demo, it’s pretty obvious that the page is not performing well. But in real scenarios, it may not be so clear, so having all of these tools to make measurements comes in handy.</p>
+<h3 id="Find-Bottleneck"><a href="#Find-Bottleneck" class="headerlink" title="Find Bottleneck"></a>Find Bottleneck</h3><ul>
+<li>Note the summary tab. When no events are selected, this tab shows you a breakdown of activity. The page spent most of its time rendering. Since performance is the art of doing less work, your goal is to reduce the amount of time spent doing rendering work.</li>
+</ul>
+<p><img src="https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/imgs/summary.svg" alt=""></p>
+<ul>
+<li>Expand the <strong>Main</strong> section. DevTools shows you a flame chart of activity on the main thread, over time. The x-axis represents the recoding, over time. Each bar represents an event. A wider bar means that event took longer. The y-axis represents the call stack. When you see events stacked on top of each other, it means the upper events caused the lower events.</li>
+</ul>
+<p><img src="https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/imgs/main.svg" alt=""></p>
+<ul>
+<li>There’s a lot of data in the recording. Zoom in on a single <strong>Animation Frame Field</strong> event by clicking, holding, and dragging your mouse over the <strong>Overview</strong>, which is the section that includes <strong>CPU</strong>, <strong>FPS</strong>, and <strong>NET</strong> charts. The <strong>Main</strong> section and <strong>Summary</strong> tab only display information for the selected portion of the recording.</li>
+</ul>
+<p><img src="https://developers.google.com/web/tools/chrome-devtools/evaluate-performance/imgs/zoomed.png" alt=""></p>
+<ul>
+<li><p>Note the red triangle in the top-right of the <strong>Animation Frame Fired</strong> event. Whenever you see a red triangle, it’s a warning that there may be an issue related to this event.</p>
+</li>
+<li><p>Click the <strong>Animation Frame Fired</strong> event. The <strong>Summary</strong> tab now shows you information about that event. Note that <strong>reveal</strong> link. Click that causes DevTools to highlight the event that initiate the <strong>Animation Frame Fired</strong> event.</p>
+</li>
+<li><p>Under the <strong>app.update</strong> event, there’s a bunch of purple events. If they were wider, it looks as though each one might have a red triangle on it. Click one of the purple <strong>Layout</strong> events now. DevTools provides more information about the event in the <strong>Summary</strong> tab.</p>
+</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-08-18T09:49:07.000Z">2017-08-18</time>
                 
                 
@@ -1946,78 +2066,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-07-29T06:40:58.000Z">2017-07-29</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 minutes read (About 304 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/07/29/Cache-Object/">Cache Object</a>
-            
-        </h1>
-        <div class="content">
-            <p>The Cache interface provides a storage mechanism for <code>Request</code> / <code>Response</code> object pairs that are cahced, for example as part of the <code>ServiceWorker</code> lifecycle. Note that the Cache Interface is exposed to windowed scopes as well as workers. You don’t have to use it in conjunction with service workers, even though it is defined in the service worker spec.</p>
-<p>An orgin can have <code>multiple Cache Objects</code>. You are responsible for implementing how your script handles <code>Cache Update</code>. Items in a Cache do not get updated unless explictly requested – they don’t expires unless deleted.</p>
-<p>Use <code>CacheStorage.open(cacheName)</code> to open a specific named cache object and then call any of the cache methods to maintain the cache.</p>
-<blockquote>
-<p>The caching API doesn’t honor HTTP caching headers.</p>
-</blockquote>
-<h3 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h3><ul>
-<li><p>Cache.match(request, options)</p>
-<p>Returns a <code>Promise</code> that resolves to the response associated with the first matching request in the Cache Object.</p>
-</li>
-</ul>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cache.match(request).then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="hljs-keyword">if</span> (response) &#123;</span><br><span class="line">    <span class="hljs-comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><p>Cache.matchAll(request, options)</p>
-<p>Returns a <code>Promise</code> that resolves to an array of all matching requests in the Cache Object.</p>
-</li>
-<li><p>Cache.add(request)</p>
-<p>Takes a URL, retrieves it and adds the resulting response object to the given cache. This is functionally equivalent to calling <code>fetch()</code>, then using <code>Cache.put()</code> to add the results to the cache.</p>
-</li>
-<li><p>Cache.addAll(requests)</p>
-<p>Takes an array of URLs, retrieves them, and adds the resulting response objects to the given cache.</p>
-</li>
-<li><p>Cache.put(request, response)</p>
-<p>Takes both a request and its response and adds it to the given cache. // namely cache the Request/Response pair.</p>
-</li>
-<li><p>Cache.delete(request, options)</p>
-<p>Finds the Cache entry whose key is the request, and if found, deletes the Cache entry and returns a <code>Promsie</code> that resolves to <code>true</code>. Otherwise resolve to <code>false</code>.</p>
-</li>
-<li><p>Cache.keys(request, options)</p>
-<p>Returns a <code>Promise</code> that resolves to an array of <code>Cache Key</code>.</p>
-</li>
-</ul>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2090,7 +2138,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        306
+                        307
                     </p>
                 </div>
             </div>
@@ -2110,7 +2158,7 @@
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        90
+                        91
                     </p>
                 </div>
             </div>
@@ -2241,7 +2289,7 @@
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2258,16 +2306,35 @@
         
         <article class="media">
             
-            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+            <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-30T06:26:54.000Z">2019-08-30</time></div>
+                    <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="has-link-black-ter is-size-6">Methods of the String in JavaScript </a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/20/note-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Note-on-Bip-173">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
-                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <a href="/2019/04/20/note-on-bip-173/" class="has-link-black-ter is-size-6">Note-on-Bip-173</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -2332,25 +2399,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/20/React-Hooks/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="React Hooks">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-20T09:41:39.000Z">2018-11-20</time></div>
-                    <a href="/2018/11/20/React-Hooks/" class="has-link-black-ter is-size-6">React Hooks</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2362,6 +2410,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/04/">
@@ -2729,16 +2788,35 @@
         
         <article class="media">
             
-            <a href="/2019/04/20/node-on-bip-173/" class="media-left">
+            <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
                 <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Node-on-Bip-173">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-30T06:26:54.000Z">2019-08-30</time></div>
+                    <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="has-link-black-ter is-size-6">Methods of the String in JavaScript </a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/04/20/note-on-bip-173/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Note-on-Bip-173">
                 </p>
             </a>
             
             <div class="media-content">
                 <div class="content">
                     <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
-                    <a href="/2019/04/20/node-on-bip-173/" class="has-link-black-ter is-size-6">Node-on-Bip-173</a>
+                    <a href="/2019/04/20/note-on-bip-173/" class="has-link-black-ter is-size-6">Note-on-Bip-173</a>
                     <p class="is-size-7 is-uppercase">
                         
                     </p>
@@ -2803,25 +2881,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2018/11/20/React-Hooks/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="React Hooks">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2018-11-20T09:41:39.000Z">2018-11-20</time></div>
-                    <a href="/2018/11/20/React-Hooks/" class="has-link-black-ter is-size-6">React Hooks</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2833,6 +2892,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">August 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/04/">

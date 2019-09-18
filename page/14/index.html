@@ -148,6 +148,273 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-06-26T22:45:09.000Z">2016-06-27</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    10 minutes read (About 1555 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/06/27/gulp-e8-87-aa-e5-8a-a8-e5-8c-96-e9-83-a8-e7-bd-b2-e5-bf-ab-e9-80-9f-e5-85-a5-e9-97-a8/">Gulp 自动化部署快速入门</a>
+            
+        </h1>
+        <div class="content">
+            <ol>
+<li><code>$ npm install —g gulp</code>全局安装</li>
+</ol>
+<ul>
+<li>安装前保证已经安装了 ruby</li>
+</ul>
+<ol>
+<li><code>$ npm install —save-dev- gulp</code>作为项目的开发依赖( devDependence)安装到项目目录<p></p></li>
+<li><p>在项目根目录下创建一个名为<code>gulpfile.js</code>的文件:</p>
+<pre><code>//引用 gulp plugin
+</code></pre><p>var gulp = require(‘gulp’);<br>//建立 gulp task<br>gulp.task(‘default’, function(){<br> //任务代码<br>})<br><code>&lt;/pre&gt;
+在项目根目录运行 gulp 时, gulp 会直接读取</code>gulpfile.js`中定义的任务并执行.</p>
+</li>
+</ol>
+<ul>
+<li>gulp 可以将每一个你要执行的工作命名, 而默认运行的task 名为<code>default</code></li>
+</ul>
+<ol>
+<li>$ gulp`运行 gulp, 运行默认的名为’ default’ 的任务( task)</li>
+</ol>
+<ul>
+<li><code>gulp &amp;lt;task&amp;gt; &amp;lt;othertask&amp;gt;</code>运行指定 task</li>
+</ul>
+<ol>
+<li>gulp 基本 API</li>
+</ol>
+<ul>
+<li><p><code>gulp.src(globs[, options])</code></p>
+<pre><code>*   `glob`参考 [node-glob 语法](https://github.com/isaacs/node-glob), 也可以直接写文件的路径
+</code></pre><ul>
+<li><code>options</code>:略</li>
+</ul>
+</li>
+<li><p><code>gulp.dest(path[,options])</code></p>
+<pre><code>*   能被`pipe`进来, 并能写文件到文件夹, 如果文件夹不存在, 则自动创建文件夹.
+</code></pre><ul>
+<li><code>path</code>: String 或 Function, 可以直接写输出目录, 也可以传入一个返回路径的函数</li>
+<li><code>options</code>:略</li>
+</ul>
+</li>
+<li><p><code>gulp.task(name[, deps], fn)</code></p>
+<pre><code>*   &lt;pre&gt;`gulp.task(&apos;script&apos;,function(){
+</code></pre><p> //待执行<br>})<br>`</p>
+<ul>
+<li><code>name</code>: 赋予任务名称</li>
+<li><p><code>deps</code>: 任务列表数组, 这些任务会在当前任务运行之前完成</p>
+<pre><code>    *   task 默认以最大并发数执行, 也就是说 gulp 会一次性执行所有 task 并不做任何等待, 如果要以特定顺序执行, 需要:
+
+            *   给出一个提示, 告知 task 什么时候执行完毕
+*   再给出一个提示, 告知 task 依赖另一个 task 的完成
+*   <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var gulp = require(&apos;gulp&apos;);</div><div class="line">//返回一个 callback, 因此系统可以知道他什么时候完成</div><div class="line">gulp.task(&apos;one&apos;, function(cb)&#123;</div><div class="line">//执行一些任务</div><div class="line"> cb(err); //如果 err 不是 null 或者 undefined, 则会停止执行, 这样代表执行失败.</div><div class="line">&#125;);</div><div class="line">//定义一个所以来的 task 必须在这个 task 执行之前完成</div><div class="line">gulp.task(&apos;two&apos;, [&apos;one&apos;], function()&#123;</div><div class="line"> //&apos;one&apos;完成后要执行的任务</div><div class="line">&#125;)</div><div class="line">gulp.task(&apos;default&apos;, [&apos;one&apos;, &apos;two&apos;]);</div></pre></td></tr></table></figure>
+</code></pre></li>
+<li><p><code>fn</code>:要执行的操作</p>
+</li>
+</ul>
+</li>
+<li><p><code>gulp.watch(glob [, opts], tasks)</code></p>
+<pre><code>*   监听文件, 并可以在文件发生改动的时候做一些事情, 他总会返回一个 EventEmiiter 来发射`change`事件.
+</code></pre><ul>
+<li><code>glob</code>: 指定具体监听哪些文件的变动</li>
+<li><p><code>tasks</code>: 需要在文件变动后执行的任务</p>
+<pre><code>*   &lt;pre&gt;`var watcher = gulp.watch(&apos;js/**/*.js&apos;, [&apos;uglify&apos;, &apos;reload&apos;]);
+</code></pre><p>watcher.on(‘change’, function(event){<br>console.log(‘File’+event.path+’ was ‘+event.type+’, running tasks…’);<br>});<br>`</p>
+</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>工作流程</li>
+</ol>
+<ul>
+<li><p>设定任务</p>
+<pre><code>*   gulp 可以对不同的 task 命名, 而 default 是默认的人物名称, 如果执行 gulp 的时候没有指定任务名称, 则会执行`default` 任务.
+</code></pre><ul>
+<li><pre>`//载入 gulp plugin
+var gulp = require('gulp');
+//定义名称为 default 的 gulp 任务
+gulp.task('default', function(){
+console.log('Hello Gulp Default Task');
+});
+//定义名称为 other 的 gulp 任务
+gulp.task('other', function(){
+console.log('Hello Gulp Other Task');
+})
+`</pre></li>
+</ul>
+</li>
+<li><p>执行指定的 gulp 任务</p>
+<pre><code>*   &lt;pre&gt;`$ gulp
+</code></pre><p>`</p>
+<pre><code>*   执行默认的 default 任务
+</code></pre><ul>
+<li><pre>`$ gulp other
+`</pre>
+
+<pre><code>*   执行任务`other`
+</code></pre></li>
+<li><pre>`$ gulp.task('default', ['other', 'script']);
+`</pre>
+
+<pre><code>*   在 default 任务中设定要执行的任务队列可以执行多个任务
+</code></pre></li>
+</ul>
+</li>
+<li><p>监听</p>
+<pre><code>*   比如我们使用`gulp-uglify`最小化 JS 时, 希望可以在每次改动 JS 的时候自动执行 gulp 最小化动作
+
+        *   &lt;pre&gt;`var gulp = require(&apos;gulp&apos;),
+</code></pre><p>gulpUglify = require(‘gulp-uglify’);<br>gulp.task(‘script’, function(){<br>gulp.src(‘javascript/original/*.js’) //指定要处理的原始 JS 目录<br>.pipe(gulpUglify()) //执行最小化<br>.pipe(gulp.dest(‘javascript/minify’)); //最小化后部署到 JS 目录<br>})<br>`</p>
+<ul>
+<li><p>添加监听</p>
+<pre><code>*   &lt;pre&gt;`gul.task(&apos;watch&apos;, function(){
+</code></pre><p>gulp.watch(‘javascript/original/*.js’, [‘script’]);<br>})<br>`</p>
+<ul>
+<li><pre>`$ gulp watch //执行监听
+`</pre>
+
+<pre><code>*   执行监听后, 每次改动 javascript/origin/*.js 中所有 JS 文件时都会重新执行 script 任务.
+</code></pre><ul>
+<li>可以用<code>**</code>监听所有文件</li>
+<li>可以将<code>watch</code>添加到任务列表, 这样只需要指令<code>gulp</code>就可以执行监听</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>例外处理</p>
+<pre><code>*   经历例外错误记录任务
+
+        *   由于例外错误可能会在很多地方出现, 最好是定义为可调用的函数
+*   &lt;pre&gt;`function errorLog(error){
+</code></pre><p>console.error(error);<br>this.emit(‘end’);<br>}<br>gulp.task(‘script’, function(){<br>gulp.src(‘…’)<br>.on(‘error’,errorLog)<br>.pipe(gulpUglify())<br> .pipe(gulp.dest(‘…’));<br>});<br>`</p>
+</li>
+</ul>
+<ol>
+<li>常用插件</li>
+</ol>
+<ul>
+<li><p>gulp-uglify</p>
+<pre><code>*   `$ npm install —save-dev gulp-uglify`
+</code></pre><ul>
+<li>将要最小化的 JS 文件放在 javascript/original 下</li>
+<li>将最小化后的 JS 文件放在 javascript/minify 下</li>
+<li><pre>`var gulp = require('gulp'),
+gulpUgligy = require('gulp-uglify');
+gulp.task('script', function(){
+gulp.src('javascript/original/*js')
+.pipe(gulpUglify())
+.pipe(gulp.dest('javascript/minify'));
+})
+`</pre></li>
+</ul>
+</li>
+<li><p>gulp-sass</p>
+<pre><code>*   `$ npm install —save-dev gulp-sass`
+
+        *   将要编译的 Scss 文件放在 scss 目录下
+*   将编译后的 CSS 文件放在 css 目录下
+*   &lt;pre&gt;`var gulp = require(&apos;gulp&apos;),
+</code></pre><p>gulpSass = required(‘gulp-sass’);<br>gulp.task(‘styles’,function(){<br>gulp.src(‘scss/*.scss’)<br>.pipe(gulpSass())<br>.pipe(gulp.dest(‘css’));<br>})<br>`</p>
+<pre><code>*   向 gulpSass()传入参数`{outputStyle:&apos;compressed&apos;}`输出压缩后的 CSS 文件
+</code></pre></li>
+<li><p>gulp-imagemin</p>
+<pre><code>*   压缩图片, 支持格式有 gif, jpg, png, svg
+</code></pre><ul>
+<li><code>$ npm install --save-dev gulp-imagemin</code></li>
+<li>指定 images/origin下所有图片都压缩, 并把压缩后的图片放到images 中</li>
+<li><pre>`var gulp = require('gulp'),
+gulpImagemin = require('gulp-imagemin');
+gulp.task('image', function(){
+gulp.src('images/original/**')
+.pipe(gulpImagemin())
+.pipe(gulp.dest('images'));
+})
+`</pre></li>
+</ul>
+</li>
+<li><p>gulp-plumber</p>
+<pre><code>*   `$ npm install —save-dev gulp-plumber`
+</code></pre><ul>
+<li><code>pipe(gulpPlumber())</code>一定要在编译 scss 及最小化 js 之前就加入(注意顺序)</li>
+<li><pre>`var gulp = require('gulp'),
+gulpUglify = require('gulp-uglify');
+gulp.watch('watch', function(){
+gulp.watch('javascript/original/*.js', ['script']);
+});
+gulp.task('script', function(){
+gulp.src('javascript/original/*.js')
+.pipe(gulpPlumber())
+.pipe(gulpUglify())
+.pipe(gulp.dest('javascript/minify'));
+});
+`</pre></li>
+<li>gulp-autoprefixer</li>
+<li>gulp-minify-css</li>
+<li>gulp-clean</li>
+<li>gulp-livereload</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>工作范例</li>
+</ol>
+<ul>
+<li><p>明确任务</p>
+<pre><code>*   检查 JS
+</code></pre><ul>
+<li>编译 Scss</li>
+<li>合并 JS</li>
+<li>压缩并重命名合并后的 JS</li>
+</ul>
+</li>
+<li><p>安装依赖</p>
+<pre><code>*   `$ npm install gulp-jshint gulp-sass gulp-concat gulp-uglify gulp-rename —save-dev`
+</code></pre><ul>
+<li><p></p><p>新建<code>gulpfile.js</code></p>
+<pre><code>*   &lt;pre&gt;`//引入 gulp 及插件
+</code></pre><p>var gulp = require(‘gulp’),<br>gulpJshint = require(‘gulp-jshint’),<br>gulpSass = require(‘gulp-sass’),<br>gulpConcat = require(‘gulp-concat’),<br>gulpUglify = require(‘gulp-uglify’),<br>gulpRename(‘gulp-rename’);<br>//检查 JS, 该任务会检查 js/下的 js 文件有没有报错或警告<br>gulp.task(‘lint’,function(){<br>gulp.src(‘./js/<em>.js’)<br>.pipe(gulpJshint())<br>.pipe(gulpJshint.reporter(‘default’));<br>});<br>//编译 Scss, 该任务会编译 scss/下的 scss 文件, 并把编译后的 css 文件保存到 /css 中<br>gulp.task(‘sass’, function(){<br>gulp.src(‘./scss/</em>.scss’)<br>.pipe(gulpSass())<br>.pipe(gulp.dest(‘./css’));<br>});<br>//合并, 压缩 JS 文件, 该任务会合并 js/下的所有 js 文件, 并输出到 dist/目录, 然后重命名为.min.js, 并压缩再输出到 dist/下<br>gulp.task(‘scripts’, function(){<br>gulp.src(‘./js/<em>.js’)<br>.pipe(gulpConcat(‘all.js’))<br>.pipe(gulp.dest(‘./dist’))<br>.pipe(gulpRename(‘all.min.js’)).<br>pipe(gulpUglify())<br>.pipe(gulp.dest(‘./dist’));<br>});<br>//默认任务, 默认任务基于其他任务, 使用.run()方法关联和运行我们之前定义的方法, 使用.watch()方法监听指定目录的文件<br>gulp.task(‘default’, function(){<br>gulp.run(‘lint’, ‘sass’, ‘scripts’);<br>//监听文件<br>gulp.watch(‘./js/</em>.js’, function(){<br>gulp.run(‘lint’,’sass’,’scripts’);<br>});<br>});</p>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2016-06-24T00:19:39.000Z">2016-06-24</time>
                 
                 <div class="level-item">
@@ -726,8 +993,8 @@ div{
         </h1>
         <div class="content">
             <p><head></head></p>
-<p><style><br>.container{<br>  overflow-y:scroll;<br>  overflow-x:hidden;<br>  perspective:1px;<br>  transform-style:preserve-3d;<br>  color:yellow;<br>  text-align:center;<br>}<br>.bg{<br>  width: 100vw;<br>  height: 40vh;<br>  position:relative;<br>}<br>h1{<br>  padding:100px;<br>}<br>.bg:before{<br>  position:absolute;<br>  top: 0;<br>  left: 0;<br>  right: 0;<br>  bottom: 0;<br>  content:””;<br>  display:block;<br>  background: url(“<a href="http://7xu8mu.com1.z0.glb.clouddn.com/katong_1.jpg&quot;)">http://7xu8mu.com1.z0.glb.clouddn.com/katong_1.jpg&quot;)</a>;<br>  background-size:cover;<br>  z-index: -1;<br>  transform:translateZ(-1px) scale(2);<br>}<br></style><br></p>
-<body><br><br><div class="container"><br>  <div class="bg"><br><br># Hello World<br><br>        原理是将图片放在bg:before, 然后为 container 设置 perspective:1px 和 preserve-3d, 并蛇者 overflow:auto(要避免 x-index 则使用 overflow-y:scroll), 然后将 bg:before 向 Z 轴移动-1px, 形成前后空间<br>  </div><br></div><br><br>    /<em>HTML</em>/<br>    div.container<br>        div.bg<br>            h1{…}<br>            p{…}<br>    /<em>CSS</em>/<br>    .container{<br>      overflow-y:scroll;<br>      overflow-x:hidden;<br>      perspective:1px;<br>      transform-style:preserve-3d;<br>      color:yellow;<br>      text-align:center;<br>    }<br>    .bg{<br>      width: 100vw;<br>      height: 40vh;<br>      position:relative;<br>    }<br>    h1{<br>      padding:100px;<br>    }<br>    .bg:before{<br>      position:absolute;<br>      top: 0;<br>      left: 0;<br>      right: 0;<br>      bottom: 0;<br>      content:””;<br>      display:block;<br>      background: url(“<a href="http://7xu8mu.com1.z0.glb.clouddn.com/katong_1.jpg&quot;)" target="_blank" rel="noopener">http://7xu8mu.com1.z0.glb.clouddn.com/katong_1.jpg&quot;)</a>;<br>      background-size:cover;<br>      z-index: -1;<br>      transform:translateZ(-1px) scale(2);<br>    }<br><br></body>
+<p><style><br>.container{<br>  overflow-y:scroll;<br>  overflow-x:hidden;<br>  perspective:1px;<br>  transform-style:preserve-3d;<br>  color:yellow;<br>  text-align:center;<br>}<br>.bg{<br>  width: 100vw;<br>  height: 40vh;<br>  position:relative;<br>}<br>h1{<br>  padding:100px;<br>}<br>.bg:before{<br>  position:absolute;<br>  top: 0;<br>  left: 0;<br>  right: 0;<br>  bottom: 0;<br>  content:””;<br>  display:block;<br>  background: url(“<a href="http://7xu8mu.com1.z0.glb.clouddn.com/katong_1.jpg">http://7xu8mu.com1.z0.glb.clouddn.com/katong_1.jpg</a>“);<br>  background-size:cover;<br>  z-index: -1;<br>  transform:translateZ(-1px) scale(2);<br>}<br></style><br></p>
+<body><br><br><div class="container"><br>  <div class="bg"><br><br># Hello World<br><br>        原理是将图片放在bg:before, 然后为 container 设置 perspective:1px 和 preserve-3d, 并蛇者 overflow:auto(要避免 x-index 则使用 overflow-y:scroll), 然后将 bg:before 向 Z 轴移动-1px, 形成前后空间<br>  </div><br></div><br><br>    /<em>HTML</em>/<br>    div.container<br>        div.bg<br>            h1{…}<br>            p{…}<br>    /<em>CSS</em>/<br>    .container{<br>      overflow-y:scroll;<br>      overflow-x:hidden;<br>      perspective:1px;<br>      transform-style:preserve-3d;<br>      color:yellow;<br>      text-align:center;<br>    }<br>    .bg{<br>      width: 100vw;<br>      height: 40vh;<br>      position:relative;<br>    }<br>    h1{<br>      padding:100px;<br>    }<br>    .bg:before{<br>      position:absolute;<br>      top: 0;<br>      left: 0;<br>      right: 0;<br>      bottom: 0;<br>      content:””;<br>      display:block;<br>      background: url(“<a href="http://7xu8mu.com1.z0.glb.clouddn.com/katong_1.jpg" target="_blank" rel="noopener">http://7xu8mu.com1.z0.glb.clouddn.com/katong_1.jpg</a>“);<br>      background-size:cover;<br>      z-index: -1;<br>      transform:translateZ(-1px) scale(2);<br>    }<br><br></body>
         </div>
         
         
@@ -1829,81 +2096,6 @@ div.container
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-06-14T17:50:58.000Z">2016-06-15</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 minutes read (About 262 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/06/15/css3-transitions-basics/">CSS3 Transitions Basics</a>
-            
-        </h1>
-        <div class="content">
-            <h3 id="Benefits-of-CSS-3"><a href="#Benefits-of-CSS-3" class="headerlink" title="Benefits of CSS 3"></a>Benefits of CSS 3</h3><ol>
-<li>CSS3 Transitions are natively handled by the browser, which means they are always faster than a comparable JS animation.</li>
-<li>JS animation is more difficult.</li>
-</ol>
-<h3 id="Bezier-Timing-Functions"><a href="#Bezier-Timing-Functions" class="headerlink" title="Bezier Timing Functions"></a>Bezier Timing Functions</h3><p>CSS3 has a <code>transition-timing-function</code> property which accepts keywords like <code>ease</code>, <code>ease-in</code>, and <code>linear</code>.</p>
-<p>However we can define our own timing function using a <code>cubic-bezier</code> value. It sounds and looks complicated but can be explained with some simple diagrams.</p>
-<ol>
-<li><code>linear</code> curse<br><img src="http://blogs.sitepointstatic.com/images/tech/855-css3-transitions-3-chart1.png" alt=""></li>
-<li><code>ease-in-out</code> curse<br><img src="http://blogs.sitepointstatic.com/images/tech/855-css3-transitions-3-chart2.png" alt=""><br>it starts slowly, about 12% of the animation is completed in the first 25% of time;<br>it ends slowly, about 12 % of the animation is completed in the last 25% of time</li>
-</ol>
-<h4 id="What’s-a-Bezier-Curve"><a href="#What’s-a-Bezier-Curve" class="headerlink" title="What’s a Bezier Curve"></a>What’s a Bezier Curve</h4><p><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Bezier_3_big.gif/240px-Bezier_3_big.gif" alt=""></p>
-<p>Since the animation line starts at (0, 0) and ends at (1, 1), we just need to define the points P0 and P1 in the cubic bezier value, e.g.</p>
-<pre><code>cubic-bezier(p0x, p0y, p1x, p1y);
-transition-timing-function: cubic-bezier(0.25, 0.25, 0.75, 0.75) //linear
-transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
-`&lt;/pre&gt;
-
-&lt;pre&gt;`transition-timing-function: cubic-bezier(0.5, -0.5, 0.5, 1.5) // invalid, points cannot locate outsite (0,1)
-</code></pre><p><img src="http://blogs.sitepointstatic.com/images/tech/855-css3-transitions-3-chart4.png" alt=""></p>
-<h4 id="Let-the-Tools-do-the-Work"><a href="#Let-the-Tools-do-the-Work" class="headerlink" title="Let the Tools do the Work"></a>Let the Tools do the Work</h4><p><a href="http://cubic-bezier.com/" target="_blank" rel="noopener">cubic-bezier.com</a></p>
-<p><a href="http://matthewlein.com/ceaser/" target="_blank" rel="noopener">Ceaser</a></p>
-<h3 id="Transition-Property-Basics"><a href="#Transition-Property-Basics" class="headerlink" title="Transition Property Basics"></a>Transition Property Basics</h3><h4 id="Which-CSS-Properties-can-be-animated"><a href="#Which-CSS-Properties-can-be-animated" class="headerlink" title="Which CSS Properties can be animated?"></a>Which CSS Properties can be animated?</h4><ul>
-<li>width</li>
-<li>padding</li>
-<li>color</li>
-<li>top</li>
-<li>border-radius</li>
-<li>transform</li>
-<li>all</li>
-</ul>
-<p>you can set one or more to property <code>transition-property</code></p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -1974,7 +2166,7 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        307
+                        308
                     </p>
                 </div>
             </div>
@@ -1994,7 +2186,7 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        91
+                        92
                     </p>
                 </div>
             </div>
@@ -2125,7 +2317,7 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2139,6 +2331,25 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
+                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2216,25 +2427,6 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/03/05/note-on-bip32/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-05T05:54:32.000Z">2019-03-05</time></div>
-                    <a href="/2019/03/05/note-on-bip32/" class="has-link-black-ter is-size-6">Note on Bip32</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2246,6 +2438,17 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/08/">
@@ -2624,6 +2827,25 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
         
         <article class="media">
             
+            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
+                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
@@ -2698,25 +2920,6 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/03/05/note-on-bip32/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-05T05:54:32.000Z">2019-03-05</time></div>
-                    <a href="/2019/03/05/note-on-bip32/" class="has-link-black-ter is-size-6">Note on Bip32</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2728,6 +2931,17 @@ transition-timing-function: cubic-bezier(0.42,0,0.58,1) //ease-in-out
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/08/">

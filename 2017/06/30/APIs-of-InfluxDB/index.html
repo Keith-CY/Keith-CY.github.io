@@ -196,9 +196,9 @@
 </tbody>
 </table>
 <h2 id="ping"><a href="#ping" class="headerlink" title="/ping"></a>/ping</h2><p>The ping endpoint accepts both <code>GET</code> and <code>POST</code> HTTP requests. Use this endpoint to check the status of your InfluxDB instance and your version of InfluxDB.</p>
-<h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET http://localhost:8086/ping</span><br><span class="line"></span><br><span class="line">HEAD http://localhost:8086/ping</span><br></pre></td></tr></table></figure>
+<h3 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GET http://localhost:8086/ping</div><div class="line"></div><div class="line">HEAD http://localhost:8086/ping</div></pre></td></tr></table></figure>
 <h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><p>Extract the version of your InfluxDB instance in the <code>X-Influxdb-Version</code> field of the header</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ curl -sl -I localhost:8086/ping</span><br><span class="line"></span><br><span class="line">HTTP/1.1 204 No Content</span><br><span class="line">Content-Type: application/json</span><br><span class="line">Request-Id: [...]</span><br><span class="line">X-Influxdb-Version: 1.2.x</span><br><span class="line">Date: Wed, 01 Mar 2017 00:09:51 GMT</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ curl -sl -I localhost:8086/ping</div><div class="line"></div><div class="line">HTTP/1.1 204 No Content</div><div class="line">Content-Type: application/json</div><div class="line">Request-Id: [...]</div><div class="line">X-Influxdb-Version: 1.2.x</div><div class="line">Date: Wed, 01 Mar 2017 00:09:51 GMT</div></pre></td></tr></table></figure>
 <h3 id="Status-Codes-and-Responses"><a href="#Status-Codes-and-Responses" class="headerlink" title="Status Codes and Responses"></a>Status Codes and Responses</h3><p>The response body is empty</p>
 <table>
 <thead>
@@ -215,7 +215,7 @@
 </tbody>
 </table>
 <h2 id="query"><a href="#query" class="headerlink" title="/query"></a>/query</h2><p>The <code>/query</code> endpoint accepts <code>GET</code> and <code>POST</code> HTTP requests. Use this endpoint to query data and manage databases, retention policies, and users.</p>
-<h3 id="Definition-1"><a href="#Definition-1" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET http://localhost:8086/query</span><br><span class="line"></span><br><span class="line">POST http://localhost:8086/query</span><br></pre></td></tr></table></figure>
+<h3 id="Definition-1"><a href="#Definition-1" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">GET http://localhost:8086/query</div><div class="line"></div><div class="line">POST http://localhost:8086/query</div></pre></td></tr></table></figure>
 <h3 id="Verb-usage"><a href="#Verb-usage" class="headerlink" title="Verb usage"></a>Verb usage</h3><table>
 <thead>
 <tr>
@@ -237,20 +237,20 @@
 <blockquote>
 <p>THe only exceptions are <code>SELECT</code> queries that include an <code>INTO</code> <strong>clause</strong>. Those <code>SELECT</code> queries require a <code>POST</code> request.</p>
 </blockquote>
-<h4 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h4><h5 id="Example-1-Query-data-with-a-SELECT-statement"><a href="#Example-1-Query-data-with-a-SELECT-statement" class="headerlink" title="Example 1: Query data with a SELECT statement"></a>Example 1: Query data with a <code>SELECT</code> statement</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -G <span class="hljs-string">'http://localhost:8086/query?db=mydb'</span> --data-urlencoded <span class="hljs-string">'q=SELECT * FROM "mymeas"'</span></span><br><span class="line"></span><br><span class="line">&#123;<span class="hljs-string">"results"</span>:[&#123;<span class="hljs-string">"statement_id"</span>:0,<span class="hljs-string">"series"</span>:[&#123;<span class="hljs-string">"name"</span>:<span class="hljs-string">"mymeas"</span>,<span class="hljs-string">"columns"</span>:[<span class="hljs-string">"time"</span>,<span class="hljs-string">"myfield"</span>,<span class="hljs-string">"mytag1"</span>,<span class="hljs-string">"mytag2"</span>],<span class="hljs-string">"values"</span>:[[<span class="hljs-string">"2017-03-01T00:16:18Z"</span>,33.1,null,null],[<span class="hljs-string">"2017-03-01T00:17:18Z"</span>,12.4,<span class="hljs-string">"12"</span>,<span class="hljs-string">"14"</span>]]&#125;]&#125;]&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h4><h5 id="Example-1-Query-data-with-a-SELECT-statement"><a href="#Example-1-Query-data-with-a-SELECT-statement" class="headerlink" title="Example 1: Query data with a SELECT statement"></a>Example 1: Query data with a <code>SELECT</code> statement</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">curl -G <span class="hljs-string">'http://localhost:8086/query?db=mydb'</span> --data-urlencoded <span class="hljs-string">'q=SELECT * FROM "mymeas"'</span></div><div class="line"></div><div class="line">&#123;<span class="hljs-string">"results"</span>:[&#123;<span class="hljs-string">"statement_id"</span>:0,<span class="hljs-string">"series"</span>:[&#123;<span class="hljs-string">"name"</span>:<span class="hljs-string">"mymeas"</span>,<span class="hljs-string">"columns"</span>:[<span class="hljs-string">"time"</span>,<span class="hljs-string">"myfield"</span>,<span class="hljs-string">"mytag1"</span>,<span class="hljs-string">"mytag2"</span>],<span class="hljs-string">"values"</span>:[[<span class="hljs-string">"2017-03-01T00:16:18Z"</span>,33.1,null,null],[<span class="hljs-string">"2017-03-01T00:17:18Z"</span>,12.4,<span class="hljs-string">"12"</span>,<span class="hljs-string">"14"</span>]]&#125;]&#125;]&#125;</div></pre></td></tr></table></figure>
 <p>The <code>mymeas</code> <strong>measurement</strong> has two points. The first point has the <strong>timestamp</strong> <code>2017-03--1T00:15:18Z</code>, a <code>myfield</code> value of <code>33.1</code> and no tag values for the <code>mytag1</code> and <code>mytag2</code> tag keys.</p>
 <p>The second point has the timestamp <code>2017-03--1T00:18:18Z</code>, a <code>myfield</code> value of <code>12</code>, a <code>mymeas</code> value of <code>12</code>, a <code>mytag1</code> value of <code>12</code> and a <code>mytag2</code> value of <code>14</code></p>
 <p>The same query in InfluxDB’s Command Line Interface(CLI) returns the following table:</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">name: mymeas</span><br><span class="line">time                   myfield   mytag1   mytag2</span><br><span class="line">----                   -------   ------   ------</span><br><span class="line">2017-03--1T00:15:18Z    33.1</span><br><span class="line">2017-03--1T00:18:18Z    12        12       14</span><br></pre></td></tr></table></figure>
-<h5 id="Example-2-Query-data-with-a-SELECT-statement-and-an-INTO-clause"><a href="#Example-2-Query-data-with-a-SELECT-statement-and-an-INTO-clause" class="headerlink" title="Example 2: Query data with a SELECT statement and an INTO clause"></a>Example 2: Query data with a <code>SELECT</code> statement and an <code>INTO</code> clause</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XPOST <span class="hljs-string">'http://localhost:8086/query?db=mydb'</span> --data-urlencoded <span class="hljs-string">'q=SELECT * INTO "newmeas" FROM "mymeas"'</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">name: mymeas</div><div class="line">time                   myfield   mytag1   mytag2</div><div class="line">----                   -------   ------   ------</div><div class="line">2017-03--1T00:15:18Z    33.1</div><div class="line">2017-03--1T00:18:18Z    12        12       14</div></pre></td></tr></table></figure>
+<h5 id="Example-2-Query-data-with-a-SELECT-statement-and-an-INTO-clause"><a href="#Example-2-Query-data-with-a-SELECT-statement-and-an-INTO-clause" class="headerlink" title="Example 2: Query data with a SELECT statement and an INTO clause"></a>Example 2: Query data with a <code>SELECT</code> statement and an <code>INTO</code> clause</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -XPOST <span class="hljs-string">'http://localhost:8086/query?db=mydb'</span> --data-urlencoded <span class="hljs-string">'q=SELECT * INTO "newmeas" FROM "mymeas"'</span></div></pre></td></tr></table></figure>
 <blockquote>
 <p><code>SELECT</code> queries that include and <code>INTO</code> clause require a <code>POST</code> requests</p>
 </blockquote>
-<h5 id="Example-3-Create-a-database"><a href="#Example-3-Create-a-database" class="headerlink" title="Example 3: Create a database"></a>Example 3: Create a database</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XPOST <span class="hljs-string">'http://localhost:8086/query'</span> --data-urlencoded <span class="hljs-string">'q=CREATE DATABASE "mydb"'</span></span><br></pre></td></tr></table></figure>
+<h5 id="Example-3-Create-a-database"><a href="#Example-3-Create-a-database" class="headerlink" title="Example 3: Create a database"></a>Example 3: Create a database</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -XPOST <span class="hljs-string">'http://localhost:8086/query'</span> --data-urlencoded <span class="hljs-string">'q=CREATE DATABASE "mydb"'</span></div></pre></td></tr></table></figure>
 <p>A successful <code>CREATE DATABASE</code> query returns no additional information.</p>
-<h4 id="Query-String-Parameter"><a href="#Query-String-Parameter" class="headerlink" title="Query String Parameter"></a>Query String Parameter</h4><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Query String Parameter         |                                            Optional/Required                                             |                                                                                Definition</span><br></pre></td></tr></table></figure>
+<h4 id="Query-String-Parameter"><a href="#Query-String-Parameter" class="headerlink" title="Query String Parameter"></a>Query String Parameter</h4><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Query String Parameter         |                                            Optional/Required                                             |                                                                                Definition</div></pre></td></tr></table></figure>
 <p>:———————————–: | :——————————————————————————————————: | :———————————————————————————————————————————————————————–: chunked=[true | &lt;number_of_points] | Optional | Returns points in streamed batches instead of in a single response. If set to <code>true</code>, InfluxDB chunks responses by series or by every 10,000 point, whichever occurs first. It set to a specific value, InfluxDB chunks responses by series or by that number of points db=</p>
-&lt;database_name&gt;<br>&lt;/database_name&gt;
+<database_name><br></database_name>
 
 <p> | Required for database-dependent queries(most <code>SELECT</code> queries and <code>SHOW</code> queries require this parameter) | Sets the target database for the query epoch=[ns,u,ms,s,m,h] | Optional | Returns epoch timestamps with the specified precision. By default, InfluxDB returns timestamps in RFC3339 format with nanosecond precision. Both <code>u</code> indicate microsecond p=</p>
 <password><br></password>
@@ -261,18 +261,16 @@
 <p> | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the username for authentication if you’ve enabled authentication. The user must have read access to the database. Use with the query string parameter <code>p</code></p>
 <blockquote>
 <p>In versions 1.2.0 and 1.2.1, InfluxDB automatically truncates the number of rows returned for requests without the <code>chunked</code> parameter. By default, the maximum number of rows returned is set to 10000, if a query has more than 10000 rows to return, InfluxDB includes a <code>&#39;partial&#39;: true</code> tag in the response body.</p>
-</blockquote>
-<blockquote>
 <p>The HTTP API also supports basic authentication. Use basic authentication if you’ve enabled authentication and aren’t using the query string parameter <code>u</code> and <code>p</code>.</p>
 </blockquote>
-<h5 id="Example-Create-a-database-using-HTTP-authentication"><a href="#Example-Create-a-database-using-HTTP-authentication" class="headerlink" title="Example: Create a database using HTTP authentication"></a>Example: Create a database using HTTP authentication</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XPOST <span class="hljs-string">'http://localhost:8086/query?u=myusername&amp;p=mypassword'</span> --data-urlencoded <span class="hljs-string">'q=CREATE DATABASE "mydb"'</span></span><br></pre></td></tr></table></figure>
+<h5 id="Example-Create-a-database-using-HTTP-authentication"><a href="#Example-Create-a-database-using-HTTP-authentication" class="headerlink" title="Example: Create a database using HTTP authentication"></a>Example: Create a database using HTTP authentication</h5><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl -XPOST <span class="hljs-string">'http://localhost:8086/query?u=myusername&amp;p=mypassword'</span> --data-urlencoded <span class="hljs-string">'q=CREATE DATABASE "mydb"'</span></div></pre></td></tr></table></figure>
 <h2 id="write"><a href="#write" class="headerlink" title="/write"></a>/write</h2><p>The <code>/write</code> endpoint accepts <code>POST</code> HTTP requests. Use this endpoint to write data to a pre-existing databse.</p>
-<h3 id="Definition-2"><a href="#Definition-2" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST http://localhost:8086/write</span><br></pre></td></tr></table></figure>
+<h3 id="Definition-2"><a href="#Definition-2" class="headerlink" title="Definition"></a>Definition</h3><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">POST http://localhost:8086/write</div></pre></td></tr></table></figure>
 <h3 id="Query-String-Parameter-1"><a href="#Query-String-Parameter-1" class="headerlink" title="Query String Parameter"></a>Query String Parameter</h3><pre><code>Query String Parameter                 | Optional/Required                                                                         | Description
 </code></pre><p>:—————————————————: | :—————————————————————————————- | :————————————————————————————————————————————————————–<br>                  consistency=[any                    | one                                                                                       | quorum                                                                                                                                                          | all] | Optional, available with InfluxEnterprise clusters only | Sets the write consistency for the point. InfluxDB assumes that the write consistency is <code>one</code> if you do not specify <code>consistency</code><br>             db=</p>
 <p><database><br></database>              | Required                                                                                  | Sets the target database for the write<br>             p=</p>
 <p><password><br></password>               | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the password for authentication if you’ve enabled authentication. Use with the query string parameter <code>u</code><br>               precision=[ns,u,ms,m,h]                | Optional                                                                                  | Sets the precision for the supplied Unix time values. InfluxDB assumes that timestamps are in nanoseconds if you do not specify <code>precision</code><br>rp=</p>
-<p>&lt;retention_policy_name&gt;<br>&lt;/retention_policy_name&gt; | Optional                                                                                  | Sets the target retention policy for the write. InfluxDB writes to the <code>DEFAULT</code> retention policy if you do not specify a retention policy<br>             u=</p>
+<p><retention_policy_name><br></retention_policy_name> | Optional                                                                                  | Sets the target retention policy for the write. InfluxDB writes to the <code>DEFAULT</code> retention policy if you do not specify a retention policy<br>             u=</p>
 <p><username><br></username>               | Optional if you haven’t enabled authentication. Required if you’ve enabled authentication | Sets the username for authentication if you’ve enabled authentication. The user must have write access to the database. Use with the query string parameter <code>p</code></p>
 
         </div>
@@ -289,26 +287,6 @@
         <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
         <div class="buttons is-centered">
             
-                
-<a class="button is-info donate">
-    <span class="icon is-small">
-        <i class="fab fa-alipay"></i>
-    </span>
-    <span>Alipay</span>
-    <div class="qrcode"><img src="/images/alipay.jpeg" alt="Alipay"></div>
-</a>
-
-                
-                
-<a class="button is-success donate">
-    <span class="icon is-small">
-        <i class="fab fa-weixin"></i>
-    </span>
-    <span>Wechat</span>
-    <div class="qrcode"><img src="/images/wechat.jpeg" alt="Wechat"></div>
-</a>
-
-                
                 <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
 
 <a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
@@ -418,7 +396,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        307
+                        308
                     </p>
                 </div>
             </div>
@@ -438,7 +416,7 @@
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        91
+                        92
                     </p>
                 </div>
             </div>
@@ -569,7 +547,7 @@
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -583,6 +561,25 @@
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
+                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -660,25 +657,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/03/05/note-on-bip32/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-05T05:54:32.000Z">2019-03-05</time></div>
-                    <a href="/2019/03/05/note-on-bip32/" class="has-link-black-ter is-size-6">Note on Bip32</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -690,6 +668,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/08/">
@@ -1068,6 +1057,25 @@
         
         <article class="media">
             
+            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
+                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
@@ -1142,25 +1150,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/03/05/note-on-bip32/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/bip32.png" alt="Note on Bip32">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-05T05:54:32.000Z">2019-03-05</time></div>
-                    <a href="/2019/03/05/note-on-bip32/" class="has-link-black-ter is-size-6">Note on Bip32</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1172,6 +1161,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/09/">
+                <span class="level-start">
+                    <span class="level-item">September 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/08/">

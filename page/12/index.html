@@ -108,6 +108,9 @@
                 <a class="navbar-item"
                 href="/about">About</a>
                 
+                <a class="navbar-item"
+                href="/resume">Resume</a>
+                
             </div>
             
             <div class="navbar-end">
@@ -142,6 +145,133 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main">
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-07-30T08:53:58.000Z">2016-07-30</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    2 minutes read (About 336 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/07/30/generator-101/">Generator 101</a>
+            
+        </h1>
+        <div class="content">
+            <pre><code>function * HelloGen(){
+  yield 100;
+  yield 400;
+}
+
+var gen = HelloGen();
+
+console.log(gen.next()); // {value: 100, done: false}
+console.log(gen.next()); // {value: 400, done: false}
+console.log(gen.next()); // {value: undefined, done: true}
+`&lt;/pre&gt;
+
+&lt;pre&gt;`function * HelloGen2() {
+  var a = yield 100;
+  var b = yield a + 100;
+
+  console.log(b);
+}
+
+var gen2 = HelloGen2();
+
+console.log(gen2.next()); // {value: 100, done: false}
+console.log(gen2.nect(500)); // {value: 600, done: false}
+console.log(gen2.next(1000)); // {value: undefined, done: done}
+// prints 1000
+`&lt;/pre&gt;
+
+### Preventing Callback Hell
+
+So, how can generators be used to avoid callback hell? First, you need to understand a simple technique that we will be using heavily with generators to write code without callbacks.
+
+#### Understanding Thunks
+
+A thunk is a partially evaluated function which accepts a single callback as the argument. Within generators, we&apos;ll be yielding thunks to write without callbacks. A simple thunk is shown below.
+
+&lt;pre&gt;`function(callback) {
+  fs.readFile(&apos;myfile.md&apos;, &apos;utf8&apos;, callback)
+}
+`&lt;/pre&gt;
+
+Thunks can also be created dynamically as shown below:
+
+&lt;pre&gt;`function readFile(filename) {
+  return function(callback) {
+    fs.readFile(filename, &apos;utf8&apos;, callback);
+  };
+}
+`&lt;/pre&gt;
+
+#### Using `co`
+
+`co` is a nice module which helps to use thunks and generators together to create Node.js applications without callbacks.
+
+A simple application which uses `co` and the `readFile()` thunk.
+
+&lt;pre&gt;`var co = require(&apos;co&apos;);
+
+co(function* (){
+  var file1 = yield readFile(&apos;file1.md&apos;);
+  var file2 = yield readFile(&apos;file2.md&apos;);
+
+  console.log(file1);
+  console.log(file2);
+})();
+`&lt;/pre&gt;
+
+As you can see, we are no longer using callbacks. This gives us a simple way to write large modular Node apps easily.
+
+###### How `co` Works Internally
+</code></pre><ol>
+<li>First, it calls <code>next(null)</code> and gets a thunk.</li>
+<li>Then, it evaluate the thunk and saves the result.</li>
+<li>Then, it calls <code>next(savedResult)</code>(in this case, saveResult == readFile(‘file1.md’), and next(savedResult) pass the content to var file1)</li>
+<li><p>Repeat these steps until <code>next()</code> return <code>{done: true}</code></p>
+<p>A minimal version of <code>co</code> written to show how it works internally.</p>
+<p>```<br>function co(generator){<br>  var gen = generator();</p>
+<p>function nextItem(err, result) {</p>
+<pre><code>var item = gen.next(result);
+</code></pre><p><pre>`if (!item.done) {<br>  item.value(nextItem); // item.value is a thunk, because yield a thunk<br>}</pre></p>
+</li>
+</ol>
+<p>}</p>
+<p>nextItem();<br>}</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
     <div class="card">
     
     <div class="card-content article ">
@@ -2415,129 +2545,6 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-07-19T19:33:29.000Z">2016-07-20</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/note/workNote/">workNote</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    7 minutes read (About 1095 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/07/20/e4-bd-bf-e7-94-a8-npm-e5-88-9b-e5-bb-ba-e6-96-b0-e5-b7-a5-e7-a8-8b/">使用 Npm 创建新工程</a>
-            
-        </h1>
-        <div class="content">
-            <p>创建一个工程目录, 并 cd 到目录中, 运行<br><code>$npm init</code><br>这个工具将引导你创建一个 package.json 文件, 他只覆盖了大多数一般的项目, 并尽量让默认内容全面.<br>运行<code>npm help json</code> 获取 package.json 中的各个字段的文档及其定义<br>后面可以用<br><code>npm install &amp;lt;pkg&amp;gt; --save</code><br>来安装一个包并将其存储为 package.json 文件中的一个依赖模块<br>任何时间按下^C 退出.<br>简单来说:<br><code>npm init</code> 创建或修改一个项目中的 package.json 文件<br>默认名称(显示在括号中)是当前文件夹的名字, 如果对于提示不输入任何字符并按下 Enter 键, npm 会将默认名称当做项目名称.<br>在完成提示内容后, npm init 将会给你一个即将创建的 package.json 文件的预览, 对于我们来说, 他看起来是这样的</p>
-<pre><code>{
-&quot;name&quot;:&quot;project-name&quot;,
-&quot;version&quot;:&quot;0.0.0&quot;,
-&quot;description&quot;:&quot;...&quot;,
-&quot;main&quot;:&quot;index.js&quot;,
-&quot;scripts&quot;:{
-  &quot;test&quot;:&quot;echo \&quot;Error:no test specified\&quot; &amp;amp;&amp;amp; exit 1&quot;
-},
-&quot;keywords&quot;:[&quot;npm&quot;,&quot;example&quot;],
-&quot;author&quot;:&quot;YourName&quot;,&quot;license&quot;:&quot;MIT&quot;
-}
-`&lt;/pre&gt;
-
-按下 Enter 进行确认, 你可以在后面随时修改, 通过编辑 package.json 或再次运行 npm init.
-npm init 永远也不会移除你放在 package.json 中的信息, 仅仅根据需求进行调整.
-
-### package.json
-
-一个项目的 package.json 文件担任下列角色
-- 他为 npm 提供一切信息
-- 他告诉 Node 怎样处理一个包
-- 他为人们查看项目提供一个进入点
-
-### 创建一个包进入点
-
-现在创建一个非常简单的脚本并将它存为 index.js
-
-&lt;pre&gt;`//index.js
-console.log(&quot;Hello, npm&quot;);
-`&lt;/pre&gt;
-
-我们可以直接运行脚本
-
-&lt;pre&gt;`$node index.js
-Hello, npm
-`&lt;/pre&gt;
-
-我们可以通过使用 require, 在其他的 Node 应用中应用这段脚本. 首先进入 Node REPL, 一个交互的命令行环境:
-
-&lt;pre&gt;`$node
-&amp;gt; require(&apos;./index.js&apos;)
-Hello, npm
-{}
-`&lt;/pre&gt;
-
-({}是 require 的返回值, 在这个例子中, 他是 index.js 的 exports 对象)
-Node 允许我们省略.js 扩展名, 因此我们可以简写为 require(&apos;,/index&apos;).
-如果我们在同一个 REPL 会话中再次运行 require, 我们将得到相同的返回值, 但是不会得到 console.log 输出, 因为 require 不会在同一个脚本中运行两次.
-./在./index 中很重要, 因为他告诉 Node 这个路径是当前文件夹的相对路径. 如果我们不显示给出绝对路径或相对路径, 而是直接给 index, Node 会在一系列文件夹中寻找匹配的模块.
-
-回顾一下, 在 package.json 文件夹中, &apos;main&apos;:&apos;index.js&apos; 的作用是什么?
-当你 require 一个包含指向 main 脚本(&apos;main&apos;:&apos;index.js&apos;)的 package.json 文件的文件夹时, Node 会认为你是在 require 这个脚本(&apos;index.js&apos;), 所以前面的代码可以简写为
-
-&lt;pre&gt;`require(./)
-`&lt;/pre&gt;
-
-现在我们可以使用 package.json 来完成上面的工作, 因为我们的脚本命名为 index.js, 他是一个文件夹的默认脚本
-
-### 第一个依赖模块
-
-使用下面的命令来快速搜索 npm registry
-`$npm search color`
-如果想要获得更多的信息, 可以跳转到 npmjs.org, 在&quot;最多依赖&quot;的列表中可以查看流行的库
-安装依赖模块
-`$npm install --save colors`
-这条指令会在本地文件夹中创建一个名为 node_modules 的文件夹并将 colors 下载到其中. `--save`将依赖模块自动加入到 package.json 文件中.
-
-&lt;pre&gt;`&quot;dependencies&quot;{
-  &quot;colors&quot;:&quot;~0.6.0-1&quot;
-}
-`&lt;/pre&gt;
-
-现在我们来重写 index.js 来使用我们的新库. colors 扩展了 String 的原型因此我们可以非常简洁的表达带有颜色的文本:
-
-&lt;pre&gt;`var colors = require(&apos;colors&apos;);
-console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
-</code></pre><p>运行 index.js 文件, 你将在原来的输出中获得一个彩色字符串</p>
-<h3 id="node-modules-的层级"><a href="#node-modules-的层级" class="headerlink" title="node_modules 的层级"></a>node_modules 的层级</h3><p>当不显示指定相对路径或绝对路径时, Node 首先查找本地的 ndoe_modules 文件夹, 当你使用 npm install 指令的时候这个文件夹被自动创建. 当 Node 发现 node_modules 下有一个叫做 colors 子目录时, Node 将他当做 require 的目标.<br><strong>查看 node_modules/colors/package.json, 可以找到’main’:’colors’ , 因此 require colors这个文件夹时 Node 会认为 require 了 colors.js 这个脚本</strong><br>然后从 require 函数中返回脚本中的 exports 对象.<br>如果找不到 colors 目录, 则会一直搜索到系统的根目录.</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2610,7 +2617,7 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        308
+                        309
                     </p>
                 </div>
             </div>
@@ -2630,7 +2637,7 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        92
+                        93
                     </p>
                 </div>
             </div>
@@ -2761,7 +2768,7 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2775,6 +2782,25 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-10T06:26:41.000Z">2019-10-10</time></div>
+                    <a href="/2019/10/10/Basic-components-in-nest-js/" class="has-link-black-ter is-size-6">Basic Components in nest.js</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2852,25 +2878,6 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/03/16/keystore/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/keystore.jpg" alt="Keystore">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
-                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2882,6 +2889,17 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/09/">
@@ -3271,6 +3289,25 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
         
         <article class="media">
             
+            <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-10T06:26:41.000Z">2019-10-10</time></div>
+                    <a href="/2019/10/10/Basic-components-in-nest-js/" class="has-link-black-ter is-size-6">Basic Components in nest.js</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
@@ -3345,25 +3382,6 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/03/16/keystore/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/keystore.jpg" alt="Keystore">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-03-16T07:22:16.000Z">2019-03-16</time></div>
-                    <a href="/2019/03/16/keystore/" class="has-link-black-ter is-size-6">Keystore</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3375,6 +3393,17 @@ console.log(&apos;Hello, &apos;.red,&apos;npm&apos;.green);
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/10/">
+                <span class="level-start">
+                    <span class="level-item">October 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/09/">

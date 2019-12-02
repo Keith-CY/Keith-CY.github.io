@@ -153,6 +153,277 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-08-23T03:14:07.000Z">2016-08-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    9 minutes read (About 1370 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/08/23/middleware/">Middleware</a>
+            
+        </h1>
+        <div class="content">
+            <p>You can include custom middleware functions to the dispatch method of your store.</p>
+<p>The dispatch function is responsible for sending actions to one or more reducer functions for state changes. The composed specialized functions around the original dispatch method creates the new middleware capable dispatch method.</p>
+<p>Source code for applyMiddleware(from Redux 1.0.1)</p>
+<pre><code>export default function applyMiddleware(...middlewares) {
+  return (next) =&amp;gt; 
+    (reducer, initialState) =&amp;gt; {
+      var store = next(reducer, initialState);
+      var dispatch = store.dispatch;
+      var chain = [];
+
+      var middlewareAPI = {
+        getState: store.getState,
+        dispatch: (action) =&amp;gt; dispatch(action)
+      };
+
+      chain = middlewares.map(middleware =&amp;gt; middleware(middlewareAPI));
+
+      return {
+        ...store,
+        dispatch
+      }
+    }
+}
+`&lt;/pre&gt;
+
+Composing Functions
+
+Functional programming is very literal and very mathematical. In the case of composing functions with math you can express two or more functions like this:
+
+&lt;pre&gt;`given:
+
+f(x) = x^2 + 3x + 1
+g(x) = 2x
+
+then:
+(f · g)(x) = f(g(x)) = f(2x) = 4x^2 + 6x + 1
+`&lt;/pre&gt;
+
+It is no coincidence that you can compose two or more functions in a similar fashion. Here is a very simple example of a function that composes two functions to return a new specialized function:
+
+&lt;pre&gt;`var greet = function(x) { return `Hello, ${x}`}
+var emote = function(x) { return `${x} :)`}
+
+var compose = function(f,g){
+  return function(x){
+    return f(g(x))
+  }
+}
+`&lt;/pre&gt;
+
+This was just to illustrate the basic concept. We will look at a more generic way to solve that issue by examining the Redux Code.
+
+### Currying
+
+Another powerful functional programming concepts is the idea of currying or partially applying argument values to a function. By currying we can create a new specialized function that has partial information supplied to it. Here is the canonical example of currying where we have an add function that curries the first operand parameter to create a specialized add function
+
+&lt;pre&gt;`var curriedAdd = function(a){
+  return function(b){
+    return a + b;
+  }
+}
+
+var addTen = curriedAdd(10);
+addTen(10); // 20
+`&lt;/pre&gt;
+
+By currying and composing your functions you can create powerful new functions that create a pipeline for data processing.
+
+### Redux Dispatch Function
+
+A Store in Redux have a dispatch method which is only concerned with the main execution task you are interested in. You dispatch actions to your reducer functions to update state of the application. Redux reducers function takes a state and action parameter and return a new resultant state.
+
+&lt;pre&gt;`reducer:: state -&amp;gt; action -&amp;gt; state
+`&lt;/pre&gt;
+
+You might dispatch an action that simply sends a message to remove an item in a list which could look like this:
+
+&lt;pre&gt;`{type: types.DELETE_ITEM, id: 10}
+`&lt;/pre&gt;
+
+The store will dispatch this action object to all of it&apos;s reducer functions which could affect state. However the reducer functions are only concerned with executing logic around this deletion. They typically don&apos;t care who did it, how long it took, or logging the before and after effects of the state changes. This is where middleware can help us to address non-core concerns.
+
+### Redux middleware
+
+Redux middleware is designed by creating functions that can be composed together before the main dispatch method is invoked.
+
+Let&apos;s creating a very simple logger middleware function that can echo the state of your application before and after running your main dispatch function. Redux middleware functions have this signiture:
+
+&lt;pre&gt;`middleware:: next -&amp;gt; action -&amp;gt; retVal
+`&lt;/pre&gt;
+
+It might look something like this:
+
+&lt;pre&gt;`export default function createLogger({getState}){
+  return (next) =&amp;gt; 
+    (action) =&amp;gt; {
+      const console = window.console;
+      const prevState = getState();
+      const returnValue = next(action);
+      const nextState = getState();
+      const actionType = String(action.type);
+      const message = `action ${actionType}`;
+
+      console.log(`%c prev state`, `color: #9e9e9e`, prevState);
+      console.log(`%c action`, `color: #03A9F4`, action);
+      console.log(`%c next state`, `color:#4CAF50`, nextState)
+    };
+}
+`&lt;/pre&gt;
+
+Notice that createLogger accepts the getState method which is injected by applyMiddleware.js and used inside closure to read the current state. This will return a new function with the `next` parameter which is used to compose the next chained middleware function or the main dispatch function.
+
+This function returns a curried function that accepts the action object which can be read or modified before sending it to the next middleware function in the chain. Finally the main dispatch function is invoked with the action object.
+</code></pre><ul>
+<li>First it captures the previous state</li>
+<li>The action is dispatched to the next middleware function</li>
+<li>All downstream middleware functions in the chain are invoked</li>
+<li>The reducer functions in the store are called with the action payload</li>
+<li><p>The logger middleware the gets the resulting next state</p>
+<h3 id="Dissecting-applyMiddleware-js"><a href="#Dissecting-applyMiddleware-js" class="headerlink" title="Dissecting applyMiddleware.js"></a>Dissecting applyMiddleware.js</h3><pre>`export default function applyMiddleware(...middlewares){
+  return (next) =&gt; 
+    (reducer, initialState) =&gt; {
+      var store = next(reducer, initialState);
+      var dispatch = store.dispatch;
+      var chain = [];
+
+      var middlewareAPI = {
+        getState: store.getState,
+        dispatch: (action) =&gt; dispatch(action)
+      };
+
+      chain = middlewares.map(middleware =&gt; middleware(middlewareAPI));
+
+      dispatch = compose(...chain, store.dispatch);
+
+      return{
+        ...store,
+        dispatch
+      };
+    };
+}
+`</pre>
+
+<p>The applyMiddleware function probably could have been named a little better, such as applyMiddlewareToStore.</p>
+<p>The applyMiddleware function returns a function that takes a mysterious next argument:</p>
+<pre>`return (next) =&gt; (reducer, initialState) =&gt; {...}
+`</pre>
+
+<p>The next argument will be a function that is used to create a store. By default you should look at the implementation for createStore. The final returned function will be like createStore and replace the dispatch function with it’s associated middlewares.</p>
+<p>Next we assign the store implementation to the function responsible for creating the new store. Then we create a variable to the store’s original dispatch function. Finally we setup an array to hold the middleware chain we will be creating.</p>
+<pre>`var store = next(reducer, initialState)
+var dispatch = store.dispatch
+var chain = [];
+`</pre>
+
+<p>This next bit of code injects the getState function and the original dispatch function from the store into each middleware function which you can optionally use in your middleware(the applyMiddleware function pass getState and dispatch to middlewares in it).</p>
+<p>The resultant middleware is stored in the chain array</p>
+<pre>`var middlewareAPI = {
+  getState: store.getState,
+  dispatch: (action) =&gt; dispatch(action)
+}
+
+chain = middlewares.map(middleware =&gt; middleware({middlewareAPI}))
+`</pre>
+
+<p>Now we create our replacement dispatch function with the information about hte middleware chain:</p>
+<pre>`dispatch = compose(...chain, store.dispatch);
+`</pre>
+
+<p>The magic to composing our middleware chain lies in this utility function supplied by Redux. Here is the implementation</p>
+<pre>`export default function compose(...funcs){
+  return funcs.reduceRight((compsed,f) =&gt; f(composed))
+}
+`</pre>
+
+<p>The composing function will literally express your functions as a composition injecting each middleware as an argument to the next middleware in the chain. Order is important here when assembling your middleware function. Finally, the original store dispatch method is composed. This new looks like:</p>
+<pre>`middlewareI(middlewareJ(middlewareK(store.dispatch)))(action)
+`</pre>
+
+<p>The final thing to do is return the new store object with the overriden function:</p>
+<pre>`return {
+  ...store,
+  dispatch
+}
+`</pre>
+
+<p>Let’s add our logger middleware we started above into a custom store with the enhanced dispatch function.</p>
+<pre>`import { createStore, applyMiddlware } from 'redux'
+import loggerMiddleware from 'logger'
+import rootReducer from './reducers'
+
+const createStoreWithMiddleware = applyMiddleware(loggerMiddleware)(createStore)
+
+export default function configureStore(initialState){
+  return createStoreWithMiddleware(rootReducer, initialState);
+}
+
+const store = configureStore()
+`</pre>
+
+<h3 id="Asynchronous-Middleware"><a href="#Asynchronous-Middleware" class="headerlink" title="Asynchronous Middleware"></a>Asynchronous Middleware</h3><p>Once you get comfortable with the basics of Redux middleware you will likely want to work with asynchronous actions that involve some sort of asynchronous execution. In particular look at ‘redux-thunk’ for more details. Let’s say you have an action creator that has some async functionality to get stock quote information:</p>
+<pre>`function fetchQuote(symbol){
+  requestQuote(symbol);
+  return fetch('......')
+         .then(req =&gt; req.json())
+         .then(json =&gt; showCurrentQuote(symbol, json));
+}
+`</pre>
+
+<p>There is no obvious way here to dispatch an action that would be returned from the fetch which is Promise based. Plus we do not have a handle to the dispatch function. Therefore we can use the redux-thunk middleware to defer execution of these operations. By wrapping the execution in a function you can delay this execution:</p>
+<pre>`function fetchQuote(symbol){
+  return dispatch =&gt; {
+    dispatch(requestQuote(symbol));
+    return fetch('......').then(req=&gt;req.json).then(json =&gt; dispatch(showCurrentQuote(symbol,json))
+  }
+}
+`</pre>
+
+<p>Remember that the applyMiddleware function will inject the <code>dispatch</code> and the <code>getStat</code> function as parameters int o the redux-thunk middleware. Now you can dispatch the resultant action objects to your store which conatains reducers. Here is the middleware function for redux-thunk that does this for you.</p>
+<p><pre>`export default function thunkMiddleware({dispatch,getState}){<br>  return (next) =&gt; </pre></p>
+<pre><code>action =&amp;gt; {
+  typeof action === &apos;function&apos;? action(dispatch, getState):next(action)
+}
+</code></pre><p>}</p>
+</li>
+</ul>
+<p>If the action is a function it will be called with the dispatch and getState function..</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2016-08-22T02:53:22.000Z">2016-08-22</time>
                 
                 <div class="level-item">
@@ -2475,116 +2746,6 @@ function onerror(err){
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-07-30T21:36:49.000Z">2016-07-31</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    4 minutes read (About 540 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/07/31/javascript-generator/">JavaScript Generator</a>
-            
-        </h1>
-        <div class="content">
-            <p>作用迭代器</p>
-<pre><code>function* argumentsGenerator() {
-  for (let i = 0; i &amp;lt; arguments.length; i++) {
-    yield arguments[i];
-  }
-}
-`&lt;/pre&gt;
-
-我们希望迭代传入的每个实参
-
-&lt;pre&gt;`var argumentsIterator = argumentsGenerator(&apos;a&apos;,&apos;b&apos;,&apos;c&apos;,&apos;d&apos;);
-
-// Prints &quot;a,b,c,d&quot;
-console.log(
-  argumentsIterator.next().value,
-  argumentsIterator.next().value,
-  argumentsIterator.next().value,
-  argumentsIterator.next().value
-)
-`&lt;/pre&gt;
-
-我们可以简单的理解
-- Generator 其实是生成 Iterator 的方法, argumentsGenerator 被称为 GeneratorFunction, 也有一些人把 GeneratorFunction 的返回值称为一个 Generator
-- yield 可以中断 GeneratorFunction 的运行, 而在 next() 时恢复运行
-- 返回的 Iterator 上, 有 next 成员方法, 能够返回迭代值. 其中 value 属性包含了实际返回值, done 属性为布尔值, 标记迭代器是否完成迭代, 要注意的是, 在 done: true 后继续运行 next 方法会产生异常.
-
-完整的 ES 实现中, for-of 循环正式为了快速迭代一个 Iterator
-
-&lt;pre&gt;`for (let value of argumetnsIterator) {
-  console.log(value);
-}
-`&lt;/pre&gt;
-
-可以利用 yield* 语法, 将 yield 操作代理到另一个 Generator
-
-&lt;pre&gt;`let delegatedIterator = (function*() {
-  yield &apos;Hello!&apos;;
-  yield &apos;Bye!&apos;;
-})();
-
-let delegatingIterator = (function*() {
-  yield &apos;Greetings!&apos;;
-  yield* delegatedIterator;
-  yield &apos;Ok, bye!&apos;;
-})();
-
-// Prints &quot;Greetings!&quot;, &quot;Hello&quot;, &quot;Bye!&quot;, &quot;Ok, bye!&quot;
-for (let value of delegatingIterator) {
-  console.log(value);
-}
-</code></pre><h3 id="用作流程控制"><a href="#用作流程控制" class="headerlink" title="用作流程控制"></a>用作流程控制</h3><p>co 已经将此特性封装的非常完美</p>
-<p>Generator 之所以可以用来控制代码流程, 就是通过 yield 来将两个或多个 Generator 的执行路径相互切换, 这种切换是语句级别的, 而不是函数级调用. 其本质是 CPS 变换.</p>
-<p>这里补充 yield 的若干行为:</p>
-<ul>
-<li>next 方法接收一个参数, 传入的参数是 yield 表达式的返回值: 即 yield 既可以产生数值,  也可以接收数值</li>
-<li>throw 方法会抛出一个异常, 并终止迭代</li>
-<li>GeneratorFunction 的 return 语句相当于一个 yield</li>
-</ul>
-<h4 id="将异步”变为”同步"><a href="#将异步”变为”同步" class="headerlink" title="将异步”变为”同步"></a>将异步”变为”同步</h4><p>假设我们希望有如下语法:</p>
-<ul>
-<li>suspend 传入一个 GeneratorFunction</li>
-<li>suspend 返回一个简单函数, 接收一个 node 风格的回调函数</li>
-<li>所有的异步调用都通过 yield, 看起来像同步调用</li>
-<li>给定一个特殊的回调, 让保证异步调用的返回值作为 yield 的返回值, 并让脚本继续</li>
-<li>GeneratorFunction 的返回值和执行过程的错误都会传入全局的回调函数</li>
-</ul>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2657,7 +2818,7 @@ for (let value of delegatingIterator) {
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        309
+                        310
                     </p>
                 </div>
             </div>
@@ -2677,7 +2838,7 @@ for (let value of delegatingIterator) {
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        93
+                        94
                     </p>
                 </div>
             </div>
@@ -2808,7 +2969,7 @@ for (let value of delegatingIterator) {
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2822,6 +2983,25 @@ for (let value of delegatingIterator) {
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
+                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2899,25 +3079,6 @@ for (let value of delegatingIterator) {
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
-                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2929,6 +3090,17 @@ for (let value of delegatingIterator) {
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/10/">
@@ -3329,6 +3501,25 @@ for (let value of delegatingIterator) {
         
         <article class="media">
             
+            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
+                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
@@ -3403,25 +3594,6 @@ for (let value of delegatingIterator) {
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
-                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3433,6 +3605,17 @@ for (let value of delegatingIterator) {
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/10/">

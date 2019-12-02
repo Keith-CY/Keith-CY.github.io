@@ -153,6 +153,116 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-07-30T21:36:49.000Z">2016-07-31</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    4 minutes read (About 540 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/07/31/javascript-generator/">JavaScript Generator</a>
+            
+        </h1>
+        <div class="content">
+            <p>作用迭代器</p>
+<pre><code>function* argumentsGenerator() {
+  for (let i = 0; i &amp;lt; arguments.length; i++) {
+    yield arguments[i];
+  }
+}
+`&lt;/pre&gt;
+
+我们希望迭代传入的每个实参
+
+&lt;pre&gt;`var argumentsIterator = argumentsGenerator(&apos;a&apos;,&apos;b&apos;,&apos;c&apos;,&apos;d&apos;);
+
+// Prints &quot;a,b,c,d&quot;
+console.log(
+  argumentsIterator.next().value,
+  argumentsIterator.next().value,
+  argumentsIterator.next().value,
+  argumentsIterator.next().value
+)
+`&lt;/pre&gt;
+
+我们可以简单的理解
+- Generator 其实是生成 Iterator 的方法, argumentsGenerator 被称为 GeneratorFunction, 也有一些人把 GeneratorFunction 的返回值称为一个 Generator
+- yield 可以中断 GeneratorFunction 的运行, 而在 next() 时恢复运行
+- 返回的 Iterator 上, 有 next 成员方法, 能够返回迭代值. 其中 value 属性包含了实际返回值, done 属性为布尔值, 标记迭代器是否完成迭代, 要注意的是, 在 done: true 后继续运行 next 方法会产生异常.
+
+完整的 ES 实现中, for-of 循环正式为了快速迭代一个 Iterator
+
+&lt;pre&gt;`for (let value of argumetnsIterator) {
+  console.log(value);
+}
+`&lt;/pre&gt;
+
+可以利用 yield* 语法, 将 yield 操作代理到另一个 Generator
+
+&lt;pre&gt;`let delegatedIterator = (function*() {
+  yield &apos;Hello!&apos;;
+  yield &apos;Bye!&apos;;
+})();
+
+let delegatingIterator = (function*() {
+  yield &apos;Greetings!&apos;;
+  yield* delegatedIterator;
+  yield &apos;Ok, bye!&apos;;
+})();
+
+// Prints &quot;Greetings!&quot;, &quot;Hello&quot;, &quot;Bye!&quot;, &quot;Ok, bye!&quot;
+for (let value of delegatingIterator) {
+  console.log(value);
+}
+</code></pre><h3 id="用作流程控制"><a href="#用作流程控制" class="headerlink" title="用作流程控制"></a>用作流程控制</h3><p>co 已经将此特性封装的非常完美</p>
+<p>Generator 之所以可以用来控制代码流程, 就是通过 yield 来将两个或多个 Generator 的执行路径相互切换, 这种切换是语句级别的, 而不是函数级调用. 其本质是 CPS 变换.</p>
+<p>这里补充 yield 的若干行为:</p>
+<ul>
+<li>next 方法接收一个参数, 传入的参数是 yield 表达式的返回值: 即 yield 既可以产生数值,  也可以接收数值</li>
+<li>throw 方法会抛出一个异常, 并终止迭代</li>
+<li>GeneratorFunction 的 return 语句相当于一个 yield</li>
+</ul>
+<h4 id="将异步”变为”同步"><a href="#将异步”变为”同步" class="headerlink" title="将异步”变为”同步"></a>将异步”变为”同步</h4><p>假设我们希望有如下语法:</p>
+<ul>
+<li>suspend 传入一个 GeneratorFunction</li>
+<li>suspend 返回一个简单函数, 接收一个 node 风格的回调函数</li>
+<li>所有的异步调用都通过 yield, 看起来像同步调用</li>
+<li>给定一个特殊的回调, 让保证异步调用的返回值作为 yield 的返回值, 并让脚本继续</li>
+<li>GeneratorFunction 的返回值和执行过程的错误都会传入全局的回调函数</li>
+</ul>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2016-07-30T08:53:58.000Z">2016-07-30</time>
                 
                 <div class="level-item">
@@ -2438,115 +2548,6 @@ var arr1 = Array.from(obj,(v,k) =&amp;gt; k); //return [0,1,2,3,4]
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-07-19T20:52:32.000Z">2016-07-20</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>&nbsp;/&nbsp;<a class="has-link-grey -link" href="/categories/note/workNote/">workNote</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    6 minutes read (About 870 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/07/20/package-json-e5-b1-9e-e6-80-a7/">package.json 属性</a>
-            
-        </h1>
-        <div class="content">
-            <h3 id="name"><a href="#name" class="headerlink" title="name"></a>name</h3><p>package.json 中最重要的属性是 name 和 version. 这两个属性是必须要有的, 否则模块无法被安装. 这两个属性一起形成了一个 npm 模块的唯一标识符.<br>模块中内容变化的同时, 模块版本也应该一起变化.<br>name 属性就是你的模块名称, 下面是一些命名规则:</p>
-<ul>
-<li>name 必须小于等于214字节, 包括前缀名称在内(如../..module)</li>
-<li>name 不能以’_’或’.’开头</li>
-<li>不能有大写字母</li>
-<li>name 会成为 url 的一部分, 不能有 url 非法字符</li>
-<li>不要使用和 node 核心模块一样的名称</li>
-<li>name 中不要有 ‘js’ 和 ‘node’</li>
-</ul>
-<h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><p>version 必须可以被 npm 依赖的一个 node-server 模块解析</p>
-<h3 id="description"><a href="#description" class="headerlink" title="description"></a>description</h3><p>一个描述, 方便别人了解你的模块的作用, 搜索的时候也有用</p>
-<h3 id="keywords"><a href="#keywords" class="headerlink" title="keywords"></a>keywords</h3><p>一个字符串数组, 方便别人搜到本模块</p>
-<h3 id="homepage"><a href="#homepage" class="headerlink" title="homepage"></a>homepage</h3><p>项目主页 url<br>注意: 这个项目主页 url 和 url 属性不同, npm 注册工具会认为你把项目发布到其他地方了, 获取模块的时候不是从官方仓库后去, 而是去 url 配置的地址</p>
-<h3 id="bugs"><a href="#bugs" class="headerlink" title="bugs"></a>bugs</h3><p>填写一个提交 bug 的地址或邮箱</p>
-<pre><code>{
- &apos;url&apos;: &apos;https://www.ezcook.de/project/issue&apos;,
- &apos;email&apos;: &apos;project@ezcook.de&apos;
-}
-`&lt;/pre&gt;
-
-如果只填写一个, 可以返回字符串而不是对象
-
-### license
-
-为模块制定一个协议, 通知用户可以使用的权限, 最常见的是 BSD-3-Clause 或 MIT
-
-&lt;pre&gt;`{&apos;license&apos;: &apos;MIT&apos;}
-`&lt;/pre&gt;
-
-### author, contributors
-
-### files
-
-files 属性的值是一个数组, 内容是模块下文件名或文件夹名, 如果是文件夹名, 则文件夹下所有文件也会被包含.
-可以在模块根目录下创建一个 &apos;.npmignore&apos; 文件, 写在这个文件里的文件会被排除在 file 属性
-
-### main
-
-main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名为&apos;foo&apos;, package.json中&apos; main&apos; 属性指定为&apos;test.js&apos;, 则通过 require(foo)来使用模块的时候会滴啊用 test.js 脚本.
-他应该指向模块根目录下得一个文件, 默认为 index.js
-
-### bin
-
-很多模块有一个或多个需要配置到 PATH 路径下的可执行模块...
-
-### man
-
-制定一个或通过数组指定一些文件夹让 linux 下的 man 指令查找文档地址
-
-### directories
-
-### repository
-
-指定一个代码存放的地址
-
-&lt;pre&gt;`&apos;repository&apos;:
-{
-  &apos;type&apos;:&apos;git&apos;,
-  &apos;url&apos;:&apos;https://github.com/...&apos;
-}
-</code></pre><p>如果是 Github, 可以用缩写完成<br>‘repository’:’gist:…’`</p>
-<h3 id="scripts"><a href="#scripts" class="headerlink" title="scripts"></a>scripts</h3><p>scripts 属性是一个对象, 里面制定了项目的生命周期各个环节需要执行的命令, key 是生命周期中的时间, value 是要执行的命令<br>具体内容有 install, start, stop 等, 详情见<a href="https://docs.npmjs.com/misc/scripts" target="_blank" rel="noopener">npm/scripts</a></p>
-<h3 id="config"><a href="#config" class="headerlink" title="config"></a>config</h3><p>用来设置一些项目不怎么变化的项目配置, 如 port 等</p>
-<h3 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h3><p>dependencies 属性是一个对象, 配置依赖模块的模块列表, key 是模块名称, vlaue 是版本范围, 版本范围是一个字符, 可以被一个或多个空格分隔.<br>比如<br>```<br>‘dependencies’:<br>{<br>  ‘foo’:’1.0.0 - 2.0.0’<br>  ‘foo1’:’&gt;=1.0.0’<br>}</p>
-<h3 id="devDependencies"><a href="#devDependencies" class="headerlink" title="devDependencies"></a>devDependencies</h3><p>如果有人想下载并使用你的模块, 也许他们并不希望或需要下载一些你在开发过程中额外的测试或文档框架<br>这种情况下最好把这些依赖添加到 devDependencies 中, 这些模块会在 npm link 或者 npm install 的时候被安装, 也可以像其他 npm 配置一样被管理</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2619,7 +2620,7 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        309
+                        310
                     </p>
                 </div>
             </div>
@@ -2639,7 +2640,7 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        93
+                        94
                     </p>
                 </div>
             </div>
@@ -2770,7 +2771,7 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2784,6 +2785,25 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
+                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2861,25 +2881,6 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
-                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2891,6 +2892,17 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/10/">
@@ -3291,6 +3303,25 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
         
         <article class="media">
             
+            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
+                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
@@ -3365,25 +3396,6 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
-                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3395,6 +3407,17 @@ main 属性指定程序的主入口文件, 比如这个模块(文件夹)命名�
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/10/">

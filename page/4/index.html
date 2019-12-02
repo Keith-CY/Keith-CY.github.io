@@ -153,6 +153,127 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-09-07T03:57:10.000Z">2017-09-07</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    10 minutes read (About 1495 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/09/07/Concept-on-BlockChain/">Concept on BlockChain</a>
+            
+        </h1>
+        <div class="content">
+            <p>A Blockchain is</p>
+<blockquote>
+<p>A distributed database that is used to maintain a continuously growing list of records, called block.</p>
+</blockquote>
+<p>A Block contains following information:</p>
+<ul>
+<li><p>Index(Block #) - Which block is it? (Genesis block has index 0)</p>
+</li>
+<li><p>Hash: Is the block valid?</p>
+</li>
+<li><p>Previous Hash: It the previous block valid?</p>
+</li>
+<li><p>Timestamp: When was the block added?</p>
+</li>
+<li><p>Data: What information is stored on the block?</p>
+</li>
+<li><p>Nonce: How many iterations did we go through before we found a valid block?</p>
+</li>
+</ul>
+<h3 id="Genesis-Block"><a href="#Genesis-Block" class="headerlink" title="Genesis Block"></a>Genesis Block</h3><p>Every Blockchain will st art with the <code>Genesis Block</code>, each block on the blockchain is dependent on the previous block, so the Genesis Block is needed to mine our first block.</p>
+<h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><p>A <strong>hash value</strong> is a numeric value of a fixed length that uniquely identifies data.</p>
+<p>The hash is calculated by taking the <strong>index</strong>, <strong>previous block hash</strong>, <strong>timestamp</strong>, <strong>block data</strong>, and <strong>nonce</strong> as input.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CryptoJS.SHA256(index + previousHash + timestamp + data + nonce)</div></pre></td></tr></table></figure>
+<h3 id="Leading-0-in-the-block-hash"><a href="#Leading-0-in-the-block-hash" class="headerlink" title="Leading 0 in the block hash"></a>Leading 0 in the block hash</h3><p>Specified leading 0 is a minimum requirement for a valid hash. The number of leading 0 required is called <strong>difficulty</strong>.</p>
+<p>The is also known as the <strong>Proof-of-Work</strong> system.</p>
+<h3 id="Nonce"><a href="#Nonce" class="headerlink" title="Nonce"></a>Nonce</h3><p>A nonce is a number used to find a valid hash</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">let</span> nonce = <span class="hljs-number">0</span></div><div class="line"><span class="hljs-keyword">let</span> hash</div><div class="line"><span class="hljs-keyword">let</span> input</div><div class="line"></div><div class="line"><span class="hljs-keyword">while</span> (!isValidHashDifficulty(hash)) &#123;</div><div class="line">  nonce += <span class="hljs-number">1</span></div><div class="line">  input = index + previousHash + timeStamp + data + nonce</div><div class="line">  hash = CryptoJS.SHA256(input)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>The nocne iterates until the hash is valid.</p>
+<p>The process of finding a nonce that corresponds to a valid hash is <strong>mining</strong>.</p>
+<p>As the difficulty <strong>increase</strong>, the number of possible valid hashes <strong>decrese</strong>. With less possible valid hashes, it takes more processing power to find a valid hash.</p>
+<h3 id="Ethereum-Virtual-Machine-EVM"><a href="#Ethereum-Virtual-Machine-EVM" class="headerlink" title="Ethereum Virtual Machine (EVM)"></a>Ethereum Virtual Machine (EVM)</h3><p>The Ethereum Virtual Machine or EVM is the runtime environment for smart contracts in Ethereum. It is not only sandboxed but actually completely isolated, which means that code running inside the EVM has no access to network, filesystem or other processes. Smart contract even have limited access to other smart contracts.</p>
+<h4 id="Accounts"><a href="#Accounts" class="headerlink" title="Accounts"></a>Accounts</h4><p>There are two kinds of accounts in Ethereum which share the same address space:</p>
+<ul>
+<li><p><code>External Account</code> that are controlled by public-private key pairs(i.e. humans)</p>
+</li>
+<li><p><code>Contract Account</code> that are controlled by the code stored together with accounts</p>
+</li>
+</ul>
+<p>The address of an external account is determined from the public key while the address of a contract is determined at the time the contract is created(it is derived from the creator address and the number of transactions sent from the address, the so-called ‘nonce’).</p>
+<p>Every account has a <strong>persistent key-value store mapping 256-bit words to 256-bit words</strong> called <strong>storage</strong>.</p>
+<p>Every account has a <strong>balance</strong> in Ether(in <em>Wei</em> to be exact) which can be modified by sending transactions that include Ether.</p>
+<h4 id="transactions"><a href="#transactions" class="headerlink" title="transactions"></a>transactions</h4><p>A transaction is a message that is sent from one account to another account(which might be the same or the special <strong>zero-account</strong>). It can include binary data(its payload) and Ether.</p>
+<p>If the target account contains code, that code is executed and the payload is provided as input data.</p>
+<p>If the target account is the <em>zero-account</em>(the account with the address 0), the transaction creates a <strong>new contract</strong>.</p>
+<p>As memtioned, the address of that contract is not the zero address but an address derived from the sender and its number of transactions sent(nonce). <strong>The payload of such a contract creation transaction is taken to be EVM bytecode and executed to generate the new contract</strong></p>
+<p>The output of the bytecode, namely the new contract, is permenantly stored.</p>
+<h4 id="Gas"><a href="#Gas" class="headerlink" title="Gas"></a>Gas</h4><p>Each transaction is charged with a certain with a certain amount of <strong>gas</strong>, whose purpose is to limit the amount of work that is needed to executed the transaction and to pay for this execution.</p>
+<p>While the EVM executes the transaction, the gas is gradually depleted according to specific rules.</p>
+<p>The <code>gas price</code> is a value set by the creator of the transaction, who has to pay <code>gas_price * gas</code>.</p>
+<h4 id="Storage-Memory-and-the-Stack"><a href="#Storage-Memory-and-the-Stack" class="headerlink" title="Storage, Memory and the Stack"></a>Storage, Memory and the Stack</h4><p>Each account has a persistent memory area which is called <strong>storage</strong>. Storage is a <strong>key-value</strong> store taht maps 256-bit word to 256-bit word.</p>
+<p>The second memory area is called <strong>memory</strong>, of which a contract obtains a freshly cleared instance for each message call. Memory is linear and can be addressed at byte level, but reads are limited to a width of 256 bits, white writes can be either 8btis or 256bits wide.</p>
+<p>Memory is expanded by a word(256-bit), when accessing (either reading or writing) a previously untouched memory word. At the time of expansion, the cost in gas must be paid. Memory is more costly the larger it grows(it scales quadratically).</p>
+<p>The EVM is not a register machine but a stack machine, so all computations are performed on an area called the <strong>stack</strong>. It has limited to the top end in the following way:</p>
+<ul>
+<li><p>it is possible to copy one of the topmost 16 elements to the top of the stack or swap the topmost 2(or 1, or more, depending on the opeartion) element fomr the stack and push the result onto the stack.</p>
+</li>
+<li><p>All other operation take the topmost 2(or 1, or more, depending on the operation) elements from the stack and push the result onto the stack.</p>
+</li>
+<li><p>It is possible to move stack elements to storage or memory</p>
+</li>
+<li><p>It is not possible to just access arbitrary elements deeper in the stack without removing the top of the stack.</p>
+</li>
+</ul>
+<h3 id="Instruction-Set"><a href="#Instruction-Set" class="headerlink" title="Instruction Set"></a>Instruction Set</h3><p>The instruction set of the EVM is kept minimal in order to avoid incorrect implementations which could cuase consensus problem. All instructions operate ont he basic data type, 256-bit words.</p>
+<p>The usual arihmetic bit, logical and comparison operations are present. Conditional and unconditional jumps are possible. Furthermore, contracts can access relevant properties of the current block like its number and timestamp.</p>
+<h3 id="Message-Calls"><a href="#Message-Calls" class="headerlink" title="Message Calls"></a>Message Calls</h3><p>Contracts can call other contracts or send Ether to non-contract accounts by the means of the message calls.</p>
+<p>Message calls are similar to transactions, in that tehy have a <strong>source</strong>, a <strong>target</strong>, <strong>data payload</strong>, <strong>Ether</strong>, <strong>gas</strong>, and return <strong>data</strong>.</p>
+<p>In fact, every transaction consists of a top-level message call which in turn can create further message calls.</p>
+<p>A contract can decide how much of its remaining <strong>gas</strong> should be sent with the inner message call and how much it wants to retain. If an out-of-gas exception happens in the inner call(or any other exception), this will be signalled by an error value put onto the stack. In this case, only the gas sent together with the call is used up.</p>
+<p>Summarily, a called contract(which can be the same as caller) will receive a <strong>freshly cleared instance of memoery</strong>, and has access to the call payload - which will be provided in a separate area called the <strong>calldata</strong>. After it has finished execution, it can return data which will be stored at a location in the caller’s memory preallocated by the caller.</p>
+<p>Calls are limited to depth of 1024, which means that for more complex operations, loops should be preferred over recursive calls.</p>
+<h3 id="Delegatecall-Callcode-and-Libraries"><a href="#Delegatecall-Callcode-and-Libraries" class="headerlink" title="Delegatecall / Callcode and Libraries"></a>Delegatecall / Callcode and Libraries</h3><p>There exists a special variant of a message call, named <strong>delegatecall</strong> which is identical to a message call apart from the fact taht the code at the target address is executed in the context of the calling contract and <code>msg.sender</code> and <code>msg.value</code> do not change their values.</p>
+<p>This means that a contract can dynamically load code from a different address at runtime. Storage, current address and balance still refer to the calling contract, only the code is taken from teh called address.</p>
+<p>This makes it possible to implement the ‘library’ feature in Solidity: Reusable library code that can be applied to a contract’s storage to implement a complex data structure.</p>
+<h3 id="Logs"><a href="#Logs" class="headerlink" title="Logs"></a>Logs</h3><p>It is possible to store data in a special indexed data structure that maps all the way up to the block level. This feature called <strong>logs</strong> is used by Solidity in order to implement <strong>events</strong>. Contracts cannot access log data after it has been created, but they can efficiently accessed from outside the blockchain.</p>
+<p>Since some part of the log data is stored in bloom filters, it is possible to search for this data in an efficient and crypographically secure way, so network peers that do not download the whole blockchain(‘light clients’) can still find these logs.</p>
+<h3 id="Create"><a href="#Create" class="headerlink" title="Create"></a>Create</h3><p>Contracts can even create other contract s using a special opcode. The only difference between <strong>create calls</strong> and normal message calls is that the payload data is executed and the result stored as code and the caller/creator receives the address of the new contract on the stack.</p>
+<h3 id="Self-destruct"><a href="#Self-destruct" class="headerlink" title="Self-destruct"></a>Self-destruct</h3><p>The only possible that code is removed from the blockchain is when a contract at that address performs the <code>selfdestruct</code> operation. The remaining Ether stored at that address is sent to a designed target and then the storage and code is removed from the state.</p>
+<blockquote>
+<p>Even if a contract’s code does not contain a call to <code>selfdestruct</code>, it can still perform that operation using <code>delegatecall</code> or <code>callcode</code>.</p>
+</blockquote>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-09-06T02:04:08.000Z">2017-09-06</time>
                 
                 
@@ -1747,126 +1868,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-08-22T06:51:20.000Z">2017-08-22</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    17 minutes read (About 2552 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/08/22/Node-Child-Process/">Node Child Process</a>
-            
-        </h1>
-        <div class="content">
-            <p><img src="https://cdn-images-1.medium.com/max/2000/1*I56pPhzO1VQw8SIsv8wYNA.png" alt=""></p>
-<p>Single-threaded, non-blocking performance in Node works great for a single process. But eventually, one process in one CPU is not going to be enough to handle the increasing workload of your application.</p>
-<p>Using multiple processes is the best way to scale a Node application. Node is designed for building distributed applications with many nodes.</p>
-<h3 id="The-Child-Process-Module"><a href="#The-Child-Process-Module" class="headerlink" title="The Child Process Module"></a>The Child Process Module</h3><p>We can easily spin a child process using Node’s <code>child_process</code> module and those child processes can easily communicate with each other with a messaging system.</p>
-<p>The <code>child_process</code> module enables us to access Operating System functionalities by running any system command inside child process.</p>
-<p>We can control that child process input stream, and listen to its output stream. We can also control the arguments to be passed to the underlying OS command, and we can do whatever we want with that command’s output.</p>
-<p>There are four different ways to create a child process in Node: <code>spawn()</code>, <code>fork()</code>, <code>exec()</code>, <code>execFile()</code>.</p>
-<h3 id="Spawned-Child-Process"><a href="#Spawned-Child-Process" class="headerlink" title="Spawned Child Process"></a>Spawned Child Process</h3><p>The <code>spawn</code> function launches a command in a new process and we can use it to pass that command any arguments. For example, here’s code to spawn a new process that will execute the <code>pwd</code> command.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'pwd'</span>)</div></pre></td></tr></table></figure>
-<p>We simply destructure the <code>spawn</code> function out of the <code>child_process</code> module and execute it with the OS command as the first argument.</p>
-<p>The result of executing the <code>spawn</code> function (the <code>child</code> object above) is a <code>ChildProcess</code> instance, which implements the <code>EventEmitter API</code>. This means we can register handlers for events on this child object directly. For example, we can do something when the child process exits by registering a handler for the <code>exit</code> event.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">child.on(<span class="hljs-string">'exit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">code, signal</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'child process exited with '</span> + <span class="hljs-string">`code <span class="hljs-subst">$&#123;code&#125;</span> and signal <span class="hljs-subst">$&#123;signal&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>The handler above gives us the exit <code>code</code> for the child process and the <code>signal</code>, if any, that was used to terminate the child process. This <code>signal</code> variable is null when the child process exits normally.</p>
-<p>The other events that we can register handlers for with the <code>ChildProcess</code> instances are <code>disconnect</code>, <code>error</code>, <code>close</code>, <code>message</code>.</p>
-<ul>
-<li><p>The <code>disconnect</code> event is emitted when the parent process manually calls the <code>child.disconnect</code> function.</p>
-</li>
-<li><p>The <code>error</code> event is emitted if the process could not be spawned or killed.</p>
-</li>
-<li><p>The <code>close</code> event is emitted when the <code>stdio</code> streams of a child process get closed.</p>
-</li>
-<li><p>The <code>message</code> event is the most important one. It’s emitted when the child process uses the <code>process.send()</code> function to send messages. This is how parent/child processes can communicate with each other.</p>
-</li>
-</ul>
-<p>Every child process also gets the three standard <code>stdio</code> streams, which we can access using <code>child.stdin</code>, <code>child.stdout</code>, <code>child.stderr</code>.</p>
-<p>When those streams get closed, the child process that was using them will emit the <code>close</code> event. This <code>close</code> event is different than the <code>exit</code> event because multiple child processes might share the same <code>stdio</code> streams and so one child process exiting does not mean that the streams got closed.</p>
-<p>Since all streams are event emitters, we can listen to different events on those <code>stdio</code> stream that are attached to every child process. Unlike in a normal process though, in a child process, the <code>stdout</code>/<code>stderr</code> streams are readable streams while the <code>stdin</code> stream is a writable one. This is basically the inverse of those types as found in a main process. The events we can use for those streams are the standard ones. Most importantly, on the readable streams, we can listen to the <code>data</code> event, which will have the output of the command or any errorencoutered while executing the command:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">child.stdout.on(<span class="hljs-string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`child stdout:\n<span class="hljs-subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">child.stderr.on(<span class="hljs-string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`child \n<span class="hljs-subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>The two handlers above will log both cases to the main process <code>stdout</code> and <code>stderr</code>. When we execute the <code>spawn</code> function above, the output of the <code>pwd</code> command gets printed and the child process exits with code <code>0</code>, which means no error occured.</p>
-<p>We can pass arguments to the command that’s executed by the <code>spawn</code> function using the second argument of the <code>spawn</code> function, which is an array of all the arguments to be passed to the command.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'find'</span>, [<span class="hljs-string">'.'</span>, <span class="hljs-string">'-type'</span>, <span class="hljs-string">'f'</span>])</div></pre></td></tr></table></figure>
-<p>If an error occurs during the execution of the command, for example, if we give find an invalid destination above, the <code>child.stderr</code> <code>data</code> event handler will be triggered and the <code>exit</code> event handler will report an exit code of <code>1</code>, which signifies that an error has occured.</p>
-<p>A child process <code>stdin</code> is a writable stream. We can use it to send a command some input. Just like any writable stream, the easiest way to consume it is using the <code>pipe</code> function. We simply pipe a readable stream into a writable stream. SInce the main process <code>stdin</code> is a readable stream, we can pipe that into a child process <code>stdin</code> stream.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'wc'</span>)</div><div class="line"></div><div class="line">process.stdin.pipe(child.stdin)</div><div class="line"></div><div class="line">child.stdout.on(<span class="hljs-string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`child stdout:\n<span class="hljs-subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>In the example above, the child process invokes the <code>wc</code> command, which count lines, words, and characters in Linux. When we pipe the main process <code>stdin</code>(which is a readable stream) into the child process <code>stdin</code>(which is a writable stream). The result of this combination is that we get a standard input mode where we can type somthing and when we hit <code>Ctrl + D</code>, what we typed will be used as the input of the <code>wc</code> command.</p>
-<p>We can also pipe the standard input/output of multiple processes on each other, just like we can do with Linux commands. For example, we can pipe the <code>stdout</code> of the <code>find</code> command to the <code>stdin</code> of the <code>wc</code> command to count all the files in the current directory:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> find = spawn(<span class="hljs-string">'find'</span>, [<span class="hljs-string">'.'</span>, <span class="hljs-string">'-type'</span>, <span class="hljs-string">'f'</span>])</div><div class="line"><span class="hljs-keyword">const</span> wc = spawn(<span class="hljs-string">'wc'</span>, [<span class="hljs-string">'-l'</span>])</div><div class="line"></div><div class="line">find.stdout.pipe(wc.stdin)</div><div class="line"></div><div class="line">wc.stdout.on(<span class="hljs-string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Number of files <span class="hljs-subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>Add <code>-l</code> to the <code>wc</code> command to make it count only the lines.</p>
-<h3 id="Shell-Syntax-and-the-exec-Function"><a href="#Shell-Syntax-and-the-exec-Function" class="headerlink" title="Shell Syntax and the exec Function"></a>Shell Syntax and the exec Function</h3><p>By default, the <code>spawn</code> function does not create a <em>shell</em> to execute the command we pass into it. This makes it slightly more efficient than the <code>exec</code> function, which does create a shell. The <code>exec</code> function has one other major difference. It <em>buffers</em> the command’s generated output and passes the whole output value to a callback function(instead of using streams, which is what <code>spawn</code> does).</p>
-<p>Here the is previous <code>find | wc</code> example implemented with an <code>exec</code> function.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; exec &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line">exec(<span class="hljs-string">'find . -type  f | wc -l'</span>, (err, stdout, stderr) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (err) &#123;</div><div class="line">    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`exec error: <span class="hljs-subst">$&#123;err&#125;</span>`</span>)</div><div class="line">    <span class="hljs-keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Number of files <span class="hljs-subst">$&#123;stdout&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>Since the <code>exec</code> function uses a shell to execute the command, we can use the <code>shell syntax</code> directly here making use of the <code>shell pipe</code> feature.</p>
-<p>Note that using the shell syntax comes at a <code>security risk</code> if you’re executing any kind of dynamic input provided externally. A user can simply do a command injection attrack using shell syntax characters like ; and $(For example, <code>commnd + &#39;; rm -rf ~&#39;</code>)</p>
-<p>The <code>exec</code> function buffers the output and passes it to the callback function(the second argument to <code>exec</code>) as the <code>stdout</code> argument there. This <code>stdout</code> argument is the command’s output that we want to print out.</p>
-<p>The <code>exec</code> function is a good choice if you need to use the shell syntax and if the size of the data expected from te command is small(Remember <code>exec</code> will buffer the whole data in memory before returning it).</p>
-<p>The <code>spawn</code> function is a much better choice when the size of the data expected from the command is large, because that data will be streamed with the standard IO objects.</p>
-<p>We can make the spawned child process inherit the standard IO object of its parents if we want to, but also, more importantly, we can ke the <code>spawn</code> function use the shell syntax as well. Here’s the smae <code>find | wc</code> command implemented with the <code>spawn</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'find . -type f'</span>, &#123;</div><div class="line">  <span class="hljs-attr">stdio</span>: <span class="hljs-string">'inherit'</span>,</div><div class="line">  <span class="hljs-attr">shell</span>: <span class="hljs-literal">true</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>Because of the <code>stdio: &#39;inherit&#39;</code> option above, when we execute the code, the child process inherits the main process <code>stdin</code>, <code>stdout</code> and <code>stderr</code>. This causes the child process data events handlers to be triggered on the main <code>process.stdout</code> stream, making the script output the result right away.</p>
-<p>Because of the <code>shell: true</code> option above, we were able to use the shell syntax in the passed command, just like we did with <code>exec</code>. But with this code, we still get the advantage of the streaming of data that the <code>spawn</code> function gives us. <em>THis is really the best of both worlds</em>.</p>
-<p>There are a few other good options we can use in the last argument to the <code>child_process</code> function besides <code>shell</code> and <code>stdio</code>. We can, for example, use the <code>cwd</code> option to change the working directory of the script.</p>
-<p>Another option we can use is the <code>env</code> option to specify the environment variables that will be visible to the new child process. The default for this option is <code>process.env</code> which gives any command access to the current process environment. If we want ot override that behavior, we can simple pass an empty object as the <code>env</code> option or new value there to be considered as the only environment variables:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'echo $ANSWER'</span>, &#123;</div><div class="line">  <span class="hljs-attr">stdio</span>: <span class="hljs-string">'inherit'</span>,</div><div class="line">  <span class="hljs-attr">shell</span>: <span class="hljs-literal">true</span>,</div><div class="line">  <span class="hljs-attr">env</span>: &#123;</div><div class="line">    <span class="hljs-attr">ANSWER</span>: <span class="hljs-number">12</span>,</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>The echo command above does not have access to the parent process’s environment variables. It can’t, for example, access <code>$HOME</code>, but it can accccess <code>$ANSWER</code> because it was passes as a custom environement variable through the <code>env</code> option.</p>
-<p>One last important child process option to explain here is the <code>detached</code> option, which makes the child process run independently of its parent process.</p>
-<p>Assuming we have a file <code>timer.js</code> that keeps the event loop busy:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// keep the event loop busy</span></div><div class="line">&#125;, <span class="hljs-number">20000</span>)</div></pre></td></tr></table></figure>
-<p>We can execute it in the background using the <code>detached</code> option:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'node'</span>, [<span class="hljs-string">'timer.js'</span>], &#123;</div><div class="line">  <span class="hljs-attr">detached</span>: <span class="hljs-literal">true</span>,</div><div class="line">  <span class="hljs-attr">stdio</span>: <span class="hljs-string">'ignore'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">child.unref()</div></pre></td></tr></table></figure>
-<p>The exact behavior of detached child process depends on the OS. On windows, the detached child process will have its own console window while on Linux the detached child process will be made the leader of a new process groups and session.</p>
-<p>It the <code>unref</code> function is called on the detached process, the parent process can exit independently of the child. This can be useful if the child is executing a long-running process, but to keep it running in the background the child’s <code>stdio</code> configurations also have to be independent of the parent.</p>
-<p>The example above will run a node script(timer.js) in the background by detaching and also ignoring its parent <code>stdio</code> file descriptors so that the parent can terminate while the child keeps running in the background.</p>
-<h3 id="The-execFile-function"><a href="#The-execFile-function" class="headerlink" title="The execFile function"></a>The execFile function</h3><p>If you need to execute a file without using a shell, the <code>execFile</code> function is what you need. It behaves exactly like the <code>exec</code> function, but does not use a shell, which makes it a bit more efficient. On windows, some files cannot be executed on their own, like <code>.bat</code>, <code>.cmd</code> files. Those files cannot be executed with <code>execFile</code> and either <code>exec</code> or <code>spawn</code> with shell set to true is required to execute them.</p>
-<h3 id="The-Sync-Function"><a href="#The-Sync-Function" class="headerlink" title="The *Sync Function"></a>The *Sync Function</h3><p>The functions <code>spawn</code>, <code>exec</code>, <code>execFile</code> from the <code>child_process</code> module also have synchronous blocking versions that will wait until child process exits.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123;</div><div class="line">  spawnSync,</div><div class="line">  execSync,</div><div class="line">  execFileSync,</div><div class="line">&#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div></pre></td></tr></table></figure>
-<h3 id="The-fork-function"><a href="#The-fork-function" class="headerlink" title="The fork() function"></a>The fork() function</h3><p>THe <code>fork</code> function is a variation of the <code>spawn</code> function for spawning node processes. The biggest difference between <code>spawn</code> and <code>fork</code> is that a communication channel is established to the child process when using <code>fork</code>, so we can use the <code>send</code> function on the forked along with the global <code>process</code> object itself to exchange messsages between the parent and forked processes. We do this through the <code>EventEmitter</code> module interface.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// parent.js</span></div><div class="line"><span class="hljs-keyword">const</span> &#123; fork &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> forked = fork(<span class="hljs-string">'child.js'</span>)</div><div class="line"></div><div class="line">forked.on(<span class="hljs-string">'message'</span>, (msg) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Message from child'</span>, msg)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">forked.send(&#123;</div><div class="line">  <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// child.js</span></div><div class="line"></div><div class="line">process.on(<span class="hljs-string">'message'</span>, (msg) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Message from parent:'</span>, msg)</div><div class="line">&#125;)</div><div class="line"><span class="hljs-keyword">let</span> counter = <span class="hljs-number">0</span></div><div class="line"></div><div class="line">setInterval(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  process.send(&#123;</div><div class="line">    <span class="hljs-attr">counter</span>: counter++</div><div class="line">  &#125;)</div><div class="line">&#125;, <span class="hljs-number">1000</span>)</div></pre></td></tr></table></figure>
-<p>In the parent.js we fork <code>child.js</code>(<strong>which will execute the file with the <code>node</code> command</strong>) and then we listen for the <code>message</code> event. The <code>message</code> event will be emitted whenever the child use <code>process.send</code>.</p>
-<p>The pass down messages from the parent to the child, we can execute the <code>send</code> function one the forked object it self, and then, in the child script we can listen to the <code>message</code> event on the global <code>process</code>.</p>
-<p>When executing the <code>parent.js</code> file, it’ll first send down the <code>{hello: &#39;world&#39;}</code> object to be printed by the forked child process and then the forked child process will send an incremental counter value every second to be printed by the parent process.</p>
-<p>Let’s do more practical example about the <code>fork</code> function.</p>
-<p>Let’s say we have an http server that handles two endpoints. One of these endpoints(<code>/compute</code> below) is computationally expensive and will take a few seconds to complete. WE can use a long for loop to simulate that:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> longComputation = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span></div><div class="line">  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1e9</span>; i++) &#123;</div><div class="line">    sum += i</div><div class="line">  &#125;</div><div class="line">  <span class="hljs-keyword">return</span> sum</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> server = http.createServer()</div><div class="line"></div><div class="line">server.on(<span class="hljs-string">'request'</span>, (req, res) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (req.url === <span class="hljs-string">'/compute'</span>) &#123;</div><div class="line">    <span class="hljs-keyword">const</span> sum = longComputation()</div><div class="line">    <span class="hljs-keyword">return</span> res.end(<span class="hljs-string">`Sum is <span class="hljs-subst">$&#123;sum&#125;</span>`</span>)</div><div class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">    res.end(<span class="hljs-string">'OK'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">server.listen(<span class="hljs-number">3000</span>)</div></pre></td></tr></table></figure>
-<p>The program has a big problem: when the <code>/compute</code> endpoint is requested, the server will not be able to handle any other requests because the event loop is busy with the long for loop operation.</p>
-<p>There are a few ways which we can solve this problem depending on the nature of the long operation but one solution that works for all operation is to just move the computational operation into another process using <code>fork</code>.</p>
-<p>We first move the whole <code>longComputation</code> function into its own file and make it invoke that function when instructed via a message from the main process:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// compute.js</span></div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> longComputatioin  = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span></div><div class="line">  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1e9</span>; i++) &#123;</div><div class="line">    sum += i;</div><div class="line">  &#125;</div><div class="line">  <span class="hljs-keyword">return</span> sum</div><div class="line">&#125;</div><div class="line"></div><div class="line">process.on(<span class="hljs-string">'message'</span>, (msg) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">const</span> sum = longComputatioin()</div><div class="line">  process.send(sum)</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// server.js</span></div><div class="line"><span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>)</div><div class="line"><span class="hljs-keyword">const</span> &#123; fork &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> server = http.createServer()</div><div class="line"></div><div class="line">server.on(<span class="hljs-string">'request'</span>, (req, res) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (req.url === <span class="hljs-string">'/compute'</span>) &#123;</div><div class="line">    <span class="hljs-keyword">const</span> compute = fork(<span class="hljs-string">'compute.js'</span>)</div><div class="line">    compute.send(<span class="hljs-string">'start'</span>)</div><div class="line">    compute.on(<span class="hljs-string">'message'</span>, sum =&gt; &#123;</div><div class="line">      res.end(<span class="hljs-string">`Sum is <span class="hljs-subst">$&#123;sum&#125;</span>`</span>)</div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">    res.end(<span class="hljs-string">'OK'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">server.listen(<span class="hljs-number">3000</span>)</div></pre></td></tr></table></figure>
-<p>When a request to <code>/compute</code> happens now with the above code, we simply send a message to the forked process to start executing the long operation. The main process’s event loop will not be blocked.</p>
-<p>Once the forked process is done with the long operation, it can send its result back to the parent process using <code>process.send</code>.</p>
-<p>Node’s <code>cluster</code> module is based on this idea of child process forking and load balancing the requests among the many forks.</p>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -1939,7 +1940,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        309
+                        310
                     </p>
                 </div>
             </div>
@@ -1959,7 +1960,7 @@
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        93
+                        94
                     </p>
                 </div>
             </div>
@@ -2090,7 +2091,7 @@
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2104,6 +2105,25 @@
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
+                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2181,25 +2201,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
-                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2211,6 +2212,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/10/">
@@ -2611,6 +2623,25 @@
         
         <article class="media">
             
+            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
+                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
@@ -2685,25 +2716,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="[WIP]notes of Building Product, Talking to Users and Growing">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-17T03:32:32.000Z">2019-04-17</time></div>
-                    <a href="/2019/04/17/notes-of-building-product-talking-to-users-and-growing/" class="has-link-black-ter is-size-6">[WIP]notes of Building Product, Talking to Users and Growing</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2715,6 +2727,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/12/">
+                <span class="level-start">
+                    <span class="level-item">December 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/10/">

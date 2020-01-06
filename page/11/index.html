@@ -153,6 +153,306 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2016-08-24T04:17:39.000Z">2016-08-24</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/note/">note</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 minutes read (About 836 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2016/08/24/redux-apis/">Redux APIs</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="Compose-…funcs"><a href="#Compose-…funcs" class="headerlink" title="Compose(…funcs)"></a>Compose(…funcs)</h3><pre><code>/**
+ * compose(f,h,g)(...args) =&amp;gt; f(g(h(...args)))
+ * 使用了 reduceRight, 从右开始执行
+ * @param {多个函数, 逗号隔开}
+ * @return {函数}
+ */
+
+export default function compose(...funcs){
+  if(funcs.length === 0){
+    return arg =&amp;gt; arg
+  }
+
+  if(funcs.length === 1){
+    return funcs[0]
+  }
+
+  const last = funcs[funcs.length - 1]
+  const rest = funcs.slice(0,-1)
+  return (...args) =&amp;gt; rest.reduceRight((composed, f) =&amp;gt; f(composed), last(...args))
+}
+`&lt;/pre&gt;
+
+关键在于 reduceRight 可以传入初值
+
+### createStore(reducer, [initialState])
+
+&lt;pre&gt;`import isPlainObject from &apos;lodash/isPlainObject&apos;
+import $$observable from &apos;symbol-observable&apos;
+
+export var ActionTypes = {
+  INIT: &apos;@@redux/INIT&apos;
+}
+
+export default function createStore(reducer, preloadState, enhancer){
+  var currentReducer = reducer
+  var currentState = preloadState
+  var currentListeners = []
+  var nextListeners = currentListeners
+  var isDispatching = false
+}
+
+function ensureCanMutateNextListeners(){
+  if(nextListeners === currentListeners){
+    nextListeners = currentListeners.slice()
+  }
+}
+
+function getState(){
+  return currentState
+}
+
+function subscribe(listener){
+  if(typeof listener !== &apos;function&apos;){
+    throw new Error(&apos;Expected listener to be a function&apos;)
+  }
+
+  var isSubscribed = true
+
+  ensureCanmutateNextListener()
+  nextListeners.push(listener)
+
+  return function ubsubscribe(){
+    if(!isSubscribe){
+      return
+    }
+    isSubscribe = false
+
+    ensureCanMutateNextListeners()
+    var index = nextListeners.indexOf(listener)
+    nextListeners.splice(index,1)
+  }
+}
+
+function dispatch(action){
+  if(isPlainObecjt(action)){
+    throw new Error(&apos;Action must be plain objects &apos; + &apos;Use custom middleware for async action&apos;)
+  }
+
+  if(typeof action.type === &apos;undefined&apos;){
+    throw new Error(&apos;Actions may not have an undefined &quot;type&quot; property. &apos; + &apos;Have you misspelled a constant?&apos;)
+  }
+
+  if(isDispatching){
+    throw new Error(&apos;Reducers may not dispatch actions.&apos;)
+  }
+
+  try{
+    isDispatching = true
+    currentState = currentReducer(currentState, action)
+  } finally {
+    isDispatching = false
+  }
+
+  var listeners = currentListeners = nextListeners
+
+  for(var i = 0; i&amp;lt; listeners.length, i++){
+    listeners[i]()
+  }
+
+  return action
+}
+
+function replaceReducer(nextReducer){
+  if(typeof nextReducer !== &apos;function&apos;){
+    throw new Error(&apos;Expected the nextReducer to be a function&apos;)
+  }
+
+  currentReducer = nextReducer
+  dispatch({type:ActionTYpes.INIT})
+}
+
+### combineReudcers(reducers)
+
+`&lt;/pre&gt;
+
+import { combineReducers } from &apos;redux&apos;
+import counterReducer from &apos;./counterReducer&apos;
+import todosReducer from &apos;./todosReducer&apos;
+
+const rootReducer = combineReducers({
+  counter: counterReducer,   // &amp;lt;--- 键名是 state 中的属性, 键值是对应 reducer 函数名
+
+  todos: todosReducer
+})
+export default rootReducer
+
+&lt;pre&gt;`
+如果提高需求
+`&lt;/pre&gt;
+
+state
+  ├── counter: 0
+  ├── todo
+        ├── optTime: []
+        ├── todoList: [] # 这其实就是原来的 todos！
+
+&lt;pre&gt;`
+对应的 reducers 是:
+`&lt;/pre&gt;
+
+reducers/
+   ├── index.js &amp;lt;-------------- combineReducers (生成 rootReducer)
+   ├── counterReducer.js
+   ├── todoReducers/ &amp;lt;--------- combineReducers
+           ├── index.js
+           ├── optTimeReducer.js
+           ├── todoListReducer.js
+
+&lt;pre&gt;`
+`&lt;/pre&gt;
+
+/*  reducers/index.js */
+import { combineReducers } from &apos;redux&apos;
+import counterReducer from &apos;./counterReducer&apos;
+import todosReducers from &apos;./todosReducer&apos;
+
+const rootReducer = combineReducers({
+  counter: counterReducer,
+  todos: todosReducers
+})
+
+export default rootReducer
+
+=================================================
+
+/* reducers/todosReducers/index.js */
+
+import { combineReducers } from &apos;redux&apos;
+import optTimeReducer from &apos;./optTimeReducer&apos;
+import todoListReducer from &apos;./todoListReducer&apos;
+
+const todosReducers = combineReducers({
+  optTime: optTimeReducer,
+  todoList: todoListReducer
+})
+
+export default todosReducers
+
+&lt;pre&gt;`
+无论 dispatch 哪个 action 都会流通**所有** reducer, 但是由于 reducer 是纯函数, 效率还是会提高.
+
+### BindActionCreator
+
+### applyMiddlware(...middlewares)
+
+先要理解 Middleware, enhancer
+
+Redux 引入中间件机制是为了在 dispatch 前后进行处理
+
+`&lt;/pre&gt;
+
+const printStateMiddleware = ({getState}) =&gt; next =&gt; action =&gt; {
+  console.log(&apos;...&apos;)
+  let returnValue = next(action)
+  console.log(&apos;...&apos;)
+  return returnValue
+}
+
+&lt;pre&gt;`
+实际上最内层
+`&lt;/pre&gt;
+
+function printStateMiddleware(middlewareAPI){ //中间件内可以使用的 API, 如 getState 与 dispatch
+   return function(dispatch){ // 传入原 dispatch 的引用
+    return function(action){
+      console.log(...)
+      var returnValue = dispatch(action)  //  执行 dispatch 行为, dispatch(action) 返回的还是 action
+      console.log(...)
+      return returnValue // 传给下一个中间件的 action
+    }
+   }
+}
+
+&lt;pre&gt;`
+### Store Enhancer
+
+说白了 Store Enhancer 是对生成 store 的 API 的改造, 与 middleware 的最大区别是 middlewere 不修改 store 的 API
+
+改造 store 的 API 就要从 createStore 入口
+
+Redux 的 applyMiddleware 就是一个 Enhancer
+
+`&lt;/pre&gt;
+
+import compose from &apos;./compose&apos; // 作用就是层层包裹
+
+// 传入中间件
+export default function applyMiddleware(...middlewares){
+  // 传入 createStore
+  return function(createStore){
+    // 返回一个函数签名和 createStore 一样的函数, 即返回一个增强版的 createStore
+    return function(reducer, preloadState, enhancer){
+      // 用原 createStore 先生成一个 store, 包含 getState, dispatch, subscribe, replaceReducer 四个 API
+      var store = creataStore(reducer, preloadState, enhancer)
+
+&lt;pre&gt;`  var dispatch = store.dispatch //  生成指向原 dispatch的引用
+  var chain = [] // 存储中间件的数组
+
+  //提供给中间件的 API 其实就是 store 的 API
+  var middlewareAPI = {
+    getState: store.getStore,
+    dispatch: (action) =&amp;gt; dispatch(action)
+  }
+
+  // 给中间件添加 API
+  chain = middlewares.map(middleware =&amp;gt; middleware(middlewareAPI))
+
+  // 串联中间件, 添加中间件的起点 store.dispatch, 返回经过修饰的 dispatch
+  dispatch = compose(...middlewares)(store.dispatch)
+
+  return{
+    ...store, // store 中保留的原 API
+     dispatch  // 用新的 dispatch 覆盖原 dispatch   
+  }
+}
+</code></pre><p>}<br>}<br>```<br><a href="https://cnodejs.org/topic/57bd23ee1d27b9113348a546" target="_blank" rel="noopener">参考</a></p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2016-08-23T03:14:07.000Z">2016-08-23</time>
                 
                 <div class="level-item">
@@ -2636,116 +2936,6 @@ Promise.race([p1,p2]).then(function(result){
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-07-30T22:13:33.000Z">2016-07-31</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 minutes read (About 258 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2016/07/31/co-module/">CO Module</a>
-            
-        </h1>
-        <div class="content">
-            <h3 id="Co-v4"><a href="#Co-v4" class="headerlink" title="Co v4"></a>Co v4</h3><p><code>co@4.0.0</code> has been released, which now relies on promises. It is a stepping stone towards the <a href="https://github.com/lukehoban/ecmascript-asyncawait" target="_blank" rel="noopener">aysnc/await proposal</a>. The primary API change is how <code>co()</code> is invoked. Before, <code>co</code> returned a “thunk”, which you then called with a callback and optional arguments. Now, <code>co()</code> return s a promise.</p>
-<pre><code>co(function* (){
-  var result = yield Promise.resolve(true);
-  return result;
-}).then(function (value) {
-  console.log(value);
-}, function(err) {
-  console.error(err.stack);
-});
-`&lt;/pre&gt;
-
-If you want to convert a `co`-generator-function into a regular function that returns a promise, you now use `co.wrap(fn*)`.
-
-&lt;pre&gt;`var fn = co.wrap(function*(val) {
-  return yield Promise.resolve(val);
-});
-
-fn(true).then(function(val){
-})
-`&lt;/pre&gt;
-
-### Platform Compatibility
-
-`co@4+` requires a `Promise` implementation. For version of node `&amp;lt; 0.11` and for many older browsers, you should/must include your own `Promise` polyfill.
-
-Node v4+ is supported out of the box, you can use `co` without flags or polyfills.
-
-### Installation
-
-&lt;pre&gt;`$ npm install co
-`&lt;/pre&gt;
-
-### Examples
-
-&lt;pre&gt;`var co = require(&apos;co&apos;);
-
-co(function*(){
-  // yield any promise
-  var result = yield Promise.resolve(true);
-}).catch(onerror);
-
-co(function*(){
-  // resolve multiple promises in parallel
-  var a = Promise.resolve(1);
-  var b = Promise.resolve(2);
-  var c = Promise.resolve(3);
-  var res = yield[a, b, c];
-  console.log(res);
-  // =&amp;gt; [1,2,3]
-}).catch(onerror);
-
-// errors can be try/catched
-co(function*() {
-  try{
-    yield Promise.reject(new Error(&apos;boom&apos;));
-  } catch (err) {
-    console.error(err.message); // &apos;boom&apos;
-  }
-});
-
-function onerror(err){
-  // log any uncaught errors
-  // co will not throw any errors you do not handle
-  // HANDLE ALL YOUR ERRORS
-  console.error(err.stack);
-}
-</code></pre>
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -2818,7 +3008,7 @@ function onerror(err){
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        310
+                        311
                     </p>
                 </div>
             </div>
@@ -2838,7 +3028,7 @@ function onerror(err){
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        94
+                        95
                     </p>
                 </div>
             </div>
@@ -2969,7 +3159,7 @@ function onerror(err){
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Chrome-Extensions/" style="font-size: 10px;">Chrome, Extensions</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2983,6 +3173,25 @@ function onerror(err){
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/06/crx-config/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
+                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -3060,25 +3269,6 @@ function onerror(err){
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/20/note-on-bip-173/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Note-on-Bip-173">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
-                    <a href="/2019/04/20/note-on-bip-173/" class="has-link-black-ter is-size-6">Note-on-Bip-173</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3090,6 +3280,17 @@ function onerror(err){
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/12/">
@@ -3501,6 +3702,25 @@ function onerror(err){
         
         <article class="media">
             
+            <a href="/2020/01/06/crx-config/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
+                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
@@ -3575,25 +3795,6 @@ function onerror(err){
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/20/note-on-bip-173/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Note-on-Bip-173">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
-                    <a href="/2019/04/20/note-on-bip-173/" class="has-link-black-ter is-size-6">Note-on-Bip-173</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -3605,6 +3806,17 @@ function onerror(err){
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/12/">
@@ -4012,7 +4224,7 @@ function onerror(err){
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2019 Chen Yu&nbsp;
+                &copy; 2020 Chen Yu&nbsp;
                 Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
                         href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
                 

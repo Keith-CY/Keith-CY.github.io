@@ -153,6 +153,84 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2018-05-15T03:20:43.000Z">2018-05-15</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    7 minutes read (About 1026 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2018/05/15/cast-assoc/">Difference Bwtween Build_assoc, Put_assoc, and Cast_assoc</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="Cast-Assoc-code"><a href="#Cast-Assoc-code" class="headerlink" title="Cast Assoc code"></a>Cast Assoc <a href="https://github.com/elixir-ecto/ecto/blob/v2.2.10/lib/ecto/changeset.ex#L659" target="_blank" rel="noopener">code</a></h3><blockquote>
+<p>cast_assoc(changeset, name, opts \ [])</p>
+</blockquote>
+<p>Casts the given association with the <code>changeset params</code></p>
+<p>This function should be used when working withe the entire association at once(and not a single element of a many-style association) and using data external to the application.</p>
+<p>When updating the data, this function requires the association to have been preloaded in the changeset struct. Missing data will invoke the <code>:on_replace</code> behaviour defined on the association. Preloading is not necessary for newly built structs.</p>
+<p>The parameters for the given association will be retrieved from <code>changeset.params</code>. Those parameters are expected to be a map with attributes, similar to the ones passed to <code>cast/4</code>. Once parameter are retrieved, <code>cast_assoc/3</code> will match those parameters with the associations already in the changeset record</p>
+<p>For example, imagine a user has many addresses relationship where post data is sent as follow</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">%&#123;<span class="hljs-string">"name"</span> =&gt; <span class="hljs-string">"John Doe"</span>, <span class="hljs-string">"addresses"</span> =&gt; [</div><div class="line">  %&#123;<span class="hljs-string">"street"</span> =&gt; <span class="hljs-string">"Some where"</span>, <span class="hljs-string">"country"</span> =&gt; <span class="hljs-string">"Brzil"</span>, <span class="hljs-string">"id"</span> =&gt; 1&#125;,</div><div class="line">  %&#123;<span class="hljs-string">"street"</span> =&gt; <span class="hljs-string">"Else where"</span>, <span class="hljs-string">"country"</span> =&gt; <span class="hljs-string">"Poland"</span>&#125;,</div><div class="line">]&#125;</div></pre></td></tr></table></figure>
+<p>and then</p>
+<figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">user</div><div class="line">|&gt; Repo.preload(<span class="hljs-symbol">:addresses</span>)</div><div class="line">|&gt; Ecto.Changeset.cast(params, [])</div><div class="line">|&gt; Ecto.Changeset.cast_assoc(<span class="hljs-symbol">:addresses</span>)</div></pre></td></tr></table></figure>
+<p>Once <code>cast_assoc/3</code> is called, Ecto will compare those params with the addresses already associated with the user and acts as follows:</p>
+<ul>
+<li><p>If the parameter does not contain an ID, the parameter data will be passed to <code>changeset/2</code> with a new struct and become an insert operation</p>
+</li>
+<li><p>If the parameter contains an ID and there is no associated child with such ID, the parameter data will be passed to <code>changeset/2</code> with a new struct and become an insert operation</p>
+</li>
+<li><p>If the parameter contains an ID and there is an associated children with such ID, the parameter data will be passed to <code>changeset/2</code> with the existing struct and become an update operation.</p>
+</li>
+<li><p>If there is an associated child with an ID and its ID is not given as parameter, the <code>:on_replace</code> callback for that association will be invoked</p>
+</li>
+</ul>
+<h5 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h5><figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">`cast_assoc/<span class="hljs-number">3</span>` is useful <span class="hljs-keyword">when</span> the associated data is managed alongside the parent struct, all at once.</div><div class="line"></div><div class="line">To work with a single element of an association, other functions are more appropriate. For example to insert a single associated struct <span class="hljs-keyword">for</span> a `has_many` association it<span class="hljs-string">'s much easier to construct the associated struct with `Ecto.build_assoc/3` and persist it directly with `Ecto.Repo.insert/2`</span></div><div class="line"></div><div class="line">Furthurmore, if each side of the association is managed seperately, it is prefereable to use `put_assoc/3` and directly instruct Ecto how the association should look like.</div><div class="line"></div><div class="line">For example, imagine you are receiving a set of tags you want to associate to an user. Those tags are meant to **exist upfront**. Using `cast_assoc/3` won't work as desired because the tags are <span class="hljs-keyword">not</span> managed alongside the user. In such cases, `put_assoc/<span class="hljs-number">3</span>` will work as desired. With the given <span class="hljs-symbol">parameters:</span></div><div class="line"></div><div class="line">  %&#123;<span class="hljs-string">"name"</span> =&gt; <span class="hljs-string">"John Doe"</span>, <span class="hljs-string">"tags"</span> =&gt; [<span class="hljs-string">"linear"</span>]&#125;</div><div class="line"></div><div class="line"><span class="hljs-keyword">and</span> <span class="hljs-keyword">then</span></div><div class="line"></div><div class="line">  tags = Repo.all(from t <span class="hljs-keyword">in</span> Tag, <span class="hljs-symbol">where:</span> t.name <span class="hljs-keyword">in</span> ^params[<span class="hljs-string">"tags"</span>])</div><div class="line"></div><div class="line">  user</div><div class="line">  |&gt; Repo.preload(<span class="hljs-symbol">:tags</span>)</div><div class="line">  |&gt; Ecto.Changeset.cast(params) <span class="hljs-comment"># no need to allow :tags as we put them directly</span></div><div class="line">  |&gt; Ecto.Changeset.put_assoc(<span class="hljs-symbol">:tags</span>, tags) <span class="hljs-comment"># explicitly set the tags</span></div><div class="line"></div><div class="line">note the changeset must have been previously `cast` using `cast/<span class="hljs-number">4</span>` before this function is called.</div></pre></td></tr></table></figure>
+<figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">cast_assoc</span></span>(changeset, name, opts \\ []) <span class="hljs-keyword">when</span> is_atom(name) <span class="hljs-keyword">do</span></div><div class="line">  cast_relation(<span class="hljs-symbol">:assoc</span>, changeset, name, opts)</div><div class="line"><span class="hljs-keyword">end</span></div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">defp</span> <span class="hljs-title">cast_relation</span></span>(type, %Changeset&#123;&#125; = changeset, key, opts) <span class="hljs-keyword">do</span></div><div class="line">  &#123; key, param_key &#125; = cast_key(key)</div><div class="line">  %&#123;<span class="hljs-symbol">data:</span> data, <span class="hljs-symbol">types:</span> types, <span class="hljs-symbol">params:</span> params, changes, changes &#125; = changeset</div><div class="line">  %&#123;<span class="hljs-symbol">related:</span> related&#125; = relation = relation!(<span class="hljs-symbol">:cast</span>, type, key, Map.get(types, key))</div><div class="line">  params = params || %&#123;&#125;</div><div class="line"></div><div class="line">  &#123;changeset, required?&#125; = if opts[<span class="hljs-symbol">:required</span>] <span class="hljs-keyword">do</span></div><div class="line">    &#123;update_in(changeset.required, &amp;[key|&amp;<span class="hljs-number">1</span>]), <span class="hljs-keyword">true</span>&#125;</div><div class="line">  else</div><div class="line">    &#123;changeset, <span class="hljs-keyword">false</span>&#125;</div><div class="line">  <span class="hljs-keyword">end</span></div><div class="line"></div><div class="line">  on_cast = Keyword.get_lazy(opts, <span class="hljs-symbol">:with</span>, <span class="hljs-keyword">fn</span> -&gt; on_cast_default(type, related) <span class="hljs-keyword">end</span>)</div><div class="line">  original = Map.get(data, key)</div><div class="line"></div><div class="line">  changeset = <span class="hljs-keyword">case</span> Map.fetch(params, params_key) <span class="hljs-keyword">do</span></div><div class="line">    &#123;<span class="hljs-symbol">:ok</span>, value&#125; -&gt;</div><div class="line">      current = Relation.load!(data, original)</div><div class="line">      <span class="hljs-keyword">case</span> Relation.cast(relation, value, current, on_cast) <span class="hljs-keyword">do</span></div><div class="line">        &#123;<span class="hljs-symbol">:ok</span>, change, relation_valid?&#125; <span class="hljs-keyword">when</span> change != original -&gt;</div><div class="line">          missing_relation(%&#123;changeset |  <span class="hljs-symbol">change:</span> Map.put(changes, key, changes), <span class="hljs-symbol">valid?:</span> changeset.valid? <span class="hljs-keyword">and</span> relation_valid?&#125;, key, current, required?, relation, opts)</div><div class="line">        <span class="hljs-symbol">:error</span> -&gt;</div><div class="line">          %&#123;changeset | <span class="hljs-symbol">errors:</span> [&#123;key, &#123;message(opts, <span class="hljs-symbol">:invalid_message</span>, <span class="hljs-string">"is invalid"</span>), [<span class="hljs-symbol">type:</span> expected_relation_type(relation)]&#125;&#125; | changeset.errors], valid? <span class="hljs-keyword">false</span>&#125;</div><div class="line">        <span class="hljs-number">_</span> -&gt; missing_relation(changeset, key, current, required?, relation, opts)</div><div class="line">      <span class="hljs-keyword">end</span></div><div class="line">    <span class="hljs-symbol">:error</span> -&gt; missing_relation(changeset, key, current, required?, relation, opts)</div><div class="line">  <span class="hljs-keyword">end</span></div><div class="line"></div><div class="line">  update_in changeset.types[key], <span class="hljs-keyword">fn</span> &#123;type, relation&#125; -&gt;</div><div class="line">    &#123;type, %&#123;relation | <span class="hljs-symbol">on_cast:</span> on_cast&#125;&#125;</div><div class="line">  <span class="hljs-keyword">end</span></div><div class="line"><span class="hljs-keyword">end</span></div></pre></td></tr></table></figure>
+<h3 id="Put-Assoc"><a href="#Put-Assoc" class="headerlink" title="Put Assoc"></a>Put Assoc</h3><p>As alternative to <code>cast_assoc/3</code></p>
+<p><code>cast_assoc/3</code> is useful when the associated data is managed alongside the parent struct, all at once.</p>
+<p>If each side of the association is managed seperately, it is preferable to use <code>put_assoc/3</code> and directly instruct Ecto how the association should look like.</p>
+<p>For example, imagine you are receiving a set of tags you want to associate to an user. Those tags are meant to exist upfront. Using <code>cast_assoc/3</code> won’t work as desired because the tags are not managed alongside the user. In such cases, <code>put_assoc/3</code> will work as desired.</p>
+<figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">%&#123;<span class="hljs-string">"name"</span> =&gt; <span class="hljs-string">"John Doe"</span>, <span class="hljs-string">"tags"</span> =&gt; [<span class="hljs-string">"lieanr"</span>]&#125;</div></pre></td></tr></table></figure>
+<p>and then:</p>
+<figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">tags = Repo.all(from t <span class="hljs-keyword">in</span> Tag, <span class="hljs-symbol">where:</span> t.name <span class="hljs-keyword">in</span> ^params[<span class="hljs-string">"tags"</span>])</div><div class="line"></div><div class="line">user</div><div class="line">|&gt; Repo.preload(<span class="hljs-symbol">:tags</span>)</div><div class="line">|&gt; Ecto.Changeset.cast(params)</div><div class="line">|&gt;  Ecto.Changeset.put_assoc(<span class="hljs-symbol">:tags</span>, tags)</div></pre></td></tr></table></figure>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><h5 id="Build-Assoc"><a href="#Build-Assoc" class="headerlink" title="Build_Assoc"></a>Build_Assoc</h5><p>Gen an instance with foreign key</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">iex&gt; post = Ecto.build_assoc(user, :posts, %&#123;header: <span class="hljs-string">"Clickbait header"</span>, body: <span class="hljs-string">"No real contet"</span>&#125;)</div><div class="line">%EctoAssoc.Post&#123;__meta__: <span class="hljs-comment">#Ecto.Schema.Metadata&lt;:built, "posts"&gt;,</span></div><div class="line">  body: <span class="hljs-string">"No real content"</span>, header: <span class="hljs-string">"Clickbait header"</span>, id: nil,</div><div class="line">  user: <span class="hljs-comment">#Ecto.Association.NotLoaded&lt;association :user is not loaded&gt;, user_id: 1&#125;</span></div><div class="line"></div><div class="line">iex&gt; Repo.insert!(post)</div></pre></td></tr></table></figure>
+<h5 id="Put-Assoc-1"><a href="#Put-Assoc-1" class="headerlink" title="Put_Assoc"></a>Put_Assoc</h5><p>Add association to changeset which is not persisted</p>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">iex&gt; post_changeset = Ecto.Changeset.change(post)</div><div class="line">iex&gt; post_with_tags = Ecto.Changeset.put_assoc(post_changeset, :tags, [misc_tag])</div><div class="line">iex&gt; Repo.insert!(post_with_tags)</div></pre></td></tr></table></figure>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p><code>cast_assoc</code> when you want to cast external parameters, like the ones from a form, into an association.</p>
+<p><code>put_assoc</code> when you already have an <strong>association struct</strong></p>
+<p><code>build_assoc</code> receive an existing struct(for example <code>user</code>), that was persisted to the database, and builds a struct(for example <code>post</code>, based on its association(for example <code>:posts</code>), with the foreign key field(for example <code>user_id</code>).</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2018-04-14T12:13:53.000Z">2018-04-14</time>
                 
                 
@@ -1454,87 +1532,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-23T01:53:34.000Z">2017-11-23</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 minutes read (About 779 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/11/23/react-lodable/">React-Lodable</a>
-            
-        </h1>
-        <div class="content">
-            <p><code>react-lodable</code> is a higher order component for loading components with dynamic<br>imports.</p>
-<p>Code-splitting is the process of taking one large bundle containing your entire<br>app, and splitting them up into multiple smaller bundles which contain seperate<br>parts of your app.</p>
-<p>This might seem difficult to do, but tools like Webpack have this built in, and<br>React Loadable is designed to make is super simple.</p>
-<h4 id="Route-based-splitting-vs-Component-based-splitting"><a href="#Route-based-splitting-vs-Component-based-splitting" class="headerlink" title="Route-based splitting vs. Component-based splitting"></a>Route-based splitting vs. Component-based splitting</h4><p>A common piece of advice you will see is to break your app into seperate routes<br>and load each one asynchronously. This seems to work well enough for many apps<br>– a a user, clicking a link and waiting for a page to load is a familiar<br>experience on the web.</p>
-<p>Namely, a route is simple a component.</p>
-<p>But in fact there are more places than just routes where you can pretty easily<br>split apart your app: Modals, Tabs, and many more UI Components hide content<br>until the user has done something to reveal it.</p>
-<p><img src="http://thejameskyle.com/img/react-loadable-component-splitting.png" alt=""></p>
-<blockquote>
-<p>Example: Maybe your app ahs a map buried inside of a tab component. Why would<br>you load a massive mapping library for the parent route every time the user<br>never to to that tab.</p>
-</blockquote>
-<p>React Loadable is a small library that makes component-centric code splitting<br>incredibly easy in React.</p>
-<p><code>Loadable</code> is a higher-order component(a function that returns a component)<br>which lets you dynamically load any module before rendering it into your app.</p>
-<p>We can make it by <code>dynamic import</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">import</span> Bar <span class="hljs-keyword">from</span> <span class="hljs-string">'./components/Bar'</span></div><div class="line"></div><div class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>&#123;</div><div class="line">  render() &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Bar</span> /&gt;</span></span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>=&gt;</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>&#123;</div><div class="line">  state = &#123;</div><div class="line">    <span class="hljs-attr">Bar</span>: <span class="hljs-literal">null</span>,</div><div class="line">  &#125;</div><div class="line">  componentWillMount() &#123;</div><div class="line">    <span class="hljs-keyword">import</span>(<span class="hljs-string">'./components/Bar'</span>).then(<span class="hljs-function"><span class="hljs-params">Bar</span> =&gt;</span> <span class="hljs-keyword">this</span>.setState(&#123; Bar &#125;))</div><div class="line">  &#125;</div><div class="line">  render() &#123;</div><div class="line">    <span class="hljs-keyword">let</span> &#123; Bar &#125; = <span class="hljs-keyword">this</span>.state</div><div class="line">    <span class="hljs-keyword">if</span> (!Bar) &#123;</div><div class="line">      <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Loading...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">      <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Bar</span> /&gt;</span></span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>But that’s whole bunch of work, and it doesn’t even handle a bunch of caess.<br>What about when <code>import()</code> fails? What about server-side rendering?</p>
-<p><code>react-loadable</code> considers the unexpected cases.</p>
-<figure class="highlight hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">import Loadable from 'react-loadable'</div><div class="line"></div><div class="line">const LoadableBar = Loadable(&#123;</div><div class="line">  loader: () =&gt; import('./components/Bar'),</div><div class="line">  loading: () =&gt; &lt;div&gt;Loading&lt;/div&gt;,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">class Foo extends React.Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return &lt;LoadableBar /&gt;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>When you use <code>import()</code> with webpack2, it will<br><a href="https://webpack.js.org/guides/code-splitting/" target="_blank" rel="noopener">automatically code-split</a> for<br>you with no additional configuration.</p>
-<p>Define your Loading Component</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Loading</span>(<span class="hljs-params"></span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Loading<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>When your loader fails, your Loading component will receive an error prop which<br>will be <code>true</code>(otherwise it will be <code>false</code>).</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Loading</span>(<span class="hljs-params">props</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (props.error) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Error<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">  &#125;</div><div class="line">  <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Loading...<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Sometimes components load really quickly(&lt;200ms) and the loading screen only<br>quickly flashes on the screen.</p>
-<p>Your loading component will get a <code>pastDelay</code> props which will only be <code>true</code><br>once the component has taken longer to load than a set <code>delay</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Loading</span>(<span class="hljs-params">props</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (props.error) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Error<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (props.pastDelay) &#123;</div><div class="line">    <span class="hljs-comment">// only show loading when it takes longer than 200ms</span></div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Loading<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>This delay defaults to 200ms, but you can customize the delay in Loadable.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Loadable(&#123;</div><div class="line">  <span class="hljs-attr">loader</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./components/Bar'</span>),</div><div class="line">  <span class="hljs-attr">loading</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Loading,</div><div class="line">  <span class="hljs-attr">delay</span>: <span class="hljs-number">300</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>Timing out when the loader is taking too long</p>
-<p>Sometimes network connections suck and never resolve or fail, they just hang<br>there forever. This sucks for the user because they won’t know if it should<br>always take this long, or if they should try refreshing.</p>
-<p>The Loading component will receive a <code>timeOut</code> prop which will be set to <code>true</code><br>when the loader has timed out.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Loading</span>(<span class="hljs-params">props</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (props.error) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Error<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (props.timedOut) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Timed out<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">  &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (props.pastDelay) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>Loading<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>This feature is disabled by default, you can pass a <code>timeout</code> option to<br><code>Loadable</code> to enable it.</p>
-<p>By default <code>Loadable</code> will render the <code>default</code> export of the returned module.<br>If you want to customize this behavior you can use the <code>render</code> option.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Loadable(&#123;</div><div class="line">  <span class="hljs-attr">loader</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./myComponent'</span>),</div><div class="line">  render(loaded, props) &#123;</div><div class="line">    <span class="hljs-keyword">let</span> Component = loaded.namedExport</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Component</span> &#123;<span class="hljs-attr">...props</span>&#125; /&gt;</span></span></div><div class="line">  &#125;,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>You can do whatever you want within <code>loader()</code> as long as it returns a promise<br>and you are able to render everything</p>
-<p>You can load multiple resources in parallel with <code>Loadable.Map</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Loadable.Map(&#123;</div><div class="line">  <span class="hljs-attr">loader</span>: &#123;</div><div class="line">    <span class="hljs-attr">Bar</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./Bar'</span>),</div><div class="line">    <span class="hljs-attr">i18n</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> fetch(<span class="hljs-string">'./i18n/bar.json'</span>).then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> res.json()),</div><div class="line">  &#125;,</div><div class="line">  render(loaded, props) &#123;</div><div class="line">    <span class="hljs-keyword">let</span> Bar = loaded.Bar.default</div><div class="line">    <span class="hljs-keyword">let</span> i18n = loaded.i18n</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">Bar</span> &#123;<span class="hljs-attr">...props</span>&#125; <span class="hljs-attr">i18n</span>=<span class="hljs-string">&#123;i18n&#125;</span> /&gt;</span></span></div><div class="line">  &#125;,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>As an optimization, you can also decide to preload a component before it gets<br>rendered.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> LoadableBar = Loadable(&#123;</div><div class="line">  <span class="hljs-attr">loader</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./Bar'</span>),</div><div class="line">  <span class="hljs-attr">loading</span>: Loading,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>&#123;</div><div class="line">  state = &#123;</div><div class="line">    <span class="hljs-attr">showBar</span>: <span class="hljs-literal">false</span>,</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  onClick = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="hljs-keyword">this</span>.setState(&#123; <span class="hljs-attr">showBar</span>: <span class="hljs-literal">true</span> &#125;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  onMouseOver = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">    LoadableBar.preload()</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="hljs-keyword">return</span> (</div><div class="line">      <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span></span></div><div class="line">        <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">&#123;this.onClick&#125;</span> <span class="hljs-attr">onMouseOver</span>=<span class="hljs-string">&#123;this.onMouseOver&#125;</span>&gt;</span></div><div class="line">          showbar</div><div class="line">        <span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span></div><div class="line">        &#123;this.state.showBar &amp;&amp; <span class="hljs-tag">&lt;<span class="hljs-name">LoadableBar</span> /&gt;</span>&#125;</div><div class="line">      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Server-side-rendering-to-see-Github"><a href="#Server-side-rendering-to-see-Github" class="headerlink" title="Server-side rendering to see Github"></a>Server-side rendering to see <a href="https://github.com/thejameskyle/react-loadable" target="_blank" rel="noopener">Github</a></h3>
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -1603,7 +1600,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        310
+                        311
                     </p>
                 </div>
             </div>
@@ -1623,7 +1620,7 @@
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        94
+                        95
                     </p>
                 </div>
             </div>
@@ -1754,7 +1751,7 @@
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Chrome-Extensions/" style="font-size: 10px;">Chrome, Extensions</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -1768,6 +1765,25 @@
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/06/crx-config/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
+                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -1845,25 +1861,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/20/note-on-bip-173/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Note-on-Bip-173">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
-                    <a href="/2019/04/20/note-on-bip-173/" class="has-link-black-ter is-size-6">Note-on-Bip-173</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -1875,6 +1872,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/12/">
@@ -2286,6 +2294,25 @@
         
         <article class="media">
             
+            <a href="/2020/01/06/crx-config/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
+                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
@@ -2360,25 +2387,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/20/note-on-bip-173/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Note-on-Bip-173">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
-                    <a href="/2019/04/20/note-on-bip-173/" class="has-link-black-ter is-size-6">Note-on-Bip-173</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2390,6 +2398,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/12/">
@@ -2797,7 +2816,7 @@
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2019 Chen Yu&nbsp;
+                &copy; 2020 Chen Yu&nbsp;
                 Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
                         href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
                 

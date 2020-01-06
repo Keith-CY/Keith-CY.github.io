@@ -153,6 +153,89 @@
         
         <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
             <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2017-09-07T05:33:23.000Z">2017-09-07</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    5 minutes read (About 684 words)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2017/09/07/optimize-web-app/">Optimize Web App</a>
+            
+        </h1>
+        <div class="content">
+            <h3 id="Optimizing-All-Assets"><a href="#Optimizing-All-Assets" class="headerlink" title="Optimizing All Assets"></a>Optimizing All Assets</h3><p>One of the most powerful, but under-utilized ways to significantly improve performance starts with understanding hwo the browser analyzes and serves assets. It turns out that browsers are pretty great at discovering resources while parsing and determing their priority of the fly. Here’s where the <strong>critical Request</strong> comes in:</p>
+<blockquote>
+<p>A request is critical if it contains assets that are necessary to render the content within the users’ viewport.</p>
+</blockquote>
+<p>For most sites, it’d be HTML, necessary CSS, a logo, a web font and maybe an image.</p>
+<p>We can control this behavior by carefully picking critical resources and adjusting theri priority.</p>
+<h4 id="preload"><a href="#preload" class="headerlink" title="preload"></a>preload</h4><p>With <code>&lt;link red=&#39;preload&#39;&gt;</code> we are <strong>able to manually force assets’ priority to <code>High</code> ensuring that desired content will be rendered on time</strong>.</p>
+<p>This technique can yield significant improvements in Time to Interactive metric, making optimal user experience possible.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*JT-53LslhwOOqTgv1dGoXg.png" alt=""></p>
+<p>Critical requests still seem like a black box for many, and the lack of sharable materials doesn’t help to change that.jj</p>
+<h3 id="Optimizing-Images"><a href="#Optimizing-Images" class="headerlink" title="Optimizing Images"></a>Optimizing Images</h3><p>Images often account for most of a web page’s transferred payload.</p>
+<h4 id="Choosing-the-right-format"><a href="#Choosing-the-right-format" class="headerlink" title="Choosing the right format"></a>Choosing the right format</h4><p>The initial choice falls between vector and raster graphics:</p>
+<ul>
+<li><p><strong>Vector</strong>: resolution independent, usually significantly smaller in size. Perfect for logos, iconography and simple assets comprising of basic shapes.</p>
+</li>
+<li><p><strong>Raster</strong>: offers much more detailed results, ideal for photographs.</p>
+</li>
+</ul>
+<p>After making this decision, there are a fair bit of formats to choose from: <code>JPEG</code>, <code>GIF</code>, <code>PNG-8</code>, <code>PNG-24</code> or newest formats such as <code>WEBP</code> or <code>JPEG-XR</code>, <code>JPEG-2000</code>.</p>
+<ul>
+<li><p><strong>JPEG</strong>: Imagery with many color(e.g. photos)</p>
+</li>
+<li><p><strong>PNG-8</strong>: Imagery with a few color</p>
+</li>
+<li><p><strong>PNG-24</strong>: Imagery with partial transparency</p>
+</li>
+<li><p><strong>GIF</strong>: Animated imagery</p>
+</li>
+</ul>
+<h3 id="Experimenting-with-new-formats"><a href="#Experimenting-with-new-formats" class="headerlink" title="Experimenting with new formats"></a>Experimenting with new formats</h3><p><strong>WebP</strong> is easily the most popular contender, supporting both lossless and lossy compression, which makes it incredibly versatile. <strong>Lossless WebP is 26% smaller than PNGs and 25-34% smaller than JPGs</strong>. With 74% browser support it can safely be used with fallback. JPGs and PNGs can be converted to WebP in PS and other image processing app as well as through command line interface(<code>brew install webp</code>).</p>
+<h3 id="Responsible-and-responsive-Imagery"><a href="#Responsible-and-responsive-Imagery" class="headerlink" title="Responsible and responsive Imagery"></a>Responsible and responsive Imagery</h3><p>W’re perfectly equipped to do so with <code>picture</code> element and <code>srcset</code> attribute(both have 85% support)</p>
+<h4 id="The-srcset-attribute"><a href="#The-srcset-attribute" class="headerlink" title="The srcset attribute"></a>The srcset attribute</h4><p><code>srcset</code> works best in the resolution switching scenario – when we want to display imagery based on user’s screen density and size. Baseed on a set of predefined rules in <code>srcset</code> and <code>size</code> attributes the browser will pick the best image to serve accordingly to the viewport.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*87BIfYsjZTh-bikjmp7eow.png" alt=""></p>
+<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-tag">&lt;<span class="hljs-name">img</span></span></div><div class="line">  <span class="hljs-attr">srcset</span>=<span class="hljs-string">"cat-320w.jpg 320w cat-480w.jpg 480w cat-800w.jpg 800w"</span>,</div><div class="line">  <span class="hljs-attr">sizes</span>=<span class="hljs-string">"(max-width: 320px) 100vw, (max-width: 480px) 80vw, 800px"</span>,</div><div class="line">  <span class="hljs-attr">src</span>=<span class="hljs-string">"cat-800w.jpg"</span></div><div class="line">  <span class="hljs-attr">alt</span>=<span class="hljs-string">"cat"</span></div><div class="line">/&gt;</div></pre></td></tr></table></figure>
+<h4 id="The-picture-element"><a href="#The-picture-element" class="headerlink" title="The picture element"></a>The picture element</h4><p><code>picture</code> element and the <code>media</code> attribute are designed to make art direction easy. BY providing different sources for varying conditions.</p>
+<p><img src="https://cdn-images-1.medium.com/max/800/1*NeyfH6Vu1xCWE2SY5w1cDQ.png" alt=""></p>
+<h4 id="Delivery-with-image-CNDs"><a href="#Delivery-with-image-CNDs" class="headerlink" title="Delivery with image CNDs"></a>Delivery with image CNDs</h4><h3 id="Optimizing-Web-Fonts"><a href="#Optimizing-Web-Fonts" class="headerlink" title="Optimizing Web Fonts"></a>Optimizing Web Fonts</h3><h4 id="Choose-the-right-format"><a href="#Choose-the-right-format" class="headerlink" title="Choose the right format"></a>Choose the right format</h4><p>There are four web font formats: <code>EOT</code>, <code>TTF</code>, <code>WOFF</code> and <code>WOFF2</code>.</p>
+<p>TTF and WOFF are most widely adopted, boasting over 90% browser support. Depending on the support you’re targeting <strong>it’s most likely safe to server WOFF2</strong> and fall back to WOFF for older browsers. The advantage of using WOFF2 is a set of custom preprocessing and compression algorithms resulting in approx 30% file-size reduction and impoved parsing capabilities.</p>
+<p>When defining the sources of web fonts in <code>@font-face</code> use the <code>format()</code> hint to specify which format should be utilized.</p>
+<h4 id="use-Unicode-range-subsetting"><a href="#use-Unicode-range-subsetting" class="headerlink" title="use Unicode-range subsetting"></a>use Unicode-range subsetting</h4><h4 id="Establish-a-font-loading-strategy"><a href="#Establish-a-font-loading-strategy" class="headerlink" title="Establish a font loading strategy"></a>Establish a font loading strategy</h4><p>Fonts are render-blocking – because the browser has to build both the DOM and CSSOM first. Wdb fonts won’t be downloaded before they’re used in a CSS selector that matches an existing node. This behavior significantly delays text rendering, often causing the <strong>Flash of Invisible Text</strong>(FOIT).</p>
+<p>Implementing a font strategy prevents users from not being able to access your content.</p>
+<p><code>font-display</code> is a new CSS property providing a non-javascript reliant solution.</p>
+<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@font-face &#123;</div><div class="line">  font-family: Post Grotesk;</div><div class="line">  src: url(<span class="hljs-string">'/fonts/Post-Growtest.woff2'</span>) format(<span class="hljs-string">'woff2'</span>),</div><div class="line">       url(<span class="hljs-string">'/fonts/Post-Growtest.woff'</span> format(<span class="hljs-string">'woff'</span>)),</div><div class="line">  font-display: swap; <span class="hljs-comment">// show fallback until web font is ready</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Optmizing-JS"><a href="#Optmizing-JS" class="headerlink" title="Optmizing JS"></a>Optmizing JS</h3>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
                 <time class="level-item has-text-grey" datetime="2017-09-07T03:57:10.000Z">2017-09-07</time>
                 
                 
@@ -1805,69 +1888,6 @@
 
 
 
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-08-24T02:19:44.000Z">2017-08-24</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    3 minutes read (About 387 words)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2017/08/24/Node-js-child-process/">Node.js Child_process</a>
-            
-        </h1>
-        <div class="content">
-            <p>Node.js runs in single-threaded, event-driven mode, which is good for improving performance via multiple child process.</p>
-<p>Each child process has three stream objects:</p>
-<ul>
-<li><p><code>child.stdin</code></p>
-</li>
-<li><p><code>child.stdout</code></p>
-</li>
-<li><p><code>child.stderr</code></p>
-</li>
-</ul>
-<p>All these three stream objects may share their parent’s <code>stdio</code>, or set to use their own stream object independently.</p>
-<p>Node.js offers <code>child_process</code> module to create new child process:</p>
-<ul>
-<li><p><code>exec</code> – <code>child_process.exec</code> use child process to execute shell command, and buffer the output for callback. This means the <code>exec</code> will buffer the whole returned value in buffer, usually you should limit the buffer in 200k, if not, the process will exit with <code>Error: maxBuffer exceeded</code>.</p>
-</li>
-<li><p><code>spawn</code> – <code>child_process.spawn</code> use command line to create new process. spawn will return a <strong>stream object</strong> with <code>stdout</code> and <code>stderr</code>. We can use <code>stdout</code> stream to read the data returned from child process. <code>stdout</code> has event handles like <code>data</code>, <code>end</code>. You can use <code>spawn</code> when a large data will returned from child process.</p>
-</li>
-<li><p><code>fork</code> – <code>child_process.fork</code> is the <code>spawn</code> in special mode(specify <code>node</code> to run the command). <code>fork(&#39;./son.js&#39;)</code> equals to <code>spawn(&#39;node&#39;, [&#39;./son.js&#39;])</code>. Different from <code>spawn</code>, <code>fork</code> will build a message pipe between main and child process.</p>
-</li>
-</ul>
-<h3 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> exec = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>).exec</div><div class="line">exec(<span class="hljs-string">'dir'</span>, &#123;<span class="hljs-attr">encoding</span>: <span class="hljs-string">'utf-u'</span>&#125;, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err, stdout, stderr</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (err) &#123;</div><div class="line">    <span class="hljs-built_in">console</span>.log(err.stack)</div><div class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Error Code: '</span> + err.code)</div><div class="line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Signal Received: '</span> + err.signal)</div><div class="line">  &#125;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'data: '</span> + stdout)</div><div class="line">&#125;).on(<span class="hljs-string">'exit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">code</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'child process exit with code: '</span> + code)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="spawn"><a href="#spawn" class="headerlink" title="spawn"></a>spawn</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> spawn = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>).spawn</div><div class="line"><span class="hljs-keyword">const</span> spawnedProcess = spawn(<span class="hljs-string">'ping'</span>, [<span class="hljs-string">'127.0.0.1'</span>], &#123; <span class="hljs-attr">encoding</span>: <span class="hljs-string">'utf-8'</span>&#125;)</div><div class="line"></div><div class="line">spawnedProcess.stdout.on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">chunk</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(chunk.toString())</div><div class="line">&#125;)</div><div class="line"></div><div class="line">spawnedProcess.stderr.on(<span class="hljs-string">'data'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">data</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(data)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">spawnedProcess.on(<span class="hljs-string">'close'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">code</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'close code: '</span> + code)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">spawnedProcess.on(<span class="hljs-string">'exit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">code</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'exit code: '</span> + code)</div><div class="line">  fs.close(fd, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">err</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">if</span> (err) &#123;</div><div class="line">      <span class="hljs-built_in">console</span>.error(err)</div><div class="line">    &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="fork"><a href="#fork" class="headerlink" title="fork"></a>fork</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// parent.js</span></div><div class="line"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">'parent pid: '</span> + process.pid)</div><div class="line"><span class="hljs-keyword">const</span> fork = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>).fork</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> child = fork(<span class="hljs-string">'./child.js'</span>)</div><div class="line"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">'fork return pid: '</span> + child.pid)</div><div class="line">child.on(<span class="hljs-string">'message'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">msg</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'parent recieve message: '</span> + <span class="hljs-built_in">JSON</span>.stringify(msg))</div><div class="line">&#125;)</div><div class="line">child.send(&#123;</div><div class="line">  <span class="hljs-attr">key</span>: <span class="hljs-string">'parent value'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// child.js</span></div><div class="line"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">'child pid: '</span> + process.pid)</div><div class="line">process.on(<span class="hljs-string">'message'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">msg</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'child recieve message: '</span> + msg)</div><div class="line">&#125;)</div><div class="line">process.send(&#123;</div><div class="line">  <span class="hljs-attr">key</span>: <span class="hljs-string">'child value'</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
 
     
 <div class="card card-transparent">
@@ -1940,7 +1960,7 @@
                         Posts
                     </p>
                     <p class="title has-text-weight-normal">
-                        310
+                        311
                     </p>
                 </div>
             </div>
@@ -1960,7 +1980,7 @@
                         Tags
                     </p>
                     <p class="title has-text-weight-normal">
-                        94
+                        95
                     </p>
                 </div>
             </div>
@@ -2091,7 +2111,7 @@
         <h3 class="menu-label">
             Tag Cloud
         </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
+        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Chrome-Extensions/" style="font-size: 10px;">Chrome, Extensions</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
     </div>
 </div>
 
@@ -2105,6 +2125,25 @@
         <h3 class="menu-label">
             Recent
         </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/06/crx-config/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
+                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
         
         <article class="media">
             
@@ -2182,25 +2221,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/20/note-on-bip-173/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Note-on-Bip-173">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
-                    <a href="/2019/04/20/note-on-bip-173/" class="has-link-black-ter is-size-6">Note-on-Bip-173</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2212,6 +2232,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/12/">
@@ -2623,6 +2654,25 @@
         
         <article class="media">
             
+            <a href="/2020/01/06/crx-config/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
+                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
+                    <p class="is-size-7 is-uppercase">
+                        
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
             <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
@@ -2697,25 +2747,6 @@
             </div>
         </article>
         
-        <article class="media">
-            
-            <a href="/2019/04/20/note-on-bip-173/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/segwit.png" alt="Note-on-Bip-173">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-04-20T08:36:54.000Z">2019-04-20</time></div>
-                    <a href="/2019/04/20/note-on-bip-173/" class="has-link-black-ter is-size-6">Note-on-Bip-173</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
     </div>
 </div>
 
@@ -2727,6 +2758,17 @@
             Archives
         </h3>
         <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">January 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
         
         <li>
             <a class="level is-marginless" href="/archives/2019/12/">
@@ -3134,7 +3176,7 @@
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2019 Chen Yu&nbsp;
+                &copy; 2020 Chen Yu&nbsp;
                 Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
                         href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
                 

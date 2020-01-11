@@ -166,13 +166,13 @@
             
         </h1>
         <div class="content">
-            <h1 id="Install-InfluxDB-on-MacOS"><a href="#Install-InfluxDB-on-MacOS" class="headerlink" title="Install InfluxDB on MacOS"></a>Install InfluxDB on MacOS</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">brew update</div><div class="line">brew install influxdb</div></pre></td></tr></table></figure>
+            <h1 id="Install-InfluxDB-on-MacOS"><a href="#Install-InfluxDB-on-MacOS" class="headerlink" title="Install InfluxDB on MacOS"></a>Install InfluxDB on MacOS</h1><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">brew update</div><div class="line">brew install influxdb</div></pre></td></tr></table></figure>
 <p>To run influxDB at startup, run this command</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ln -sfv /usr/<span class="built_in">local</span>/opt/influxdb/*.plist ~/Library/LaunchAgents</div></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ln -sfv /usr/<span class="hljs-built_in">local</span>/opt/influxdb/*.plist ~/Library/LaunchAgents</div></pre></td></tr></table></figure>
 <p>Now, to start InfluxDB, run this command(Accept the request of incoming connections in the window that appears)</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">influxd -config /usr/<span class="built_in">local</span>/etc/influxdb.conf</div></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">influxd -config /usr/<span class="hljs-built_in">local</span>/etc/influxdb.conf</div></pre></td></tr></table></figure>
 <h1 id="Check-if-InfluxDB-works"><a href="#Check-if-InfluxDB-works" class="headerlink" title="Check if InfluxDB works"></a>Check if InfluxDB works</h1><p>InfluxDB exposes an API with which one can easily check its good working condition. Here’s what you will receive in return for this curl command</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">curl -sl -I localhost:8086/ping</div><div class="line">HTTP/1.1 204 No Content</div><div class="line">Content-Type: application/json</div><div class="line">Request-Id: 95b307f8-5d6b-11e7-8002-000000000000</div><div class="line">X-Influxdb-Version: v1.3.0</div><div class="line">Date: Fri, 30 Jun 2017 08:10:31 GMT</div></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">curl -sl -I localhost:8086/ping</div><div class="line">HTTP/1.1 204 No Content</div><div class="line">Content-Type: application/json</div><div class="line">Request-Id: 95b307f8-5d6b-11e7-8002-000000000000</div><div class="line">X-Influxdb-Version: v1.3.0</div><div class="line">Date: Fri, 30 Jun 2017 08:10:31 GMT</div></pre></td></tr></table></figure>
 <h1 id="Terminology-difference-with-SQL-database"><a href="#Terminology-difference-with-SQL-database" class="headerlink" title="Terminology, difference with SQL database"></a>Terminology, difference with SQL database</h1><p>Like all non-relational database, InfluxDB for its own vocabulary your need to know before starting</p>
 <ul>
 <li><p><strong>Measurement</strong> is equivalent to <strong>SQL table</strong></p>
@@ -199,7 +199,7 @@
 <li><p>DROP SHARD</p>
 </li>
 </ul>
-<h2 id="Create-a-Database"><a href="#Create-a-Database" class="headerlink" title="Create a Database"></a>Create a Database</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE DATABASE &lt;database_name&gt; [WITH [DURATION &lt;duration&gt;] [REPLICATION &lt;n&gt;] [SHARD DURATION &lt;shard_duration&gt;] [NAME &lt;retention-policy-name&gt;]]</div></pre></td></tr></table></figure>
+<h2 id="Create-a-Database"><a href="#Create-a-Database" class="headerlink" title="Create a Database"></a>Create a Database</h2><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE DATABASE &lt;database_name&gt; [WITH [DURATION &lt;duration&gt;] [REPLICATION &lt;n&gt;] [SHARD DURATION &lt;shard_duration&gt;] [NAME &lt;retention-policy-name&gt;]]</div></pre></td></tr></table></figure>
 <p><strong>Basic Setting</strong></p>
 <ul>
 <li><p>database_name: name of the database</p>
@@ -207,7 +207,7 @@
 <li><p>duration: you can set the period of data retention(conversation) but it makes more sense to implement a retention policy.</p>
 </li>
 </ul>
-<h2 id="Delete-a-database-drop-database"><a href="#Delete-a-database-drop-database" class="headerlink" title="Delete a database (drop database)"></a>Delete a database (drop database)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DROP DATABASE &lt;database_name&gt;</div></pre></td></tr></table></figure>
+<h2 id="Delete-a-database-drop-database"><a href="#Delete-a-database-drop-database" class="headerlink" title="Delete a database (drop database)"></a>Delete a database (drop database)</h2><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DROP DATABASE &lt;database_name&gt;</div></pre></td></tr></table></figure>
 <h1 id="Establish-a-retention-policy"><a href="#Establish-a-retention-policy" class="headerlink" title="Establish a retention policy"></a>Establish a retention policy</h1><p>InfluxDB incorporates a system of automatic deletion of data. It is the policy of Retention. Spent some time, data is automatically deleted from the base. This mechanism is very convenient because it for a good grasp of size of the base and we don’t have to worry about the maintenance operation. Free to each set the lifetime of any particular measure. If you want to follow the temperature of its microprocessor, one less may be sufficient, instead the retention policy must be more flexible if we want to compare the temperature in a House form one year to the other. It will also think about the system upstream, you don’t have to store a measurement of atmosphere temperature every 10 seconds! A measurement per minutes, 15 minutes, that’s enough. Instead in an industrial process, we certainly want to go for the second… or a lot less.</p>
 <p>We therefore for 3 methods</p>
 <ul>
@@ -218,7 +218,7 @@
 <li><p>Drop: to remove a rule</p>
 </li>
 </ul>
-<h1 id="Create-a-retention-policy"><a href="#Create-a-retention-policy" class="headerlink" title="Create a retention policy"></a>Create a retention policy</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE RETENTION POLICY &lt;name_politic_retention&gt; ON &lt;name_database&gt; DURATION: &lt;duration&gt; REPLICATION: &lt;n&gt; [SHARD DURATION &lt;duration duration_shard&gt;] [DEFAULT]</div></pre></td></tr></table></figure>
+<h1 id="Create-a-retention-policy"><a href="#Create-a-retention-policy" class="headerlink" title="Create a retention policy"></a>Create a retention policy</h1><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE RETENTION POLICY &lt;name_politic_retention&gt; ON &lt;name_database&gt; DURATION: &lt;duration&gt; REPLICATION: &lt;n&gt; [SHARD DURATION &lt;duration duration_shard&gt;] [DEFAULT]</div></pre></td></tr></table></figure>
 <p><strong>Parameters</strong></p>
 <ul>
 <li><p>name_politic_retention: a short name without spaces of preference</p>
@@ -232,11 +232,11 @@
 <li><p>n: number of replication(required), put 1 if no cluster installed</p>
 </li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE RETENTION POLICY <span class="string">'one_day_only'</span> WE <span class="string">'NOAA_water_database'</span> DURATION 1 d REPLICATION 1</div></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE RETENTION POLICY <span class="hljs-string">'one_day_only'</span> WE <span class="hljs-string">'NOAA_water_database'</span> DURATION 1 d REPLICATION 1</div></pre></td></tr></table></figure>
 <p>This policy keeps the records during a day(one_day_only) based NOAA_water_database. The data are stored in space shard 1 day. Replication 1 indicates that a copy of each item is copied in the cluster.</p>
 <h1 id="Modify-retention-policy-alter-retention-policy"><a href="#Modify-retention-policy-alter-retention-policy" class="headerlink" title="Modify retention policy(alter retention policy)"></a>Modify retention policy(alter retention policy)</h1><p>This method allows to change an existing retention policy</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ALTER ...</div></pre></td></tr></table></figure>
-<h1 id="Destroyed-a-retention-policy-drop-retention-policy"><a href="#Destroyed-a-retention-policy-drop-retention-policy" class="headerlink" title="Destroyed a retention policy(drop retention policy)"></a>Destroyed a retention policy(drop retention policy)</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DROP RETENTION ...</div></pre></td></tr></table></figure>
+<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ALTER ...</div></pre></td></tr></table></figure>
+<h1 id="Destroyed-a-retention-policy-drop-retention-policy"><a href="#Destroyed-a-retention-policy-drop-retention-policy" class="headerlink" title="Destroyed a retention policy(drop retention policy)"></a>Destroyed a retention policy(drop retention policy)</h1><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DROP RETENTION ...</div></pre></td></tr></table></figure>
 <h1 id="Discover-the-InfluxDB-Shell"><a href="#Discover-the-InfluxDB-Shell" class="headerlink" title="Discover the InfluxDB Shell"></a>Discover the InfluxDB Shell</h1><p>Now we know some methods, we will provide to run some test</p>
 
         </div>

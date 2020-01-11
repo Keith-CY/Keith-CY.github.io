@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html  lang="en">
+
 <head>
     <meta charset="utf-8">
 <title>Time to Start Fastify - EzCook</title>
@@ -81,6 +82,7 @@
 <link rel="stylesheet" href="/css/style.css">
 
 </head>
+
 <body class="is-3-column">
     <nav class="navbar navbar-main">
     <div class="container">
@@ -102,16 +104,7 @@
                 href="/archives">Archives</a>
                 
                 <a class="navbar-item"
-                href="/categories">Categories</a>
-                
-                <a class="navbar-item"
-                href="/tags">Tags</a>
-                
-                <a class="navbar-item"
-                href="/about">About</a>
-                
-                <a class="navbar-item"
-                href="/resume">Resume</a>
+                href="/projects">Projects</a>
                 
             </div>
             
@@ -142,11 +135,8 @@
         </div>
     </div>
 </nav>
-    
-    <section class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+
+    <div class="card">
     
     <div class="card-content article ">
         
@@ -176,21 +166,21 @@
             
         </h1>
         <div class="content">
-            <h3 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h3><h4 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add fastify</div></pre></td></tr></table></figure>
-<h4 id="First-Server"><a href="#First-Server" class="headerlink" title="First Server"></a>First Server</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Require the framework and instantiate it</span></div><div class="line"><span class="hljs-keyword">const</span> fastify = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fastify'</span>)()</div><div class="line"></div><div class="line"><span class="hljs-comment">// Declare a route</span></div><div class="line">fastify.get(<span class="hljs-string">'/'</span>, (req, reply) =&gt; &#123;</div><div class="line">  reply.send(&#123;</div><div class="line">    <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// Run the server</span></div><div class="line">fastify.listen(<span class="hljs-number">3000</span>, (err) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Server is running on <span class="hljs-subst">$&#123;fastify.server.address().port&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h4 id="Schema-Serialization"><a href="#Schema-Serialization" class="headerlink" title="Schema Serialization"></a>Schema Serialization</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> fastify = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fastify'</span>)()</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> opts = &#123;</div><div class="line">  <span class="hljs-attr">schema</span>: &#123;</div><div class="line">    <span class="hljs-attr">response</span>: &#123;</div><div class="line">      <span class="hljs-number">200</span>: &#123;</div><div class="line">        <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>,</div><div class="line">        <span class="hljs-attr">properties</span>: &#123;</div><div class="line">          <span class="hljs-attr">hello</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-comment">// Declare a route with an output shcema</span></div><div class="line">fastify.get(<span class="hljs-string">'/'</span>, opts, (req, reply) =&gt; &#123;</div><div class="line">  replysend(&#123; <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span> &#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.listen(<span class="hljs-number">3000</span>, (err) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Server is running on <span class="hljs-subst">$&#123;fastify.server.address().port&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+            <h3 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h3><h4 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add fastify</div></pre></td></tr></table></figure>
+<h4 id="First-Server"><a href="#First-Server" class="headerlink" title="First Server"></a>First Server</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Require the framework and instantiate it</span></div><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)()</div><div class="line"></div><div class="line"><span class="comment">// Declare a route</span></div><div class="line">fastify.get(<span class="string">'/'</span>, (req, reply) =&gt; &#123;</div><div class="line">  reply.send(&#123;</div><div class="line">    <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// Run the server</span></div><div class="line">fastify.listen(<span class="number">3000</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Server is running on <span class="subst">$&#123;fastify.server.address().port&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="Schema-Serialization"><a href="#Schema-Serialization" class="headerlink" title="Schema Serialization"></a>Schema Serialization</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)()</div><div class="line"></div><div class="line"><span class="keyword">const</span> opts = &#123;</div><div class="line">  <span class="attr">schema</span>: &#123;</div><div class="line">    <span class="attr">response</span>: &#123;</div><div class="line">      <span class="number">200</span>: &#123;</div><div class="line">        <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">        <span class="attr">properties</span>: &#123;</div><div class="line">          <span class="attr">hello</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Declare a route with an output shcema</span></div><div class="line">fastify.get(<span class="string">'/'</span>, opts, (req, reply) =&gt; &#123;</div><div class="line">  replysend(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.listen(<span class="number">3000</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Server is running on <span class="subst">$&#123;fastify.server.address().port&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h4 id="Register"><a href="#Register" class="headerlink" title="Register"></a>Register</h4><p>Register routes in seperate files</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// server.js</span></div><div class="line"><span class="hljs-keyword">const</span> fastify = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fastify'</span>)()</div><div class="line"></div><div class="line">fastify.register(<span class="hljs-built_in">require</span>(<span class="hljs-string">'./route'</span>))</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> opts = &#123;</div><div class="line">  <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span>,</div><div class="line">  <span class="hljs-attr">something</span>: <span class="hljs-literal">true</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">fastify.register([</div><div class="line">  <span class="hljs-built_in">require</span>(<span class="hljs-string">'./another-route'</span>),</div><div class="line">  <span class="hljs-built_in">require</span>(<span class="hljs-string">'./yet-another-route'</span>),</div><div class="line">], opts, (err) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.listen(<span class="hljs-number">3000</span>, (err) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Server is running on <span class="hljs-subst">$&#123;fastify.server.address().port&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// route.js</span></div><div class="line"><span class="hljs-built_in">module</span>.exports = (fastify, options, next) &#123;</div><div class="line">  fastify.get(<span class="hljs-string">'/'</span>, (req, reply) =&gt; &#123;</div><div class="line">    replysend(&#123; <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span> &#125;)</div><div class="line">  &#125;)</div><div class="line">  next()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// server.js</span></div><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)()</div><div class="line"></div><div class="line">fastify.register(<span class="built_in">require</span>(<span class="string">'./route'</span>))</div><div class="line"></div><div class="line"><span class="keyword">const</span> opts = &#123;</div><div class="line">  <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">  <span class="attr">something</span>: <span class="literal">true</span>,</div><div class="line">&#125;</div><div class="line"></div><div class="line">fastify.register([</div><div class="line">  <span class="built_in">require</span>(<span class="string">'./another-route'</span>),</div><div class="line">  <span class="built_in">require</span>(<span class="string">'./yet-another-route'</span>),</div><div class="line">], opts, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.listen(<span class="number">3000</span>, (err) =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`Server is running on <span class="subst">$&#123;fastify.server.address().port&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// route.js</span></div><div class="line"><span class="built_in">module</span>.exports = (fastify, options, next) &#123;</div><div class="line">  fastify.get(<span class="string">'/'</span>, (req, reply) =&gt; &#123;</div><div class="line">    replysend(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">  &#125;)</div><div class="line">  next()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>or <code>async/await</code>:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-built_in">module</span>.exports = <span class="hljs-keyword">async</span> (fastify, options) =&gt; &#123;</div><div class="line">  fastify.get(<span class="hljs-string">'/'</span>, (req, reply) =&gt; &#123;</div><div class="line">    replysend(&#123; <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span> &#125;)</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="keyword">async</span> (fastify, options) =&gt; &#123;</div><div class="line">  fastify.get(<span class="string">'/'</span>, (req, reply) =&gt; &#123;</div><div class="line">    replysend(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="Server-Methods"><a href="#Server-Methods" class="headerlink" title="Server Methods"></a>Server Methods</h3><h4 id="server"><a href="#server" class="headerlink" title="server"></a>server</h4><p><code>fastify.server</code>: The Node Core <code>server</code> object.</p>
 <h4 id="ready"><a href="#ready" class="headerlink" title="ready"></a>ready</h4><p>Function  called when all the plugins has been loaded. It takes an error parameter if something went wrong.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.ready(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> &#123; <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.ready(<span class="function"><span class="params">err</span> =&gt;</span> &#123; <span class="keyword">if</span> (err) <span class="keyword">throw</span> err &#125;)</div></pre></td></tr></table></figure>
 <h4 id="listen"><a href="#listen" class="headerlink" title="listen"></a>listen</h4><p>Starts the server on the given port after all the plugins loaded, internally waits for the <code>.ready()</code> event. The callback is the same as the Node Core.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.listen(<span class="hljs-number">3000</span>, err =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.listen(<span class="number">3000</span>, err =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>Specifying an address is also supported:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.listen(<span class="hljs-number">3000</span>, <span class="hljs-string">'127.0.0.1'</span>, err =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (err) <span class="hljs-keyword">throw</span> err</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.listen(<span class="number">3000</span>, <span class="string">'127.0.0.1'</span>, err =&gt; &#123;</div><div class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h4 id="route"><a href="#route" class="headerlink" title="route"></a>route</h4><p>Method to add routes to the server, it also have shorthands.</p>
 <h4 id="routes-iterator"><a href="#routes-iterator" class="headerlink" title="routes iterator"></a>routes iterator</h4><p>The fastify instance is an Iterable object with all the registered routes. The route properties are the same the developer has declared.</p>
 <h4 id="close"><a href="#close" class="headerlink" title="close"></a>close</h4><p><code>fastify.close(callback)</code>, call this function to close the server instance and run the <code>onClose</code> hook.</p>
@@ -203,7 +193,7 @@
 <h4 id="setSchemaCompiler"><a href="#setSchemaCompiler" class="headerlink" title="setSchemaCompiler"></a>setSchemaCompiler</h4><p>Set the schema compiler for all routes.</p>
 <h4 id="setNotFoundHandler"><a href="#setNotFoundHandler" class="headerlink" title="setNotFoundHandler"></a>setNotFoundHandler</h4><p><code>fastify.setNotFoundHandler(handler(req, reply))</code>: set the 404 handler. This call is fully encapsulated, so different plugins can set different not found handlers.</p>
 <h4 id="setErrorHandler"><a href="#setErrorHandler" class="headerlink" title="setErrorHandler"></a>setErrorHandler</h4><p><code>fastify.setErrorHandler(handler(err, reply))</code>: set a function that will be called whenever an error happens. The handler is fully encapsulated, so different plugins can set different error handlers.</p>
-<h3 id="Routes"><a href="#Routes" class="headerlink" title="Routes"></a>Routes</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.route(options)</div></pre></td></tr></table></figure>
+<h3 id="Routes"><a href="#Routes" class="headerlink" title="Routes"></a>Routes</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.route(options)</div></pre></td></tr></table></figure>
 <ul>
 <li><p><code>method</code>: currently it supports <code>DELETE</code>, <code>GET</code>, <code>HEAD</code>, <code>PATCH</code>, <code>POST</code>, <code>PUT</code>, and <code>OPTIONS</code>, it could be an array of methods.</p>
 </li>
@@ -231,23 +221,23 @@
 </li>
 </ul>
 <p>Exmaple</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">fastify.route(&#123;</div><div class="line">  <span class="hljs-attr">method</span>: <span class="hljs-string">'GET'</span>,</div><div class="line">  <span class="hljs-attr">url</span>: <span class="hljs-string">'/'</span>,</div><div class="line">  <span class="hljs-attr">schema</span>: &#123;</div><div class="line">    <span class="hljs-attr">querystring</span>: &#123;</div><div class="line">      <span class="hljs-attr">name</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;,</div><div class="line">      <span class="hljs-attr">excitement</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'integer'</span> &#125;,</div><div class="line">    &#125;,</div><div class="line">    <span class="hljs-attr">response</span>: &#123;</div><div class="line">      <span class="hljs-number">200</span>: &#123;</div><div class="line">        <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>,</div><div class="line">        <span class="hljs-attr">properties</span>: &#123;</div><div class="line">          <span class="hljs-attr">hello</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">handler</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, reply</span>) </span>&#123;</div><div class="line">    reply.send(&#123;</div><div class="line">      <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span>,</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.route(&#123;</div><div class="line">  <span class="hljs-attr">method</span>: <span class="hljs-string">'GET'</span>,</div><div class="line">  <span class="hljs-attr">url</span>: <span class="hljs-string">'/'</span>,</div><div class="line">  <span class="hljs-attr">schema</span>: &#123;<span class="hljs-comment">/*..*/</span>&#125;,</div><div class="line">  <span class="hljs-attr">beforeHandler</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, reply, done</span>) </span>&#123;</div><div class="line">    <span class="hljs-comment">// auth</span></div><div class="line">    done()</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">handler</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">req, reply</span>) </span>&#123;</div><div class="line">    reply.send(&#123;</div><div class="line">      <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span>,</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">fastify.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">url</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">schema</span>: &#123;</div><div class="line">    <span class="attr">querystring</span>: &#123;</div><div class="line">      <span class="attr">name</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">      <span class="attr">excitement</span>: &#123; <span class="attr">type</span>: <span class="string">'integer'</span> &#125;,</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">response</span>: &#123;</div><div class="line">      <span class="number">200</span>: &#123;</div><div class="line">        <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">        <span class="attr">properties</span>: &#123;</div><div class="line">          <span class="attr">hello</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, reply</span>) </span>&#123;</div><div class="line">    reply.send(&#123;</div><div class="line">      <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">url</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">schema</span>: &#123;<span class="comment">/*..*/</span>&#125;,</div><div class="line">  <span class="attr">beforeHandler</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, reply, done</span>) </span>&#123;</div><div class="line">    <span class="comment">// auth</span></div><div class="line">    done()</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span>(<span class="params">req, reply</span>) </span>&#123;</div><div class="line">    reply.send(&#123;</div><div class="line">      <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h4 id="ShortHands"><a href="#ShortHands" class="headerlink" title="ShortHands"></a>ShortHands</h4><p><code>fastify.method(path, [options], handler)</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> opts = &#123;</div><div class="line">  <span class="hljs-attr">schema</span>: &#123;</div><div class="line">    <span class="hljs-attr">response</span>: &#123;</div><div class="line">      <span class="hljs-number">200</span>: &#123;</div><div class="line">        <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>,</div><div class="line">        <span class="hljs-attr">properites</span>: &#123;</div><div class="line">          <span class="hljs-attr">hello</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">fastify.get(<span class="hljs-string">'/'</span>, opts, (req, reply) =&gt; &#123;</div><div class="line">  reply.send(&#123;</div><div class="line">    <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> opts = &#123;</div><div class="line">  <span class="attr">schema</span>: &#123;</div><div class="line">    <span class="attr">response</span>: &#123;</div><div class="line">      <span class="number">200</span>: &#123;</div><div class="line">        <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">        <span class="attr">properites</span>: &#123;</div><div class="line">          <span class="attr">hello</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">fastify.get(<span class="string">'/'</span>, opts, (req, reply) =&gt; &#123;</div><div class="line">  reply.send(&#123;</div><div class="line">    <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p><code>fastify.all(path, [options], handler)</code> will add the same handler to all the supported methods.</p>
-<h4 id="Async-Await"><a href="#Async-Await" class="headerlink" title="Async/Await"></a>Async/Await</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fastify.get(<span class="hljs-string">'/'</span>, options, <span class="hljs-keyword">async</span> (req, reply) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">var</span> data = <span class="hljs-keyword">await</span> getData()</div><div class="line">  <span class="hljs-keyword">var</span> processed = <span class="hljs-keyword">await</span> processData(data)</div><div class="line">  <span class="hljs-keyword">return</span> processed</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h4 id="Route-Prefixing"><a href="#Route-Prefixing" class="headerlink" title="Route Prefixing"></a>Route Prefixing</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// server.js</span></div><div class="line"><span class="hljs-keyword">const</span> fastify = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fastify'</span>)()</div><div class="line"></div><div class="line">fastify.register(<span class="hljs-built_in">require</span>(<span class="hljs-string">'./routes/v1/users'</span>), &#123;</div><div class="line">  <span class="hljs-attr">prefix</span>: <span class="hljs-string">'/v1'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// routes/v1/users</span></div><div class="line"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">fastify, opts, next</span>) </span>&#123;</div><div class="line">  fastify.get(<span class="hljs-string">'/user'</span>, handler_v1)</div><div class="line">  next()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Async-Await"><a href="#Async-Await" class="headerlink" title="Async/Await"></a>Async/Await</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fastify.get(<span class="string">'/'</span>, options, <span class="keyword">async</span> (req, reply) =&gt; &#123;</div><div class="line">  <span class="keyword">var</span> data = <span class="keyword">await</span> getData()</div><div class="line">  <span class="keyword">var</span> processed = <span class="keyword">await</span> processData(data)</div><div class="line">  <span class="keyword">return</span> processed</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="Route-Prefixing"><a href="#Route-Prefixing" class="headerlink" title="Route Prefixing"></a>Route Prefixing</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// server.js</span></div><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)()</div><div class="line"></div><div class="line">fastify.register(<span class="built_in">require</span>(<span class="string">'./routes/v1/users'</span>), &#123;</div><div class="line">  <span class="attr">prefix</span>: <span class="string">'/v1'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// routes/v1/users</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params">fastify, opts, next</span>) </span>&#123;</div><div class="line">  fastify.get(<span class="string">'/user'</span>, handler_v1)</div><div class="line">  next()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>Now your client can access to <code>/v1/user</code>.</p>
 <p>Be aware that if you use <code>fastify-plugin</code> this option won’t work.</p>
 <h3 id="Logging"><a href="#Logging" class="headerlink" title="Logging"></a>Logging</h3><p>Logging is disabled by default, and you can enable it by passing <code>{ logger: true }</code> or <code>{ logger: { level: &#39;info&#39; } }</code> when you create the fastify instance.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> fastify = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fastify'</span>)(&#123;</div><div class="line">  <span class="hljs-attr">logger</span>: <span class="hljs-literal">true</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.get(<span class="hljs-string">'/'</span>, options, (req, reply) =&gt; &#123;</div><div class="line">  req.log.info(<span class="hljs-string">'Some info about the current request'</span>)</div><div class="line">  reply.send(&#123;</div><div class="line">    <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fastify = <span class="built_in">require</span>(<span class="string">'fastify'</span>)(&#123;</div><div class="line">  <span class="attr">logger</span>: <span class="literal">true</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.get(<span class="string">'/'</span>, options, (req, reply) =&gt; &#123;</div><div class="line">  req.log.info(<span class="string">'Some info about the current request'</span>)</div><div class="line">  reply.send(&#123;</div><div class="line">    <span class="attr">hello</span>: <span class="string">'world'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h3 id="Middlewares"><a href="#Middlewares" class="headerlink" title="Middlewares"></a>Middlewares</h3><p>Fastify provides out of the box an asynchronous middleare engine compatible with Express and Restify middlewares.</p>
 <p>Fastify middleware don’t support the full syntax <code>middleware(err, req, res, next)</code> because error handling is done inside Fastify.</p>
 <p>Also if you are using a middleware taht bundles different, smaller middlewares such as helmet, we recommand to use the single module to get better performances.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fastify.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'cors'</span>)())</div><div class="line">fastify.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'dns-prefetch-control'</span>)())</div><div class="line">fastify.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'frameguard'</span>)())</div><div class="line">fastify.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'hide-powered-by'</span>)())</div><div class="line">fastify.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'hsts'</span>)())</div><div class="line">fastify.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'ienoopen'</span>)())</div><div class="line">fastify.use(<span class="hljs-built_in">require</span>(<span class="hljs-string">'x-xss-protection'</span>)())</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'cors'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'dns-prefetch-control'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'frameguard'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'hide-powered-by'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'hsts'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'ienoopen'</span>)())</div><div class="line">fastify.use(<span class="built_in">require</span>(<span class="string">'x-xss-protection'</span>)())</div></pre></td></tr></table></figure>
 <p>If you need to run a middleware only under certain path, just pass the path as first parameter to <code>use</code> and you are done.</p>
 <p>Note that this does not support routes with parameters, (eg: <code>/users/:id/comments</code>) and wildcard is not supported in multiple paths.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> serveStatic = <span class="hljs-built_in">require</span>(<span class="hljs-string">'serve-static'</span>)</div><div class="line"></div><div class="line"><span class="hljs-comment">// single path</span></div><div class="line">fastify.use(<span class="hljs-string">'/css'</span>, servveStatic(<span class="hljs-string">'/asserts'</span>))</div><div class="line"><span class="hljs-comment">// wildcard path</span></div><div class="line">fastify.use(<span class="hljs-string">'/css/*'</span>, servveStatic(<span class="hljs-string">'/asserts'</span>))</div><div class="line"><span class="hljs-comment">// multiple paths</span></div><div class="line">fastify.use([<span class="hljs-string">'/css'</span>, <span class="hljs-string">'/js'</span>], servveStatic(<span class="hljs-string">'/asserts'</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> serveStatic = <span class="built_in">require</span>(<span class="string">'serve-static'</span>)</div><div class="line"></div><div class="line"><span class="comment">// single path</span></div><div class="line">fastify.use(<span class="string">'/css'</span>, servveStatic(<span class="string">'/asserts'</span>))</div><div class="line"><span class="comment">// wildcard path</span></div><div class="line">fastify.use(<span class="string">'/css/*'</span>, servveStatic(<span class="string">'/asserts'</span>))</div><div class="line"><span class="comment">// multiple paths</span></div><div class="line">fastify.use([<span class="string">'/css'</span>, <span class="string">'/js'</span>], servveStatic(<span class="string">'/asserts'</span>))</div></pre></td></tr></table></figure>
 <h3 id="Hook"><a href="#Hook" class="headerlink" title="Hook"></a>Hook</h3><p>By using the hook you can interact directly inside the lifecycle of Fastify, there are three different Hooks that you can use(in order of execution):</p>
 <ul>
 <li><p><code>onRequest</code></p>
@@ -260,39 +250,39 @@
 </li>
 </ul>
 <p>Example:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="hljs-string">'onRequest'</span>, (req, res, next) =&gt; &#123;</div><div class="line">  <span class="hljs-comment">// some code</span></div><div class="line">  next()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.addHook(<span class="hljs-string">'preHandler'</span>, (req, res, next) =&gt; &#123;</div><div class="line">  <span class="hljs-comment">// some code</span></div><div class="line">  next()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.addHook(<span class="hljs-string">'onResponse'</span>, (res, next) =&gt; &#123;</div><div class="line">  <span class="hljs-comment">// some code</span></div><div class="line">  next()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="string">'onRequest'</span>, (req, res, next) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  next()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.addHook(<span class="string">'preHandler'</span>, (req, res, next) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  next()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.addHook(<span class="string">'onResponse'</span>, (res, next) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  next()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>If you want to pass a custom error code to the user, just use the <code>reply.code()</code>:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="hljs-string">'onRequest'</span>, (req, res, next) =&gt; &#123;</div><div class="line">  <span class="hljs-comment">// some code</span></div><div class="line">  reply.code(<span class="hljs-number">400</span>)</div><div class="line">  next(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'some error'</span>))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="string">'onRequest'</span>, (req, res, next) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  reply.code(<span class="number">400</span>)</div><div class="line">  next(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'some error'</span>))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>The error will be handled by <code>Reply</code></p>
 <p>The unique hook that is not inside the lifecycle is <code>&#39;onClose&#39;</code>, this one is triggered when you call <code>fastify.close()</code> to stop the server, and it is useful if you have some plugins that need a ‘shutdown’ part, such as a connection to database.</p>
 <p>Only for this hook the parameters of the functions changes.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="hljs-string">'onClose'</span>, (instance, done) =&gt; &#123;</div><div class="line">  <span class="hljs-comment">// some code</span></div><div class="line">  done()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="string">'onClose'</span>, (instance, done) =&gt; &#123;</div><div class="line">  <span class="comment">// some code</span></div><div class="line">  done()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h4 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h4><p>Except for <code>onClose</code> all the hooks are encapsulated this means that you can decide where your hooks should run by using <code>register</code>.</p>
 <h4 id="beforeHandler"><a href="#beforeHandler" class="headerlink" title="beforeHandler"></a>beforeHandler</h4><p><code>beforeHandler</code> is not a standard hook like <code>preHandler</code>, but is a function that your register right in the route option that will be executed only in the specified route.</p>
 <p><code>beforeHandler</code> is executed always after the <code>preHandler</code> hook.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="hljs-string">'preHander'</span>, (req, reply, done) =&gt; &#123;</div><div class="line">  <span class="hljs-comment">//  your code</span></div><div class="line">  done()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.route(&#123;</div><div class="line">  <span class="hljs-attr">method</span>: <span class="hljs-string">'GET'</span>,</div><div class="line">  <span class="hljs-attr">url</span>: <span class="hljs-string">'/'</span>,</div><div class="line">  <span class="hljs-attr">schema</span>: &#123;<span class="hljs-comment">/*...*/</span>&#125;,</div><div class="line">  <span class="hljs-attr">beforeHandler</span>: <span class="hljs-function">(<span class="hljs-params">req, reply, done</span>) =&gt;</span> &#123;<span class="hljs-comment">/*...*/</span> ;done()&#125;</div><div class="line">  handler: <span class="hljs-function">(<span class="hljs-params">req, reply</span>) =&gt;</span> &#123; reply.send(&#123; <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span> &#125;) &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.route(&#123;</div><div class="line">  <span class="hljs-attr">method</span>: <span class="hljs-string">'GET'</span>,</div><div class="line">  <span class="hljs-attr">url</span>: <span class="hljs-string">'/'</span>,</div><div class="line">  <span class="hljs-attr">shcema</span>: &#123;<span class="hljs-comment">/*...*/</span>&#125;,</div><div class="line">  <span class="hljs-attr">beforeHandler</span>: [</div><div class="line">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">first</span> (<span class="hljs-params">req, reply, done</span>) </span>&#123;</div><div class="line">      done()</div><div class="line">    &#125;,</div><div class="line">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">second</span> (<span class="hljs-params">req, reply, done</span>) </span>&#123;</div><div class="line">      done()</div><div class="line">    &#125;</div><div class="line">  ],</div><div class="line">  <span class="hljs-attr">handler</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, reply</span>) </span>&#123;</div><div class="line">    reply.send(&#123; <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span> &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">fastify.addHook(<span class="string">'preHander'</span>, (req, reply, done) =&gt; &#123;</div><div class="line">  <span class="comment">//  your code</span></div><div class="line">  done()</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">url</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">schema</span>: &#123;<span class="comment">/*...*/</span>&#125;,</div><div class="line">  <span class="attr">beforeHandler</span>: <span class="function">(<span class="params">req, reply, done</span>) =&gt;</span> &#123;<span class="comment">/*...*/</span> ;done()&#125;</div><div class="line">  handler: <span class="function">(<span class="params">req, reply</span>) =&gt;</span> &#123; reply.send(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;) &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.route(&#123;</div><div class="line">  <span class="attr">method</span>: <span class="string">'GET'</span>,</div><div class="line">  <span class="attr">url</span>: <span class="string">'/'</span>,</div><div class="line">  <span class="attr">shcema</span>: &#123;<span class="comment">/*...*/</span>&#125;,</div><div class="line">  <span class="attr">beforeHandler</span>: [</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">first</span> (<span class="params">req, reply, done</span>) </span>&#123;</div><div class="line">      done()</div><div class="line">    &#125;,</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">second</span> (<span class="params">req, reply, done</span>) </span>&#123;</div><div class="line">      done()</div><div class="line">    &#125;</div><div class="line">  ],</div><div class="line">  <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span> (<span class="params">req, reply</span>) </span>&#123;</div><div class="line">    reply.send(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h3 id="Decorators"><a href="#Decorators" class="headerlink" title="Decorators"></a>Decorators</h3><p>If you need to add functionalities to the Fastify instance, the <code>decorator</code> api is what you need.</p>
 <p>This api allows you to add new properties to the Fastify instance, a property value is not restricted to be a function, could also be an object or a string for example.</p>
 <h4 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h4><h5 id="decorate-1"><a href="#decorate-1" class="headerlink" title="decorate"></a>decorate</h5><p>Just call the <code>decorate</code> api and pass the name of the new property and its value.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="hljs-string">'utility'</span>, () =&gt; &#123;</div><div class="line">  <span class="hljs-comment">// something very useful</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="string">'utility'</span>, () =&gt; &#123;</div><div class="line">  <span class="comment">// something very useful</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>As said above, you can decorate the instance with other values and not only functions:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="hljs-string">'conf'</span>, &#123;</div><div class="line">  <span class="hljs-attr">db</span>: <span class="hljs-string">'some db'</span>,</div><div class="line">  <span class="hljs-attr">port</span>: <span class="hljs-number">3000</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="string">'conf'</span>, &#123;</div><div class="line">  <span class="attr">db</span>: <span class="string">'some db'</span>,</div><div class="line">  <span class="attr">port</span>: <span class="number">3000</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>Once you decorate the instance you can access the value every time you need by using the name you passed as parameter:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">fastify.utility()</div><div class="line"><span class="hljs-built_in">console</span>.log(fastify.conf.db)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">fastify.utility()</div><div class="line"><span class="built_in">console</span>.log(fastify.conf.db)</div></pre></td></tr></table></figure>
 <p>Decorators are not <em>overwritable</em>, if you try to declare a decorator already declared, <code>decorate</code> will throw an exception.</p>
 <h5 id="decorateReply"><a href="#decorateReply" class="headerlink" title="decorateReply"></a>decorateReply</h5><p>As the name suggest, this api is needed if you want to add new methods to the <code>Reply</code> core object. Just call the <code>decorateReply</code> api and pass the name of the new property and its value.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.decorateReply(<span class="hljs-string">'utility'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</div><div class="line">  <span class="hljs-comment">// something very useful</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.decorateReply(<span class="string">'utility'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// something very useful</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>Note: using an arrow function will break the binding of <code>this</code> to the Fastify <code>reply</code> instance.</p>
-<h5 id="decorateRequest"><a href="#decorateRequest" class="headerlink" title="decorateRequest"></a>decorateRequest</h5><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.decorateRequest(<span class="hljs-string">'utility'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</div><div class="line">  <span class="hljs-comment">// something very useful</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h5 id="decorateRequest"><a href="#decorateRequest" class="headerlink" title="decorateRequest"></a>decorateRequest</h5><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">fastify.decorateRequest(<span class="string">'utility'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// something very useful</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>Note: using an arrow function will break the binding of <code>this</code> to the Fastify <code>request</code> instance.</p>
 <h5 id="extendServerError"><a href="#extendServerError" class="headerlink" title="extendServerError"></a>extendServerError</h5><p>If you need to extend the standard <code>server error</code>, this api is what you need.</p>
 <p>You must pass a function that returns an Object, Fastify will extend the server error with the returned object of your function. The function will receive the original error object.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">fastify.extendServerError(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">return</span> &#123;</div><div class="line">    <span class="hljs-attr">timestamp</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(),</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">/*</span></div><div class="line">  The resulting object will be: &#123;</div><div class="line">    error: string,</div><div class="line">    message: string,</div><div class="line">    statusCode: number,</div><div class="line">    timestamp: date,</div><div class="line">  &#125;</div><div class="line">*/</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">fastify.extendServerError(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">timestamp</span>: <span class="keyword">new</span> <span class="built_in">Date</span>(),</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">  The resulting object will be: &#123;</div><div class="line">    error: string,</div><div class="line">    message: string,</div><div class="line">    statusCode: number,</div><div class="line">    timestamp: date,</div><div class="line">  &#125;</div><div class="line">*/</div></pre></td></tr></table></figure>
 <h4 id="Sync-and-Async"><a href="#Sync-and-Async" class="headerlink" title="Sync and Async"></a>Sync and Async</h4><p><code>decorate</code> is synchronous API, if you need to add a decorator that has an asynchronous bootstrap, could happen that Fastify boots up before your decorator is ready. To avoid this issue you must use <code>register</code> api in combination with <code>fastify-plugin</code>.</p>
 <h4 id="Dependencies"><a href="#Dependencies" class="headerlink" title="Dependencies"></a>Dependencies</h4><p>If your decorator depends on another decorator, you can declare the dependencies of your function, it’s pretty easy, you just need to add an array of strings(representing the names of the decorators your are depending on) as third parameter.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="hljs-string">'utility'</span>, fn, [<span class="hljs-string">'greet'</span>, <span class="hljs-string">'log'</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.decorate(<span class="string">'utility'</span>, fn, [<span class="string">'greet'</span>, <span class="string">'log'</span>])</div></pre></td></tr></table></figure>
 <p>If a dependency is not satisfied, <code>decorate</code> will throw an exception.</p>
-<h4 id="hasDecorator"><a href="#hasDecorator" class="headerlink" title="hasDecorator"></a>hasDecorator</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.hasDecorator(<span class="hljs-string">'utility'</span>)</div></pre></td></tr></table></figure>
+<h4 id="hasDecorator"><a href="#hasDecorator" class="headerlink" title="hasDecorator"></a>hasDecorator</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fastify.hasDecorator(<span class="string">'utility'</span>)</div></pre></td></tr></table></figure>
 <h3 id="Validation-and-Serialize"><a href="#Validation-and-Serialize" class="headerlink" title="Validation and Serialize"></a>Validation and Serialize</h3><p>Fastify uses a schema based approach and even if it is not mandatory we recommend to use JSON Schema to validate you routes and serialize your output, internally Fastify compiles the schema in a highly performance function.</p>
 <h4 id="Validation"><a href="#Validation" class="headerlink" title="Validation"></a>Validation</h4><p>The route validation internally uses <code>Ajv</code>, which is highly performant JSON validator. Validate the input is very easy, just add the fields that you need inside the route schema and you are done.</p>
 <p>The supported validations are</p>
@@ -307,14 +297,14 @@
 </li>
 </ul>
 <p>Example:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> schema = &#123;</div><div class="line">  <span class="hljs-attr">body</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>,</div><div class="line">    <span class="hljs-attr">properties</span>: &#123;</div><div class="line">      <span class="hljs-attr">someKey</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span>&#125;,</div><div class="line">      <span class="hljs-attr">someOtherKey</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'number'</span> &#125;,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">querystring</span>: &#123;</div><div class="line">    <span class="hljs-attr">name</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;,</div><div class="line">    <span class="hljs-attr">excitement</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'integer'</span> &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">params</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>,</div><div class="line">    <span class="hljs-attr">properties</span>: &#123;</div><div class="line">      <span class="hljs-attr">par1</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;,</div><div class="line">      <span class="hljs-attr">par2</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'number'</span> &#125;,</div><div class="line">    &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">headers</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>,</div><div class="line">    <span class="hljs-attr">properties</span>: &#123;</div><div class="line">      <span class="hljs-string">'x-foo'</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;,</div><div class="line">    &#125;,</div><div class="line">    <span class="hljs-attr">required</span>: [<span class="hljs-string">'x-foo'</span>],</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> schema = &#123;</div><div class="line">  <span class="attr">body</span>: &#123;</div><div class="line">    <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">    <span class="attr">properties</span>: &#123;</div><div class="line">      <span class="attr">someKey</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span>&#125;,</div><div class="line">      <span class="attr">someOtherKey</span>: &#123; <span class="attr">type</span>: <span class="string">'number'</span> &#125;,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">querystring</span>: &#123;</div><div class="line">    <span class="attr">name</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">    <span class="attr">excitement</span>: &#123; <span class="attr">type</span>: <span class="string">'integer'</span> &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">params</span>: &#123;</div><div class="line">    <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">    <span class="attr">properties</span>: &#123;</div><div class="line">      <span class="attr">par1</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">      <span class="attr">par2</span>: &#123; <span class="attr">type</span>: <span class="string">'number'</span> &#125;,</div><div class="line">    &#125;,</div><div class="line">  &#125;,</div><div class="line">  <span class="attr">headers</span>: &#123;</div><div class="line">    <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">    <span class="attr">properties</span>: &#123;</div><div class="line">      <span class="string">'x-foo'</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">required</span>: [<span class="string">'x-foo'</span>],</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="Schema-Compiler"><a href="#Schema-Compiler" class="headerlink" title="Schema Compiler"></a>Schema Compiler</h4><p>The <code>schemaCompiler</code> is a function that returns a function that validates the body, url parameters, headers and query string.</p>
 <p>The default <code>schemaCompiler</code> returns a function that implements the <code>ajv</code> validation interface. <code>fastify</code> use it internally to speed the valiation up.</p>
 <h4 id="Serialize"><a href="#Serialize" class="headerlink" title="Serialize"></a>Serialize</h4><p>Usually you will send your data to the clients via JSON, and Fastify has a powerful tools to help you: <code>fast-json-stringify</code>, which is used if you have provided an output schema in the route options.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> schema = &#123;</div><div class="line">  <span class="hljs-attr">response</span>: &#123;</div><div class="line">    <span class="hljs-number">200</span>: &#123;</div><div class="line">      <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>,</div><div class="line">      <span class="hljs-attr">properties</span>: &#123;</div><div class="line">        <span class="hljs-attr">value</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;,</div><div class="line">        <span class="hljs-attr">otherValue</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'boolean'</span> &#125;,</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> schema = &#123;</div><div class="line">  <span class="attr">response</span>: &#123;</div><div class="line">    <span class="number">200</span>: &#123;</div><div class="line">      <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">      <span class="attr">properties</span>: &#123;</div><div class="line">        <span class="attr">value</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">        <span class="attr">otherValue</span>: &#123; <span class="attr">type</span>: <span class="string">'boolean'</span> &#125;,</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>As you can see the response schema is based on the status code, if you want to use the same schema for mutliple status code, you can use <code>2xx</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> schema = &#123;</div><div class="line">  <span class="hljs-attr">response</span>: &#123;</div><div class="line">    <span class="hljs-string">'2xx'</span>: &#123;</div><div class="line">      <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>,</div><div class="line">      <span class="hljs-attr">properties</span>: &#123;</div><div class="line">        <span class="hljs-attr">value</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;,</div><div class="line">        <span class="hljs-attr">otherValue</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'boolean'</span> &#125;,</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="hljs-number">201</span>: &#123;</div><div class="line">      <span class="hljs-attr">type</span>: <span class="hljs-string">'object'</span>,</div><div class="line">      <span class="hljs-attr">properties</span>: &#123;</div><div class="line">        <span class="hljs-attr">value</span>: &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'string'</span> &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h3><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">Incoming Request</div><div class="line">  │</div><div class="line">  └─▶ Instance Logger</div><div class="line">        │</div><div class="line">        └─▶ Routing</div><div class="line">             │</div><div class="line">       404 ◀─┴─▶ onRequest Hook</div><div class="line">                  │</div><div class="line">        4**/5** ◀─┴─▶ run Middlewares</div><div class="line">                        │</div><div class="line">              4**/5** ◀─┴─▶ Parsing</div><div class="line">                             │</div><div class="line">                       415 ◀─┴─▶ Validation</div><div class="line">                                   │</div><div class="line">                             400 ◀─┴─▶ preHandler Hook</div><div class="line">                                         │</div><div class="line">                               4**/5** ◀─┴─▶ beforeHandler</div><div class="line">                                               │</div><div class="line">                                     4**/5** ◀─┴─▶ User Handler</div><div class="line">                                                     │</div><div class="line">                                                     └─▶ Reply</div><div class="line">                                                          │ │</div><div class="line">                                                          │ └─▶ Outgoing Response</div><div class="line">                                                          │</div><div class="line">                                                          └─▶ onResponse Hook</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> schema = &#123;</div><div class="line">  <span class="attr">response</span>: &#123;</div><div class="line">    <span class="string">'2xx'</span>: &#123;</div><div class="line">      <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">      <span class="attr">properties</span>: &#123;</div><div class="line">        <span class="attr">value</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;,</div><div class="line">        <span class="attr">otherValue</span>: &#123; <span class="attr">type</span>: <span class="string">'boolean'</span> &#125;,</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="number">201</span>: &#123;</div><div class="line">      <span class="attr">type</span>: <span class="string">'object'</span>,</div><div class="line">      <span class="attr">properties</span>: &#123;</div><div class="line">        <span class="attr">value</span>: &#123; <span class="attr">type</span>: <span class="string">'string'</span> &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Lifecycle"><a href="#Lifecycle" class="headerlink" title="Lifecycle"></a>Lifecycle</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">Incoming Request</div><div class="line">  │</div><div class="line">  └─▶ Instance Logger</div><div class="line">        │</div><div class="line">        └─▶ Routing</div><div class="line">             │</div><div class="line">       404 ◀─┴─▶ onRequest Hook</div><div class="line">                  │</div><div class="line">        4**/5** ◀─┴─▶ run Middlewares</div><div class="line">                        │</div><div class="line">              4**/5** ◀─┴─▶ Parsing</div><div class="line">                             │</div><div class="line">                       415 ◀─┴─▶ Validation</div><div class="line">                                   │</div><div class="line">                             400 ◀─┴─▶ preHandler Hook</div><div class="line">                                         │</div><div class="line">                               4**/5** ◀─┴─▶ beforeHandler</div><div class="line">                                               │</div><div class="line">                                     4**/5** ◀─┴─▶ User Handler</div><div class="line">                                                     │</div><div class="line">                                                     └─▶ Reply</div><div class="line">                                                          │ │</div><div class="line">                                                          │ └─▶ Outgoing Response</div><div class="line">                                                          │</div><div class="line">                                                          └─▶ onResponse Hook</div></pre></td></tr></table></figure>
 <h3 id="Reply"><a href="#Reply" class="headerlink" title="Reply"></a>Reply</h3><p>The second parameter of the handler function is <code>Reply</code>.</p>
 <p>Reply is a core Fastify object that exposes the following functions:</p>
 <ul>
@@ -333,20 +323,20 @@
 <li><p>.sent: A boolean value that you can use if you need to know it <code>send</code> has already been called.</p>
 </li>
 </ul>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fastify.get(<span class="hljs-string">'/'</span>, options, (request, reply) =&gt; &#123;</div><div class="line">  reply</div><div class="line">    .code(<span class="hljs-number">200</span>)</div><div class="line">    .type(<span class="hljs-string">'application/json'</span>)</div><div class="line">    .send(&#123; <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span> &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fastify.get(<span class="string">'/'</span>, options, (request, reply) =&gt; &#123;</div><div class="line">  reply</div><div class="line">    .code(<span class="number">200</span>)</div><div class="line">    .type(<span class="string">'application/json'</span>)</div><div class="line">    .send(&#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h4 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h4><p>If not set via <code>reply.code</code>, the resulting <code>statusCode</code> will be <code>200</code></p>
 <h4 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h4><p>Sets a custom header to the response.</p>
 <p>If you not set a <code>Content-Type</code> header, Fastify assumes that you are using <code>application/json</code>, unless you are send a stream, in that case Fastify recognize it and sets the <code>Content-Type</code> at <code>application/octet-stream</code>.</p>
 <h4 id="Redirect"><a href="#Redirect" class="headerlink" title="Redirect"></a>Redirect</h4><p>Redirects a request to the specified url, the status code is optional, default to <code>302</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reply.redirect(<span class="hljs-string">'/home'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">reply.redirect(<span class="string">'/home'</span>)</div></pre></td></tr></table></figure>
 <h4 id="Type"><a href="#Type" class="headerlink" title="Type"></a>Type</h4><p>Sets the content type for the response.</p>
 <p>It’s the shortcut for <code>reply.header(&#39;Content-Type&#39;, &#39;application/json&#39;)</code></p>
 <h4 id="Serializer"><a href="#Serializer" class="headerlink" title="Serializer"></a>Serializer</h4><h4 id="Send"><a href="#Send" class="headerlink" title="Send"></a>Send</h4><h4 id="Objects"><a href="#Objects" class="headerlink" title="Objects"></a>Objects</h4><p>If you are sending JSON Objects, send will serialize the object with <code>fast-json-stringify</code> if you setted an output schema, otherwise <code>fast-safe-stringify</code></p>
 <h4 id="Promises"><a href="#Promises" class="headerlink" title="Promises"></a>Promises</h4><p>Send handle natively the promsies and supports out of the box async-await:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">fastify.get(<span class="hljs-string">'/promises'</span>, options, (req, reply) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">const</span> promise = <span class="hljs-keyword">new</span> Prmise(<span class="hljs-comment">/*...*/</span>)</div><div class="line">  reply</div><div class="line">    .code(<span class="hljs-number">200</span>)</div><div class="line">    .send(promise)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.get(<span class="hljs-string">'/async-await'</span>, options, <span class="hljs-keyword">async</span> (req, reply) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">let</span> res = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> &#123;</div><div class="line">    setTimeout(resolve, <span class="hljs-number">200</span>, &#123; <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span> &#125;)</div><div class="line">  &#125;)</div><div class="line">  <span class="hljs-keyword">return</span> res</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">fastify.get(<span class="string">'/promises'</span>, options, (req, reply) =&gt; &#123;</div><div class="line">  <span class="keyword">const</span> promise = <span class="keyword">new</span> Prmise(<span class="comment">/*...*/</span>)</div><div class="line">  reply</div><div class="line">    .code(<span class="number">200</span>)</div><div class="line">    .send(promise)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">fastify.get(<span class="string">'/async-await'</span>, options, <span class="keyword">async</span> (req, reply) =&gt; &#123;</div><div class="line">  <span class="keyword">let</span> res = <span class="keyword">await</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</div><div class="line">    setTimeout(resolve, <span class="number">200</span>, &#123; <span class="attr">hello</span>: <span class="string">'world'</span> &#125;)</div><div class="line">  &#125;)</div><div class="line">  <span class="keyword">return</span> res</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h4 id="Streams"><a href="#Streams" class="headerlink" title="Streams"></a>Streams</h4><p>Send can also handle streams out of box, internally uses <code>pump</code> to avoid leaks of file description. If you are sneding a stream and you have not setted a <code>Content-Type</code> header, send will set it at <code>application/octet-stream</code>.</p>
 <h4 id="Errors"><a href="#Errors" class="headerlink" title="Errors"></a>Errors</h4><p>If you pass to send an object that is an instance of Error, Fastify will automatically create error structured as the following:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="hljs-attr">error</span>: string, <span class="hljs-comment">// the http error message</span></div><div class="line">  message: string, <span class="hljs-comment">// the user error message</span></div><div class="line">  statusCode: number, <span class="hljs-comment">// the http status code</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">error</span>: string, <span class="comment">// the http error message</span></div><div class="line">  message: string, <span class="comment">// the user error message</span></div><div class="line">  statusCode: number, <span class="comment">// the http status code</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h3><p>The first parameter of the handler function is <code>Request</code>.</p>
 <p>Request is a core Fastify object containing the following fields: </p>
 <ul>
@@ -363,15 +353,15 @@
 <li><p>log</p>
 </li>
 </ul>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fastify.post(<span class="hljs-string">'/:params'</span>, options, (req, reply) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(request.body)</div><div class="line">  <span class="hljs-built_in">console</span>.log(request.query)</div><div class="line">  <span class="hljs-built_in">console</span>.log(request.params)</div><div class="line">  <span class="hljs-built_in">console</span>.log(request.headers)</div><div class="line">  <span class="hljs-built_in">console</span>.log(request.req)</div><div class="line">  request.log.info(<span class="hljs-string">'some info'</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">fastify.post(<span class="string">'/:params'</span>, options, (req, reply) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(request.body)</div><div class="line">  <span class="built_in">console</span>.log(request.query)</div><div class="line">  <span class="built_in">console</span>.log(request.params)</div><div class="line">  <span class="built_in">console</span>.log(request.headers)</div><div class="line">  <span class="built_in">console</span>.log(request.req)</div><div class="line">  request.log.info(<span class="string">'some info'</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h3 id="Content-Type-Parser"><a href="#Content-Type-Parser" class="headerlink" title="Content Type Parser"></a>Content Type Parser</h3><p>Natively Fastify supports only <code>application/json</code> content-type. If you need to support different content types you can use the <code>addContentTypeParser</code> api.</p>
-<h4 id="Catch-All"><a href="#Catch-All" class="headerlink" title="Catch All"></a>Catch All</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fastify.addContentTypeParser(<span class="hljs-string">'*'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req, done</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">var</span> data = <span class="hljs-string">''</span></div><div class="line">  req.on(<span class="hljs-string">'data'</span>, chunk =&gt; &#123;data += chunk&#125;)</div><div class="line">  req.on(<span class="hljs-string">'end'</span>, () =&gt; done(data))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="Catch-All"><a href="#Catch-All" class="headerlink" title="Catch All"></a>Catch All</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fastify.addContentTypeParser(<span class="string">'*'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">req, done</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> data = <span class="string">''</span></div><div class="line">  req.on(<span class="string">'data'</span>, chunk =&gt; &#123;data += chunk&#125;)</div><div class="line">  req.on(<span class="string">'end'</span>, () =&gt; done(data))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <h3 id="Plugins"><a href="#Plugins" class="headerlink" title="Plugins"></a>Plugins</h3><p>Fastify allows the user to extend its functionalities with plugins. A plugin can be a set of routes, a server decorator or whatever.</p>
 <p>The API you will need for one or more plugins is <code>register</code>.</p>
 <p>By default, <code>register</code> creates a <strong>new scope</strong>, this means that if you do some changes to the Fastify instance(via decorate), this change will not be reflected to the current context ancestors, but only to its sons.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fastify.register(plugin, [options])</div><div class="line"></div><div class="line">fastify.register([</div><div class="line">  <span class="hljs-built_in">require</span>(<span class="hljs-string">'./another-route'</span>),</div><div class="line">  <span class="hljs-built_in">require</span>(<span class="hljs-string">'./yet-another-route'</span>),</div><div class="line">], opts)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">fastify.register(plugin, [options])</div><div class="line"></div><div class="line">fastify.register([</div><div class="line">  <span class="built_in">require</span>(<span class="string">'./another-route'</span>),</div><div class="line">  <span class="built_in">require</span>(<span class="string">'./yet-another-route'</span>),</div><div class="line">], opts)</div></pre></td></tr></table></figure>
 <h3 id="Craete-a-Plugin"><a href="#Craete-a-Plugin" class="headerlink" title="Craete a Plugin"></a>Craete a Plugin</h3><p>Create a plugin is very easy, you just need to create a function that takes three paremters, the <code>fastify</code> instance, an options object and the next callback.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function">(<span class="hljs-params">fastify, opts, next</span>) =&gt;</span> &#123;</div><div class="line">  fastify.decorate(<span class="hljs-string">'utility'</span>, () =&gt; &#123;&#125;)</div><div class="line">  fastify.get(<span class="hljs-string">'/'</span>, handler)</div><div class="line">  next()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">fastify, opts, next</span>) =&gt;</span> &#123;</div><div class="line">  fastify.decorate(<span class="string">'utility'</span>, () =&gt; &#123;&#125;)</div><div class="line">  fastify.get(<span class="string">'/'</span>, handler)</div><div class="line">  next()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="Handle-the-Scope"><a href="#Handle-the-Scope" class="headerlink" title="Handle the Scope"></a>Handle the Scope</h4><p>You have two ways to tell Fastify to avoid the creation of a new context:</p>
 <ul>
 <li><p>Use the <code>fastify-plugin</code> module</p>
@@ -380,7 +370,7 @@
 </li>
 </ul>
 <p>We recomended to use the <code>fastify-plugin</code> module, because it solves this problem for you, and you can pass as parameter a version range of Fastify taht your plguin support.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> fp = <span class="hljs-built_in">require</span>(<span class="hljs-string">'fastify-plguin'</span>)</div><div class="line"></div><div class="line"><span class="hljs-built_in">module</span>.exports = fp(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">fastify, opts, next</span>) </span>&#123;</div><div class="line">  fastify.decorate(<span class="hljs-string">'utility'</span>, () =&gt; &#123;&#125;)</div><div class="line">  next()</div><div class="line">&#125;, <span class="hljs-string">'0.x'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> fp = <span class="built_in">require</span>(<span class="string">'fastify-plguin'</span>)</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = fp(<span class="function"><span class="keyword">function</span>(<span class="params">fastify, opts, next</span>) </span>&#123;</div><div class="line">  fastify.decorate(<span class="string">'utility'</span>, () =&gt; &#123;&#125;)</div><div class="line">  next()</div><div class="line">&#125;, <span class="string">'0.x'</span>)</div></pre></td></tr></table></figure>
 
         </div>
         
@@ -471,1282 +461,7 @@
 
     </div>
 </div>
-</div>
-                
 
-
-
-
-<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <nav class="level">
-            <div class="level-item has-text-centered">
-                <div>
-                    
-                        <img class="image is-128x128 has-mb-6" src="/images/avatar.jpg" alt="Keith Chen">
-                    
-                    
-                    <p class="is-size-4 is-block">
-                        Keith Chen
-                    </p>
-                    
-                    
-                    <p class="is-size-6 is-block">
-                        FE Engineer on Blockchain
-                    </p>
-                    
-                    
-                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
-                        <i class="fas fa-map-marker-alt has-mr-7"></i>
-                        <span>30°17&#39;37N, 120°9&#39;41E</span>
-                    </p>
-                    
-                </div>
-            </div>
-        </nav>
-        <nav class="level is-mobile">
-            <div class="level-item has-text-centered is-marginless">
-                <div>
-                    <p class="heading">
-                        Posts
-                    </p>
-                    <p class="title has-text-weight-normal">
-                        311
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered is-marginless">
-                <div>
-                    <p class="heading">
-                        Categories
-                    </p>
-                    <p class="title has-text-weight-normal">
-                        7
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered is-marginless">
-                <div>
-                    <p class="heading">
-                        Tags
-                    </p>
-                    <p class="title has-text-weight-normal">
-                        95
-                    </p>
-                </div>
-            </div>
-        </nav>
-        <div class="level">
-            <a class="level-item button is-link is-rounded" href="https://github.com/keith-CY" target="_blank">
-                Follow</a>
-        </div>
-        
-        
-    </div>
-</div>
-    
-        
-    
-        
-
-<div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            Links
-        </h3>
-        <ul class="menu-list">
-        
-            <li>
-                <a class="level is-mobile" href="https://github.com/keith-CY" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">Keith CY</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">github.com</span>
-                    </span>
-                </a>
-            </li>
-        
-            <li>
-                <a class="level is-mobile" href="https://www.linkedin.com/in/宇-陈-644b61ba" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">Yu Chen</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">www.linkedin.com</span>
-                    </span>
-                </a>
-            </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-
-
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-            <h3 class="menu-label">
-                Categories
-            </h3>
-            <ul class="menu-list">
-            <li>
-        <a class="level is-marginless" href="/categories/Soup/">
-            <span class="level-start">
-                <span class="level-item">Soup</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/Uncategorized/">
-            <span class="level-start">
-                <span class="level-item">Uncategorized</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">2</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/github/">
-            <span class="level-start">
-                <span class="level-item">github</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">4</span>
-            </span>
-        </a><ul><li>
-        <a class="level is-marginless" href="/categories/github/note/">
-            <span class="level-start">
-                <span class="level-item">note</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li></ul></li><li>
-        <a class="level is-marginless" href="/categories/note/">
-            <span class="level-start">
-                <span class="level-item">note</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">141</span>
-            </span>
-        </a><ul><li>
-        <a class="level is-marginless" href="/categories/note/workNote/">
-            <span class="level-start">
-                <span class="level-item">workNote</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">19</span>
-            </span>
-        </a></li></ul></li><li>
-        <a class="level is-marginless" href="/categories/workNote/">
-            <span class="level-start">
-                <span class="level-item">workNote</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">5</span>
-            </span>
-        </a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            Tag Cloud
-        </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Chrome-Extensions/" style="font-size: 10px;">Chrome, Extensions</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
-    </div>
-</div>
-
-    
-    
-        <div class="column-right-shadow is-hidden-widescreen ">
-        
-            
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            Recent
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2020/01/06/crx-config/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
-                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
-                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-10T06:26:41.000Z">2019-10-10</time></div>
-                    <a href="/2019/10/10/Basic-components-in-nest-js/" class="has-link-black-ter is-size-6">Basic Components in nest.js</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
-                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-30T06:26:54.000Z">2019-08-30</time></div>
-                    <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="has-link-black-ter is-size-6">Methods of the String in JavaScript </a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-
-        
-            <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            Archives
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2020/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2020</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">5</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">12</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">18</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">31</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">19</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">14</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">15</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">9</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">6</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">16</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">30</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">43</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">25</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">24</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-        
-        </div>
-    
-</div>
-
-                
-
-
-
-
-<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            Recent
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2020/01/06/crx-config/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
-                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
-                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-10T06:26:41.000Z">2019-10-10</time></div>
-                    <a href="/2019/10/10/Basic-components-in-nest-js/" class="has-link-black-ter is-size-6">Basic Components in nest.js</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
-                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-30T06:26:54.000Z">2019-08-30</time></div>
-                    <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="has-link-black-ter is-size-6">Methods of the String in JavaScript </a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-
-    
-        <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            Archives
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2020/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2020</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">5</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">12</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">18</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">31</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">19</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">14</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">15</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">9</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">6</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">16</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">30</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">43</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">25</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">24</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-    
-    
-</div>
-
-            </div>
-        </div>
-    </section>
-    <footer class="footer">
-    <div class="container">
-        <div class="level">
-            <div class="level-start has-text-centered-mobile">
-                <a class="footer-logo is-block has-mb-6" href="/">
-                
-                    <img src="/images/logo.png" alt="Time to Start Fastify" height="28">
-                
-                </a>
-                <p class="is-size-7">
-                &copy; 2020 Chen Yu&nbsp;
-                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
-                
-                <br>
-                <span id="busuanzi_container_site_uv">
-                Visited by <span id="busuanzi_value_site_uv">0</span> users
-                </span>
-                
-                </p>
-            </div>
-            <div class="level-end">
-            
-            </div>
-        </div>
-    </div>
-</footer>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
 <script>moment.locale("en");</script>
@@ -1874,4 +589,5 @@ document.addEventListener('DOMContentLoaded', function () {
 <link rel="stylesheet" href="/css/insight.css">
     
 </body>
+
 </html>

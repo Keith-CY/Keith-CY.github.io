@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html  lang="en">
+
 <head>
     <meta charset="utf-8">
 <title>Methods of Observable - EzCook</title>
@@ -81,6 +82,7 @@
 <link rel="stylesheet" href="/css/style.css">
 
 </head>
+
 <body class="is-3-column">
     <nav class="navbar navbar-main">
     <div class="container">
@@ -102,16 +104,7 @@
                 href="/archives">Archives</a>
                 
                 <a class="navbar-item"
-                href="/categories">Categories</a>
-                
-                <a class="navbar-item"
-                href="/tags">Tags</a>
-                
-                <a class="navbar-item"
-                href="/about">About</a>
-                
-                <a class="navbar-item"
-                href="/resume">Resume</a>
+                href="/projects">Projects</a>
                 
             </div>
             
@@ -142,11 +135,8 @@
         </div>
     </div>
 </nav>
-    
-    <section class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+
+    <div class="card">
     
     <div class="card-content article ">
         
@@ -220,20 +210,20 @@
 <blockquote>
 <p><strong>Whenever</strong> any input Observable emits a value, it computes a formula using the latest values from all the inputs, then emits the output of the formula.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// combine two timer Observable</span></div><div class="line"><span class="hljs-keyword">const</span> firstTimer = Rx.Observable.timer(<span class="hljs-number">0</span>, <span class="hljs-number">1000</span>)</div><div class="line"><span class="hljs-keyword">const</span> secondTimer = Rx.Observable.timer(<span class="hljs-number">500</span>, <span class="hljs-number">1000</span>)</div><div class="line"><span class="hljs-keyword">const</span> combineTimers = Rx.Observable.combineLatest(firstTimer, secondTimer)</div><div class="line">combineTimers.subscribe(<span class="hljs-built_in">console</span>.log)</div><div class="line"><span class="hljs-comment">// logs</span></div><div class="line"><span class="hljs-comment">// [0, 0] after 0.5s, triggered by secondTimer</span></div><div class="line"><span class="hljs-comment">// [1, 0] after 1s, triggered by firstTimer</span></div><div class="line"><span class="hljs-comment">// [1, 1.5] after 1.5s, triggered by secondTimer</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="hljs-comment">// combine an array of observable</span></div><div class="line"><span class="hljs-keyword">const</span> observables = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>].map(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> Rx.Observable.of(n).delay(n * <span class="hljs-number">1000</span>).startWith(<span class="hljs-number">0</span>))</div><div class="line"><span class="hljs-keyword">const</span> combined = Rx.Observable.combineLatest(observables)</div><div class="line">combined.subscribe(<span class="hljs-built_in">console</span>.log)</div><div class="line"><span class="hljs-comment">// logs</span></div><div class="line"><span class="hljs-comment">// [0, 0, 0] immediately</span></div><div class="line"><span class="hljs-comment">// [1, 0, 0] after 1s triggered by observables[0]</span></div><div class="line"><span class="hljs-comment">// [1, 2, 0] after 2s triggered by observables[1]</span></div><div class="line"><span class="hljs-comment">// [1, 2, 4] after 4s triggered by observables[2]</span></div><div class="line"></div><div class="line"><span class="hljs-comment">// use project function to dynamically calculate the body-mass index</span></div><div class="line"><span class="hljs-keyword">const</span> weight = Rx.Observable.of(<span class="hljs-number">70</span>, <span class="hljs-number">72</span>, <span class="hljs-number">76</span>, <span class="hljs-number">79</span>, <span class="hljs-number">75</span>)</div><div class="line"><span class="hljs-keyword">const</span> height = Rx.Observable.of(<span class="hljs-number">1.76</span>, <span class="hljs-number">1.77</span>, <span class="hljs-number">1.78</span>)</div><div class="line"><span class="hljs-keyword">const</span> bmi = Rx.Observable.combineLatest(weight, height, (w, h) =&gt; w/(h*h))</div><div class="line">bmi.subscribe(<span class="hljs-built_in">console</span>.log)</div><div class="line"><span class="hljs-comment">// With output to console:</span></div><div class="line"><span class="hljs-comment">// BMI is 24.212293388429753</span></div><div class="line"><span class="hljs-comment">// BMI is 23.93948099205209</span></div><div class="line"><span class="hljs-comment">// BMI is 23.671253629592222</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// combine two timer Observable</span></div><div class="line"><span class="keyword">const</span> firstTimer = Rx.Observable.timer(<span class="number">0</span>, <span class="number">1000</span>)</div><div class="line"><span class="keyword">const</span> secondTimer = Rx.Observable.timer(<span class="number">500</span>, <span class="number">1000</span>)</div><div class="line"><span class="keyword">const</span> combineTimers = Rx.Observable.combineLatest(firstTimer, secondTimer)</div><div class="line">combineTimers.subscribe(<span class="built_in">console</span>.log)</div><div class="line"><span class="comment">// logs</span></div><div class="line"><span class="comment">// [0, 0] after 0.5s, triggered by secondTimer</span></div><div class="line"><span class="comment">// [1, 0] after 1s, triggered by firstTimer</span></div><div class="line"><span class="comment">// [1, 1.5] after 1.5s, triggered by secondTimer</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// combine an array of observable</span></div><div class="line"><span class="keyword">const</span> observables = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>].map(<span class="function"><span class="params">n</span> =&gt;</span> Rx.Observable.of(n).delay(n * <span class="number">1000</span>).startWith(<span class="number">0</span>))</div><div class="line"><span class="keyword">const</span> combined = Rx.Observable.combineLatest(observables)</div><div class="line">combined.subscribe(<span class="built_in">console</span>.log)</div><div class="line"><span class="comment">// logs</span></div><div class="line"><span class="comment">// [0, 0, 0] immediately</span></div><div class="line"><span class="comment">// [1, 0, 0] after 1s triggered by observables[0]</span></div><div class="line"><span class="comment">// [1, 2, 0] after 2s triggered by observables[1]</span></div><div class="line"><span class="comment">// [1, 2, 4] after 4s triggered by observables[2]</span></div><div class="line"></div><div class="line"><span class="comment">// use project function to dynamically calculate the body-mass index</span></div><div class="line"><span class="keyword">const</span> weight = Rx.Observable.of(<span class="number">70</span>, <span class="number">72</span>, <span class="number">76</span>, <span class="number">79</span>, <span class="number">75</span>)</div><div class="line"><span class="keyword">const</span> height = Rx.Observable.of(<span class="number">1.76</span>, <span class="number">1.77</span>, <span class="number">1.78</span>)</div><div class="line"><span class="keyword">const</span> bmi = Rx.Observable.combineLatest(weight, height, (w, h) =&gt; w/(h*h))</div><div class="line">bmi.subscribe(<span class="built_in">console</span>.log)</div><div class="line"><span class="comment">// With output to console:</span></div><div class="line"><span class="comment">// BMI is 24.212293388429753</span></div><div class="line"><span class="comment">// BMI is 23.93948099205209</span></div><div class="line"><span class="comment">// BMI is 23.671253629592222</span></div></pre></td></tr></table></figure>
 <ul>
 <li>concat</li>
 </ul>
 <p><code>public static concat(input1: ObservableInput, input2: ObservableInput, scheduler: Schedular): Observable</code></p>
 <p><img src="http://reactivex.io/rxjs/img/concat.png" alt=""></p>
 <p>Creates an output Observable which sequentially emits all values from given Observable and then moves on to the next.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Concatenate a timer counting form 0 to 3 with a synchronous sequence from 1 to 10</span></div><div class="line"><span class="hljs-keyword">var</span> timer = Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">4</span>)</div><div class="line"><span class="hljs-keyword">var</span> sequence = Rx.Observable.range(<span class="hljs-number">1</span>, <span class="hljs-number">10</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = Rx.Observable.concat(timer, sequence)</div><div class="line"></div><div class="line"><span class="hljs-comment">// concatenate an array of 3 Observables, different from the one above</span></div><div class="line"><span class="hljs-keyword">var</span> timer1 = Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">10</span>)</div><div class="line"><span class="hljs-keyword">var</span> timer2 = Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">6</span>)</div><div class="line"><span class="hljs-keyword">var</span> timer3 = Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">10</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = Rx.Observable.concat([timer1, timer2, timer3])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Concatenate a timer counting form 0 to 3 with a synchronous sequence from 1 to 10</span></div><div class="line"><span class="keyword">var</span> timer = Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">4</span>)</div><div class="line"><span class="keyword">var</span> sequence = Rx.Observable.range(<span class="number">1</span>, <span class="number">10</span>)</div><div class="line"><span class="keyword">var</span> result = Rx.Observable.concat(timer, sequence)</div><div class="line"></div><div class="line"><span class="comment">// concatenate an array of 3 Observables, different from the one above</span></div><div class="line"><span class="keyword">var</span> timer1 = Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">10</span>)</div><div class="line"><span class="keyword">var</span> timer2 = Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">6</span>)</div><div class="line"><span class="keyword">var</span> timer3 = Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">10</span>)</div><div class="line"><span class="keyword">var</span> result = Rx.Observable.concat([timer1, timer2, timer3])</div></pre></td></tr></table></figure>
 <ul>
 <li>create</li>
 </ul>
 <p><code>public static create(onSubscription: function(observer: Observer): TearDownLogic): Observable</code></p>
 <p>Creates a new Observable, that will execute the specified function when an Observer subscribes to it.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> observable = Rx.Observable.create(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">observer</span>) </span>&#123;</div><div class="line">  observer.next(<span class="hljs-number">1</span>)</div><div class="line">  observer.next(<span class="hljs-number">2</span>)</div><div class="line">  observer.next(<span class="hljs-number">3</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> observable = Rx.Observable.create(<span class="function"><span class="keyword">function</span>(<span class="params">observer</span>) </span>&#123;</div><div class="line">  observer.next(<span class="number">1</span>)</div><div class="line">  observer.next(<span class="number">2</span>)</div><div class="line">  observer.next(<span class="number">3</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <ul>
 <li>defer</li>
 </ul>
@@ -243,7 +233,7 @@
 <p>Creates the Observable lazily, that is, only when it is subscribed.</p>
 </blockquote>
 <p><img src="http://reactivex.io/rxjs/img/defer.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// when defer is called, it returns an Observable</span></div><div class="line"><span class="hljs-keyword">var</span> clicksOrInterval = Rx.Observable.defer(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Math</span>.random() &gt; <span class="hljs-number">0.5</span>) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">    <span class="hljs-keyword">return</span> Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// when defer is called, it returns an Observable</span></div><div class="line"><span class="keyword">var</span> clicksOrInterval = Rx.Observable.defer(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span> (<span class="built_in">Math</span>.random() &gt; <span class="number">0.5</span>) &#123;</div><div class="line">    <span class="keyword">return</span> Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> Rx.Observable.interval(<span class="number">1000</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <ul>
 <li>empty</li>
 </ul>
@@ -253,7 +243,7 @@
 <p>Just emits ‘complete’ and nothing else</p>
 </blockquote>
 <p><img src="http://reactivex.io/rxjs/img/empty.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> result = Rx.Observable.empty().startWith(<span class="hljs-number">8</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> result = Rx.Observable.empty().startWith(<span class="number">8</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>from</li>
 </ul>
@@ -271,7 +261,7 @@
 <p>Creates an Observable from DOM events, or Node EventEmitter events or others</p>
 </blockquote>
 <p><img src="http://reactivex.io/rxjs/img/fromEvent.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>fromEventPattern</li>
 </ul>
@@ -280,7 +270,7 @@
 <blockquote>
 <p>Converts any addHandler/removeHandler API to an Observable</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addClickHandler</span>(<span class="hljs-params">handler</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">'click'</span>, handler)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeClick</span>(<span class="hljs-params">handler</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">document</span>.removeEventListener(<span class="hljs-string">'click'</span>, handler)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEventPattern(</div><div class="line">  addClickHandler,</div><div class="line">  removeClickHandler,</div><div class="line">)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">addClickHandler</span>(<span class="params">handler</span>) </span>&#123;</div><div class="line">  <span class="built_in">document</span>.addEventListener(<span class="string">'click'</span>, handler)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeClick</span>(<span class="params">handler</span>) </span>&#123;</div><div class="line">  <span class="built_in">document</span>.removeEventListener(<span class="string">'click'</span>, handler)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEventPattern(</div><div class="line">  addClickHandler,</div><div class="line">  removeClickHandler,</div><div class="line">)</div></pre></td></tr></table></figure>
 <ul>
 <li>fromPromise</li>
 </ul>
@@ -288,7 +278,7 @@
 <blockquote>
 <p>Returns an Observable that just emit the Promise’s resolved value, then complete</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> result = Rx.Observable.fromPromise(fetch(<span class="hljs-string">'reqres.in/api/users'</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> result = Rx.Observable.fromPromise(fetch(<span class="string">'reqres.in/api/users'</span>))</div></pre></td></tr></table></figure>
 <ul>
 <li>interval</li>
 </ul>
@@ -306,7 +296,7 @@
 <blockquote>
 <p>Flatten multiple Observables together by blending their values into one Observable</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> timer = Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line"><span class="hljs-keyword">var</span> clicksOrTimer = Rx.Observable.merge(clicks, timer)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line"><span class="keyword">var</span> timer = Rx.Observable.interval(<span class="number">1000</span>)</div><div class="line"><span class="keyword">var</span> clicksOrTimer = Rx.Observable.merge(clicks, timer)</div></pre></td></tr></table></figure>
 <ul>
 <li>never</li>
 </ul>
@@ -316,7 +306,7 @@
 <blockquote>
 <p>An Observable that never emits anything</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.never().startWith(<span class="hljs-number">7</span>).subscribe(<span class="hljs-built_in">console</span>.log)</div><div class="line"><span class="hljs-comment">// won't console 7</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.never().startWith(<span class="number">7</span>).subscribe(<span class="built_in">console</span>.log)</div><div class="line"><span class="comment">// won't console 7</span></div></pre></td></tr></table></figure>
 <ul>
 <li>of</li>
 </ul>
@@ -356,13 +346,13 @@
 <li>webSocket</li>
 </ul>
 <p><code>public static webSocket(urlConfigOrSource: string | WebSocketSubjectConfig): Observable</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">let</span> subject = Rx.Observable.webSocket(<span class="hljs-string">'ws://localhost:8001'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> subject = Rx.Observable.webSocket(<span class="string">'ws://localhost:8001'</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>zip</li>
 </ul>
 <p><code>public static zip(observables: *): Observable&lt;R&gt;</code></p>
 <p>Combines multiple Observables to create an Observable whose values are calculated from the valeus, in order, of each of its input Observables.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">let</span> age$ = Rx.Observable.of(<span class="hljs-number">27</span>, <span class="hljs-number">25</span>, <span class="hljs-number">29</span>)</div><div class="line"><span class="hljs-keyword">let</span> name$ = Rx.Observable.of(<span class="hljs-string">'Foo'</span>, <span class="hljs-string">'Bar'</span>, <span class="hljs-string">'Beer'</span>)</div><div class="line"><span class="hljs-keyword">let</span> isDev$ = Rx.Observable.of(<span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>)</div><div class="line"></div><div class="line">Rx.Observable.zip(age$, name$, isDev$, (age, name, isDev) =&gt; (&#123;age, name, isDev&#125;))</div><div class="line"><span class="hljs-comment">// outputs</span></div><div class="line"><span class="hljs-comment">// &#123; age: 27, name: 'Foo', isDev: true &#125;</span></div><div class="line"><span class="hljs-comment">// &#123; age: 25, name: 'Bar', isDev: true &#125;</span></div><div class="line"><span class="hljs-comment">// &#123; age: 29, name: 'Beer', isDev: false &#125;</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> age$ = Rx.Observable.of(<span class="number">27</span>, <span class="number">25</span>, <span class="number">29</span>)</div><div class="line"><span class="keyword">let</span> name$ = Rx.Observable.of(<span class="string">'Foo'</span>, <span class="string">'Bar'</span>, <span class="string">'Beer'</span>)</div><div class="line"><span class="keyword">let</span> isDev$ = Rx.Observable.of(<span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">false</span>)</div><div class="line"></div><div class="line">Rx.Observable.zip(age$, name$, isDev$, (age, name, isDev) =&gt; (&#123;age, name, isDev&#125;))</div><div class="line"><span class="comment">// outputs</span></div><div class="line"><span class="comment">// &#123; age: 27, name: 'Foo', isDev: true &#125;</span></div><div class="line"><span class="comment">// &#123; age: 25, name: 'Bar', isDev: true &#125;</span></div><div class="line"><span class="comment">// &#123; age: 29, name: 'Beer', isDev: false &#125;</span></div></pre></td></tr></table></figure>
 <ul>
 <li>constructor</li>
 </ul>
@@ -377,7 +367,7 @@
 <p>It’s like auditTime, but the silencing duration is determined by a second Observable.</p>
 </blockquote>
 <p><code>audit</code> is similar to <code>throttle</code>, but emits the last value from the silenced time window.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = clicks.audit(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> Rx.Observable.interval(<span class="hljs-number">1000</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line"><span class="keyword">var</span> result = clicks.audit(<span class="function"><span class="params">ev</span> =&gt;</span> Rx.Observable.interval(<span class="number">1000</span>))</div></pre></td></tr></table></figure>
 <ul>
 <li>auditTime</li>
 </ul>
@@ -399,7 +389,7 @@
 </ul>
 <p><code>public bufferCount(bufferSize: number, startBufferEvery: number): Observable&lt;T[]&gt;</code></p>
 <p><img src="http://reactivex.io/rxjs/img/bufferCount.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> interval = Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line">interval.bufferCount(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> interval = Rx.Observable.interval(<span class="number">1000</span>)</div><div class="line">interval.bufferCount(<span class="number">3</span>, <span class="number">2</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>bufferTime</li>
 </ul>
@@ -426,7 +416,7 @@
 <p><code>public catch(selector: function): Obversable</code></p>
 <p><img src="http://reactivex.io/rxjs/img/catch.png" alt=""></p>
 <p>Catches errors on the observable to be handled by returning a new obversable or throwing an error.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)</div><div class="line">.map(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (n === <span class="hljs-number">4</span>) <span class="hljs-keyword">throw</span> <span class="hljs-string">'four'</span></div><div class="line">  <span class="hljs-keyword">return</span> n</div><div class="line">&#125;).catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> Rx.Observable.of(<span class="hljs-string">'I'</span> , <span class="hljs-string">'II'</span>, <span class="hljs-string">'III'</span>, <span class="hljs-string">'IV'</span>, <span class="hljs-string">'V'</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</div><div class="line">.map(<span class="function"><span class="params">n</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">if</span> (n === <span class="number">4</span>) <span class="keyword">throw</span> <span class="string">'four'</span></div><div class="line">  <span class="keyword">return</span> n</div><div class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> Rx.Observable.of(<span class="string">'I'</span> , <span class="string">'II'</span>, <span class="string">'III'</span>, <span class="string">'IV'</span>, <span class="string">'V'</span>))</div></pre></td></tr></table></figure>
 <ul>
 <li>combineAll</li>
 </ul>
@@ -437,7 +427,7 @@
 <blockquote>
 <p>Flatten an Observable-of-Observables by applying combineLatest when the Observable-of-Observable completes</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>);</div><div class="line"><span class="hljs-keyword">var</span> higherOrder = clicks.map(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span></div><div class="line">  Rx.Observable.interval(<span class="hljs-built_in">Math</span>.random()*<span class="hljs-number">2000</span>).take(<span class="hljs-number">13</span>)</div><div class="line">).take(<span class="hljs-number">3</span>);</div><div class="line"><span class="hljs-keyword">var</span> result = higherOrder.combineAll();</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>);</div><div class="line"><span class="keyword">var</span> higherOrder = clicks.map(<span class="function"><span class="params">ev</span> =&gt;</span></div><div class="line">  Rx.Observable.interval(<span class="built_in">Math</span>.random()*<span class="number">2000</span>).take(<span class="number">13</span>)</div><div class="line">).take(<span class="number">3</span>);</div><div class="line"><span class="keyword">var</span> result = higherOrder.combineAll();</div></pre></td></tr></table></figure>
 <ul>
 <li>combineLatest</li>
 </ul>
@@ -467,7 +457,7 @@
 <blockquote>
 <p>Map each value to an Observable, then flatten all of these inner Observables using concatAll</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = clicks.concatMap(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">return</span> Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">4</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line"><span class="keyword">var</span> result = clicks.concatMap(<span class="function"><span class="params">ev</span> =&gt;</span> &#123;</div><div class="line">  <span class="keyword">return</span> Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">4</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <ul>
 <li>concatMaoTo</li>
 </ul>
@@ -481,7 +471,7 @@
 </ul>
 <p><code>public count(predicate: function(value: T, i: number, source: Observable&lt;T&gt;): boolean): Observable</code></p>
 <p>Counts the number of emissions on the source and emits the number when the source completes.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// count how many seconds have passed before the first click</span></div><div class="line"><span class="hljs-keyword">var</span> seconds = Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> secondsBeforeClick = seconds.takeUntil(clicks)</div><div class="line">secondsBeforeClick.count()</div><div class="line"></div><div class="line"><span class="hljs-comment">// count how many odd numbers are there between 1 and 7</span></div><div class="line"><span class="hljs-keyword">var</span> numbers = Rx.Observable.range(<span class="hljs-number">1</span>, <span class="hljs-number">7</span>)</div><div class="line">numbers.count(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> i % <span class="hljs-number">2</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// count how many seconds have passed before the first click</span></div><div class="line"><span class="keyword">var</span> seconds = Rx.Observable.interval(<span class="number">1000</span>)</div><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line"><span class="keyword">var</span> secondsBeforeClick = seconds.takeUntil(clicks)</div><div class="line">secondsBeforeClick.count()</div><div class="line"></div><div class="line"><span class="comment">// count how many odd numbers are there between 1 and 7</span></div><div class="line"><span class="keyword">var</span> numbers = Rx.Observable.range(<span class="number">1</span>, <span class="number">7</span>)</div><div class="line">numbers.count(<span class="function"><span class="params">i</span> =&gt;</span> i % <span class="number">2</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>debounce</li>
 </ul>
@@ -491,7 +481,7 @@
 <blockquote>
 <p>It’s like debounceTime, but the time span of emission silence is determined by a second Observable.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = clicks.debounce(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Rx.Observable.interval(<span class="hljs-number">1000</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line"><span class="keyword">var</span> result = clicks.debounce(<span class="function"><span class="params">()</span> =&gt;</span> Rx.Observable.interval(<span class="number">1000</span>))</div></pre></td></tr></table></figure>
 <ul>
 <li>debounceTime</li>
 </ul>
@@ -510,7 +500,7 @@
 <blockquote>
 <p>If the source Observable turns out to be empty, then this operator will emit a default value.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> clicksBeforeFive = clicks.takeUntil(Rx.Observable.interval(<span class="hljs-number">5000</span>))</div><div class="line">clicksBeforeFive.defaultIfEmpty(<span class="hljs-string">'no click'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line"><span class="keyword">var</span> clicksBeforeFive = clicks.takeUntil(Rx.Observable.interval(<span class="number">5000</span>))</div><div class="line">clicksBeforeFive.defaultIfEmpty(<span class="string">'no click'</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>delay</li>
 </ul>
@@ -534,13 +524,13 @@
 <p>Unwraps Notification objects as actual next, error, and complete emissions. The opposite of materialize.</p>
 </blockquote>
 <p><code>dematerialize</code> is assumed to operate an Observable that only emits <code>Notification</code> objects as <code>next</code> emission, and does not emit any <code>error</code>. Such Observable is the output of a <code>materialize</code> operation. Those notifications are then unwrapped using the metadata they contain, and emitted as <code>next</code>, <code>error</code>and <code>complete</code> on the output Observable.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> notiA = <span class="hljs-keyword">new</span> Rx.Notification(<span class="hljs-string">'N'</span>, <span class="hljs-string">'A'</span>)</div><div class="line"><span class="hljs-keyword">var</span> notiB = <span class="hljs-keyword">new</span> Rx.Notification(<span class="hljs-string">'N'</span>, <span class="hljs-string">'B'</span>)</div><div class="line"><span class="hljs-keyword">var</span> notiE = <span class="hljs-keyword">new</span> Rx.Notification(<span class="hljs-string">'E'</span>, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'x.toUpperCase is not a function'</span>))</div><div class="line"><span class="hljs-keyword">var</span> materialized = Rx.Observable.of(notiA, notiB, notiE)</div><div class="line"><span class="hljs-keyword">var</span> upperCase = materialized.dematerialize()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> notiA = <span class="keyword">new</span> Rx.Notification(<span class="string">'N'</span>, <span class="string">'A'</span>)</div><div class="line"><span class="keyword">var</span> notiB = <span class="keyword">new</span> Rx.Notification(<span class="string">'N'</span>, <span class="string">'B'</span>)</div><div class="line"><span class="keyword">var</span> notiE = <span class="keyword">new</span> Rx.Notification(<span class="string">'E'</span>, <span class="keyword">void</span> <span class="number">0</span>, <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'x.toUpperCase is not a function'</span>))</div><div class="line"><span class="keyword">var</span> materialized = Rx.Observable.of(notiA, notiB, notiE)</div><div class="line"><span class="keyword">var</span> upperCase = materialized.dematerialize()</div></pre></td></tr></table></figure>
 <ul>
 <li>distinct</li>
 </ul>
 <p><code>public distinct(keySelector: function, flushes: Observable): Observable</code></p>
 <p>Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from previous item<strong>s</strong>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">67</span>,<span class="hljs-number">6</span>,<span class="hljs-number">6</span>,).distinct()</div><div class="line"><span class="hljs-comment">// 1,2,3,4,5,67,6</span></div><div class="line"><span class="hljs-comment">// repeated 1 omitted</span></div><div class="line"></div><div class="line"><span class="hljs-comment">// keySelector</span></div><div class="line">interface Person &#123;</div><div class="line">  <span class="hljs-attr">age</span>: number</div><div class="line">  name: string</div><div class="line">&#125;</div><div class="line"></div><div class="line">Rx.Observable.of&lt;Person&gt;(</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">7</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Bar'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span> &#125;,</div><div class="line">).distinct(<span class="hljs-function">(<span class="hljs-params">p: Person</span>) =&gt;</span> p.name)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">67</span>,<span class="number">6</span>,<span class="number">6</span>,).distinct()</div><div class="line"><span class="comment">// 1,2,3,4,5,67,6</span></div><div class="line"><span class="comment">// repeated 1 omitted</span></div><div class="line"></div><div class="line"><span class="comment">// keySelector</span></div><div class="line">interface Person &#123;</div><div class="line">  <span class="attr">age</span>: number</div><div class="line">  name: string</div><div class="line">&#125;</div><div class="line"></div><div class="line">Rx.Observable.of&lt;Person&gt;(</div><div class="line">  &#123; <span class="attr">age</span>: <span class="number">4</span>, <span class="attr">name</span>: <span class="string">'Foo'</span> &#125;,</div><div class="line">  &#123; <span class="attr">age</span>: <span class="number">7</span>, <span class="attr">name</span>: <span class="string">'Bar'</span> &#125;,</div><div class="line">  &#123; <span class="attr">age</span>: <span class="number">5</span>, <span class="attr">name</span>: <span class="string">'Foo'</span> &#125;,</div><div class="line">).distinct(<span class="function">(<span class="params">p: Person</span>) =&gt;</span> p.name)</div></pre></td></tr></table></figure>
 <blockquote>
 <p>Note: ‘1’ is different from 1</p>
 </blockquote>
@@ -553,7 +543,7 @@
 <li>distinctUntilKeyChanged</li>
 </ul>
 <p><code>public distinctUntilKeyChanged(key: string, compare: function): Observable</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">interface Person &#123;</div><div class="line">  <span class="hljs-attr">age</span>: number</div><div class="line">  name: string</div><div class="line">&#125;</div><div class="line"></div><div class="line">Rx.Observable.of&lt;Person&gt;(</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Bar'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">naem</span>: <span class="hljs-string">'For'</span> &#125;,</div><div class="line">).distinctUntilKeyChanged(<span class="hljs-string">'name'</span>, (x: string, <span class="hljs-attr">y</span>: string) =&gt; x.substring(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>) === y.substring(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">interface Person &#123;</div><div class="line">  <span class="attr">age</span>: number</div><div class="line">  name: string</div><div class="line">&#125;</div><div class="line"></div><div class="line">Rx.Observable.of&lt;Person&gt;(</div><div class="line">  &#123; <span class="attr">age</span>: <span class="number">4</span>, <span class="attr">name</span>: <span class="string">'Foo'</span> &#125;,</div><div class="line">  &#123; <span class="attr">age</span>: <span class="number">5</span>, <span class="attr">name</span>: <span class="string">'Bar'</span> &#125;,</div><div class="line">  &#123; <span class="attr">age</span>: <span class="number">3</span>, <span class="attr">naem</span>: <span class="string">'For'</span> &#125;,</div><div class="line">).distinctUntilKeyChanged(<span class="string">'name'</span>, (x: string, <span class="attr">y</span>: string) =&gt; x.substring(<span class="number">0</span>, <span class="number">2</span>) === y.substring(<span class="number">0</span>, <span class="number">2</span>))</div></pre></td></tr></table></figure>
 <ul>
 <li>do</li>
 </ul>
@@ -572,13 +562,13 @@
 <blockquote>
 <p>Emits only the i-th value , then completes.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks.elementAt(<span class="hljs-number">2</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line">clicks.elementAt(<span class="number">2</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>every</li>
 </ul>
 <p><code>public every(predicate: function, thisArg: any): Observable</code></p>
 <p>Returns an Observable that emits whether or not every item of the source satisfies the condition specified.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// all elements are less than 5, otherwise false</span></div><div class="line">Observable.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>)</div><div class="line">  .every(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x &lt; <span class="hljs-number">5</span>)</div><div class="line">  .subscribe(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(x)); <span class="hljs-comment">// -&gt; false</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// all elements are less than 5, otherwise false</span></div><div class="line">Observable.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)</div><div class="line">  .every(<span class="function"><span class="params">x</span> =&gt;</span> x &lt; <span class="number">5</span>)</div><div class="line">  .subscribe(<span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(x)); <span class="comment">// -&gt; false</span></div></pre></td></tr></table></figure>
 <ul>
 <li>exhaust</li>
 </ul>
@@ -589,7 +579,7 @@
 <p>Flatten an Observable-of-Observables by dropping the next inner Observable while the current inner is still executing.</p>
 </blockquote>
 <p><code>exhaust</code> ingores every new inner Observable if the previous Observable has not yet completed.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> higherOrder = clicks.map(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">3</span>))</div><div class="line">higherOrder.exhaust()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line"><span class="keyword">var</span> higherOrder = clicks.map(<span class="function"><span class="params">ev</span> =&gt;</span> Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">3</span>))</div><div class="line">higherOrder.exhaust()</div></pre></td></tr></table></figure>
 <ul>
 <li>exhaustMap</li>
 </ul>
@@ -605,14 +595,14 @@
 <blockquote>
 <p>It’s similar to mergeMap, but applies the projection function to every source value as well as every output value. It’s recursive.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks.mapTo(<span class="hljs-number">1</span>).expand(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> Rx.Observable.of(<span class="hljs-number">2</span>*x).delay(<span class="hljs-number">1000</span>)).take(<span class="hljs-number">10</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line">clicks.mapTo(<span class="number">1</span>).expand(<span class="function"><span class="params">x</span> =&gt;</span> Rx.Observable.of(<span class="number">2</span>*x).delay(<span class="number">1000</span>)).take(<span class="number">10</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>filter</li>
 </ul>
 <p><code>public filter(predicate: function(value T, index: number): boolean, thisArg: any): Observable</code></p>
 <p><img src="http://reactivex.io/rxjs/img/filter.png" alt=""></p>
 <p>Filter items emitted by the source Observable by only emitting those that satisfy a specified predicate.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks.filter(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> <span class="hljs-built_in">Math</span>.random() &gt; <span class="hljs-number">0.4</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line">clicks.filter(<span class="function"><span class="params">ev</span> =&gt;</span> <span class="built_in">Math</span>.random() &gt; <span class="number">0.4</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>find</li>
 </ul>
@@ -676,7 +666,7 @@
 <p><code>public map(project: function(value: T, index: number): R, thisArg: any): Observable</code></p>
 <p><img src="http://reactivex.io/rxjs/img/map.png" alt=""></p>
 <p>Applies a given <code>project</code> function to each value emitted by the source Observable, and emits the resulting values as an Observable.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks.map(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> ev.clientX)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line">clicks.map(<span class="function"><span class="params">ev</span> =&gt;</span> ev.clientX)</div></pre></td></tr></table></figure>
 <ul>
 <li>mapTo</li>
 </ul>
@@ -694,7 +684,7 @@
 </ul>
 <p><code>public max(comparer: Function): Observable</code></p>
 <p><img src="http://reactivex.io/rxjs/img/max.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>, <span class="hljs-number">9</span>, <span class="hljs-number">8</span>).max()</div><div class="line"></div><div class="line">interface Person &#123;</div><div class="line">  <span class="hljs-attr">name</span>: string</div><div class="line">  age: number</div><div class="line">&#125;</div><div class="line"></div><div class="line">Rx.Observable.of&lt;Person&gt;(</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">7</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">8</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Bar'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'For'</span> &#125;,</div><div class="line">)</div><div class="line">.max&lt;Person&gt;<span class="hljs-function">(<span class="hljs-params">(a, b</span>) =&gt;</span> a.age - b.age)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="number">5</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>).max()</div><div class="line"></div><div class="line">interface Person &#123;</div><div class="line">  <span class="attr">name</span>: string</div><div class="line">  age: number</div><div class="line">&#125;</div><div class="line"></div><div class="line">Rx.Observable.of&lt;Person&gt;(</div><div class="line">  &#123; <span class="attr">age</span>: <span class="number">7</span>, <span class="attr">name</span>: <span class="string">'Foo'</span> &#125;,</div><div class="line">  &#123; <span class="attr">age</span>: <span class="number">8</span>, <span class="attr">name</span>: <span class="string">'Bar'</span> &#125;,</div><div class="line">  &#123; <span class="attr">age</span>: <span class="number">0</span>, <span class="attr">name</span>: <span class="string">'For'</span> &#125;,</div><div class="line">)</div><div class="line">.max&lt;Person&gt;<span class="function">(<span class="params">(a, b</span>) =&gt;</span> a.age - b.age)</div></pre></td></tr></table></figure>
 <ul>
 <li>merge</li>
 </ul>
@@ -719,7 +709,7 @@
 <blockquote>
 <p>Map each value to an Observable, then flattn all of these inner Observable using mergeAll</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> letters = Rx.Observable.of(<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>)</div><div class="line">letters.mergeMap(<span class="hljs-function"><span class="hljs-params">letter</span> =&gt;</span> Rx.Observable.interval(<span class="hljs-number">1000</span>).map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> i+letter))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> letters = Rx.Observable.of(<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>)</div><div class="line">letters.mergeMap(<span class="function"><span class="params">letter</span> =&gt;</span> Rx.Observable.interval(<span class="number">1000</span>).map(<span class="function"><span class="params">i</span> =&gt;</span> i+letter))</div></pre></td></tr></table></figure>
 <ul>
 <li>mergeMapTo</li>
 </ul>
@@ -731,7 +721,7 @@
 </ul>
 <p><code>public mergeScan(accumulator: function(acc: R, value: T): Observable&lt;R&gt;, seed: *, concurrent: number): Observable&lt;R&gt;</code></p>
 <p>Applies an accumulator function over the source Observable where the accumulator function itself retunrs an Observable, then each intermediate Observable is merged into the output Obsevable.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> click$ = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">const</span> one$ = click$.mapTo(<span class="hljs-number">1</span>)</div><div class="line"><span class="hljs-keyword">const</span> seed = <span class="hljs-number">0</span></div><div class="line"><span class="hljs-keyword">const</span> count$ = one$.mergeScan(<span class="hljs-function">(<span class="hljs-params">acc, one</span>) =&gt;</span> Rx.Observable.of(acc + one), seed)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> click$ = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line"><span class="keyword">const</span> one$ = click$.mapTo(<span class="number">1</span>)</div><div class="line"><span class="keyword">const</span> seed = <span class="number">0</span></div><div class="line"><span class="keyword">const</span> count$ = one$.mergeScan(<span class="function">(<span class="params">acc, one</span>) =&gt;</span> Rx.Observable.of(acc + one), seed)</div></pre></td></tr></table></figure>
 <ul>
 <li>min</li>
 </ul>
@@ -773,7 +763,7 @@
 <blockquote>
 <p>Like map, but meant only for picking on eof the nested properties of every emitted object.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> clicks$ = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks$.pluck(<span class="hljs-string">'target'</span>, <span class="hljs-string">'tagName'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> clicks$ = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line">clicks$.pluck(<span class="string">'target'</span>, <span class="string">'tagName'</span>)</div></pre></td></tr></table></figure>
 <ul>
 <li>publish</li>
 </ul>
@@ -985,7 +975,7 @@
 <li>toPromise</li>
 </ul>
 <p><code>public toPromise(PromiseCtor: *): Promise&lt;T&gt;</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="hljs-number">42</span>).toPromise().then(<span class="hljs-built_in">console</span>.log)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="number">42</span>).toPromise().then(<span class="built_in">console</span>.log)</div></pre></td></tr></table></figure>
 <ul>
 <li>window</li>
 </ul>
@@ -995,7 +985,7 @@
 <blockquote>
 <p>It’s like buffer, but emits a nested Observable instead of an array.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">let</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">let</span> interval = Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line">clicks.window(interval)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">'click'</span>)</div><div class="line"><span class="keyword">let</span> interval = Rx.Observable.interval(<span class="number">1000</span>)</div><div class="line">clicks.window(interval)</div></pre></td></tr></table></figure>
 <ul>
 <li>windowCount</li>
 </ul>
@@ -1116,1282 +1106,7 @@
 
     </div>
 </div>
-</div>
-                
 
-
-
-
-<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <nav class="level">
-            <div class="level-item has-text-centered">
-                <div>
-                    
-                        <img class="image is-128x128 has-mb-6" src="/images/avatar.jpg" alt="Keith Chen">
-                    
-                    
-                    <p class="is-size-4 is-block">
-                        Keith Chen
-                    </p>
-                    
-                    
-                    <p class="is-size-6 is-block">
-                        FE Engineer on Blockchain
-                    </p>
-                    
-                    
-                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
-                        <i class="fas fa-map-marker-alt has-mr-7"></i>
-                        <span>30°17&#39;37N, 120°9&#39;41E</span>
-                    </p>
-                    
-                </div>
-            </div>
-        </nav>
-        <nav class="level is-mobile">
-            <div class="level-item has-text-centered is-marginless">
-                <div>
-                    <p class="heading">
-                        Posts
-                    </p>
-                    <p class="title has-text-weight-normal">
-                        311
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered is-marginless">
-                <div>
-                    <p class="heading">
-                        Categories
-                    </p>
-                    <p class="title has-text-weight-normal">
-                        7
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered is-marginless">
-                <div>
-                    <p class="heading">
-                        Tags
-                    </p>
-                    <p class="title has-text-weight-normal">
-                        95
-                    </p>
-                </div>
-            </div>
-        </nav>
-        <div class="level">
-            <a class="level-item button is-link is-rounded" href="https://github.com/keith-CY" target="_blank">
-                Follow</a>
-        </div>
-        
-        
-    </div>
-</div>
-    
-        
-    
-        
-
-<div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            Links
-        </h3>
-        <ul class="menu-list">
-        
-            <li>
-                <a class="level is-mobile" href="https://github.com/keith-CY" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">Keith CY</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">github.com</span>
-                    </span>
-                </a>
-            </li>
-        
-            <li>
-                <a class="level is-mobile" href="https://www.linkedin.com/in/宇-陈-644b61ba" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">Yu Chen</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">www.linkedin.com</span>
-                    </span>
-                </a>
-            </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-
-
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-            <h3 class="menu-label">
-                Categories
-            </h3>
-            <ul class="menu-list">
-            <li>
-        <a class="level is-marginless" href="/categories/Soup/">
-            <span class="level-start">
-                <span class="level-item">Soup</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/Uncategorized/">
-            <span class="level-start">
-                <span class="level-item">Uncategorized</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">2</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/github/">
-            <span class="level-start">
-                <span class="level-item">github</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">4</span>
-            </span>
-        </a><ul><li>
-        <a class="level is-marginless" href="/categories/github/note/">
-            <span class="level-start">
-                <span class="level-item">note</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li></ul></li><li>
-        <a class="level is-marginless" href="/categories/note/">
-            <span class="level-start">
-                <span class="level-item">note</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">141</span>
-            </span>
-        </a><ul><li>
-        <a class="level is-marginless" href="/categories/note/workNote/">
-            <span class="level-start">
-                <span class="level-item">workNote</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">19</span>
-            </span>
-        </a></li></ul></li><li>
-        <a class="level is-marginless" href="/categories/workNote/">
-            <span class="level-start">
-                <span class="level-item">workNote</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">5</span>
-            </span>
-        </a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            Tag Cloud
-        </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Chrome-Extensions/" style="font-size: 10px;">Chrome, Extensions</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
-    </div>
-</div>
-
-    
-    
-        <div class="column-right-shadow is-hidden-widescreen ">
-        
-            
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            Recent
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2020/01/06/crx-config/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
-                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
-                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-10T06:26:41.000Z">2019-10-10</time></div>
-                    <a href="/2019/10/10/Basic-components-in-nest-js/" class="has-link-black-ter is-size-6">Basic Components in nest.js</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
-                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-30T06:26:54.000Z">2019-08-30</time></div>
-                    <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="has-link-black-ter is-size-6">Methods of the String in JavaScript </a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-
-        
-            <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            Archives
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2020/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2020</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">5</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">12</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">18</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">31</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">19</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">14</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">15</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">9</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">6</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">16</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">30</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">43</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">25</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">24</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-        
-        </div>
-    
-</div>
-
-                
-
-
-
-
-<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            Recent
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2020/01/06/crx-config/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
-                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
-                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-10T06:26:41.000Z">2019-10-10</time></div>
-                    <a href="/2019/10/10/Basic-components-in-nest-js/" class="has-link-black-ter is-size-6">Basic Components in nest.js</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
-                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-30T06:26:54.000Z">2019-08-30</time></div>
-                    <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="has-link-black-ter is-size-6">Methods of the String in JavaScript </a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-
-    
-        <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            Archives
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2020/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2020</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">5</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">12</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">18</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">31</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">19</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">14</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">15</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">9</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">6</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">16</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">30</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">43</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">25</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">24</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-    
-    
-</div>
-
-            </div>
-        </div>
-    </section>
-    <footer class="footer">
-    <div class="container">
-        <div class="level">
-            <div class="level-start has-text-centered-mobile">
-                <a class="footer-logo is-block has-mb-6" href="/">
-                
-                    <img src="/images/logo.png" alt="Methods of Observable" height="28">
-                
-                </a>
-                <p class="is-size-7">
-                &copy; 2020 Chen Yu&nbsp;
-                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
-                
-                <br>
-                <span id="busuanzi_container_site_uv">
-                Visited by <span id="busuanzi_value_site_uv">0</span> users
-                </span>
-                
-                </p>
-            </div>
-            <div class="level-end">
-            
-            </div>
-        </div>
-    </div>
-</footer>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
 <script>moment.locale("en");</script>
@@ -2519,4 +1234,5 @@ document.addEventListener('DOMContentLoaded', function () {
 <link rel="stylesheet" href="/css/insight.css">
     
 </body>
+
 </html>

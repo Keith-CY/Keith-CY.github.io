@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html  lang="en">
+
 <head>
     <meta charset="utf-8">
 <title>Notes on Interactive Data Visualization for the Web - EzCook</title>
@@ -81,6 +82,7 @@
 <link rel="stylesheet" href="/css/style.css">
 
 </head>
+
 <body class="is-3-column">
     <nav class="navbar navbar-main">
     <div class="container">
@@ -102,16 +104,7 @@
                 href="/archives">Archives</a>
                 
                 <a class="navbar-item"
-                href="/categories">Categories</a>
-                
-                <a class="navbar-item"
-                href="/tags">Tags</a>
-                
-                <a class="navbar-item"
-                href="/about">About</a>
-                
-                <a class="navbar-item"
-                href="/resume">Resume</a>
+                href="/projects">Projects</a>
                 
             </div>
             
@@ -142,11 +135,8 @@
         </div>
     </div>
 </nav>
-    
-    <section class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+
+    <div class="card">
     
     <div class="card-content article ">
         
@@ -202,23 +192,23 @@
 <p>A scale’s <em>output range</em> is the range of possible output values, commonly used as display values in pixel units.</p>
 <h2 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h2><p>Normalization is the process of mapping a numeric value to a new value between 0 and 1, based on the possible minumum and maximum values.</p>
 <h2 id="Creating-a-Scale"><a href="#Creating-a-Scale" class="headerlink" title="Creating a Scale"></a>Creating a Scale</h2><p>D3’s linear scale function generator is accessed with <code>d3.scaleLiner()</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> scale = d3.scaleLinear()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scale = d3.scaleLinear()</div></pre></td></tr></table></figure>
 <p>Now <code>scale</code> is a function to which you can pass input values.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale(<span class="hljs-number">2.5</span>) <span class="hljs-comment">// return 2.5</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale(<span class="number">2.5</span>) <span class="comment">// return 2.5</span></div></pre></td></tr></table></figure>
 <p>Because we haven’t set a domain and a range yet, this function will map input to output on a <code>1:1</code> scale.</p>
 <p>We set the scale’s input domain to 100, 500 by passing those values to the <code>domain()</code> method as an array.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale.domain([<span class="hljs-number">100</span>, <span class="hljs-number">500</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale.domain([<span class="number">100</span>, <span class="number">500</span>])</div></pre></td></tr></table></figure>
 <p>Set the output range in similar fashion, with <code>range()</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale.range([<span class="hljs-number">10</span>, <span class="hljs-number">350</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale.range([<span class="number">10</span>, <span class="number">350</span>])</div></pre></td></tr></table></figure>
 <p>These steps can be chained:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> scale = d3.scaleLinear()</div><div class="line">  .domain([<span class="hljs-number">100</span>, <span class="hljs-number">500</span>])</div><div class="line">  .range([<span class="hljs-number">10</span>, <span class="hljs-number">350</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scale = d3.scaleLinear()</div><div class="line">  .domain([<span class="number">100</span>, <span class="number">500</span>])</div><div class="line">  .range([<span class="number">10</span>, <span class="number">350</span>])</div></pre></td></tr></table></figure>
 <p>Now it’s effective</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scale(<span class="hljs-number">100</span>) <span class="hljs-comment">// return 10</span></div><div class="line">scale(<span class="hljs-number">300</span>) <span class="hljs-comment">// return 180</span></div><div class="line">scale(<span class="hljs-number">500</span>) <span class="hljs-comment">// return 350</span></div></pre></td></tr></table></figure>
-<h3 id="d3-max-and-d3-min"><a href="#d3-max-and-d3-min" class="headerlink" title="d3.max() and d3.min()"></a>d3.max() and d3.min()</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> dataset = [</div><div class="line">  [<span class="hljs-number">5</span>, <span class="hljs-number">20</span>], [<span class="hljs-number">480</span>, <span class="hljs-number">90</span>], [<span class="hljs-number">250</span>, <span class="hljs-number">50</span>], [<span class="hljs-number">100</span>, <span class="hljs-number">33</span>], [<span class="hljs-number">330</span>, <span class="hljs-number">95</span>],</div><div class="line">  [<span class="hljs-number">410</span>, <span class="hljs-number">12</span>], [<span class="hljs-number">475</span>, <span class="hljs-number">44</span>], [<span class="hljs-number">25</span>, <span class="hljs-number">67</span>], [<span class="hljs-number">85</span>, <span class="hljs-number">21</span>], [<span class="hljs-number">220</span>, <span class="hljs-number">88</span>]</div><div class="line">]</div><div class="line"></div><div class="line">d3.max(dataset, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">return</span> d[<span class="hljs-number">0</span>]</div><div class="line">&#125;)</div><div class="line"><span class="hljs-comment">// this function will return the value 480</span></div></pre></td></tr></table></figure>
-<h3 id="Setting-Up-Dynamic-Scales"><a href="#Setting-Up-Dynamic-Scales" class="headerlink" title="Setting Up Dynamic Scales"></a>Setting Up Dynamic Scales</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> xScale = d3.scaleLinear()</div><div class="line">  .domain([<span class="hljs-number">0</span>, d3.max(dataset, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">    retrun d[<span class="hljs-number">0</span>]</div><div class="line">  &#125;)])</div><div class="line">  .range([<span class="hljs-number">0</span>, w])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scale(<span class="number">100</span>) <span class="comment">// return 10</span></div><div class="line">scale(<span class="number">300</span>) <span class="comment">// return 180</span></div><div class="line">scale(<span class="number">500</span>) <span class="comment">// return 350</span></div></pre></td></tr></table></figure>
+<h3 id="d3-max-and-d3-min"><a href="#d3-max-and-d3-min" class="headerlink" title="d3.max() and d3.min()"></a>d3.max() and d3.min()</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> dataset = [</div><div class="line">  [<span class="number">5</span>, <span class="number">20</span>], [<span class="number">480</span>, <span class="number">90</span>], [<span class="number">250</span>, <span class="number">50</span>], [<span class="number">100</span>, <span class="number">33</span>], [<span class="number">330</span>, <span class="number">95</span>],</div><div class="line">  [<span class="number">410</span>, <span class="number">12</span>], [<span class="number">475</span>, <span class="number">44</span>], [<span class="number">25</span>, <span class="number">67</span>], [<span class="number">85</span>, <span class="number">21</span>], [<span class="number">220</span>, <span class="number">88</span>]</div><div class="line">]</div><div class="line"></div><div class="line">d3.max(dataset, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> d[<span class="number">0</span>]</div><div class="line">&#125;)</div><div class="line"><span class="comment">// this function will return the value 480</span></div></pre></td></tr></table></figure>
+<h3 id="Setting-Up-Dynamic-Scales"><a href="#Setting-Up-Dynamic-Scales" class="headerlink" title="Setting Up Dynamic Scales"></a>Setting Up Dynamic Scales</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xScale = d3.scaleLinear()</div><div class="line">  .domain([<span class="number">0</span>, d3.max(dataset, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">    retrun d[<span class="number">0</span>]</div><div class="line">  &#125;)])</div><div class="line">  .range([<span class="number">0</span>, w])</div></pre></td></tr></table></figure>
 <p>Output range is set to 0 and w, the SVG’s width.</p>
 <p>Use the scale</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.attr(<span class="hljs-string">'x'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">return</span> xScale(d[<span class="hljs-number">0</span>])</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.attr(<span class="string">'x'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> xScale(d[<span class="number">0</span>])</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <blockquote>
 <p><code>d3.scaleLinear()</code> has several other handly methods that deserve a breif mention here:</p>
 </blockquote>
@@ -231,7 +221,7 @@
 </li>
 </ul>
 <p>To use any of these special methods, just tack them onto the chain in which you define the original scale function.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> scale = d3.scaleLinear().domain([<span class="hljs-number">0.123</span>, <span class="hljs-number">4.67</span>]).range([<span class="hljs-number">0</span>, <span class="hljs-number">500</span>]).nice()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> scale = d3.scaleLinear().domain([<span class="number">0.123</span>, <span class="number">4.67</span>]).range([<span class="number">0</span>, <span class="number">500</span>]).nice()</div></pre></td></tr></table></figure>
 <blockquote>
 <p>Other Scales</p>
 </blockquote>
@@ -253,12 +243,12 @@
 </ul>
 <h1 id="Axes"><a href="#Axes" class="headerlink" title="Axes"></a>Axes</h1><p>D3’s axes are actually <code>function</code> whose parameters you define. Unlike scales, when an axis function is called, it doesn’t return a value, but generates the visual elements of the axis, including lines, labels, and ticks.</p>
 <h2 id="Setting-Up-an-Axis"><a href="#Setting-Up-an-Axis" class="headerlink" title="Setting Up an Axis"></a>Setting Up an Axis</h2><p>There are four different axis function constructors, each one corresponding to a different orientation and placement of labels: <code>d3.axisTop</code>, <code>d3.axisBottom</code>, <code>d3.axisLeft</code>, <code>d3.axisRight</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xAxis = d3.axisBottom()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> xAxis = d3.axisBottom()</div></pre></td></tr></table></figure>
 <p>At a minimum, each axis also needs to be told on what <em>scale</em> to operate.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xAxis = d3.axisBottom().scale(xScale)</div><div class="line"><span class="hljs-comment">// or</span></div><div class="line"><span class="hljs-keyword">const</span> xAxis = d3.axisBottom(xScale)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> xAxis = d3.axisBottom().scale(xScale)</div><div class="line"><span class="comment">// or</span></div><div class="line"><span class="keyword">const</span> xAxis = d3.axisBottom(xScale)</div></pre></td></tr></table></figure>
 <p>Finally, to actually generate the axis and insert all those little lines and labels into our SVG, we must <code>call</code> teh <code>xAxis</code> function. This is similar to the scale functions, which we first configured by setting parameters, and then later <code>called</code> to put them into action.</p>
 <p>Here we put this code at the end of script, so the axis is generated after the other elements in the SVG, and therefore appears ‘on top’</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="hljs-string">'g'</span>).call(xAxis)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="string">'g'</span>).call(xAxis)</div></pre></td></tr></table></figure>
 <p>This is where things get a little funky. You might be wondering why this looks so different from our friendly scale functions. Here’s why: because an axis function actually draws something to the screen (by appending SVG elements to the DOM), we need to specify where in the DOM it should place new elements.</p>
 <p>In the svg, we <code>append()</code> a new <code>g</code> element to the end of the SVG. In SVG land, a <code>g</code> element is a <code>group</code> element. Group elements are invisible, unlike <code>line</code>, <code>rect</code>, and <code>circle</code> and they have no visual presence themselves.</p>
 <p>The <code>g</code> element can keep our code nice and be transformed.</p>
@@ -267,29 +257,29 @@
 <p>This this case, the selection is our new <code>g</code> group element. Although the <code>g</code> isn’t strictly necessary, we are using it because the axis function is about to generate lots of crazy lines and numbers, and it’s noce to contain all those element within a single group object.</p>
 <p><code>call()</code> hands off <code>g</code> to the <code>xAxis</code> function, so our axis is genrated within <code>g</code></p>
 <h3 id="Positioning-Axes"><a href="#Positioning-Axes" class="headerlink" title="Positioning Axes"></a>Positioning Axes</h3><p>By default, an axis is positioned using the range values of the specified scale. In our case, <code>xAxis</code> is referencing <code>xScale</code>, which has a range of [20, 460], because we applied 20 pixels of padding on all edge of the SVG. We can transform the axis by:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="hljs-string">'g'</span>)</div><div class="line">  .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'axis'</span>)</div><div class="line">  .attr(<span class="hljs-string">'tranform'</span>, <span class="hljs-string">'translate(0, '</span> + (h - padding) + <span class="hljs-string">')'</span>)</div><div class="line">  .call(xAxis)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="string">'g'</span>)</div><div class="line">  .attr(<span class="string">'class'</span>, <span class="string">'axis'</span>)</div><div class="line">  .attr(<span class="string">'tranform'</span>, <span class="string">'translate(0, '</span> + (h - padding) + <span class="string">')'</span>)</div><div class="line">  .call(xAxis)</div></pre></td></tr></table></figure>
 <p>In the end, we would like  our <code>g</code> to look like this in the DOM:</p>
-<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-tag">&lt;<span class="hljs-name">g</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"axis"</span> <span class="hljs-attr">transform</span>=<span class="hljs-string">"translate(0, 280)"</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">g</span> <span class="attr">class</span>=<span class="string">"axis"</span> <span class="attr">transform</span>=<span class="string">"translate(0, 280)"</span>&gt;</span></div></pre></td></tr></table></figure>
 <h3 id="CSS-styles-on-axis"><a href="#CSS-styles-on-axis" class="headerlink" title="CSS styles on axis"></a>CSS styles on axis</h3><p>The axes themselves are made up of <code>path</code>, <code>line</code>, <code>text</code> element, so those are the three elemnts to target in your CSS.</p>
 <p>The paths and lines can be styled together, with the same rules, and text gets its own rules around for font and font size.</p>
-<figure class="highlight css hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-selector-class">.axis</span> <span class="hljs-selector-tag">path</span>, <span class="hljs-selector-class">.axis</span> <span class="hljs-selector-tag">line</span> &#123;</div><div class="line">  <span class="hljs-attribute">stroke</span>: teal;</div><div class="line">  <span class="hljs-attribute">shape-rendering</span>: crispEdges;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-selector-class">.axis</span> <span class="hljs-selector-tag">text</span> &#123;</div><div class="line">  <span class="hljs-attribute">font-family</span>: Optima, Futura, sans-serif;</div><div class="line">  <span class="hljs-attribute">font-weight</span>: bold;</div><div class="line">  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">14px</span>;</div><div class="line">  <span class="hljs-attribute">fill</span>: teal;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.axis</span> <span class="selector-tag">path</span>, <span class="selector-class">.axis</span> <span class="selector-tag">line</span> &#123;</div><div class="line">  <span class="attribute">stroke</span>: teal;</div><div class="line">  <span class="attribute">shape-rendering</span>: crispEdges;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="selector-class">.axis</span> <span class="selector-tag">text</span> &#123;</div><div class="line">  <span class="attribute">font-family</span>: Optima, Futura, sans-serif;</div><div class="line">  <span class="attribute">font-weight</span>: bold;</div><div class="line">  <span class="attribute">font-size</span>: <span class="number">14px</span>;</div><div class="line">  <span class="attribute">fill</span>: teal;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>These CSS rules will override D3’s default styles.</p>
 <p>Note that when we use CSS rules to style SVG elements, only SVG attribute names – not regular CSS properties – should be used.</p>
 <h3 id="Check-for-Ticks"><a href="#Check-for-Ticks" class="headerlink" title="Check for Ticks"></a>Check for Ticks</h3><p>Some ticks spread disease, but D3’s ticks communicates information.</p>
 <p>You can customize all aspects of your axes, starting with the rough number of ticks, using <code>ticks()</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xAxis = d3.axisBottom().scale(xScale).ticks(<span class="hljs-number">6</span>) <span class="hljs-comment">// set rough # of ticks</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> xAxis = d3.axisBottom().scale(xScale).ticks(<span class="number">6</span>) <span class="comment">// set rough # of ticks</span></div></pre></td></tr></table></figure>
 <p>Specifying tick values manually</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xAixs = d3.axisBottom().scale(xScale).tickValues([<span class="hljs-number">0</span>, <span class="hljs-number">100</span>, <span class="hljs-number">250</span>, <span class="hljs-number">700</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> xAixs = d3.axisBottom().scale(xScale).tickValues([<span class="number">0</span>, <span class="number">100</span>, <span class="number">250</span>, <span class="number">700</span>])</div></pre></td></tr></table></figure>
 <h3 id="Formatting-Tick-labels"><a href="#Formatting-Tick-labels" class="headerlink" title="Formatting Tick labels"></a>Formatting Tick labels</h3><p>Enter <code>tickFormat()</code>, which enables you to specify how your numbers should be formatted.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> formatAsPercentage = d3.format(<span class="hljs-string">".1%"</span>)</div><div class="line">xAxis.tickFormat(formatAsPercentage)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> formatAsPercentage = d3.format(<span class="string">".1%"</span>)</div><div class="line">xAxis.tickFormat(formatAsPercentage)</div></pre></td></tr></table></figure>
 <h1 id="Updates-Transtions-and-Motion"><a href="#Updates-Transtions-and-Motion" class="headerlink" title="Updates, Transtions, and Motion"></a>Updates, Transtions, and Motion</h1><blockquote>
 <p>Transtion: .transition(), .duration()</p>
 <p>Motion: .delay(), .ease()</p>
 </blockquote>
 <p>The argument could be number or function</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.transition()</div><div class="line">.delay(<span class="hljs-function">(<span class="hljs-params">d, i</span>) =&gt;</span> <span class="hljs-number">100</span> * i)</div><div class="line">.duration(<span class="hljs-number">300</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.transition()</div><div class="line">.delay(<span class="function">(<span class="params">d, i</span>) =&gt;</span> <span class="number">100</span> * i)</div><div class="line">.duration(<span class="number">300</span>)</div></pre></td></tr></table></figure>
 <p>The default easing is <code>d3.easeCubicInOut</code>, which produces the gradual acceleration and deceleration.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.transition()</div><div class="line">.duration(<span class="hljs-number">3000</span>)</div><div class="line">.ease(d3.easeLinear)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.transition()</div><div class="line">.duration(<span class="number">3000</span>)</div><div class="line">.ease(d3.easeLinear)</div></pre></td></tr></table></figure>
 <ul>
 <li><p>d3.easeCircleIn</p>
 </li>
@@ -311,7 +301,7 @@
 </blockquote>
 <h3 id="Containing-Visual-Elements-With-Clipping-Paths"><a href="#Containing-Visual-Elements-With-Clipping-Paths" class="headerlink" title="Containing Visual Elements With Clipping Paths"></a>Containing Visual Elements With Clipping Paths</h3><p>SVG has support for <em>clipping paths</em>, which you might know as <em>masks</em> in many drawing tools.</p>
 <p>Much like <code>g</code>, <code>clipPath</code> has no visual presence of its own, but it contains visual elements.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;clipPath id=<span class="hljs-string">"chart-area"</span>&gt;</div><div class="line">  <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">rect</span> <span class="hljs-attr">x</span>=<span class="hljs-string">"30"</span> <span class="hljs-attr">y</span>=<span class="hljs-string">"30"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"410"</span> <span class="hljs-attr">height</span>=<span class="hljs-string">"240"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">rect</span>&gt;</span></span></div><div class="line">&lt;<span class="hljs-regexp">/clipPath&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;clipPath id=<span class="string">"chart-area"</span>&gt;</div><div class="line">  <span class="xml"><span class="tag">&lt;<span class="name">rect</span> <span class="attr">x</span>=<span class="string">"30"</span> <span class="attr">y</span>=<span class="string">"30"</span> <span class="attr">width</span>=<span class="string">"410"</span> <span class="attr">height</span>=<span class="string">"240"</span>&gt;</span><span class="tag">&lt;/<span class="name">rect</span>&gt;</span></span></div><div class="line">&lt;<span class="regexp">/clipPath&gt;</span></div></pre></td></tr></table></figure>
 <p>Note that outer <code>clipPath</code> element has been given an ID of <code>chart-area</code>. We can use that ID to reference it later. Within the <code>clipPath</code> is a <code>rect</code>, which will function as the mask.</p>
 <p>3 steps to using a clipping path:</p>
 <ol>
@@ -322,30 +312,30 @@
 <li><p>Add a reference to the <code>clipPath</code> form whatever elements you wish to be masked.</p>
 </li>
 </ol>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="hljs-string">'clipPath'</span>)</div><div class="line">  .attr(<span class="hljs-string">'id'</span>, <span class="hljs-string">'chart-area'</span>) <span class="hljs-comment">// assign an id</span></div><div class="line">  .append(<span class="hljs-string">'rect'</span>) <span class="hljs-comment">// within the clippath, create new rect</span></div><div class="line">  .attr(<span class="hljs-string">'x'</span>, padding)</div><div class="line">  .attr(<span class="hljs-string">'y'</span>, padding)</div><div class="line">  .attr(<span class="hljs-string">'width'</span>, w - padding * <span class="hljs-number">2</span>)</div><div class="line">  .attr(<span class="hljs-string">'height'</span>, h - padding * <span class="hljs-number">2</span>)</div><div class="line"></div><div class="line">svg.append(<span class="hljs-string">'g'</span>)</div><div class="line">  .attr(<span class="hljs-string">'id'</span>, <span class="hljs-string">'circles'</span>)</div><div class="line">  .attr(<span class="hljs-string">'clip-path'</span>, <span class="hljs-string">'url(#chart-area)'</span>)</div><div class="line">  .selectAll(<span class="hljs-string">'circle'</span>)</div><div class="line">  .data(dataset)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'circle'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="string">'clipPath'</span>)</div><div class="line">  .attr(<span class="string">'id'</span>, <span class="string">'chart-area'</span>) <span class="comment">// assign an id</span></div><div class="line">  .append(<span class="string">'rect'</span>) <span class="comment">// within the clippath, create new rect</span></div><div class="line">  .attr(<span class="string">'x'</span>, padding)</div><div class="line">  .attr(<span class="string">'y'</span>, padding)</div><div class="line">  .attr(<span class="string">'width'</span>, w - padding * <span class="number">2</span>)</div><div class="line">  .attr(<span class="string">'height'</span>, h - padding * <span class="number">2</span>)</div><div class="line"></div><div class="line">svg.append(<span class="string">'g'</span>)</div><div class="line">  .attr(<span class="string">'id'</span>, <span class="string">'circles'</span>)</div><div class="line">  .attr(<span class="string">'clip-path'</span>, <span class="string">'url(#chart-area)'</span>)</div><div class="line">  .selectAll(<span class="string">'circle'</span>)</div><div class="line">  .data(dataset)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="string">'circle'</span>)</div></pre></td></tr></table></figure>
 <h1 id="Interactivity"><a href="#Interactivity" class="headerlink" title="Interactivity"></a>Interactivity</h1><p>D3 allows you to bind event listener to more than one element at a time.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">svg.selectAll(<span class="hljs-string">'rect'</span>)</div><div class="line">  .data(dataset)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'rect'</span>)</div><div class="line">  ....</div><div class="line">  .on(<span class="hljs-string">'click'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="hljs-comment">// ...</span></div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">svg.selectAll(<span class="string">'rect'</span>)</div><div class="line">  .data(dataset)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="string">'rect'</span>)</div><div class="line">  ....</div><div class="line">  .on(<span class="string">'click'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
 <p>Within anonymous function , D3 automatically sets the context of <code>this</code>  so it references <code>current element upon which we are acting</code></p>
-<figure class="highlight css hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-selector-tag">svg</span> <span class="hljs-selector-tag">text</span> &#123;</div><div class="line">  <span class="hljs-attribute">pointer-event</span>: none;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">svg</span> <span class="selector-tag">text</span> &#123;</div><div class="line">  <span class="attribute">pointer-event</span>: none;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>or</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="hljs-string">'text'</span>).style(<span class="hljs-string">'pointer-event'</span>, <span class="hljs-string">'none'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="string">'text'</span>).style(<span class="string">'pointer-event'</span>, <span class="string">'none'</span>)</div></pre></td></tr></table></figure>
 <h3 id="Grouping-SVG-Element"><a href="#Grouping-SVG-Element" class="headerlink" title="Grouping SVG Element"></a>Grouping SVG Element</h3><p>Note that <code>g</code> group elements do not, by themselves, trigger any mouse events. The reason for this is that <code>g</code> elements have no pixels.</p>
 <p>You can still bind event listener to <code>g</code> elements, just keep in mind that the elements within that <code>g</code> will then behave as a group. If any of the enclosed elements are clicked or moused over, then the listener function will be activated.</p>
 <h3 id="Tooltips"><a href="#Tooltips" class="headerlink" title="Tooltips"></a>Tooltips</h3><p>In interactive visualizations, tooltips are small overlays that present data values. In many cases, it’s not necessary to label every individual data value in the default value, but that level of detail should still be accessible to users.</p>
-<h4 id="SVG-Element-Tooltips"><a href="#SVG-Element-Tooltips" class="headerlink" title="SVG Element Tooltips"></a>SVG Element Tooltips</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">.on(<span class="hljs-string">'mouseover'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">const</span> xPosition = <span class="hljs-built_in">parseFloat</span>(d3.select(<span class="hljs-keyword">this</span>)).attr(<span class="hljs-string">'x'</span>) + xScale.bandWidth()</div><div class="line">  <span class="hljs-keyword">const</span> yPosition = <span class="hljs-built_in">parseFloat</span>(d3.select(<span class="hljs-keyword">this</span>)).attr(<span class="hljs-string">'y'</span>) + <span class="hljs-number">14</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// create the tooltip label</span></div><div class="line"></div><div class="line">svg.append(<span class="hljs-string">'text'</span>)</div><div class="line">  .attr(<span class="hljs-string">'id'</span>, <span class="hljs-string">'tooltip'</span>)</div><div class="line">  .attr(<span class="hljs-string">'x'</span>, xPosition)</div><div class="line">  .attr(<span class="hljs-string">'y'</span>, yPosition)</div><div class="line">  .attr(<span class="hljs-string">'text-anchor'</span>, <span class="hljs-string">'middle'</span>)</div><div class="line">  .attr(<span class="hljs-string">'font-family'</span>, <span class="hljs-string">'sans-serif'</span>)</div><div class="line">  .attr(<span class="hljs-string">'font-size'</span>, <span class="hljs-string">'11px'</span>)</div><div class="line">  .attr(<span class="hljs-string">'font-weight'</span>, <span class="hljs-string">'bold'</span>)</div><div class="line">  .attr(<span class="hljs-string">'fill'</span>, <span class="hljs-string">'black'</span>)</div><div class="line">  .text(d)</div><div class="line"></div><div class="line">.on(<span class="hljs-string">'mouseout'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</div><div class="line">  d3.select(<span class="hljs-string">'#tooltip'</span>).remove()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h1 id="Using-Paths"><a href="#Using-Paths" class="headerlink" title="Using Paths"></a>Using Paths</h1><h3 id="Line-Charts"><a href="#Line-Charts" class="headerlink" title="Line Charts"></a>Line Charts</h3><h4 id="Scale-setup"><a href="#Scale-setup" class="headerlink" title="Scale setup"></a>Scale setup</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xScale = d3.scaleTime()</div><div class="line">  .domain([</div><div class="line">    d3.min(dataset, (d) =&gt; d.date),</div><div class="line">    d3.max(dataset, (d) =&gt; da.date)</div><div class="line">  ])</div><div class="line">  .range([<span class="hljs-number">0</span>, w])</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> yScale = d3.scaleLinear()</div><div class="line">  .domain([</div><div class="line">    <span class="hljs-number">0</span>,</div><div class="line">    d3.max(dataset, (d) =&gt; d.avarage)</div><div class="line">  ])</div><div class="line">  .range([h, <span class="hljs-number">0</span>])</div></pre></td></tr></table></figure>
+<h4 id="SVG-Element-Tooltips"><a href="#SVG-Element-Tooltips" class="headerlink" title="SVG Element Tooltips"></a>SVG Element Tooltips</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">.on(<span class="string">'mouseover'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> xPosition = <span class="built_in">parseFloat</span>(d3.select(<span class="keyword">this</span>)).attr(<span class="string">'x'</span>) + xScale.bandWidth()</div><div class="line">  <span class="keyword">const</span> yPosition = <span class="built_in">parseFloat</span>(d3.select(<span class="keyword">this</span>)).attr(<span class="string">'y'</span>) + <span class="number">14</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// create the tooltip label</span></div><div class="line"></div><div class="line">svg.append(<span class="string">'text'</span>)</div><div class="line">  .attr(<span class="string">'id'</span>, <span class="string">'tooltip'</span>)</div><div class="line">  .attr(<span class="string">'x'</span>, xPosition)</div><div class="line">  .attr(<span class="string">'y'</span>, yPosition)</div><div class="line">  .attr(<span class="string">'text-anchor'</span>, <span class="string">'middle'</span>)</div><div class="line">  .attr(<span class="string">'font-family'</span>, <span class="string">'sans-serif'</span>)</div><div class="line">  .attr(<span class="string">'font-size'</span>, <span class="string">'11px'</span>)</div><div class="line">  .attr(<span class="string">'font-weight'</span>, <span class="string">'bold'</span>)</div><div class="line">  .attr(<span class="string">'fill'</span>, <span class="string">'black'</span>)</div><div class="line">  .text(d)</div><div class="line"></div><div class="line">.on(<span class="string">'mouseout'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  d3.select(<span class="string">'#tooltip'</span>).remove()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="Using-Paths"><a href="#Using-Paths" class="headerlink" title="Using Paths"></a>Using Paths</h1><h3 id="Line-Charts"><a href="#Line-Charts" class="headerlink" title="Line Charts"></a>Line Charts</h3><h4 id="Scale-setup"><a href="#Scale-setup" class="headerlink" title="Scale setup"></a>Scale setup</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> xScale = d3.scaleTime()</div><div class="line">  .domain([</div><div class="line">    d3.min(dataset, (d) =&gt; d.date),</div><div class="line">    d3.max(dataset, (d) =&gt; da.date)</div><div class="line">  ])</div><div class="line">  .range([<span class="number">0</span>, w])</div><div class="line"></div><div class="line"><span class="keyword">const</span> yScale = d3.scaleLinear()</div><div class="line">  .domain([</div><div class="line">    <span class="number">0</span>,</div><div class="line">    d3.max(dataset, (d) =&gt; d.avarage)</div><div class="line">  ])</div><div class="line">  .range([h, <span class="number">0</span>])</div></pre></td></tr></table></figure>
 <p>Define a line generator</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> lineGen = d3.line()</div><div class="line">  .x(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> xScale(d.date))</div><div class="line">  .y(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> yScale(d.avarage))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> lineGen = d3.line()</div><div class="line">  .x(<span class="function"><span class="params">d</span> =&gt;</span> xScale(d.date))</div><div class="line">  .y(<span class="function"><span class="params">d</span> =&gt;</span> yScale(d.avarage))</div></pre></td></tr></table></figure>
 <p>The x and y accessors tell the line generator how to decide <code>where</code> to place each point on the line.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> svg = d3.select(<span class="hljs-string">'body'</span>)</div><div class="line">  .append(<span class="hljs-string">'svg'</span>)</div><div class="line">  .attr(<span class="hljs-string">'width'</span>, w)</div><div class="line">  .attr(<span class="hljs-string">'height'</span>, h)</div><div class="line"></div><div class="line">svg.append(<span class="hljs-string">'path'</span>)</div><div class="line">  .datum(dataset)</div><div class="line">  .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'line'</span>)</div><div class="line">  .attr(<span class="hljs-string">'d'</span>, lineGen)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> svg = d3.select(<span class="string">'body'</span>)</div><div class="line">  .append(<span class="string">'svg'</span>)</div><div class="line">  .attr(<span class="string">'width'</span>, w)</div><div class="line">  .attr(<span class="string">'height'</span>, h)</div><div class="line"></div><div class="line">svg.append(<span class="string">'path'</span>)</div><div class="line">  .datum(dataset)</div><div class="line">  .attr(<span class="string">'class'</span>, <span class="string">'line'</span>)</div><div class="line">  .attr(<span class="string">'d'</span>, lineGen)</div></pre></td></tr></table></figure>
 <p>Instead of using <code>data()</code> to bind each value in our <code>dataset</code> array to a different element, we use <code>datum()</code>, the method for binding a <em>single</em> data value to a single element. The entire <code>dataset</code> array is bound to the new <code>path</code> we just created.</p>
 <p>We set a <code>d</code> attribute, passing in our line generator function as an argument.</p>
 <p>Since the data has already been bound to the <code>path</code>, the line generator simply grabs taht data. plots the pointers as we specified, and draws a line connecting them.</p>
 <h3 id="Dealing-with-Missing-Data"><a href="#Dealing-with-Missing-Data" class="headerlink" title="Dealing with Missing Data"></a>Dealing with Missing Data</h3><p>Assume a -99.99 value is not a true measurement, namely one value is missed.</p>
 <p><code>defined()</code> is just an configuration method, like <code>x()</code> and <code>y()</code>. If the result of its anonymous function is true, then that data value is included, or the value is excluded.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> lineGen = d3.line()</div><div class="line">  .defined(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (d.avarage &gt; <span class="hljs-number">0</span>))</div><div class="line">  .x(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> x.date)</div><div class="line">  .y(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> x.avatarge)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> lineGen = d3.line()</div><div class="line">  .defined(<span class="function"><span class="params">d</span> =&gt;</span> (d.avarage &gt; <span class="number">0</span>))</div><div class="line">  .x(<span class="function"><span class="params">d</span> =&gt;</span> x.date)</div><div class="line">  .y(<span class="function"><span class="params">d</span> =&gt;</span> x.avatarge)</div></pre></td></tr></table></figure>
 <h3 id="Area-Charts"><a href="#Area-Charts" class="headerlink" title="Area Charts"></a>Area Charts</h3><p>Areas are not too different from lines. If a line is a series of connected (x, y) points, then an area is just that same line, plus a second such line (usually a flat baseline), with all the space in between filled in.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> area = d3.area()</div><div class="line">  .defined(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (d.avarage &gt; <span class="hljs-number">0</span>))</div><div class="line">  .x(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (xScale(d.date)))</div><div class="line">  .y0(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> (yScale.range()[<span class="hljs-number">0</span>]))</div><div class="line">  .y1(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> (yScale(d.avarge)))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> area = d3.area()</div><div class="line">  .defined(<span class="function"><span class="params">d</span> =&gt;</span> (d.avarage &gt; <span class="number">0</span>))</div><div class="line">  .x(<span class="function"><span class="params">d</span> =&gt;</span> (xScale(d.date)))</div><div class="line">  .y0(<span class="function"><span class="params">()</span> =&gt;</span> (yScale.range()[<span class="number">0</span>]))</div><div class="line">  .y1(<span class="function">(<span class="params">d</span>) =&gt;</span> (yScale(d.avarge)))</div></pre></td></tr></table></figure>
 <p><code>y0</code> represents the area’s baseline, which <code>y1</code> represents the top.</p>
 <h1 id="Selections"><a href="#Selections" class="headerlink" title="Selections"></a>Selections</h1><h3 id="A-Closer-Look-at-Selections"><a href="#A-Closer-Look-at-Selections" class="headerlink" title="A Closer Look at Selections"></a>A Closer Look at Selections</h3><p><img src="https://www.safaribooksonline.com/library/view/interactive-data-visualization/9781491921296/assets/dvw2_1201.png" alt=""></p>
 <p><code>d3.select(&#39;body&#39;)</code> returns a <code>Selection</code>, which consists of <code>_groups</code> and <code>_parents</code></p>
@@ -354,17 +344,17 @@
 <p>Let’s expand <code>body</code> and will see a lot of properties associated with <code>body</code>.</p>
 <p>Selections are just very special objects generated and interpreted by D3. You will never manipulate a selection yourself – don’t bother trying to reach int <code>_groups</code> – as that’s what all of D3’s selection methods are for.</p>
 <p><code>d3.select()</code> and <code>d3.selectAll()</code> operate at the page level, which means</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> allGroups = d3.selectAll(<span class="hljs-string">'g'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> allGroups = d3.selectAll(<span class="string">'g'</span>)</div></pre></td></tr></table></figure>
 <p>The <code>select()</code> and <code>selectAll()</code> statements create <em>new</em> selections, and hand those new selections off to the subsequent methods.</p>
 <p>To minimize the confusion from old and new selections, Mike Bostock recommends using an indentation convetion of four space when the selection is unchanged, but only two when a new selection is returned.</p>
 <p><code>select()</code> and <code>append()</code> are methods that return new selections, <code>attr()</code> does not, but merely relays whatever selection it just acted on.</p>
 <h3 id="Storing-Selections"><a href="#Storing-Selections" class="headerlink" title="Storing Selections"></a>Storing Selections</h3><p>Selections are immutable. All selection methods that affect which elements are selected (or their order) return a new selection rather tahn modifying the current selection.</p>
 <p>That is, once you make a selection, you can’t modify it. You can only make a new one, which could be a subset of the original, and overwrite it.</p>
-<h3 id="Enter-Merge-and-Exit"><a href="#Enter-Merge-and-Exit" class="headerlink" title="Enter, Merge and Exit"></a>Enter, Merge and Exit</h3><h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">d3.select(<span class="hljs-string">'body'</span>).selectAll(<span class="hljs-string">'p'</span>)</div><div class="line">  .data(dataset)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'p'</span>)</div><div class="line">  .text(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (<span class="hljs-string">'I can count up to '</span> + d))</div><div class="line">  .filter(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (d &gt; <span class="hljs-number">15</span>))</div><div class="line">  .style(<span class="hljs-string">'color'</span>, <span class="hljs-string">'red'</span>)</div></pre></td></tr></table></figure>
+<h3 id="Enter-Merge-and-Exit"><a href="#Enter-Merge-and-Exit" class="headerlink" title="Enter, Merge and Exit"></a>Enter, Merge and Exit</h3><h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">d3.select(<span class="string">'body'</span>).selectAll(<span class="string">'p'</span>)</div><div class="line">  .data(dataset)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="string">'p'</span>)</div><div class="line">  .text(<span class="function"><span class="params">d</span> =&gt;</span> (<span class="string">'I can count up to '</span> + d))</div><div class="line">  .filter(<span class="function"><span class="params">d</span> =&gt;</span> (d &gt; <span class="number">15</span>))</div><div class="line">  .style(<span class="string">'color'</span>, <span class="string">'red'</span>)</div></pre></td></tr></table></figure>
 <p><code>filter()</code> takes a selection and an anonymous function. If the function return <code>true</code> for a given element, then that element is included in the new selection returned by <code>filter()</code>.</p>
 <h3 id="Each"><a href="#Each" class="headerlink" title="Each"></a>Each</h3><p>The most common purpose of creating a selection is to ultimately to modify it in some way, such as by using <code>attr()</code> or <code>style()</code>. But it can be useful to define your own functions, espectially for custom calculation or modifications that will be repeated.</p>
 <p>We can use <code>each()</code> to run an arbitrary function once for each element in a selection. <code>each()</code> takes whatever selection it’s given and calls the specified function once for each item in the selection.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">selection.each(<span class="hljs-function">(<span class="hljs-params">d, i</span>) =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">selection.each(<span class="function">(<span class="params">d, i</span>) =&gt;</span> &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>Some serious points to note:</p>
 <ul>
 <li><p>Since the <code>d</code> and <code>i</code> arguments are specified in the function definition, D3 will populate them for you.</p>
@@ -398,27 +388,27 @@
 </ul>
 <h3 id="Pie-Layout"><a href="#Pie-Layout" class="headerlink" title="Pie Layout"></a>Pie Layout</h3><p><code>d3.pie()</code> might not be as delicious as it sounds, but it’s still worthy of your attention. It is typically used to create a doughnut or pie chart.</p>
 <p>Start with simple dataset</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> dataset = [ <span class="hljs-number">5</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">45</span>, <span class="hljs-number">6</span>, <span class="hljs-number">25</span> ]</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> dataset = [ <span class="number">5</span>, <span class="number">10</span>, <span class="number">20</span>, <span class="number">45</span>, <span class="number">6</span>, <span class="number">25</span> ]</div></pre></td></tr></table></figure>
 <p>Wd define a default pie layout</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> pie = d3.pie()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> pie = d3.pie()</div></pre></td></tr></table></figure>
 <p>Then, all that remains is to hand off our data to the new <code>pie()</code> function, as in <code>pie(dataset)</code>.</p>
 <p>The pie layout takes our simple array of numbers and generates an array of objects, one object for each value. Each of those objects now has a few new values – most important, <code>startAngle</code> and <code>endAngle</code>.</p>
 <p>To actually draw the wedges, we turn to <code>d3.arc()</code>, a handy built-in function for drawing arcs as SVG <code>path</code> elements.</p>
 <p>Arcs are defiend as custom functions, and they require inner and outer redius values.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> w = <span class="hljs-number">300</span></div><div class="line"><span class="hljs-keyword">const</span> h = <span class="hljs-number">300</span></div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> outerRadius = w / <span class="hljs-number">2</span></div><div class="line"><span class="hljs-keyword">const</span> innerRadius = <span class="hljs-number">0</span></div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> arc = d3.arc()</div><div class="line">  .innerRadius(innerRadius)</div><div class="line">  .outerRadius(outerRadius)</div></pre></td></tr></table></figure>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> svg = d3.select(<span class="hljs-string">'body'</span>)</div><div class="line">  .append(<span class="hljs-string">'svg'</span>)</div><div class="line">  .attr(<span class="hljs-string">'width'</span>, w)</div><div class="line">  .attr(<span class="hljs-string">'height'</span>, h)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> w = <span class="number">300</span></div><div class="line"><span class="keyword">const</span> h = <span class="number">300</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> outerRadius = w / <span class="number">2</span></div><div class="line"><span class="keyword">const</span> innerRadius = <span class="number">0</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> arc = d3.arc()</div><div class="line">  .innerRadius(innerRadius)</div><div class="line">  .outerRadius(outerRadius)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> svg = d3.select(<span class="string">'body'</span>)</div><div class="line">  .append(<span class="string">'svg'</span>)</div><div class="line">  .attr(<span class="string">'width'</span>, w)</div><div class="line">  .attr(<span class="string">'height'</span>, h)</div></pre></td></tr></table></figure>
 <p>Then we can create new groups for each incoming wedge, binding the pie-ified data to the new elements, and translating each group into the center of the chart, so the <code>path</code>s will appear in the right place</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// set up groups</span></div><div class="line"><span class="hljs-keyword">const</span> arcs = svg.selectAll(<span class="hljs-string">'g.arc'</span>)</div><div class="line">  .data(pie(dataset))</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'g'</span>)</div><div class="line">  .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'arc'</span>)</div><div class="line">  .attr(<span class="hljs-string">'transform'</span>, <span class="hljs-string">'translate('</span> + outerRadius + <span class="hljs-string">', '</span> + outerRadius + <span class="hljs-string">')'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// set up groups</span></div><div class="line"><span class="keyword">const</span> arcs = svg.selectAll(<span class="string">'g.arc'</span>)</div><div class="line">  .data(pie(dataset))</div><div class="line">  .enter()</div><div class="line">  .append(<span class="string">'g'</span>)</div><div class="line">  .attr(<span class="string">'class'</span>, <span class="string">'arc'</span>)</div><div class="line">  .attr(<span class="string">'transform'</span>, <span class="string">'translate('</span> + outerRadius + <span class="string">', '</span> + outerRadius + <span class="string">')'</span>)</div></pre></td></tr></table></figure>
 <p>Note that we’re saving a reference to each newly created <code>g</code> in a variable called <code>arcs</code></p>
 <p>Finally, within each new <code>g</code>, we append a <code>path</code>. A <code>path</code>‘s path description is defined in the <code>d</code> attribute. So we call the <code>arc</code> generator, which generates the path information based on the data already bound to this group.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// draw arc paths</span></div><div class="line">arcs.append(<span class="hljs-string">'path'</span>)</div><div class="line">  .attr(<span class="hljs-string">'fill'</span>, (d, i) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> colors(i)</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'d'</span>, arc)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// draw arc paths</span></div><div class="line">arcs.append(<span class="string">'path'</span>)</div><div class="line">  .attr(<span class="string">'fill'</span>, (d, i) =&gt; &#123;</div><div class="line">    <span class="keyword">return</span> colors(i)</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="string">'d'</span>, arc)</div></pre></td></tr></table></figure>
 <p><code>arc</code> is our path generator function.</p>
 <p>When a named function is specified as a parameter in this way, D3 automcatically passes in the datum and index values, without us having to write them out explicitly.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">.attr(<span class="hljs-string">'d'</span>, arc)</div><div class="line"></div><div class="line"><span class="hljs-comment">// equivalent</span></div><div class="line"></div><div class="line">.attr(<span class="hljs-string">'d'</span>, (d, i) =&gt; (arc(d, i)))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">.attr(<span class="string">'d'</span>, arc)</div><div class="line"></div><div class="line"><span class="comment">// equivalent</span></div><div class="line"></div><div class="line">.attr(<span class="string">'d'</span>, (d, i) =&gt; (arc(d, i)))</div></pre></td></tr></table></figure>
 <p>D3 has a number of handy ways to generate categorical colors</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> color = d3.scaleOrdinal(d3.schemeCategory10)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> color = d3.scaleOrdinal(d3.schemeCategory10)</div></pre></td></tr></table></figure>
 <p>Generate text labels for each wedge:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">arcs.append(<span class="hljs-string">'text'</span>)</div><div class="line">  .artr(<span class="hljs-string">'transform'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">'translate('</span> + arc.centroid(d) + <span class="hljs-string">')'</span></div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'text-anchor'</span>, <span class="hljs-string">'middle'</span>)</div><div class="line">  .text(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> &#123; <span class="hljs-keyword">return</span> d.value &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">arcs.append(<span class="string">'text'</span>)</div><div class="line">  .artr(<span class="string">'transform'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'translate('</span> + arc.centroid(d) + <span class="string">')'</span></div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="string">'text-anchor'</span>, <span class="string">'middle'</span>)</div><div class="line">  .text(<span class="function">(<span class="params">d</span>) =&gt;</span> &#123; <span class="keyword">return</span> d.value &#125;)</div></pre></td></tr></table></figure>
 <p>A <em>centroid</em> is the calculated center point of any shape, whether that shape is regular(like a square) or highly irregular(like an outline of the state of Maryland).</p>
 <p><code>arc.centroid()</code> is super-helpful function that calculates and returns the center point of any arc.</p>
 <blockquote>
@@ -427,18 +417,18 @@
 <h3 id="Stack-Layout"><a href="#Stack-Layout" class="headerlink" title="Stack Layout"></a>Stack Layout</h3><p><code>d3.stack()</code> converts two-dimentional data into ‘stacked’ data.</p>
 <p>It calculates a baseline value for each datum, so you can <code>stack</code> layers of data on top of one another.</p>
 <p>Start with some data</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> dataset = [</div><div class="line">  &#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">22</span> &#125;,</div><div class="line">true&#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">12</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">28</span> &#125;,</div><div class="line">true&#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">19</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">32</span> &#125;,</div><div class="line">true&#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">7</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">23</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">35</span> &#125;,</div><div class="line">true&#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">23</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">17</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">43</span> &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> dataset = [</div><div class="line">  &#123; <span class="attr">apples</span>: <span class="number">5</span>, <span class="attr">oranges</span>: <span class="number">10</span>, <span class="attr">grapes</span>: <span class="number">22</span> &#125;,</div><div class="line">true&#123; <span class="attr">apples</span>: <span class="number">4</span>, <span class="attr">oranges</span>: <span class="number">12</span>, <span class="attr">grapes</span>: <span class="number">28</span> &#125;,</div><div class="line">true&#123; <span class="attr">apples</span>: <span class="number">2</span>, <span class="attr">oranges</span>: <span class="number">19</span>, <span class="attr">grapes</span>: <span class="number">32</span> &#125;,</div><div class="line">true&#123; <span class="attr">apples</span>: <span class="number">7</span>, <span class="attr">oranges</span>: <span class="number">23</span>, <span class="attr">grapes</span>: <span class="number">35</span> &#125;,</div><div class="line">true&#123; <span class="attr">apples</span>: <span class="number">23</span>, <span class="attr">oranges</span>: <span class="number">17</span>, <span class="attr">grapes</span>: <span class="number">43</span> &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
 <p>The <code>dataset</code> is organized by <em>column</em>. The stack layout reconfigures the data to be organized by <em>categories</em>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Set up stack method</span></div><div class="line"><span class="hljs-keyword">const</span> stack = d3.stack().keys([<span class="hljs-string">'apples'</span>, <span class="hljs-string">'oranges'</span>, <span class="hljs-string">'grapes'</span>])</div><div class="line"></div><div class="line"><span class="hljs-comment">// Data, stacked</span></div><div class="line"><span class="hljs-keyword">const</span> series = stack(dataset)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Set up stack method</span></div><div class="line"><span class="keyword">const</span> stack = d3.stack().keys([<span class="string">'apples'</span>, <span class="string">'oranges'</span>, <span class="string">'grapes'</span>])</div><div class="line"></div><div class="line"><span class="comment">// Data, stacked</span></div><div class="line"><span class="keyword">const</span> series = stack(dataset)</div></pre></td></tr></table></figure>
 <p>Now <code>series</code> is an array with three values, each one itself an array corresponding to each categorical series: apples, oranges, and grapes(in that order because we specified as such in <code>keys()</code>)</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">//'series', the array formerly known as 'dataset'</span></div><div class="line">[</div><div class="line">true[ [ <span class="hljs-number">0</span>,  <span class="hljs-number">5</span>], [ <span class="hljs-number">0</span>,  <span class="hljs-number">4</span>], [ <span class="hljs-number">0</span>,  <span class="hljs-number">2</span>], [ <span class="hljs-number">0</span>,  <span class="hljs-number">7</span>], [ <span class="hljs-number">0</span>, <span class="hljs-number">23</span>] ],  <span class="hljs-comment">// apples</span></div><div class="line">true[ [ <span class="hljs-number">5</span>, <span class="hljs-number">15</span>], [ <span class="hljs-number">4</span>, <span class="hljs-number">16</span>], [ <span class="hljs-number">2</span>, <span class="hljs-number">21</span>], [ <span class="hljs-number">7</span>, <span class="hljs-number">30</span>], [<span class="hljs-number">23</span>, <span class="hljs-number">40</span>] ],  <span class="hljs-comment">// oranges</span></div><div class="line">true[ [<span class="hljs-number">15</span>, <span class="hljs-number">37</span>], [<span class="hljs-number">16</span>, <span class="hljs-number">44</span>], [<span class="hljs-number">21</span>, <span class="hljs-number">53</span>], [<span class="hljs-number">30</span>, <span class="hljs-number">65</span>], [<span class="hljs-number">40</span>, <span class="hljs-number">83</span>] ]   <span class="hljs-comment">// grapes</span></div><div class="line">]</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//'series', the array formerly known as 'dataset'</span></div><div class="line">[</div><div class="line">true[ [ <span class="number">0</span>,  <span class="number">5</span>], [ <span class="number">0</span>,  <span class="number">4</span>], [ <span class="number">0</span>,  <span class="number">2</span>], [ <span class="number">0</span>,  <span class="number">7</span>], [ <span class="number">0</span>, <span class="number">23</span>] ],  <span class="comment">// apples</span></div><div class="line">true[ [ <span class="number">5</span>, <span class="number">15</span>], [ <span class="number">4</span>, <span class="number">16</span>], [ <span class="number">2</span>, <span class="number">21</span>], [ <span class="number">7</span>, <span class="number">30</span>], [<span class="number">23</span>, <span class="number">40</span>] ],  <span class="comment">// oranges</span></div><div class="line">true[ [<span class="number">15</span>, <span class="number">37</span>], [<span class="number">16</span>, <span class="number">44</span>], [<span class="number">21</span>, <span class="number">53</span>], [<span class="number">30</span>, <span class="number">65</span>], [<span class="number">40</span>, <span class="number">83</span>] ]   <span class="comment">// grapes</span></div><div class="line">]</div></pre></td></tr></table></figure>
 <p>To stack element visually, now we can reference each data object’s baseline and top line values.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Add a group for each row of data</span></div><div class="line"><span class="hljs-keyword">const</span> groups = svg.selectAll(<span class="hljs-string">'g'</span>)</div><div class="line">  .data(series)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'g'</span>)</div><div class="line">  .style(<span class="hljs-string">'fill'</span>, (di, i) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> colors(i)</div><div class="line">  &#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// Add a rect for each data value</span></div><div class="line"><span class="hljs-keyword">const</span> rects = groups.selectAll(<span class="hljs-string">'rect'</span>)</div><div class="line">  .data(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> (d))</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'rect'</span>)</div><div class="line">  .attr(<span class="hljs-string">'x'</span>, (d, i) =&gt; &#123;</div><div class="line">    retrun xScale(i)</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'y'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> ySclae(d[<span class="hljs-number">0</span>])</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'height'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> yScale(d[<span class="hljs-number">1</span>]-d[<span class="hljs-number">0</span>])</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'width'</span>, xScale.bandWidth())</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Add a group for each row of data</span></div><div class="line"><span class="keyword">const</span> groups = svg.selectAll(<span class="string">'g'</span>)</div><div class="line">  .data(series)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="string">'g'</span>)</div><div class="line">  .style(<span class="string">'fill'</span>, (di, i) =&gt; &#123;</div><div class="line">    <span class="keyword">return</span> colors(i)</div><div class="line">  &#125;)</div><div class="line"></div><div class="line"><span class="comment">// Add a rect for each data value</span></div><div class="line"><span class="keyword">const</span> rects = groups.selectAll(<span class="string">'rect'</span>)</div><div class="line">  .data(<span class="function">(<span class="params">d</span>) =&gt;</span> (d))</div><div class="line">  .enter()</div><div class="line">  .append(<span class="string">'rect'</span>)</div><div class="line">  .attr(<span class="string">'x'</span>, (d, i) =&gt; &#123;</div><div class="line">    retrun xScale(i)</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="string">'y'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="keyword">return</span> ySclae(d[<span class="number">0</span>])</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="string">'height'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="keyword">return</span> yScale(d[<span class="number">1</span>]-d[<span class="number">0</span>])</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="string">'width'</span>, xScale.bandWidth())</div></pre></td></tr></table></figure>
 <p>Within each group, we select all the <code>rect</code>s and bind a subset of the data with this line</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.data(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> (d))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.data(<span class="function">(<span class="params">d</span>) =&gt;</span> (d))</div></pre></td></tr></table></figure>
 <h4 id="A-New-Order"><a href="#A-New-Order" class="headerlink" title="A New Order"></a>A New Order</h4><p>Unless otherwise specified, series will be stacked in the order specified in <code>keys()</code>.</p>
 <p>But you can use <code>order()</code> to specify an alternate sequence to be applied before all the stacked values are calculated.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> stack = d3.stack()</div><div class="line">  .keys([ <span class="hljs-string">'apples'</span>, <span class="hljs-string">'oranges'</span>, <span class="hljs-string">'grapes'</span> ])</div><div class="line">  .order(d3.stackOrderDesending)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> stack = d3.stack()</div><div class="line">  .keys([ <span class="string">'apples'</span>, <span class="string">'oranges'</span>, <span class="string">'grapes'</span> ])</div><div class="line">  .order(d3.stackOrderDesending)</div></pre></td></tr></table></figure>
 <ul>
 <li><p>d3.stackOrderNone</p>
 </li>
@@ -454,8 +444,8 @@
 <p>Force layouts are typically used with network data. In computer science, this kind of dataset is called a <code>graph</code>. A simple graph is a list of <code>node</code> and <code>edge</code>. The nodes are entities in the dataset, and the edges are the <code>connection</code>s between nodes. Some nodes will be connected by edges and others won’t.</p>
 <p>Nodea are commonly represented as circles and edges as lines.</p>
 <p>The physical metaphor here is of particles that repel each other, yet are also connected by strings.  The repelling forces push particles away from each other, preventing visual overlap, and the strings prevent them from just flying out into space, thereby keeping them on the screen where we can see them.</p>
-<h4 id="Preparing-the-network-data"><a href="#Preparing-the-network-data" class="headerlink" title="Preparing the network data"></a>Preparing the network data</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> dataset = &#123;</div><div class="line">true<span class="hljs-attr">nodes</span>: [</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Adam"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Bob"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Carrie"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Donovan"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Edward"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Felicity"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"George"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Hannah"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Iris"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Jerry"</span> &#125;</div><div class="line">true],</div><div class="line">true<span class="hljs-attr">edges</span>: [</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">1</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">2</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">3</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">4</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">5</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">5</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">5</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">4</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">8</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">9</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">6</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">7</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">7</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">8</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">8</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">9</span> &#125;</div><div class="line">true]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h4 id="Defining-the-Force-Simulation"><a href="#Defining-the-Force-Simulation" class="headerlink" title="Defining the Force Simulation"></a>Defining the Force Simulation</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Initialize a simple force layout, using the nodes and edges in dataset</span></div><div class="line"><span class="hljs-keyword">const</span> layout = d3.forceSimulation(dataset.nodes)</div><div class="line">  .force(<span class="hljs-string">'charge'</span>, d3.forceManyBody())</div><div class="line">  .force(<span class="hljs-string">'link'</span>, d3.forceLink(dataset.edges))</div><div class="line">  .force(<span class="hljs-string">'center'</span>, d3.forceCenter().x(w/<span class="hljs-number">2</span>).y(h/<span class="hljs-number">2</span>))</div></pre></td></tr></table></figure>
+<h4 id="Preparing-the-network-data"><a href="#Preparing-the-network-data" class="headerlink" title="Preparing the network data"></a>Preparing the network data</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> dataset = &#123;</div><div class="line">true<span class="attr">nodes</span>: [</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"Adam"</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"Bob"</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"Carrie"</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"Donovan"</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"Edward"</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"Felicity"</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"George"</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"Hannah"</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"Iris"</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">"Jerry"</span> &#125;</div><div class="line">true],</div><div class="line">true<span class="attr">edges</span>: [</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">0</span>, <span class="attr">target</span>: <span class="number">1</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">0</span>, <span class="attr">target</span>: <span class="number">2</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">0</span>, <span class="attr">target</span>: <span class="number">3</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">0</span>, <span class="attr">target</span>: <span class="number">4</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">1</span>, <span class="attr">target</span>: <span class="number">5</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">2</span>, <span class="attr">target</span>: <span class="number">5</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">2</span>, <span class="attr">target</span>: <span class="number">5</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">3</span>, <span class="attr">target</span>: <span class="number">4</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">5</span>, <span class="attr">target</span>: <span class="number">8</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">5</span>, <span class="attr">target</span>: <span class="number">9</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">6</span>, <span class="attr">target</span>: <span class="number">7</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">7</span>, <span class="attr">target</span>: <span class="number">8</span> &#125;,</div><div class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">8</span>, <span class="attr">target</span>: <span class="number">9</span> &#125;</div><div class="line">true]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h4 id="Defining-the-Force-Simulation"><a href="#Defining-the-Force-Simulation" class="headerlink" title="Defining the Force Simulation"></a>Defining the Force Simulation</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Initialize a simple force layout, using the nodes and edges in dataset</span></div><div class="line"><span class="keyword">const</span> layout = d3.forceSimulation(dataset.nodes)</div><div class="line">  .force(<span class="string">'charge'</span>, d3.forceManyBody())</div><div class="line">  .force(<span class="string">'link'</span>, d3.forceLink(dataset.edges))</div><div class="line">  .force(<span class="string">'center'</span>, d3.forceCenter().x(w/<span class="number">2</span>).y(h/<span class="number">2</span>))</div></pre></td></tr></table></figure>
 <p>Call <code>d3.forceSimulation()</code> and pass in a reference to the nodes. This will generate a new simulator and automatically start running it, but without any forces applied, it won’t be very interesting.</p>
 <p>To create force, call <code>force()</code> as many times as you like, each time specifying an arbitrary name for each force(in case you want to reference it later) and the name of a force function.</p>
 <ul>
@@ -468,20 +458,20 @@
 </ul>
 <h4 id="Creating-the-Visual-Elements"><a href="#Creating-the-Visual-Elements" class="headerlink" title="Creating the Visual Elements"></a>Creating the Visual Elements</h4><p>After defining our force simulation, we proceed to generate visual elements.</p>
 <p>First we create a line for each edge:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Create edges as lines</span></div><div class="line"><span class="hljs-keyword">const</span> edges = svg.selectAll(<span class="hljs-string">'line'</span>)</div><div class="line">  .data(dataset.edges)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'line'</span>)</div><div class="line">  .style(<span class="hljs-string">'stroke'</span>, <span class="hljs-string">'#ccc'</span>)</div><div class="line">  .style(<span class="hljs-string">'stroke-width'</span>, <span class="hljs-number">1</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Create edges as lines</span></div><div class="line"><span class="keyword">const</span> edges = svg.selectAll(<span class="string">'line'</span>)</div><div class="line">  .data(dataset.edges)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="string">'line'</span>)</div><div class="line">  .style(<span class="string">'stroke'</span>, <span class="string">'#ccc'</span>)</div><div class="line">  .style(<span class="string">'stroke-width'</span>, <span class="number">1</span>)</div></pre></td></tr></table></figure>
 <p>Then create a circle for each node:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> nodes = svg.selectAll(<span class="hljs-string">'circle'</span>)</div><div class="line">  .data(dataset.nodes)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'circle'</span>)</div><div class="line">  .attr(<span class="hljs-string">'r'</span>, <span class="hljs-number">10</span>)</div><div class="line">  .style(<span class="hljs-string">'fill'</span>, (d, i) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> colors(i)</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> nodes = svg.selectAll(<span class="string">'circle'</span>)</div><div class="line">  .data(dataset.nodes)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="string">'circle'</span>)</div><div class="line">  .attr(<span class="string">'r'</span>, <span class="number">10</span>)</div><div class="line">  .style(<span class="string">'fill'</span>, (d, i) =&gt; &#123;</div><div class="line">    <span class="keyword">return</span> colors(i)</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
 <p>Add simple tooltip:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Add a simple tooltip</span></div><div class="line"></div><div class="line">nodes.append(<span class="hljs-string">'title'</span>)</div><div class="line">  .text(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> &#123;</div><div class="line">    <span class="hljs-keyword">return</span> d.name</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Add a simple tooltip</span></div><div class="line"></div><div class="line">nodes.append(<span class="string">'title'</span>)</div><div class="line">  .text(<span class="function">(<span class="params">d</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">return</span> d.name</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
 <h4 id="Updating-Visuals-Over-Time"><a href="#Updating-Visuals-Over-Time" class="headerlink" title="Updating Visuals Over Time"></a>Updating Visuals Over Time</h4><p>D3’s force simulation ‘ticks’ forward through time, just like every other physics simulation. With each tick, the simulation adjusts the position values for each node and edge according to the rules we specified when the layout was first initialized. To see this progress visually, we need to update the associated elements – the lines and circles – on every tick.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Every time the simulation 'ticks', this will be called</span></div><div class="line">force.on(<span class="hljs-string">'tick'</span>, () =&gt; &#123;</div><div class="line">  edges.attr(<span class="hljs-string">'x1'</span>, d =&gt; (d.source.x))</div><div class="line">    .attr(<span class="hljs-string">'y1'</span>, d =&gt; (d.source.y))</div><div class="line">    .attr(<span class="hljs-string">'x2'</span>, d =&gt; (d.target.x))</div><div class="line">    .attr(<span class="hljs-string">'y2'</span>, d =&gt; (d.target.y))</div><div class="line"></div><div class="line">  nodes.attr(<span class="hljs-string">'cx'</span>, d =&gt; (d.x))</div><div class="line">    .attr(<span class="hljs-string">'cy'</span>, d =&gt; (d.y))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Every time the simulation 'ticks', this will be called</span></div><div class="line">force.on(<span class="string">'tick'</span>, () =&gt; &#123;</div><div class="line">  edges.attr(<span class="string">'x1'</span>, d =&gt; (d.source.x))</div><div class="line">    .attr(<span class="string">'y1'</span>, d =&gt; (d.source.y))</div><div class="line">    .attr(<span class="string">'x2'</span>, d =&gt; (d.target.x))</div><div class="line">    .attr(<span class="string">'y2'</span>, d =&gt; (d.target.y))</div><div class="line"></div><div class="line">  nodes.attr(<span class="string">'cx'</span>, d =&gt; (d.x))</div><div class="line">    .attr(<span class="string">'cy'</span>, d =&gt; (d.y))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>This tells D3, ‘Ok, every time you tick, take the new (x, y) values for each line and circle and update them in the DOM’</p>
 <p>Here the (x, y) are calculated and appeded by D3.</p>
 <h4 id="Draggable-Nodes"><a href="#Draggable-Nodes" class="headerlink" title="Draggable Nodes"></a>Draggable Nodes</h4><p>Add the <code>call()</code> statement to our <code>Nodes</code>:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.cal(d3.drag()</div><div class="line">  .on(<span class="hljs-string">'start'</span>, dragStarted)</div><div class="line">  .on(<span class="hljs-string">'drag'</span>, dragging)</div><div class="line">  .on(<span class="hljs-string">'end'</span>, dragEnded))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.cal(d3.drag()</div><div class="line">  .on(<span class="string">'start'</span>, dragStarted)</div><div class="line">  .on(<span class="string">'drag'</span>, dragging)</div><div class="line">  .on(<span class="string">'end'</span>, dragEnded))</div></pre></td></tr></table></figure>
 <p>This bit code ‘calls’ the <code>d3.drag()</code> method on each node.</p>
 <p><code>d3.drag()</code>, in turn, sets event listeners for the three drag-related events, and specifies functions to trigger whenever one of those events occurs.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dragStarted</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (!d3.event.active) force.alphaTarget(<span class="hljs-number">0.3</span>).restart()</div><div class="line">  d.fx = d.x</div><div class="line">  d.fy = d.y</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dragging</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  d.fx = d3.event.x</div><div class="line">  d.fy = d3.event.y</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dragEnded</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (!d3.event.active) force.alphaTarget(<span class="hljs-number">0</span>)</div><div class="line">  d.fx = <span class="hljs-literal">null</span></div><div class="line">  d.fy = <span class="hljs-literal">null</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">dragStarted</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!d3.event.active) force.alphaTarget(<span class="number">0.3</span>).restart()</div><div class="line">  d.fx = d.x</div><div class="line">  d.fy = d.y</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">dragging</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">  d.fx = d3.event.x</div><div class="line">  d.fy = d3.event.y</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">dragEnded</span> (<span class="params">d</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!d3.event.active) force.alphaTarget(<span class="number">0</span>)</div><div class="line">  d.fx = <span class="literal">null</span></div><div class="line">  d.fy = <span class="literal">null</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h1 id="Geomapping"><a href="#Geomapping" class="headerlink" title="Geomapping"></a>Geomapping</h1><p>…</p>
 
         </div>
@@ -564,1282 +554,7 @@
 
     </div>
 </div>
-</div>
-                
 
-
-
-
-<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <nav class="level">
-            <div class="level-item has-text-centered">
-                <div>
-                    
-                        <img class="image is-128x128 has-mb-6" src="/images/avatar.jpg" alt="Keith Chen">
-                    
-                    
-                    <p class="is-size-4 is-block">
-                        Keith Chen
-                    </p>
-                    
-                    
-                    <p class="is-size-6 is-block">
-                        FE Engineer on Blockchain
-                    </p>
-                    
-                    
-                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
-                        <i class="fas fa-map-marker-alt has-mr-7"></i>
-                        <span>30°17&#39;37N, 120°9&#39;41E</span>
-                    </p>
-                    
-                </div>
-            </div>
-        </nav>
-        <nav class="level is-mobile">
-            <div class="level-item has-text-centered is-marginless">
-                <div>
-                    <p class="heading">
-                        Posts
-                    </p>
-                    <p class="title has-text-weight-normal">
-                        311
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered is-marginless">
-                <div>
-                    <p class="heading">
-                        Categories
-                    </p>
-                    <p class="title has-text-weight-normal">
-                        7
-                    </p>
-                </div>
-            </div>
-            <div class="level-item has-text-centered is-marginless">
-                <div>
-                    <p class="heading">
-                        Tags
-                    </p>
-                    <p class="title has-text-weight-normal">
-                        95
-                    </p>
-                </div>
-            </div>
-        </nav>
-        <div class="level">
-            <a class="level-item button is-link is-rounded" href="https://github.com/keith-CY" target="_blank">
-                Follow</a>
-        </div>
-        
-        
-    </div>
-</div>
-    
-        
-    
-        
-
-<div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            Links
-        </h3>
-        <ul class="menu-list">
-        
-            <li>
-                <a class="level is-mobile" href="https://github.com/keith-CY" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">Keith CY</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">github.com</span>
-                    </span>
-                </a>
-            </li>
-        
-            <li>
-                <a class="level is-mobile" href="https://www.linkedin.com/in/宇-陈-644b61ba" target="_blank">
-                    <span class="level-left">
-                        <span class="level-item">Yu Chen</span>
-                    </span>
-                    <span class="level-right">
-                        <span class="level-item tag">www.linkedin.com</span>
-                    </span>
-                </a>
-            </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-
-
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-            <h3 class="menu-label">
-                Categories
-            </h3>
-            <ul class="menu-list">
-            <li>
-        <a class="level is-marginless" href="/categories/Soup/">
-            <span class="level-start">
-                <span class="level-item">Soup</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/Uncategorized/">
-            <span class="level-start">
-                <span class="level-item">Uncategorized</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">2</span>
-            </span>
-        </a></li><li>
-        <a class="level is-marginless" href="/categories/github/">
-            <span class="level-start">
-                <span class="level-item">github</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">4</span>
-            </span>
-        </a><ul><li>
-        <a class="level is-marginless" href="/categories/github/note/">
-            <span class="level-start">
-                <span class="level-item">note</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">1</span>
-            </span>
-        </a></li></ul></li><li>
-        <a class="level is-marginless" href="/categories/note/">
-            <span class="level-start">
-                <span class="level-item">note</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">141</span>
-            </span>
-        </a><ul><li>
-        <a class="level is-marginless" href="/categories/note/workNote/">
-            <span class="level-start">
-                <span class="level-item">workNote</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">19</span>
-            </span>
-        </a></li></ul></li><li>
-        <a class="level is-marginless" href="/categories/workNote/">
-            <span class="level-start">
-                <span class="level-item">workNote</span>
-            </span>
-            <span class="level-end">
-                <span class="level-item tag">5</span>
-            </span>
-        </a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            Tag Cloud
-        </h3>
-        <a href="/tags/AJAX/" style="font-size: 10.91px;">AJAX</a> <a href="/tags/BOOTSTRAP/" style="font-size: 10px;">BOOTSTRAP</a> <a href="/tags/Bash/" style="font-size: 11.82px;">Bash</a> <a href="/tags/BlockChain/" style="font-size: 10px;">BlockChain</a> <a href="/tags/Blockchain/" style="font-size: 10px;">Blockchain</a> <a href="/tags/CORS/" style="font-size: 10px;">CORS</a> <a href="/tags/CSS/" style="font-size: 10.91px;">CSS</a> <a href="/tags/CSS3/" style="font-size: 20px;">CSS3</a> <a href="/tags/Chrome-Extensions/" style="font-size: 10px;">Chrome, Extensions</a> <a href="/tags/Closure/" style="font-size: 10px;">Closure</a> <a href="/tags/CommonJS/" style="font-size: 10px;">CommonJS</a> <a href="/tags/Contract-Ethereum-Web3/" style="font-size: 10px;">Contract, Ethereum, Web3</a> <a href="/tags/Contract-Solidity/" style="font-size: 10px;">Contract, Solidity</a> <a href="/tags/D3-Example/" style="font-size: 10px;">D3, Example</a> <a href="/tags/DAPP-Solidity/" style="font-size: 10px;">DAPP, Solidity</a> <a href="/tags/DApp-Solidity/" style="font-size: 10px;">DApp, Solidity</a> <a href="/tags/DOM/" style="font-size: 12.73px;">DOM</a> <a href="/tags/DevTools/" style="font-size: 10px;">DevTools</a> <a href="/tags/Drizzle-Ethereum-BlockChain/" style="font-size: 10px;">Drizzle, Ethereum, BlockChain</a> <a href="/tags/ES6/" style="font-size: 10.91px;">ES6</a> <a href="/tags/ESLint/" style="font-size: 10px;">ESLint</a> <a href="/tags/ETH-Wallet/" style="font-size: 10px;">ETH, Wallet</a> <a href="/tags/Economics/" style="font-size: 10px;">Economics</a> <a href="/tags/Elixir-Phoenix-SCSS/" style="font-size: 10px;">Elixir, Phoenix, SCSS</a> <a href="/tags/Erlang-Elixir-GenServer/" style="font-size: 10px;">Erlang, Elixir, GenServer</a> <a href="/tags/Ethereum/" style="font-size: 10px;">Ethereum</a> <a href="/tags/Ethereum-IPFS/" style="font-size: 10px;">Ethereum, IPFS</a> <a href="/tags/FP/" style="font-size: 10px;">FP</a> <a href="/tags/Git/" style="font-size: 10px;">Git</a> <a href="/tags/GitHub-Workflow/" style="font-size: 10px;">GitHub, Workflow</a> <a href="/tags/Go-Http-Web/" style="font-size: 10px;">Go, Http, Web</a> <a href="/tags/GraphQL-Apollo-TypeScript/" style="font-size: 10px;">GraphQL, Apollo, TypeScript</a> <a href="/tags/Gulp/" style="font-size: 11.82px;">Gulp</a> <a href="/tags/HTML5/" style="font-size: 15.45px;">HTML5</a> <a href="/tags/HTTP2-Node/" style="font-size: 10px;">HTTP2, Node</a> <a href="/tags/Html-Picture/" style="font-size: 10px;">Html, Picture</a> <a href="/tags/Immutable/" style="font-size: 10px;">Immutable</a> <a href="/tags/Int8Array/" style="font-size: 10px;">Int8Array</a> <a href="/tags/JSON-RPC/" style="font-size: 10px;">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 19.09px;">Javascript</a> <a href="/tags/Koa/" style="font-size: 10.91px;">Koa</a> <a href="/tags/Koa-NPM-Package/" style="font-size: 10px;">Koa, NPM, Package</a> <a href="/tags/MDL/" style="font-size: 16.36px;">MDL</a> <a href="/tags/Material-Design/" style="font-size: 17.27px;">Material Design</a> <a href="/tags/Mock-JavaScript/" style="font-size: 10px;">Mock, JavaScript</a> <a href="/tags/MySQL/" style="font-size: 10px;">MySQL</a> <a href="/tags/NODE/" style="font-size: 13.64px;">NODE</a> <a href="/tags/NPM/" style="font-size: 10.91px;">NPM</a> <a href="/tags/Nginx/" style="font-size: 10px;">Nginx</a> <a href="/tags/Nock/" style="font-size: 10px;">Nock</a> <a href="/tags/Node-CLI/" style="font-size: 10.91px;">Node, CLI</a> <a href="/tags/Node-Fastify/" style="font-size: 10.91px;">Node, Fastify</a> <a href="/tags/Node-Graphql-Koa/" style="font-size: 10px;">Node, Graphql, Koa</a> <a href="/tags/Node-js/" style="font-size: 10.91px;">Node.js</a> <a href="/tags/Node-js-Nest-js/" style="font-size: 10px;">Node.js, Nest.js</a> <a href="/tags/Phoenix-Elixir-Ecto/" style="font-size: 10px;">Phoenix, Elixir, Ecto</a> <a href="/tags/Promise/" style="font-size: 11.82px;">Promise</a> <a href="/tags/Protobuf/" style="font-size: 10px;">Protobuf</a> <a href="/tags/Pug-HTML/" style="font-size: 10px;">Pug, HTML</a> <a href="/tags/React/" style="font-size: 18.18px;">React</a> <a href="/tags/React-Docker/" style="font-size: 10px;">React, Docker</a> <a href="/tags/React-Router-Code-splitting/" style="font-size: 10px;">React, Router, Code-splitting</a> <a href="/tags/React-Native/" style="font-size: 10px;">React-Native</a> <a href="/tags/React-Redux/" style="font-size: 10px;">React-Redux</a> <a href="/tags/React-Router/" style="font-size: 10.91px;">React-Router</a> <a href="/tags/Redux/" style="font-size: 14.55px;">Redux</a> <a href="/tags/RegExp/" style="font-size: 10px;">RegExp</a> <a href="/tags/Ruby-Rails/" style="font-size: 10px;">Ruby, Rails</a> <a href="/tags/Ruby-Rails-RoR-Mina/" style="font-size: 10px;">Ruby, Rails, RoR, Mina</a> <a href="/tags/Rust-Rocket/" style="font-size: 10px;">Rust, Rocket</a> <a href="/tags/RxJS/" style="font-size: 10px;">RxJS</a> <a href="/tags/Smart-Contract-Web3/" style="font-size: 10px;">Smart Contract, Web3</a> <a href="/tags/Solidity/" style="font-size: 12.73px;">Solidity</a> <a href="/tags/Solidity-Error-Handling/" style="font-size: 10px;">Solidity, Error Handling</a> <a href="/tags/Solidity-Public-External/" style="font-size: 10px;">Solidity, Public, External</a> <a href="/tags/Solidity-Smart-Contract/" style="font-size: 10px;">Solidity, Smart Contract</a> <a href="/tags/Thunk/" style="font-size: 10.91px;">Thunk</a> <a href="/tags/Trick/" style="font-size: 11.82px;">Trick</a> <a href="/tags/Web/" style="font-size: 10px;">Web</a> <a href="/tags/Webpack/" style="font-size: 10px;">Webpack</a> <a href="/tags/Webpack-DLL/" style="font-size: 10px;">Webpack, DLL</a> <a href="/tags/automatic/" style="font-size: 10px;">automatic</a> <a href="/tags/babel/" style="font-size: 10px;">babel</a> <a href="/tags/babel-polyfill/" style="font-size: 10px;">babel-polyfill</a> <a href="/tags/blockchain-bitcoin-bip/" style="font-size: 10.91px;">blockchain, bitcoin, bip</a> <a href="/tags/commandline/" style="font-size: 10px;">commandline</a> <a href="/tags/github/" style="font-size: 10.91px;">github</a> <a href="/tags/jQuery/" style="font-size: 10px;">jQuery</a> <a href="/tags/lecture-yc/" style="font-size: 10px;">lecture, yc</a> <a href="/tags/precache/" style="font-size: 10px;">precache</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/webpack/" style="font-size: 17.27px;">webpack</a> <a href="/tags/webpack2/" style="font-size: 11.82px;">webpack2</a> <a href="/tags/测试/" style="font-size: 11.82px;">测试</a>
-    </div>
-</div>
-
-    
-    
-        <div class="column-right-shadow is-hidden-widescreen ">
-        
-            
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            Recent
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2020/01/06/crx-config/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
-                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
-                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-10T06:26:41.000Z">2019-10-10</time></div>
-                    <a href="/2019/10/10/Basic-components-in-nest-js/" class="has-link-black-ter is-size-6">Basic Components in nest.js</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
-                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-30T06:26:54.000Z">2019-08-30</time></div>
-                    <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="has-link-black-ter is-size-6">Methods of the String in JavaScript </a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-
-        
-            <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            Archives
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2020/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2020</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">5</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">12</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">18</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">31</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">19</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">14</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">15</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">9</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">6</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">16</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">30</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">43</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">25</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">24</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-        
-        </div>
-    
-</div>
-
-                
-
-
-
-
-<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
-    
-        
-<div class="card widget">
-    <div class="card-content">
-        <h3 class="menu-label">
-            Recent
-        </h3>
-        
-        <article class="media">
-            
-            <a href="/2020/01/06/crx-config/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Crx-Config">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-05T17:10:11.000Z">2020-01-06</time></div>
-                    <a href="/2020/01/06/crx-config/" class="has-link-black-ter is-size-6">Crx-Config</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/12/03/Introduction-to-MACD/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/macd-indicator.png" alt="Introduction to MACD">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-12-02T17:43:39.000Z">2019-12-03</time></div>
-                    <a href="/2019/12/03/Introduction-to-MACD/" class="has-link-black-ter is-size-6">Introduction to MACD</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/10/10/Basic-components-in-nest-js/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/nestjs_components.png" alt="Basic Components in nest.js">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-10-10T06:26:41.000Z">2019-10-10</time></div>
-                    <a href="/2019/10/10/Basic-components-in-nest-js/" class="has-link-black-ter is-size-6">Basic Components in nest.js</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time></div>
-                    <a href="/2019/09/16/Snippet-of-GitHub-Actions/" class="has-link-black-ter is-size-6">Snippet of GitHub Actions</a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
-            <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Methods of the String in JavaScript ">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-30T06:26:54.000Z">2019-08-30</time></div>
-                    <a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" class="has-link-black-ter is-size-6">Methods of the String in JavaScript </a>
-                    <p class="is-size-7 is-uppercase">
-                        
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-    </div>
-</div>
-
-    
-        <div class="card widget">
-    <div class="card-content">
-        <div class="menu">
-        <h3 class="menu-label">
-            Archives
-        </h3>
-        <ul class="menu-list">
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2020/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2020</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2019/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2019</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">5</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">4</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2018/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2018</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">12</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">18</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">31</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">19</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">14</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">15</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/04/">
-                <span class="level-start">
-                    <span class="level-item">April 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">9</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/03/">
-                <span class="level-start">
-                    <span class="level-item">March 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/02/">
-                <span class="level-start">
-                    <span class="level-item">February 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">6</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2017/01/">
-                <span class="level-start">
-                    <span class="level-item">January 2017</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">3</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/12/">
-                <span class="level-start">
-                    <span class="level-item">December 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/11/">
-                <span class="level-start">
-                    <span class="level-item">November 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">2</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/10/">
-                <span class="level-start">
-                    <span class="level-item">October 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">1</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/09/">
-                <span class="level-start">
-                    <span class="level-item">September 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">16</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/08/">
-                <span class="level-start">
-                    <span class="level-item">August 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">30</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/07/">
-                <span class="level-start">
-                    <span class="level-item">July 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">43</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/06/">
-                <span class="level-start">
-                    <span class="level-item">June 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">25</span>
-                </span>
-            </a>
-        </li>
-        
-        <li>
-            <a class="level is-marginless" href="/archives/2016/05/">
-                <span class="level-start">
-                    <span class="level-item">May 2016</span>
-                </span>
-                <span class="level-end">
-                    <span class="level-item tag">24</span>
-                </span>
-            </a>
-        </li>
-        
-        </ul>
-        </div>
-    </div>
-</div>
-    
-    
-</div>
-
-            </div>
-        </div>
-    </section>
-    <footer class="footer">
-    <div class="container">
-        <div class="level">
-            <div class="level-start has-text-centered-mobile">
-                <a class="footer-logo is-block has-mb-6" href="/">
-                
-                    <img src="/images/logo.png" alt="Notes on Interactive Data Visualization for the Web" height="28">
-                
-                </a>
-                <p class="is-size-7">
-                &copy; 2020 Chen Yu&nbsp;
-                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
-                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
-                
-                <br>
-                <span id="busuanzi_container_site_uv">
-                Visited by <span id="busuanzi_value_site_uv">0</span> users
-                </span>
-                
-                </p>
-            </div>
-            <div class="level-end">
-            
-            </div>
-        </div>
-    </div>
-</footer>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
 <script>moment.locale("en");</script>
@@ -1967,4 +682,5 @@ document.addEventListener('DOMContentLoaded', function () {
 <link rel="stylesheet" href="/css/insight.css">
     
 </body>
+
 </html>

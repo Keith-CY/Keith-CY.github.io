@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html  lang="en">
+
+<head>
+    <meta charset="utf-8">
+<title>Inspect-protobuf.js - EzCook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+
+
+
+
+<link rel="icon" href="/images/logo.png">
+
+<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+
+
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-136207372-1');
+</script>
+
+
+
+
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+
+
+    
+
+
+
+    
+        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+
+
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.png" alt="Inspect-protobuf.js" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/projects">Projects</a>
+                
+                <a class="navbar-item"
+                href="https://wiki.digit-map.de/">Digit Map</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
+                        
+                        <i class="fas fa-envelope"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="Search" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/gallery/thumbnails/pbjs.png" alt="Inspect-protobuf.js">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-01-17T03:30:02.000Z">2020-01-17</time>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    6 minutes read (About 927 words)
+                </span>
+                
+                
+                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
+                    <i class="far fa-eye"></i>
+                    <span id="busuanzi_value_page_pv">0</span> visits
+                </span>
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                Inspect-protobuf.js
+            
+        </h1>
+        <div class="content">
+            <p><a href="https://ezcook.de/2017/12/22/Start-in-Protobuf/" target="_blank" rel="noopener">Start in protobuf</a></p>
+<p><strong>Protocol Buffers</strong> are a language-neutral, platform-neutral, extensible way of serializing structured data.</p>
+<h2 id="Basic-usage"><a href="#Basic-usage" class="headerlink" title="Basic usage"></a>Basic usage</h2><h3 id="Using-JSON-descriptors"><a href="#Using-JSON-descriptors" class="headerlink" title="Using JSON descriptors"></a>Using JSON descriptors</h3><figure class="highlight hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// awesome.json</div><div class="line">&#123;</div><div class="line">  "nested": &#123;</div><div class="line">    "AwesomeMessage": &#123;</div><div class="line">      "fields": &#123;</div><div class="line">        "awesomeField": &#123;</div><div class="line">          "type": "string",</div><div class="line">          "id": 1</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>Type(T)</th>
+<th>Extends</th>
+<th>Type-specific properties</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Root</td>
+<td>Namespace</td>
+<td>nested</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>Namespace</td>
+<td>fields</td>
+</tr>
+<tr>
+<td>Enum</td>
+<td>ReflectionObject</td>
+<td>values</td>
+</tr>
+<tr>
+<td>Field</td>
+<td>ReflectionObject</td>
+<td>rule, type, id</td>
+</tr>
+<tr>
+<td>MapField</td>
+<td>Field</td>
+<td>keyType</td>
+</tr>
+<tr>
+<td>OneOf</td>
+<td>ReflectionObject</td>
+<td>oneof(array of field names)</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>Namespace</td>
+<td>methods</td>
+</tr>
+<tr>
+<td>Method</td>
+<td>ReflectionObject</td>
+<td>type, requestType,responseType,requestStream,responseStream</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>T#fromJSON(name, json)</code> creates the responsive reflection object JSON descriptor</li>
+<li><code>T#toJSON()</code> creates a JSON descriptor from the responsive reflection object</li>
+</ul>
+<h3 id="Using-reflection-only"><a href="#Using-reflection-only" class="headerlink" title="Using reflection only"></a>Using reflection only</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> Root = protobuf.Root</div><div class="line"><span class="hljs-keyword">const</span> Type = protobuf.Type</div><div class="line"><span class="hljs-keyword">const</span> Field = protobuf.Field</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> AwesomeMessage = <span class="hljs-keyword">new</span> Type(<span class="hljs-string">'AwesomeMessage'</span>).add(<span class="hljs-keyword">new</span> Field(<span class="hljs-string">'awesomeField'</span>, <span class="hljs-number">1</span>, <span class="hljs-string">'string'</span>))</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> root = <span class="hljs-keyword">new</span> Root().define(<span class="hljs-string">'awesomepackage'</span>).add(AwesomeMessage)</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="Inspect-the-protobuf-js"><a href="#Inspect-the-protobuf-js" class="headerlink" title="Inspect the protobuf.js"></a>Inspect the protobuf.js</h2><blockquote>
+<p>The code snippets following have been converted into class-style.</p>
+</blockquote>
+<h3 id="Protobuf-ReflectionObject"><a href="#Protobuf-ReflectionObject" class="headerlink" title="Protobuf ReflectionObject"></a>Protobuf ReflectionObject</h3><p>Located at <code>src/object.js</code></p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">let</span> Root</div><div class="line"></div><div class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReflectionObject</span> </span>&#123;</div><div class="line">  name: string <span class="hljs-comment">// unique name within its namespace</span></div><div class="line">  options: object</div><div class="line">  parent: string | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span> <span class="hljs-comment">// parent namespace</span></div><div class="line">  resolved: boolean = <span class="hljs-literal">false</span> <span class="hljs-comment">// whether already resolved or not</span></div><div class="line">  comment: string | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span> <span class="hljs-comment">// comment text, if any</span></div><div class="line">  filename: string | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span> <span class="hljs-comment">// defining file name</span></div><div class="line"></div><div class="line">  <span class="hljs-keyword">constructor</span>(name: string, options: object) &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (!isString(name)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'name must be a string'</span>)</div><div class="line">    <span class="hljs-keyword">this</span>.name = name</div><div class="line">    <span class="hljs-keyword">if</span> (!isObject(options)) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'options must be an object'</span>)</div><div class="line">    <span class="hljs-keyword">this</span>.options = options</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @property root</div><div class="line">   * @description Reference to the root namespace</div><div class="line">   */</div><div class="line">  root: &#123;</div><div class="line">    get() &#123;</div><div class="line">      <span class="hljs-keyword">let</span> ptr = <span class="hljs-keyword">this</span>;</div><div class="line">      <span class="hljs-keyword">while</span>(ptr.parent !== <span class="hljs-literal">null</span>) &#123;</div><div class="line">        ptr = ptr.parent</div><div class="line">      &#125;</div><div class="line">      <span class="hljs-keyword">return</span> ptr</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @property fullName</div><div class="line">   * @description full name including leading dot.</div><div class="line">   */</div><div class="line">  fullName:&#123;</div><div class="line">    get() &#123;</div><div class="line">      <span class="hljs-keyword">let</span> path = [<span class="hljs-keyword">this</span>.name]</div><div class="line">      <span class="hljs-keyword">let</span> ptr = <span class="hljs-keyword">this</span>.parent</div><div class="line">      <span class="hljs-keyword">while</span>(ptr) &#123;</div><div class="line">        path.unshift(ptr.name)</div><div class="line">        ptr = ptr.parent</div><div class="line">      &#125;</div><div class="line">      <span class="hljs-keyword">return</span> path.join(<span class="hljs-string">'.'</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @method toJSON</div><div class="line">   * @description Converts this reflection object to its descriptor representation</div><div class="line">   */</div><div class="line">  toJSON() &#123;</div><div class="line">    <span class="hljs-keyword">throw</span> <span class="hljs-built_in">Error</span>() <span class="hljs-comment">// not implemented, shouldn't happen</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @method onAdd</div><div class="line">   * @description called when this object is added to a parent</div><div class="line">   */</div><div class="line">  onAdd(parent) &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.parent &amp;&amp; <span class="hljs-keyword">this</span>.parent !== parent) &#123;</div><div class="line">      <span class="hljs-keyword">this</span>.parent.remove(<span class="hljs-keyword">this</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">this</span>.parent = parent</div><div class="line">    <span class="hljs-keyword">this</span>.resolved = <span class="hljs-literal">false</span></div><div class="line">    <span class="hljs-keyword">let</span> root = parent.root</div><div class="line">    <span class="hljs-keyword">if</span> (root <span class="hljs-keyword">instanceof</span> Root) &#123;</div><div class="line">      root._handleAdd(<span class="hljs-keyword">this</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @method onRemove</div><div class="line">   * @description called when this object is removed from a parent</div><div class="line">   */</div><div class="line">  onRemove(parent) &#123;</div><div class="line">    <span class="hljs-keyword">let</span> root = parent.root</div><div class="line">    <span class="hljs-keyword">if</span> (root <span class="hljs-keyword">instanceof</span> Root) &#123;</div><div class="line">      root._handleRemove(<span class="hljs-keyword">this</span>)</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">this</span>.parent = <span class="hljs-literal">null</span></div><div class="line">    <span class="hljs-keyword">this</span>.resolved = <span class="hljs-literal">false</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @method resolve</div><div class="line">   * @description resovles this objects type references</div><div class="line">   */</div><div class="line">  resolve() &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.resolved) &#123;</div><div class="line">      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.root <span class="hljs-keyword">instanceof</span> Root) &#123;</div><div class="line">      <span class="hljs-keyword">this</span>.resolved = <span class="hljs-literal">true</span></div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @method getOption</div><div class="line">   * @description gets an option value</div><div class="line">   */</div><div class="line">  getOption(name) &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.options) &#123;</div><div class="line">      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.options[name]</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @method set an option</div><div class="line">   */</div><div class="line">  setOption(name, value, ifNotSet) &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (!ifNotSet || !<span class="hljs-keyword">this</span>.options || <span class="hljs-keyword">this</span>.options[name]===<span class="hljs-literal">undefined</span>) &#123;</div><div class="line">      (<span class="hljs-keyword">this</span>.options || <span class="hljs-keyword">this</span>.options = &#123;&#125;)[name] = valeu</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  setOptions(options, ifNotSet) &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (options) &#123;</div><div class="line">      <span class="hljs-built_in">Object</span>.keys(options).forEach(<span class="hljs-function"><span class="hljs-params">name</span> =&gt;</span> &#123;</div><div class="line">        <span class="hljs-keyword">this</span>.setOption(name, options[name], ifNotSet)</div><div class="line">      &#125;)</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  toString() &#123;</div><div class="line">    <span class="hljs-keyword">const</span> className = <span class="hljs-keyword">this</span>.constructor.className</div><div class="line">    <span class="hljs-keyword">const</span> fullName = <span class="hljs-keyword">this</span>.fullName</div><div class="line">    <span class="hljs-keyword">if</span> (fullName.length) &#123;</div><div class="line">      <span class="hljs-keyword">return</span> className + <span class="hljs-string">' '</span> + fullName</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">return</span> className</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @description set up cyclic dependencies(called in index-light)</div><div class="line">   */</div><div class="line">  _configure = (Root_) &#123;</div><div class="line">    Root = Root_</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Protobuf-Namespace"><a href="#Protobuf-Namespace" class="headerlink" title="Protobuf Namespace"></a>Protobuf Namespace</h3><p>Located at <code>src/namespace.js</code></p>
+<figure class="highlight js hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">let</span> Type, Service, Enum</div><div class="line"></div><div class="line"><span class="hljs-comment">/**</span></div><div class="line"> * @function arrayToJSON</div><div class="line"> * @description convert an array of reflection objects to JSON</div><div class="line"> */</div><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">arrayToJSON</span>(<span class="hljs-params">array, toJSONOptions</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (!(array &amp;&amp; array.length)) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span></div><div class="line">  &#125;</div><div class="line">  <span class="hljs-keyword">let</span> obj = &#123;&#125;</div><div class="line">  array.forEach(<span class="hljs-function"><span class="hljs-params">reflection</span> =&gt;</span> &#123;</div><div class="line">    obj[reflection.name] = reflection.toJSON(toJSONOptions)</div><div class="line">  &#125;)</div><div class="line">  <span class="hljs-keyword">return</span> obj</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">clearCache</span>(<span class="hljs-params">namepsace: Namespace</span>) </span>&#123;</div><div class="line">  namespace._nestedArray = <span class="hljs-literal">null</span></div><div class="line">  <span class="hljs-keyword">return</span> namespace</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Namespace</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ReflectionObject</span> </span>&#123;</div><div class="line">  nested: boolean = <span class="hljs-literal">undefined</span> <span class="hljs-comment">// nested objects by name</span></div><div class="line">  _nestedArray: ReflectionObject[] | <span class="hljs-literal">null</span> = <span class="hljs-literal">null</span> <span class="hljs-comment">// cached nested objects as an array</span></div><div class="line"></div><div class="line">  nestedArray:&#123;</div><div class="line">    get() &#123;</div><div class="line">      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._nestedArray || (<span class="hljs-keyword">this</span>._nestedArray = util.toArray(<span class="hljs-keyword">this</span>.nested))</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-keyword">static</span> arrayToJSON = arrayToJSON</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @mehtod fromJSON</div><div class="line">   * @description construct a namespace from JSON</div><div class="line">   */</div><div class="line">  <span class="hljs-keyword">static</span> fromJSON(name, json) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Namespace(name, json.options).addJSON(json.nested)</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @mehtod isReservedId</div><div class="line">   * @description test if the specified id is reserved</div><div class="line">   */</div><div class="line">  <span class="hljs-keyword">static</span> isReservedId(reserved, id) &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (reserved) &#123;</div><div class="line">      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; reserved.length; ++i) &#123;</div><div class="line">        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> reserved[i] !== <span class="hljs-string">'string'</span> &amp;&amp; reserved[i][<span class="hljs-number">0</span>] &lt;= id &amp;&amp; reserved[i][<span class="hljs-number">1</span>] &gt; id) &#123;</div><div class="line">          <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span></div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @method isReservedName</div><div class="line">   * @description test if the specified name is reserved</div><div class="line">   */</div><div class="line">  isReservedName(reserved, name) &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (reserved) &#123;</div><div class="line">      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; reserved.length; ++i) &#123;</div><div class="line">        <span class="hljs-keyword">if</span> (reserved[i] === name) &#123;</div><div class="line">          <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span></div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-keyword">constructor</span>(name, options) &#123;</div><div class="line">    <span class="hljs-keyword">super</span>(name, options)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @method toJSON</div><div class="line">   * @description convert this namespace to a namespace descriptor</div><div class="line">   */</div><div class="line">  <span class="hljs-keyword">static</span> toJSON(toJSONOptions) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> util.toObject([</div><div class="line">      <span class="hljs-string">'options'</span>: <span class="hljs-keyword">this</span>.options,</div><div class="line">      <span class="hljs-string">'nested'</span>: arrayToJSON(<span class="hljs-keyword">this</span>.nestedArray, toJSONOptions)</div><div class="line">    ])</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @method addJSON</div><div class="line">   * @description Add nested objects to this namespace from nested object descriptors</div><div class="line">   */</div><div class="line">  addJSON(nestedJSON) &#123;</div><div class="line">    <span class="hljs-keyword">const</span> ns = <span class="hljs-keyword">this</span></div><div class="line">    <span class="hljs-keyword">if</span> (nestedJSON) &#123;</div><div class="line">      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> names = <span class="hljs-built_in">Object</span>.keys(nestedJSON), i = <span class="hljs-number">0</span>, nested; i&lt; names.length; ++i) &#123;</div><div class="line">          nested = nestedJSON[names[i]]</div><div class="line">          ns.add(</div><div class="line">            (nested.fields !== <span class="hljs-literal">undefined</span> ? Type.fromJSON : nested.values !== <span class="hljs-literal">undefined</span> ? Enum.fromJSON : nested.methods !== <span class="hljs-literal">undefined</span> ? Service.fromJSON:nested.id !== <span class="hljs-literal">undefined</span> ? Field.fromJSON : Namespace.fromJSON)(names[i], nested)</div><div class="line">          )</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  get(name) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.nested &amp;&amp; <span class="hljs-keyword">this</span>.nested[name] || <span class="hljs-literal">null</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  getEnum(name) &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.nested &amp;&amp; <span class="hljs-keyword">this</span>.nested[name] <span class="hljs-keyword">instanceof</span> Enum) &#123;</div><div class="line">      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.nested[name].value</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`no such enum: <span class="hljs-subst">$&#123;name&#125;</span>`</span>)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * @mehtod add</div><div class="line">   * @description add a nested object to this namespace</div><div class="line">   */</div><div class="line">  add(object) &#123;</div><div class="line">    <span class="hljs-keyword">if</span> (!(object <span class="hljs-keyword">instanceof</span> Field &amp;&amp; object.extend !== <span class="hljs-literal">undefined</span> || object <span class="hljs-keyword">instanceof</span> Type || object <span class="hljs-keyword">instanceof</span> Enum || object <span class="hljs-keyword">instanceof</span> Servce || object <span class="hljs-keyword">instanceof</span> Namespace)) &#123;</div><div class="line">      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'object must be a valid nested object'</span>)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.nested)&#123;</div><div class="line">      <span class="hljs-keyword">this</span>.nested = &#123;&#125;</div><div class="line">    &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">      <span class="hljs-keyword">let</span> prev = <span class="hljs-keyword">this</span>.get(object.name)</div><div class="line">      <span class="hljs-keyword">if</span> (prev) &#123;</div><div class="line">        <span class="hljs-keyword">if</span> (prev <span class="hljs-keyword">instanceof</span> Namespace &amp;&amp; object <span class="hljs-keyword">instanceof</span> Namespace &amp;&amp; !(prev <span class="hljs-keyword">instanceof</span> Type || prev <span class="hljs-keyword">instanceof</span> Service)) &#123;</div><div class="line">          <span class="hljs-keyword">let</span> nested = prev.nestedArray</div><div class="line">          <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; nested.length; ++i) &#123;</div><div class="line">            object.add(nested[i])</div><div class="line">          &#125;</div><div class="line">          <span class="hljs-keyword">this</span>.remove(prev)</div><div class="line">          <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>.nested) &#123;</div><div class="line">            <span class="hljs-keyword">this</span>.nested = &#123;&#125;</div><div class="line">          &#125;</div><div class="line">          object.setOptions(prev.options, <span class="hljs-literal">true</span>)</div><div class="line">        &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">          <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">`duplicate name <span class="hljs-subst">$&#123;object.name&#125;</span> in <span class="hljs-subst">$&#123;<span class="hljs-keyword">this</span>&#125;</span>`</span>)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="hljs-keyword">this</span>.nested[object.name] = object</div><div class="line">    object.onAdd(<span class="hljs-keyword">this</span>)</div><div class="line">    <span class="hljs-keyword">return</span> clearCache(<span class="hljs-keyword">this</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Protobuf-Root"><a href="#Protobuf-Root" class="headerlink" title="Protobuf Root"></a>Protobuf Root</h3><h3 id="Protobuf-Enum"><a href="#Protobuf-Enum" class="headerlink" title="Protobuf Enum"></a>Protobuf Enum</h3><h3 id="Protobuf-Type"><a href="#Protobuf-Type" class="headerlink" title="Protobuf Type"></a>Protobuf Type</h3><h3 id="Protobuf-Field"><a href="#Protobuf-Field" class="headerlink" title="Protobuf Field"></a>Protobuf Field</h3><h3 id="Protobuf-OneOf"><a href="#Protobuf-OneOf" class="headerlink" title="Protobuf OneOf"></a>Protobuf OneOf</h3><h3 id="Protobuf-MapField"><a href="#Protobuf-MapField" class="headerlink" title="Protobuf MapField"></a>Protobuf MapField</h3><h3 id="Protobuf-Service"><a href="#Protobuf-Service" class="headerlink" title="Protobuf Service"></a>Protobuf Service</h3><h3 id="Protobuf-Method"><a href="#Protobuf-Method" class="headerlink" title="Protobuf Method"></a>Protobuf Method</h3><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
+        <div class="buttons is-centered">
+            
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
+    <span class="icon is-small">
+        <i class="fab fa-paypal"></i>
+    </span>
+    <span>Paypal</span>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
+    <input type="hidden" name="currency_code" value="USD" />
+</form>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2020/01/06/crx-config/">
+                <span class="level-item">Crx-Config</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
+        
+<div id="comment-container"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+	var gitment = new Gitment({
+		id: '2020/01/17/Inspect-protobuf-js/',
+		owner: 'Keith-CY',
+		repo: 'Keith-CY.github.io',
+		oauth: {
+			client_id: '56319e1ce36ed4313555',
+			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
+		},
+	})
+	gitment.render('comment-container')
+</script>
+
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("en");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="Back to Top" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: 'Posts',
+                PAGES: 'Pages',
+                CATEGORIES: 'Categories',
+                TAGS: 'Tags',
+                UNTITLED: '(Untitled)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+
+</html>

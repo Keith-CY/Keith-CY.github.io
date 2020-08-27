@@ -3,6 +3,138 @@
   
     
     <entry>
+      <title><![CDATA[Shorthand of Ethereum Provider]]></title>
+      <url>/2020/08/27/shorthand-of-ethereum-provider/</url>
+      <content type="html"><![CDATA[<p><a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1193.md" target="_blank" rel="noopener">EIP 1193</a></p>
+<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>A JavaScript Ethereum Provider API for consistency across clients and applications.</p>
+<p>This EIP formalizes an Ethereum Provider API to promote wallet interoperability. The API is designed to be <strong>minimal, event-driven, and agonstic of transport and RPC protocols</strong></p>
+<p><strong>It’s functionality is easily extended by defining new RPC methods and message event types</strong></p>
+<h2 id="Terminology"><a href="#Terminology" class="headerlink" title="Terminology"></a>Terminology</h2><ul>
+<li>Provider: a JavaScript object made available to a consumer, that provides access to Ethereum by menas of Clients<ul>
+<li>e.g. window.ethereum</li>
+</ul>
+</li>
+<li>Client: An endpoint that receives Remote Procedure Call (RPC)<ul>
+<li>e.g. server of MetaMask</li>
+</ul>
+</li>
+<li>Wallet: An end-user application that manages private keys, performs signing operations, and acts as a middleware between the Provider and the Client<ul>
+<li>e.g. MetaMask</li>
+<li>Application send message via provider to wallet and wallet proxy the message to the client</li>
+</ul>
+</li>
+<li>Remote Procedure Call (RPC)</li>
+</ul>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><h3 id="request"><a href="#request" class="headerlink" title="request"></a>request</h3><blockquote>
+<p>The <code>request</code> method is intended as a <strong>transport- and protocol-agnostic</strong> wrapper function for Remote Procedure Calls</p>
+</blockquote>
+<figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">interface</span> RequestArguments &#123;</div><div class="line">  readonly method: <span class="hljs-built_in">string</span></div><div class="line">  readonly params: readonly unknown[] | object</div><div class="line">&#125;</div><div class="line"></div><div class="line">Provider.request(args: RequestArguments): <span class="hljs-built_in">Promise</span>&lt;unknown&gt;</div></pre></td></tr></table></figure>
+<p>The provider must identify requested RPC method by the value of <code>RequestArguments.method</code></p>
+<p>If the requested RPC method takes any parameters, the Provider must accept as the value of <code>RequestArguments.params</code></p>
+<p>RPC requests must be handled such that the returned Promise either resolves with a value per the requested RPC method’s specification, or rejects with an error.</p>
+<h3 id="Events"><a href="#Events" class="headerlink" title="Events"></a>Events</h3><p>The provider must implement the following event handling methods:</p>
+<ul>
+<li>on</li>
+<li>removeListener</li>
+</ul>
+<p>These methods must be implemented per the Node.js <code>EventEmitter</code> API</p>
+<blockquote>
+<p>To satisfy these requirements, Provider implementers should consider simply extending the Node.js <code>EventEmitter</code> class and bundling it for the target environment.</p>
+</blockquote>
+<h4 id="Message-Event"><a href="#Message-Event" class="headerlink" title="Message Event"></a>Message Event</h4><blockquote>
+<p>The <code>message</code> event is intended for arbitrary notifications not covered by other events.</p>
+</blockquote>
+<p>When emitted, the <code>message</code> event must be emitted with an object argument of the following form:</p>
+<figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">interface</span> ProviderMessage &#123;</div><div class="line">  readonly <span class="hljs-keyword">type</span>: <span class="hljs-built_in">string</span></div><div class="line">  readonly data: unknown</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Subscriptions-Event"><a href="#Subscriptions-Event" class="headerlink" title="Subscriptions Event"></a>Subscriptions Event</h4><p>If the provider supports Ethereum RPC subscriptions, the provider must emit the <code>message</code> event when it receives a subscription notification.</p>
+<p>If the provider receives a subscription message, the provider must emit a <code>message</code> event with a <code>ProviderMessage</code> object of the following form:</p>
+<figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">interface</span> EthSubscription <span class="hljs-keyword">extends</span> ProviderMessage &#123;</div><div class="line">  readonly <span class="hljs-keyword">type</span>: <span class="hljs-string">'eth_subscription'</span></div><div class="line">  readonly data: &#123;</div><div class="line">    readonly subscription: <span class="hljs-built_in">string</span></div><div class="line">    readonly result: unknown</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Connect-Event"><a href="#Connect-Event" class="headerlink" title="Connect Event"></a>Connect Event</h4><p>If the provider becomes connected, the provider must emit the event named <code>connected</code>.</p>
+<p>This includes when:</p>
+<ul>
+<li>The provider first connects to a chain after initialization.</li>
+<li>The provider connects to a chain after the <code>disconnect</code> event was emitted.</li>
+</ul>
+<p>This event must be emitted with an object of the following form:</p>
+<figure class="highlight typescript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">interface</span> ProviderConnectInfo &#123;</div><div class="line">  readonly chainId: <span class="hljs-built_in">string</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Disconnect-Event"><a href="#Disconnect-Event" class="headerlink" title="Disconnect Event"></a>Disconnect Event</h4><p>If the provider becomes disconnected from all chains, the provider must emit the event named <code>disconnect</code> with value <code>error: ProviderRpcError</code>, per the interface defined in teh RPC Errors.</p>
+<h4 id="ChainChanged-Event"><a href="#ChainChanged-Event" class="headerlink" title="ChainChanged Event"></a>ChainChanged Event</h4><p>If the chain the provider is connected to changes, the provider must emit the event named <code>chainChanged</code> with the value <code>chainId: string</code>.</p>
+<h4 id="AccountsChanged"><a href="#AccountsChanged" class="headerlink" title="AccountsChanged"></a>AccountsChanged</h4><p>If the accounts available to the provider change, the provider must emit the event named <code>accountsChanged</code> wth value <code>accounts: string[]</code>, containing the account addresses per the <code>eth_accounts</code> Ethereum RPC method.</p>
+<h2 id="Rational"><a href="#Rational" class="headerlink" title="Rational"></a>Rational</h2><p>The purpose of a Provider is to provide a consumer with access to Ethereum. In general, a Provider must enable an Ethereum web application to do <em>two</em> things:</p>
+<ul>
+<li>Make Ethereum RPC requests</li>
+<li>Respond to <strong>state changes</strong> in the Provider’s Ethereum chain, Client, and Wallet.</li>
+</ul>
+<h2 id="Backwards-Compatibility"><a href="#Backwards-Compatibility" class="headerlink" title="Backwards Compatibility"></a>Backwards Compatibility</h2><p>Many providers adopted a draft version of this specification before it was finalized.</p>
+<p>Providers that only implement this specification will not be compatible with Ethereum web applications that target the legacy API.</p>
+<blockquote>
+<p>The Provider is intended to pass messages between an Ethereum Client and an Ethereum application. It is <em>not</em> responsible for private key or account management; It merely processes RPC messages and emits events.<br>Consequently, account security and user privacy need to be implemented in middlewares between the Provider and its client. In practice, we call these middleware applications “Wallet”, and they usually manage the user’s private keys and accounts.</p>
+<p>The Provider can be thought of as an extension of the Wallet, exposed in an <strong>untrusted</strong> environment, under the control of some third party(e.g. website)</p>
+</blockquote>
+<h3 id="Rules"><a href="#Rules" class="headerlink" title="Rules"></a>Rules</h3><ul>
+<li>The Provider does not contain any private user data</li>
+<li>The Provider and Wallet programs are isolated from each other</li>
+<li>The Wallet and/or Client rate-limit requests from the Provider</li>
+<li>The Wallet and/or Client validate all data sent from the Provider</li>
+</ul>
+<h2 id="Discussion"><a href="#Discussion" class="headerlink" title="Discussion"></a>Discussion</h2><p><a href="https://github.com/ethereum/EIPs/issues/2319" target="_blank" rel="noopener">Discussion: EIP-1193</a></p>
+<h2 id="Key-Updates"><a href="#Key-Updates" class="headerlink" title="Key Updates"></a>Key Updates</h2><p><a href="https://github.com/ethereum/EIPs/pull/2702" target="_blank" rel="noopener">#2702</a> - Normative change, don’t require Provider to implement the <code>emit</code> method since it’s an implementation detail.</p>
+<p><a href="https://github.com/ethereum/EIPs/pull/2695" target="_blank" rel="noopener">#2695</a> - Remove all deprecated methods and events from teh API documentation, since they were only specified in the API documentation.</p>
+<p><a href="https://github.com/ethereum/EIPs/pull/2673" target="_blank" rel="noopener">#2673</a></p>
+<ul>
+<li>Remove index signature from interfaces<ul>
+<li>i.e. no more <code>[key: string]: unknown</code>, the ability to add properties is implied</li>
+</ul>
+</li>
+<li><code>RequestArguments</code><ul>
+<li><code>params?: unknown</code> -&gt; <code>params?: unknown[] | object</code></li>
+<li>Explicitly define relationship between <code>RequstArguments</code> fields and RPC method names and parameters</li>
+</ul>
+</li>
+<li>Note:<ul>
+<li><code>request</code> takes a single, options bag argument, <strong>to make it as extensible as possible</strong>. We are extremely unlikely to have to revisit it ever again.<ul>
+<li>If devs find the options bag unergonomic, they can define their wrapper functions</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a href="https://github.com/ethereum/EIPs/pull/2590" target="_blank" rel="noopener">#2590</a></p>
+<ul>
+<li>New signature for the <code>request</code> method, <code>Provider.request(args: RequestArguments): Promise&lt;unknown&gt;</code><ul>
+<li>This is motivated by discussions with @frozeman and others, and enables a future for the Provider interface generally and the <code>request</code> method specifically where any of the following holds:</li>
+<li>Multiple chains are served by a single Provider at once.</li>
+<li><strong>Multiple protocols</strong> are served by a single Provider at once</li>
+<li>The Provider needs some kind of metadata submitted along with <code>request</code> calls, for reasons we are unable to anticipate today</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>IMO this is the most meaningful point to take this update: <strong>Multiple protocols</strong> are served by a single Provider at once.</p>
+</blockquote>
+<p><a href="https://github.com/ethereum/EIPs/pull/2577" target="_blank" rel="noopener">#2577</a></p>
+<ul>
+<li>Deprecates <code>send</code> and <code>sendAsync</code></li>
+<li>Specifies a new method <code>request</code>, with the same Promise signature as the <code>send</code> currently, per @MicahZoltu’s suggestion<ul>
+<li>On the topic of alternate names, perhaps, <code>ethereum.request(...)</code>?. Since JSON-RPC is a request-response pairing I think this name makes sense.</li>
+</ul>
+</li>
+<li>Changes the interface of the <code>notification</code> event, such that a generalized object is emitted.</li>
+<li>Makes the spec transpot- and RPC protocol-agnostic, per the contributions of @ryanio</li>
+<li>Add the <code>message</code> event for generalized messaging.</li>
+</ul>
+]]></content>
+      
+        
+        <tags>
+            
+            <tag> EIP </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Inspect-protobuf.js]]></title>
       <url>/2020/01/17/Inspect-protobuf-js/</url>
       <content type="html"><![CDATA[<p><a href="https://ezcook.de/2017/12/22/Start-in-Protobuf/" target="_blank" rel="noopener">Start in protobuf</a></p>

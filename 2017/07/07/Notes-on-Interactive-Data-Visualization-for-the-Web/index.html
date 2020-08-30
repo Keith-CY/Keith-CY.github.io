@@ -1,176 +1,108 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Notes on Interactive Data Visualization for the Web | EzCook</title><meta name="description" content="Introducing D3D3 – also referred to as d3.js – is a JavaScript library for creating data visualization. But that kind of undersell it. The abbreviation D3 reference the tool’s full name, Data-Driven D"><meta name="keywords" content="D3"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Notes on Interactive Data Visualization for the Web"><meta property="og:url" content="https://ezcook.de/2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Introducing D3D3 – also referred to as d3.js – is a JavaScript library for creating data visualization. But that kind of undersell it. The abbreviation D3 reference the tool’s full name, Data-Driven D"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2017-07-07T04:23:35.000Z"><meta property="article:modified_time" content="2020-08-30T12:47:03.561Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Notes on Interactive Data Visualization for the Web - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Notes on Interactive Data Visualization for the Web" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-07-07T04:23:35.000Z">2017-07-07</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    29 minutes read (About 4375 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Notes on Interactive Data Visualization for the Web
-            
-        </h1>
-        <div class="content">
-            <h1 id="Introducing-D3"><a href="#Introducing-D3" class="headerlink" title="Introducing D3"></a>Introducing D3</h1><p>D3 – also referred to as d3.js – is a JavaScript library for creating data visualization. But that kind of undersell it.</p>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:47:03'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introducing-D3"><span class="toc-number">1.</span> <span class="toc-text">Introducing D3</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Data"><span class="toc-number">2.</span> <span class="toc-text">Data</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Binding-Data"><span class="toc-number">2.1.</span> <span class="toc-text">Binding Data</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Drawing-with-Data"><span class="toc-number">2.2.</span> <span class="toc-text">Drawing with Data</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Scales"><span class="toc-number">3.</span> <span class="toc-text">Scales</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Domains-and-Ranges"><span class="toc-number">3.1.</span> <span class="toc-text">Domains and Ranges</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Normalization"><span class="toc-number">3.2.</span> <span class="toc-text">Normalization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-a-Scale"><span class="toc-number">3.3.</span> <span class="toc-text">Creating a Scale</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#d3-max-and-d3-min"><span class="toc-number">3.3.1.</span> <span class="toc-text">d3.max() and d3.min()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Setting-Up-Dynamic-Scales"><span class="toc-number">3.3.2.</span> <span class="toc-text">Setting Up Dynamic Scales</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Axes"><span class="toc-number">4.</span> <span class="toc-text">Axes</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Setting-Up-an-Axis"><span class="toc-number">4.1.</span> <span class="toc-text">Setting Up an Axis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Positioning-Axes"><span class="toc-number">4.1.1.</span> <span class="toc-text">Positioning Axes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSS-styles-on-axis"><span class="toc-number">4.1.2.</span> <span class="toc-text">CSS styles on axis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-for-Ticks"><span class="toc-number">4.1.3.</span> <span class="toc-text">Check for Ticks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Formatting-Tick-labels"><span class="toc-number">4.1.4.</span> <span class="toc-text">Formatting Tick labels</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Updates-Transtions-and-Motion"><span class="toc-number">5.</span> <span class="toc-text">Updates, Transtions, and Motion</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#on-Transition-Starts-and-Ends"><span class="toc-number">5.0.1.</span> <span class="toc-text">on() Transition Starts and Ends</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Containing-Visual-Elements-With-Clipping-Paths"><span class="toc-number">5.0.2.</span> <span class="toc-text">Containing Visual Elements With Clipping Paths</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Interactivity"><span class="toc-number">6.</span> <span class="toc-text">Interactivity</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Grouping-SVG-Element"><span class="toc-number">6.0.1.</span> <span class="toc-text">Grouping SVG Element</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tooltips"><span class="toc-number">6.0.2.</span> <span class="toc-text">Tooltips</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SVG-Element-Tooltips"><span class="toc-number">6.0.2.1.</span> <span class="toc-text">SVG Element Tooltips</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Using-Paths"><span class="toc-number">7.</span> <span class="toc-text">Using Paths</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Line-Charts"><span class="toc-number">7.0.1.</span> <span class="toc-text">Line Charts</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Scale-setup"><span class="toc-number">7.0.1.1.</span> <span class="toc-text">Scale setup</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dealing-with-Missing-Data"><span class="toc-number">7.0.2.</span> <span class="toc-text">Dealing with Missing Data</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Area-Charts"><span class="toc-number">7.0.3.</span> <span class="toc-text">Area Charts</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Selections"><span class="toc-number">8.</span> <span class="toc-text">Selections</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-Closer-Look-at-Selections"><span class="toc-number">8.0.1.</span> <span class="toc-text">A Closer Look at Selections</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Storing-Selections"><span class="toc-number">8.0.2.</span> <span class="toc-text">Storing Selections</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Enter-Merge-and-Exit"><span class="toc-number">8.0.3.</span> <span class="toc-text">Enter, Merge and Exit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Filter"><span class="toc-number">8.0.4.</span> <span class="toc-text">Filter</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Each"><span class="toc-number">8.0.5.</span> <span class="toc-text">Each</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Layouts"><span class="toc-number">9.</span> <span class="toc-text">Layouts</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pie-Layout"><span class="toc-number">9.0.1.</span> <span class="toc-text">Pie Layout</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stack-Layout"><span class="toc-number">9.0.2.</span> <span class="toc-text">Stack Layout</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#A-New-Order"><span class="toc-number">9.0.2.1.</span> <span class="toc-text">A New Order</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Stacked-Areas"><span class="toc-number">9.0.3.</span> <span class="toc-text">Stacked Areas</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Force-Layout"><span class="toc-number">9.0.4.</span> <span class="toc-text">Force Layout</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Preparing-the-network-data"><span class="toc-number">9.0.4.1.</span> <span class="toc-text">Preparing the network data</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Defining-the-Force-Simulation"><span class="toc-number">9.0.4.2.</span> <span class="toc-text">Defining the Force Simulation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Creating-the-Visual-Elements"><span class="toc-number">9.0.4.3.</span> <span class="toc-text">Creating the Visual Elements</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Updating-Visuals-Over-Time"><span class="toc-number">9.0.4.4.</span> <span class="toc-text">Updating Visuals Over Time</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Draggable-Nodes"><span class="toc-number">9.0.4.5.</span> <span class="toc-text">Draggable Nodes</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Geomapping"><span class="toc-number">10.</span> <span class="toc-text">Geomapping</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Notes on Interactive Data Visualization for the Web</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-07-07T04:23:35.000Z" title="Created 2017-07-07 12:23:35">2017-07-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:47:03.561Z" title="Updated 2020-08-30 20:47:03">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h1 id="Introducing-D3"><a href="#Introducing-D3" class="headerlink" title="Introducing D3"></a>Introducing D3</h1><p>D3 – also referred to as d3.js – is a JavaScript library for creating data visualization. But that kind of undersell it.</p>
 <p>The abbreviation D3 reference the tool’s full name, <em>Data-Driven Documents</em>. The <em>data</em> is provided by you, and the <em>documents</em> are web-based documents, meaning anything that can be rendered by a web browser, such as HTML and SVG. D3 does the <em>driviing</em>, in the sense that it connects the data to the documents.</p>
 <h1 id="Data"><a href="#Data" class="headerlink" title="Data"></a>Data</h1><p><em>Data</em> is an extemely broad term, only slightly less vague than the nearly all-encompassing <em>information</em>.</p>
 <p>Boradly speaking, data is a structured information with potential for meaning.</p>
@@ -196,23 +128,32 @@
 <p>A scale’s <em>output range</em> is the range of possible output values, commonly used as display values in pixel units.</p>
 <h2 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h2><p>Normalization is the process of mapping a numeric value to a new value between 0 and 1, based on the possible minumum and maximum values.</p>
 <h2 id="Creating-a-Scale"><a href="#Creating-a-Scale" class="headerlink" title="Creating a Scale"></a>Creating a Scale</h2><p>D3’s linear scale function generator is accessed with <code>d3.scaleLiner()</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> scale = d3.scaleLinear()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scale = d3.scaleLinear()</span><br></pre></td></tr></table></figure>
+
 <p>Now <code>scale</code> is a function to which you can pass input values.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale(<span class="hljs-number">2.5</span>) <span class="hljs-comment">// return 2.5</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scale(<span class="number">2.5</span>) <span class="comment">// return 2.5</span></span><br></pre></td></tr></table></figure>
+
 <p>Because we haven’t set a domain and a range yet, this function will map input to output on a <code>1:1</code> scale.</p>
 <p>We set the scale’s input domain to 100, 500 by passing those values to the <code>domain()</code> method as an array.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale.domain([<span class="hljs-number">100</span>, <span class="hljs-number">500</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scale.domain([<span class="number">100</span>, <span class="number">500</span>])</span><br></pre></td></tr></table></figure>
+
 <p>Set the output range in similar fashion, with <code>range()</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scale.range([<span class="hljs-number">10</span>, <span class="hljs-number">350</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scale.range([<span class="number">10</span>, <span class="number">350</span>])</span><br></pre></td></tr></table></figure>
+
 <p>These steps can be chained:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> scale = d3.scaleLinear()</div><div class="line">  .domain([<span class="hljs-number">100</span>, <span class="hljs-number">500</span>])</div><div class="line">  .range([<span class="hljs-number">10</span>, <span class="hljs-number">350</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scale = d3.scaleLinear()</span><br><span class="line">  .domain([<span class="number">100</span>, <span class="number">500</span>])</span><br><span class="line">  .range([<span class="number">10</span>, <span class="number">350</span>])</span><br></pre></td></tr></table></figure>
+
 <p>Now it’s effective</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">scale(<span class="hljs-number">100</span>) <span class="hljs-comment">// return 10</span></div><div class="line">scale(<span class="hljs-number">300</span>) <span class="hljs-comment">// return 180</span></div><div class="line">scale(<span class="hljs-number">500</span>) <span class="hljs-comment">// return 350</span></div></pre></td></tr></table></figure>
-<h3 id="d3-max-and-d3-min"><a href="#d3-max-and-d3-min" class="headerlink" title="d3.max() and d3.min()"></a>d3.max() and d3.min()</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> dataset = [</div><div class="line">  [<span class="hljs-number">5</span>, <span class="hljs-number">20</span>], [<span class="hljs-number">480</span>, <span class="hljs-number">90</span>], [<span class="hljs-number">250</span>, <span class="hljs-number">50</span>], [<span class="hljs-number">100</span>, <span class="hljs-number">33</span>], [<span class="hljs-number">330</span>, <span class="hljs-number">95</span>],</div><div class="line">  [<span class="hljs-number">410</span>, <span class="hljs-number">12</span>], [<span class="hljs-number">475</span>, <span class="hljs-number">44</span>], [<span class="hljs-number">25</span>, <span class="hljs-number">67</span>], [<span class="hljs-number">85</span>, <span class="hljs-number">21</span>], [<span class="hljs-number">220</span>, <span class="hljs-number">88</span>]</div><div class="line">]</div><div class="line"></div><div class="line">d3.max(dataset, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">return</span> d[<span class="hljs-number">0</span>]</div><div class="line">&#125;)</div><div class="line"><span class="hljs-comment">// this function will return the value 480</span></div></pre></td></tr></table></figure>
-<h3 id="Setting-Up-Dynamic-Scales"><a href="#Setting-Up-Dynamic-Scales" class="headerlink" title="Setting Up Dynamic Scales"></a>Setting Up Dynamic Scales</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> xScale = d3.scaleLinear()</div><div class="line">  .domain([<span class="hljs-number">0</span>, d3.max(dataset, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">    retrun d[<span class="hljs-number">0</span>]</div><div class="line">  &#125;)])</div><div class="line">  .range([<span class="hljs-number">0</span>, w])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">scale(<span class="number">100</span>) <span class="comment">// return 10</span></span><br><span class="line">scale(<span class="number">300</span>) <span class="comment">// return 180</span></span><br><span class="line">scale(<span class="number">500</span>) <span class="comment">// return 350</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="d3-max-and-d3-min"><a href="#d3-max-and-d3-min" class="headerlink" title="d3.max() and d3.min()"></a>d3.max() and d3.min()</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> dataset = [</span><br><span class="line">  [<span class="number">5</span>, <span class="number">20</span>], [<span class="number">480</span>, <span class="number">90</span>], [<span class="number">250</span>, <span class="number">50</span>], [<span class="number">100</span>, <span class="number">33</span>], [<span class="number">330</span>, <span class="number">95</span>],</span><br><span class="line">  [<span class="number">410</span>, <span class="number">12</span>], [<span class="number">475</span>, <span class="number">44</span>], [<span class="number">25</span>, <span class="number">67</span>], [<span class="number">85</span>, <span class="number">21</span>], [<span class="number">220</span>, <span class="number">88</span>]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">d3.max(dataset, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> d[<span class="number">0</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// this function will return the value 480</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Setting-Up-Dynamic-Scales"><a href="#Setting-Up-Dynamic-Scales" class="headerlink" title="Setting Up Dynamic Scales"></a>Setting Up Dynamic Scales</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> xScale = d3.scaleLinear()</span><br><span class="line">  .domain([<span class="number">0</span>, d3.max(dataset, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</span><br><span class="line">    retrun d[<span class="number">0</span>]</span><br><span class="line">  &#125;)])</span><br><span class="line">  .range([<span class="number">0</span>, w])</span><br></pre></td></tr></table></figure>
+
 <p>Output range is set to 0 and w, the SVG’s width.</p>
 <p>Use the scale</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.attr(<span class="hljs-string">'x'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">return</span> xScale(d[<span class="hljs-number">0</span>])</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.attr(<span class="string">&#x27;x&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> xScale(d[<span class="number">0</span>])</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p><code>d3.scaleLinear()</code> has several other handly methods that deserve a breif mention here:</p>
 </blockquote>
@@ -225,7 +166,8 @@
 </li>
 </ul>
 <p>To use any of these special methods, just tack them onto the chain in which you define the original scale function.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> scale = d3.scaleLinear().domain([<span class="hljs-number">0.123</span>, <span class="hljs-number">4.67</span>]).range([<span class="hljs-number">0</span>, <span class="hljs-number">500</span>]).nice()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> scale = d3.scaleLinear().domain([<span class="number">0.123</span>, <span class="number">4.67</span>]).range([<span class="number">0</span>, <span class="number">500</span>]).nice()</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>Other Scales</p>
 </blockquote>
@@ -247,12 +189,15 @@
 </ul>
 <h1 id="Axes"><a href="#Axes" class="headerlink" title="Axes"></a>Axes</h1><p>D3’s axes are actually <code>function</code> whose parameters you define. Unlike scales, when an axis function is called, it doesn’t return a value, but generates the visual elements of the axis, including lines, labels, and ticks.</p>
 <h2 id="Setting-Up-an-Axis"><a href="#Setting-Up-an-Axis" class="headerlink" title="Setting Up an Axis"></a>Setting Up an Axis</h2><p>There are four different axis function constructors, each one corresponding to a different orientation and placement of labels: <code>d3.axisTop</code>, <code>d3.axisBottom</code>, <code>d3.axisLeft</code>, <code>d3.axisRight</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xAxis = d3.axisBottom()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xAxis = d3.axisBottom()</span><br></pre></td></tr></table></figure>
+
 <p>At a minimum, each axis also needs to be told on what <em>scale</em> to operate.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xAxis = d3.axisBottom().scale(xScale)</div><div class="line"><span class="hljs-comment">// or</span></div><div class="line"><span class="hljs-keyword">const</span> xAxis = d3.axisBottom(xScale)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xAxis = d3.axisBottom().scale(xScale)</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">const</span> xAxis = d3.axisBottom(xScale)</span><br></pre></td></tr></table></figure>
+
 <p>Finally, to actually generate the axis and insert all those little lines and labels into our SVG, we must <code>call</code> teh <code>xAxis</code> function. This is similar to the scale functions, which we first configured by setting parameters, and then later <code>called</code> to put them into action.</p>
 <p>Here we put this code at the end of script, so the axis is generated after the other elements in the SVG, and therefore appears ‘on top’</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="hljs-string">'g'</span>).call(xAxis)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">svg.append(<span class="string">&#x27;g&#x27;</span>).call(xAxis)</span><br></pre></td></tr></table></figure>
+
 <p>This is where things get a little funky. You might be wondering why this looks so different from our friendly scale functions. Here’s why: because an axis function actually draws something to the screen (by appending SVG elements to the DOM), we need to specify where in the DOM it should place new elements.</p>
 <p>In the svg, we <code>append()</code> a new <code>g</code> element to the end of the SVG. In SVG land, a <code>g</code> element is a <code>group</code> element. Group elements are invisible, unlike <code>line</code>, <code>rect</code>, and <code>circle</code> and they have no visual presence themselves.</p>
 <p>The <code>g</code> element can keep our code nice and be transformed.</p>
@@ -261,29 +206,39 @@
 <p>This this case, the selection is our new <code>g</code> group element. Although the <code>g</code> isn’t strictly necessary, we are using it because the axis function is about to generate lots of crazy lines and numbers, and it’s noce to contain all those element within a single group object.</p>
 <p><code>call()</code> hands off <code>g</code> to the <code>xAxis</code> function, so our axis is genrated within <code>g</code></p>
 <h3 id="Positioning-Axes"><a href="#Positioning-Axes" class="headerlink" title="Positioning Axes"></a>Positioning Axes</h3><p>By default, an axis is positioned using the range values of the specified scale. In our case, <code>xAxis</code> is referencing <code>xScale</code>, which has a range of [20, 460], because we applied 20 pixels of padding on all edge of the SVG. We can transform the axis by:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="hljs-string">'g'</span>)</div><div class="line">  .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'axis'</span>)</div><div class="line">  .attr(<span class="hljs-string">'tranform'</span>, <span class="hljs-string">'translate(0, '</span> + (h - padding) + <span class="hljs-string">')'</span>)</div><div class="line">  .call(xAxis)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">svg.append(<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;class&#x27;</span>, <span class="string">&#x27;axis&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;tranform&#x27;</span>, <span class="string">&#x27;translate(0, &#x27;</span> + (h - padding) + <span class="string">&#x27;)&#x27;</span>)</span><br><span class="line">  .call(xAxis)</span><br></pre></td></tr></table></figure>
+
 <p>In the end, we would like  our <code>g</code> to look like this in the DOM:</p>
-<figure class="highlight html hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-tag">&lt;<span class="hljs-name">g</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"axis"</span> <span class="hljs-attr">transform</span>=<span class="hljs-string">"translate(0, 280)"</span>&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">g</span> <span class="attr">class</span>=<span class="string">&quot;axis&quot;</span> <span class="attr">transform</span>=<span class="string">&quot;translate(0, 280)&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="CSS-styles-on-axis"><a href="#CSS-styles-on-axis" class="headerlink" title="CSS styles on axis"></a>CSS styles on axis</h3><p>The axes themselves are made up of <code>path</code>, <code>line</code>, <code>text</code> element, so those are the three elemnts to target in your CSS.</p>
 <p>The paths and lines can be styled together, with the same rules, and text gets its own rules around for font and font size.</p>
-<figure class="highlight css hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-selector-class">.axis</span> <span class="hljs-selector-tag">path</span>, <span class="hljs-selector-class">.axis</span> <span class="hljs-selector-tag">line</span> &#123;</div><div class="line">  <span class="hljs-attribute">stroke</span>: teal;</div><div class="line">  <span class="hljs-attribute">shape-rendering</span>: crispEdges;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-selector-class">.axis</span> <span class="hljs-selector-tag">text</span> &#123;</div><div class="line">  <span class="hljs-attribute">font-family</span>: Optima, Futura, sans-serif;</div><div class="line">  <span class="hljs-attribute">font-weight</span>: bold;</div><div class="line">  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">14px</span>;</div><div class="line">  <span class="hljs-attribute">fill</span>: teal;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.axis</span> <span class="selector-tag">path</span>, <span class="selector-class">.axis</span> <span class="selector-tag">line</span> &#123;</span><br><span class="line">  <span class="attribute">stroke</span>: teal;</span><br><span class="line">  <span class="attribute">shape-rendering</span>: crispEdges;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.axis</span> <span class="selector-tag">text</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: Optima, Futura, sans-serif;</span><br><span class="line">  <span class="attribute">font-weight</span>: bold;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">14px</span>;</span><br><span class="line">  <span class="attribute">fill</span>: teal;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>These CSS rules will override D3’s default styles.</p>
 <p>Note that when we use CSS rules to style SVG elements, only SVG attribute names – not regular CSS properties – should be used.</p>
 <h3 id="Check-for-Ticks"><a href="#Check-for-Ticks" class="headerlink" title="Check for Ticks"></a>Check for Ticks</h3><p>Some ticks spread disease, but D3’s ticks communicates information.</p>
 <p>You can customize all aspects of your axes, starting with the rough number of ticks, using <code>ticks()</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xAxis = d3.axisBottom().scale(xScale).ticks(<span class="hljs-number">6</span>) <span class="hljs-comment">// set rough # of ticks</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xAxis = d3.axisBottom().scale(xScale).ticks(<span class="number">6</span>) <span class="comment">// set rough # of ticks</span></span><br></pre></td></tr></table></figure>
+
 <p>Specifying tick values manually</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xAixs = d3.axisBottom().scale(xScale).tickValues([<span class="hljs-number">0</span>, <span class="hljs-number">100</span>, <span class="hljs-number">250</span>, <span class="hljs-number">700</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xAixs = d3.axisBottom().scale(xScale).tickValues([<span class="number">0</span>, <span class="number">100</span>, <span class="number">250</span>, <span class="number">700</span>])</span><br></pre></td></tr></table></figure>
+
 <h3 id="Formatting-Tick-labels"><a href="#Formatting-Tick-labels" class="headerlink" title="Formatting Tick labels"></a>Formatting Tick labels</h3><p>Enter <code>tickFormat()</code>, which enables you to specify how your numbers should be formatted.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> formatAsPercentage = d3.format(<span class="hljs-string">".1%"</span>)</div><div class="line">xAxis.tickFormat(formatAsPercentage)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> formatAsPercentage = d3.format(<span class="string">&quot;.1%&quot;</span>)</span><br><span class="line">xAxis.tickFormat(formatAsPercentage)</span><br></pre></td></tr></table></figure>
+
 <h1 id="Updates-Transtions-and-Motion"><a href="#Updates-Transtions-and-Motion" class="headerlink" title="Updates, Transtions, and Motion"></a>Updates, Transtions, and Motion</h1><blockquote>
 <p>Transtion: .transition(), .duration()</p>
+</blockquote>
+<blockquote>
 <p>Motion: .delay(), .ease()</p>
 </blockquote>
 <p>The argument could be number or function</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.transition()</div><div class="line">.delay(<span class="hljs-function">(<span class="hljs-params">d, i</span>) =&gt;</span> <span class="hljs-number">100</span> * i)</div><div class="line">.duration(<span class="hljs-number">300</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.transition()</span><br><span class="line">.delay(<span class="function">(<span class="params">d, i</span>) =&gt;</span> <span class="number">100</span> * i)</span><br><span class="line">.duration(<span class="number">300</span>)</span><br></pre></td></tr></table></figure>
+
 <p>The default easing is <code>d3.easeCubicInOut</code>, which produces the gradual acceleration and deceleration.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.transition()</div><div class="line">.duration(<span class="hljs-number">3000</span>)</div><div class="line">.ease(d3.easeLinear)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.transition()</span><br><span class="line">.duration(<span class="number">3000</span>)</span><br><span class="line">.ease(d3.easeLinear)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>d3.easeCircleIn</p>
 </li>
@@ -305,7 +260,8 @@
 </blockquote>
 <h3 id="Containing-Visual-Elements-With-Clipping-Paths"><a href="#Containing-Visual-Elements-With-Clipping-Paths" class="headerlink" title="Containing Visual Elements With Clipping Paths"></a>Containing Visual Elements With Clipping Paths</h3><p>SVG has support for <em>clipping paths</em>, which you might know as <em>masks</em> in many drawing tools.</p>
 <p>Much like <code>g</code>, <code>clipPath</code> has no visual presence of its own, but it contains visual elements.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;clipPath id=<span class="hljs-string">"chart-area"</span>&gt;</div><div class="line">  <span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">rect</span> <span class="hljs-attr">x</span>=<span class="hljs-string">"30"</span> <span class="hljs-attr">y</span>=<span class="hljs-string">"30"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"410"</span> <span class="hljs-attr">height</span>=<span class="hljs-string">"240"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">rect</span>&gt;</span></span></div><div class="line">&lt;<span class="hljs-regexp">/clipPath&gt;</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;clipPath id=<span class="string">&quot;chart-area&quot;</span>&gt;</span><br><span class="line">  &lt;rect x=<span class="string">&quot;30&quot;</span> y=<span class="string">&quot;30&quot;</span> width=<span class="string">&quot;410&quot;</span> height=<span class="string">&quot;240&quot;</span>&gt;&lt;/rect&gt;</span><br><span class="line">&lt;/clipPath&gt;</span><br></pre></td></tr></table></figure>
+
 <p>Note that outer <code>clipPath</code> element has been given an ID of <code>chart-area</code>. We can use that ID to reference it later. Within the <code>clipPath</code> is a <code>rect</code>, which will function as the mask.</p>
 <p>3 steps to using a clipping path:</p>
 <ol>
@@ -316,49 +272,62 @@
 <li><p>Add a reference to the <code>clipPath</code> form whatever elements you wish to be masked.</p>
 </li>
 </ol>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="hljs-string">'clipPath'</span>)</div><div class="line">  .attr(<span class="hljs-string">'id'</span>, <span class="hljs-string">'chart-area'</span>) <span class="hljs-comment">// assign an id</span></div><div class="line">  .append(<span class="hljs-string">'rect'</span>) <span class="hljs-comment">// within the clippath, create new rect</span></div><div class="line">  .attr(<span class="hljs-string">'x'</span>, padding)</div><div class="line">  .attr(<span class="hljs-string">'y'</span>, padding)</div><div class="line">  .attr(<span class="hljs-string">'width'</span>, w - padding * <span class="hljs-number">2</span>)</div><div class="line">  .attr(<span class="hljs-string">'height'</span>, h - padding * <span class="hljs-number">2</span>)</div><div class="line"></div><div class="line">svg.append(<span class="hljs-string">'g'</span>)</div><div class="line">  .attr(<span class="hljs-string">'id'</span>, <span class="hljs-string">'circles'</span>)</div><div class="line">  .attr(<span class="hljs-string">'clip-path'</span>, <span class="hljs-string">'url(#chart-area)'</span>)</div><div class="line">  .selectAll(<span class="hljs-string">'circle'</span>)</div><div class="line">  .data(dataset)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'circle'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">svg.append(<span class="string">&#x27;clipPath&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;chart-area&#x27;</span>) <span class="comment">// assign an id</span></span><br><span class="line">  .append(<span class="string">&#x27;rect&#x27;</span>) <span class="comment">// within the clippath, create new rect</span></span><br><span class="line">  .attr(<span class="string">&#x27;x&#x27;</span>, padding)</span><br><span class="line">  .attr(<span class="string">&#x27;y&#x27;</span>, padding)</span><br><span class="line">  .attr(<span class="string">&#x27;width&#x27;</span>, w - padding * <span class="number">2</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;height&#x27;</span>, h - padding * <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">svg.append(<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;circles&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;clip-path&#x27;</span>, <span class="string">&#x27;url(#chart-area)&#x27;</span>)</span><br><span class="line">  .selectAll(<span class="string">&#x27;circle&#x27;</span>)</span><br><span class="line">  .data(dataset)</span><br><span class="line">  .enter()</span><br><span class="line">  .append(<span class="string">&#x27;circle&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <h1 id="Interactivity"><a href="#Interactivity" class="headerlink" title="Interactivity"></a>Interactivity</h1><p>D3 allows you to bind event listener to more than one element at a time.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">svg.selectAll(<span class="hljs-string">'rect'</span>)</div><div class="line">  .data(dataset)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'rect'</span>)</div><div class="line">  ....</div><div class="line">  .on(<span class="hljs-string">'click'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="hljs-comment">// ...</span></div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">svg.selectAll(<span class="string">&#x27;rect&#x27;</span>)</span><br><span class="line">  .data(dataset)</span><br><span class="line">  .enter()</span><br><span class="line">  .append(<span class="string">&#x27;rect&#x27;</span>)</span><br><span class="line">  ....</span><br><span class="line">  .on(<span class="string">&#x27;click&#x27;</span>, <span class="function">(<span class="params">d</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
 <p>Within anonymous function , D3 automatically sets the context of <code>this</code>  so it references <code>current element upon which we are acting</code></p>
-<figure class="highlight css hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-selector-tag">svg</span> <span class="hljs-selector-tag">text</span> &#123;</div><div class="line">  <span class="hljs-attribute">pointer-event</span>: none;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">svg</span> <span class="selector-tag">text</span> &#123;</span><br><span class="line">  <span class="attribute">pointer-event</span>: none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>or</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svg.append(<span class="hljs-string">'text'</span>).style(<span class="hljs-string">'pointer-event'</span>, <span class="hljs-string">'none'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">svg.append(<span class="string">&#x27;text&#x27;</span>).style(<span class="string">&#x27;pointer-event&#x27;</span>, <span class="string">&#x27;none&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Grouping-SVG-Element"><a href="#Grouping-SVG-Element" class="headerlink" title="Grouping SVG Element"></a>Grouping SVG Element</h3><p>Note that <code>g</code> group elements do not, by themselves, trigger any mouse events. The reason for this is that <code>g</code> elements have no pixels.</p>
 <p>You can still bind event listener to <code>g</code> elements, just keep in mind that the elements within that <code>g</code> will then behave as a group. If any of the enclosed elements are clicked or moused over, then the listener function will be activated.</p>
 <h3 id="Tooltips"><a href="#Tooltips" class="headerlink" title="Tooltips"></a>Tooltips</h3><p>In interactive visualizations, tooltips are small overlays that present data values. In many cases, it’s not necessary to label every individual data value in the default value, but that level of detail should still be accessible to users.</p>
-<h4 id="SVG-Element-Tooltips"><a href="#SVG-Element-Tooltips" class="headerlink" title="SVG Element Tooltips"></a>SVG Element Tooltips</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">.on(<span class="hljs-string">'mouseover'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">const</span> xPosition = <span class="hljs-built_in">parseFloat</span>(d3.select(<span class="hljs-keyword">this</span>)).attr(<span class="hljs-string">'x'</span>) + xScale.bandWidth()</div><div class="line">  <span class="hljs-keyword">const</span> yPosition = <span class="hljs-built_in">parseFloat</span>(d3.select(<span class="hljs-keyword">this</span>)).attr(<span class="hljs-string">'y'</span>) + <span class="hljs-number">14</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// create the tooltip label</span></div><div class="line"></div><div class="line">svg.append(<span class="hljs-string">'text'</span>)</div><div class="line">  .attr(<span class="hljs-string">'id'</span>, <span class="hljs-string">'tooltip'</span>)</div><div class="line">  .attr(<span class="hljs-string">'x'</span>, xPosition)</div><div class="line">  .attr(<span class="hljs-string">'y'</span>, yPosition)</div><div class="line">  .attr(<span class="hljs-string">'text-anchor'</span>, <span class="hljs-string">'middle'</span>)</div><div class="line">  .attr(<span class="hljs-string">'font-family'</span>, <span class="hljs-string">'sans-serif'</span>)</div><div class="line">  .attr(<span class="hljs-string">'font-size'</span>, <span class="hljs-string">'11px'</span>)</div><div class="line">  .attr(<span class="hljs-string">'font-weight'</span>, <span class="hljs-string">'bold'</span>)</div><div class="line">  .attr(<span class="hljs-string">'fill'</span>, <span class="hljs-string">'black'</span>)</div><div class="line">  .text(d)</div><div class="line"></div><div class="line">.on(<span class="hljs-string">'mouseout'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</div><div class="line">  d3.select(<span class="hljs-string">'#tooltip'</span>).remove()</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h1 id="Using-Paths"><a href="#Using-Paths" class="headerlink" title="Using Paths"></a>Using Paths</h1><h3 id="Line-Charts"><a href="#Line-Charts" class="headerlink" title="Line Charts"></a>Line Charts</h3><h4 id="Scale-setup"><a href="#Scale-setup" class="headerlink" title="Scale setup"></a>Scale setup</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> xScale = d3.scaleTime()</div><div class="line">  .domain([</div><div class="line">    d3.min(dataset, (d) =&gt; d.date),</div><div class="line">    d3.max(dataset, (d) =&gt; da.date)</div><div class="line">  ])</div><div class="line">  .range([<span class="hljs-number">0</span>, w])</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> yScale = d3.scaleLinear()</div><div class="line">  .domain([</div><div class="line">    <span class="hljs-number">0</span>,</div><div class="line">    d3.max(dataset, (d) =&gt; d.avarage)</div><div class="line">  ])</div><div class="line">  .range([h, <span class="hljs-number">0</span>])</div></pre></td></tr></table></figure>
+<h4 id="SVG-Element-Tooltips"><a href="#SVG-Element-Tooltips" class="headerlink" title="SVG Element Tooltips"></a>SVG Element Tooltips</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">.on(<span class="string">&#x27;mouseover&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">d</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> xPosition = <span class="built_in">parseFloat</span>(d3.select(<span class="built_in">this</span>)).attr(<span class="string">&#x27;x&#x27;</span>) + xScale.bandWidth()</span><br><span class="line">  <span class="keyword">const</span> yPosition = <span class="built_in">parseFloat</span>(d3.select(<span class="built_in">this</span>)).attr(<span class="string">&#x27;y&#x27;</span>) + <span class="number">14</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// create the tooltip label</span></span><br><span class="line"></span><br><span class="line">svg.append(<span class="string">&#x27;text&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;id&#x27;</span>, <span class="string">&#x27;tooltip&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;x&#x27;</span>, xPosition)</span><br><span class="line">  .attr(<span class="string">&#x27;y&#x27;</span>, yPosition)</span><br><span class="line">  .attr(<span class="string">&#x27;text-anchor&#x27;</span>, <span class="string">&#x27;middle&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;font-family&#x27;</span>, <span class="string">&#x27;sans-serif&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;font-size&#x27;</span>, <span class="string">&#x27;11px&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;font-weight&#x27;</span>, <span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;fill&#x27;</span>, <span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">  .text(d)</span><br><span class="line"></span><br><span class="line">.on(<span class="string">&#x27;mouseout&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  d3.select(<span class="string">&#x27;#tooltip&#x27;</span>).remove()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="Using-Paths"><a href="#Using-Paths" class="headerlink" title="Using Paths"></a>Using Paths</h1><h3 id="Line-Charts"><a href="#Line-Charts" class="headerlink" title="Line Charts"></a>Line Charts</h3><h4 id="Scale-setup"><a href="#Scale-setup" class="headerlink" title="Scale setup"></a>Scale setup</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xScale = d3.scaleTime()</span><br><span class="line">  .domain([</span><br><span class="line">    d3.min(dataset, <span class="function">(<span class="params">d</span>) =&gt;</span> d.date),</span><br><span class="line">    d3.max(dataset, <span class="function">(<span class="params">d</span>) =&gt;</span> da.date)</span><br><span class="line">  ])</span><br><span class="line">  .range([<span class="number">0</span>, w])</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> yScale = d3.scaleLinear()</span><br><span class="line">  .domain([</span><br><span class="line">    <span class="number">0</span>,</span><br><span class="line">    d3.max(dataset, <span class="function">(<span class="params">d</span>) =&gt;</span> d.avarage)</span><br><span class="line">  ])</span><br><span class="line">  .range([h, <span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
 <p>Define a line generator</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> lineGen = d3.line()</div><div class="line">  .x(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> xScale(d.date))</div><div class="line">  .y(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> yScale(d.avarage))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> lineGen = d3.line()</span><br><span class="line">  .x(<span class="function"><span class="params">d</span> =&gt;</span> xScale(d.date))</span><br><span class="line">  .y(<span class="function"><span class="params">d</span> =&gt;</span> yScale(d.avarage))</span><br></pre></td></tr></table></figure>
+
 <p>The x and y accessors tell the line generator how to decide <code>where</code> to place each point on the line.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> svg = d3.select(<span class="hljs-string">'body'</span>)</div><div class="line">  .append(<span class="hljs-string">'svg'</span>)</div><div class="line">  .attr(<span class="hljs-string">'width'</span>, w)</div><div class="line">  .attr(<span class="hljs-string">'height'</span>, h)</div><div class="line"></div><div class="line">svg.append(<span class="hljs-string">'path'</span>)</div><div class="line">  .datum(dataset)</div><div class="line">  .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'line'</span>)</div><div class="line">  .attr(<span class="hljs-string">'d'</span>, lineGen)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> svg = d3.select(<span class="string">&#x27;body&#x27;</span>)</span><br><span class="line">  .append(<span class="string">&#x27;svg&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;width&#x27;</span>, w)</span><br><span class="line">  .attr(<span class="string">&#x27;height&#x27;</span>, h)</span><br><span class="line"></span><br><span class="line">svg.append(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line">  .datum(dataset)</span><br><span class="line">  .attr(<span class="string">&#x27;class&#x27;</span>, <span class="string">&#x27;line&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;d&#x27;</span>, lineGen)</span><br></pre></td></tr></table></figure>
+
 <p>Instead of using <code>data()</code> to bind each value in our <code>dataset</code> array to a different element, we use <code>datum()</code>, the method for binding a <em>single</em> data value to a single element. The entire <code>dataset</code> array is bound to the new <code>path</code> we just created.</p>
 <p>We set a <code>d</code> attribute, passing in our line generator function as an argument.</p>
 <p>Since the data has already been bound to the <code>path</code>, the line generator simply grabs taht data. plots the pointers as we specified, and draws a line connecting them.</p>
 <h3 id="Dealing-with-Missing-Data"><a href="#Dealing-with-Missing-Data" class="headerlink" title="Dealing with Missing Data"></a>Dealing with Missing Data</h3><p>Assume a -99.99 value is not a true measurement, namely one value is missed.</p>
 <p><code>defined()</code> is just an configuration method, like <code>x()</code> and <code>y()</code>. If the result of its anonymous function is true, then that data value is included, or the value is excluded.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> lineGen = d3.line()</div><div class="line">  .defined(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (d.avarage &gt; <span class="hljs-number">0</span>))</div><div class="line">  .x(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> x.date)</div><div class="line">  .y(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> x.avatarge)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> lineGen = d3.line()</span><br><span class="line">  .defined(<span class="function"><span class="params">d</span> =&gt;</span> (d.avarage &gt; <span class="number">0</span>))</span><br><span class="line">  .x(<span class="function"><span class="params">d</span> =&gt;</span> x.date)</span><br><span class="line">  .y(<span class="function"><span class="params">d</span> =&gt;</span> x.avatarge)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Area-Charts"><a href="#Area-Charts" class="headerlink" title="Area Charts"></a>Area Charts</h3><p>Areas are not too different from lines. If a line is a series of connected (x, y) points, then an area is just that same line, plus a second such line (usually a flat baseline), with all the space in between filled in.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> area = d3.area()</div><div class="line">  .defined(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (d.avarage &gt; <span class="hljs-number">0</span>))</div><div class="line">  .x(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (xScale(d.date)))</div><div class="line">  .y0(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> (yScale.range()[<span class="hljs-number">0</span>]))</div><div class="line">  .y1(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> (yScale(d.avarge)))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> area = d3.area()</span><br><span class="line">  .defined(<span class="function"><span class="params">d</span> =&gt;</span> (d.avarage &gt; <span class="number">0</span>))</span><br><span class="line">  .x(<span class="function"><span class="params">d</span> =&gt;</span> (xScale(d.date)))</span><br><span class="line">  .y0(<span class="function">() =&gt;</span> (yScale.range()[<span class="number">0</span>]))</span><br><span class="line">  .y1(<span class="function">(<span class="params">d</span>) =&gt;</span> (yScale(d.avarge)))</span><br></pre></td></tr></table></figure>
+
 <p><code>y0</code> represents the area’s baseline, which <code>y1</code> represents the top.</p>
-<h1 id="Selections"><a href="#Selections" class="headerlink" title="Selections"></a>Selections</h1><h3 id="A-Closer-Look-at-Selections"><a href="#A-Closer-Look-at-Selections" class="headerlink" title="A Closer Look at Selections"></a>A Closer Look at Selections</h3><p><img src="https://www.safaribooksonline.com/library/view/interactive-data-visualization/9781491921296/assets/dvw2_1201.png" alt=""></p>
+<h1 id="Selections"><a href="#Selections" class="headerlink" title="Selections"></a>Selections</h1><h3 id="A-Closer-Look-at-Selections"><a href="#A-Closer-Look-at-Selections" class="headerlink" title="A Closer Look at Selections"></a>A Closer Look at Selections</h3><p><img src= "/img/loading.gif" data-lazy-src="https://www.safaribooksonline.com/library/view/interactive-data-visualization/9781491921296/assets/dvw2_1201.png"></p>
 <p><code>d3.select(&#39;body&#39;)</code> returns a <code>Selection</code>, which consists of <code>_groups</code> and <code>_parents</code></p>
 <p>So a selection contains two arrays: <code>_groups</code> and <code>_parents</code></p>
 <p><code>_groups</code> contains yet another array, which itself contains a list of elements – ony one in this case, <code>body</code>.</p>
 <p>Let’s expand <code>body</code> and will see a lot of properties associated with <code>body</code>.</p>
 <p>Selections are just very special objects generated and interpreted by D3. You will never manipulate a selection yourself – don’t bother trying to reach int <code>_groups</code> – as that’s what all of D3’s selection methods are for.</p>
 <p><code>d3.select()</code> and <code>d3.selectAll()</code> operate at the page level, which means</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> allGroups = d3.selectAll(<span class="hljs-string">'g'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> allGroups = d3.selectAll(<span class="string">&#x27;g&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <p>The <code>select()</code> and <code>selectAll()</code> statements create <em>new</em> selections, and hand those new selections off to the subsequent methods.</p>
 <p>To minimize the confusion from old and new selections, Mike Bostock recommends using an indentation convetion of four space when the selection is unchanged, but only two when a new selection is returned.</p>
 <p><code>select()</code> and <code>append()</code> are methods that return new selections, <code>attr()</code> does not, but merely relays whatever selection it just acted on.</p>
 <h3 id="Storing-Selections"><a href="#Storing-Selections" class="headerlink" title="Storing Selections"></a>Storing Selections</h3><p>Selections are immutable. All selection methods that affect which elements are selected (or their order) return a new selection rather tahn modifying the current selection.</p>
 <p>That is, once you make a selection, you can’t modify it. You can only make a new one, which could be a subset of the original, and overwrite it.</p>
-<h3 id="Enter-Merge-and-Exit"><a href="#Enter-Merge-and-Exit" class="headerlink" title="Enter, Merge and Exit"></a>Enter, Merge and Exit</h3><h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">d3.select(<span class="hljs-string">'body'</span>).selectAll(<span class="hljs-string">'p'</span>)</div><div class="line">  .data(dataset)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'p'</span>)</div><div class="line">  .text(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (<span class="hljs-string">'I can count up to '</span> + d))</div><div class="line">  .filter(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> (d &gt; <span class="hljs-number">15</span>))</div><div class="line">  .style(<span class="hljs-string">'color'</span>, <span class="hljs-string">'red'</span>)</div></pre></td></tr></table></figure>
+<h3 id="Enter-Merge-and-Exit"><a href="#Enter-Merge-and-Exit" class="headerlink" title="Enter, Merge and Exit"></a>Enter, Merge and Exit</h3><h3 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">d3.select(<span class="string">&#x27;body&#x27;</span>).selectAll(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">  .data(dataset)</span><br><span class="line">  .enter()</span><br><span class="line">  .append(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line">  .text(<span class="function"><span class="params">d</span> =&gt;</span> (<span class="string">&#x27;I can count up to &#x27;</span> + d))</span><br><span class="line">  .filter(<span class="function"><span class="params">d</span> =&gt;</span> (d &gt; <span class="number">15</span>))</span><br><span class="line">  .style(<span class="string">&#x27;color&#x27;</span>, <span class="string">&#x27;red&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <p><code>filter()</code> takes a selection and an anonymous function. If the function return <code>true</code> for a given element, then that element is included in the new selection returned by <code>filter()</code>.</p>
 <h3 id="Each"><a href="#Each" class="headerlink" title="Each"></a>Each</h3><p>The most common purpose of creating a selection is to ultimately to modify it in some way, such as by using <code>attr()</code> or <code>style()</code>. But it can be useful to define your own functions, espectially for custom calculation or modifications that will be repeated.</p>
 <p>We can use <code>each()</code> to run an arbitrary function once for each element in a selection. <code>each()</code> takes whatever selection it’s given and calls the specified function once for each item in the selection.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">selection.each(<span class="hljs-function">(<span class="hljs-params">d, i</span>) =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">selection.each(<span class="function">(<span class="params">d, i</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>Some serious points to note:</p>
 <ul>
 <li><p>Since the <code>d</code> and <code>i</code> arguments are specified in the function definition, D3 will populate them for you.</p>
@@ -392,27 +361,36 @@
 </ul>
 <h3 id="Pie-Layout"><a href="#Pie-Layout" class="headerlink" title="Pie Layout"></a>Pie Layout</h3><p><code>d3.pie()</code> might not be as delicious as it sounds, but it’s still worthy of your attention. It is typically used to create a doughnut or pie chart.</p>
 <p>Start with simple dataset</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> dataset = [ <span class="hljs-number">5</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">45</span>, <span class="hljs-number">6</span>, <span class="hljs-number">25</span> ]</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> dataset = [ <span class="number">5</span>, <span class="number">10</span>, <span class="number">20</span>, <span class="number">45</span>, <span class="number">6</span>, <span class="number">25</span> ]</span><br></pre></td></tr></table></figure>
+
 <p>Wd define a default pie layout</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> pie = d3.pie()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> pie = d3.pie()</span><br></pre></td></tr></table></figure>
+
 <p>Then, all that remains is to hand off our data to the new <code>pie()</code> function, as in <code>pie(dataset)</code>.</p>
 <p>The pie layout takes our simple array of numbers and generates an array of objects, one object for each value. Each of those objects now has a few new values – most important, <code>startAngle</code> and <code>endAngle</code>.</p>
 <p>To actually draw the wedges, we turn to <code>d3.arc()</code>, a handy built-in function for drawing arcs as SVG <code>path</code> elements.</p>
 <p>Arcs are defiend as custom functions, and they require inner and outer redius values.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> w = <span class="hljs-number">300</span></div><div class="line"><span class="hljs-keyword">const</span> h = <span class="hljs-number">300</span></div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> outerRadius = w / <span class="hljs-number">2</span></div><div class="line"><span class="hljs-keyword">const</span> innerRadius = <span class="hljs-number">0</span></div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> arc = d3.arc()</div><div class="line">  .innerRadius(innerRadius)</div><div class="line">  .outerRadius(outerRadius)</div></pre></td></tr></table></figure>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> svg = d3.select(<span class="hljs-string">'body'</span>)</div><div class="line">  .append(<span class="hljs-string">'svg'</span>)</div><div class="line">  .attr(<span class="hljs-string">'width'</span>, w)</div><div class="line">  .attr(<span class="hljs-string">'height'</span>, h)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> w = <span class="number">300</span></span><br><span class="line"><span class="keyword">const</span> h = <span class="number">300</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> outerRadius = w / <span class="number">2</span></span><br><span class="line"><span class="keyword">const</span> innerRadius = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> arc = d3.arc()</span><br><span class="line">  .innerRadius(innerRadius)</span><br><span class="line">  .outerRadius(outerRadius)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> svg = d3.select(<span class="string">&#x27;body&#x27;</span>)</span><br><span class="line">  .append(<span class="string">&#x27;svg&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;width&#x27;</span>, w)</span><br><span class="line">  .attr(<span class="string">&#x27;height&#x27;</span>, h)</span><br></pre></td></tr></table></figure>
+
 <p>Then we can create new groups for each incoming wedge, binding the pie-ified data to the new elements, and translating each group into the center of the chart, so the <code>path</code>s will appear in the right place</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// set up groups</span></div><div class="line"><span class="hljs-keyword">const</span> arcs = svg.selectAll(<span class="hljs-string">'g.arc'</span>)</div><div class="line">  .data(pie(dataset))</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'g'</span>)</div><div class="line">  .attr(<span class="hljs-string">'class'</span>, <span class="hljs-string">'arc'</span>)</div><div class="line">  .attr(<span class="hljs-string">'transform'</span>, <span class="hljs-string">'translate('</span> + outerRadius + <span class="hljs-string">', '</span> + outerRadius + <span class="hljs-string">')'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// set up groups</span></span><br><span class="line"><span class="keyword">const</span> arcs = svg.selectAll(<span class="string">&#x27;g.arc&#x27;</span>)</span><br><span class="line">  .data(pie(dataset))</span><br><span class="line">  .enter()</span><br><span class="line">  .append(<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;class&#x27;</span>, <span class="string">&#x27;arc&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;transform&#x27;</span>, <span class="string">&#x27;translate(&#x27;</span> + outerRadius + <span class="string">&#x27;, &#x27;</span> + outerRadius + <span class="string">&#x27;)&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <p>Note that we’re saving a reference to each newly created <code>g</code> in a variable called <code>arcs</code></p>
 <p>Finally, within each new <code>g</code>, we append a <code>path</code>. A <code>path</code>‘s path description is defined in the <code>d</code> attribute. So we call the <code>arc</code> generator, which generates the path information based on the data already bound to this group.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// draw arc paths</span></div><div class="line">arcs.append(<span class="hljs-string">'path'</span>)</div><div class="line">  .attr(<span class="hljs-string">'fill'</span>, (d, i) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> colors(i)</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'d'</span>, arc)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// draw arc paths</span></span><br><span class="line">arcs.append(<span class="string">&#x27;path&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;fill&#x27;</span>, <span class="function">(<span class="params">d, i</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> colors(i)</span><br><span class="line">  &#125;)</span><br><span class="line">  .attr(<span class="string">&#x27;d&#x27;</span>, arc)</span><br></pre></td></tr></table></figure>
+
 <p><code>arc</code> is our path generator function.</p>
 <p>When a named function is specified as a parameter in this way, D3 automcatically passes in the datum and index values, without us having to write them out explicitly.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">.attr(<span class="hljs-string">'d'</span>, arc)</div><div class="line"></div><div class="line"><span class="hljs-comment">// equivalent</span></div><div class="line"></div><div class="line">.attr(<span class="hljs-string">'d'</span>, (d, i) =&gt; (arc(d, i)))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">.attr(<span class="string">&#x27;d&#x27;</span>, arc)</span><br><span class="line"></span><br><span class="line"><span class="comment">// equivalent</span></span><br><span class="line"></span><br><span class="line">.attr(<span class="string">&#x27;d&#x27;</span>, <span class="function">(<span class="params">d, i</span>) =&gt;</span> (arc(d, i)))</span><br></pre></td></tr></table></figure>
+
 <p>D3 has a number of handy ways to generate categorical colors</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> color = d3.scaleOrdinal(d3.schemeCategory10)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> color = d3.scaleOrdinal(d3.schemeCategory10)</span><br></pre></td></tr></table></figure>
+
 <p>Generate text labels for each wedge:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">arcs.append(<span class="hljs-string">'text'</span>)</div><div class="line">  .artr(<span class="hljs-string">'transform'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> <span class="hljs-string">'translate('</span> + arc.centroid(d) + <span class="hljs-string">')'</span></div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'text-anchor'</span>, <span class="hljs-string">'middle'</span>)</div><div class="line">  .text(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> &#123; <span class="hljs-keyword">return</span> d.value &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">arcs.append(<span class="string">&#x27;text&#x27;</span>)</span><br><span class="line">  .artr(<span class="string">&#x27;transform&#x27;</span>, <span class="function">(<span class="params">d</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;translate(&#x27;</span> + arc.centroid(d) + <span class="string">&#x27;)&#x27;</span></span><br><span class="line">  &#125;)</span><br><span class="line">  .attr(<span class="string">&#x27;text-anchor&#x27;</span>, <span class="string">&#x27;middle&#x27;</span>)</span><br><span class="line">  .text(<span class="function">(<span class="params">d</span>) =&gt;</span> &#123; <span class="keyword">return</span> d.value &#125;)</span><br></pre></td></tr></table></figure>
+
 <p>A <em>centroid</em> is the calculated center point of any shape, whether that shape is regular(like a square) or highly irregular(like an outline of the state of Maryland).</p>
 <p><code>arc.centroid()</code> is super-helpful function that calculates and returns the center point of any arc.</p>
 <blockquote>
@@ -421,18 +399,24 @@
 <h3 id="Stack-Layout"><a href="#Stack-Layout" class="headerlink" title="Stack Layout"></a>Stack Layout</h3><p><code>d3.stack()</code> converts two-dimentional data into ‘stacked’ data.</p>
 <p>It calculates a baseline value for each datum, so you can <code>stack</code> layers of data on top of one another.</p>
 <p>Start with some data</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> dataset = [</div><div class="line">  &#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">22</span> &#125;,</div><div class="line">true&#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">12</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">28</span> &#125;,</div><div class="line">true&#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">19</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">32</span> &#125;,</div><div class="line">true&#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">7</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">23</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">35</span> &#125;,</div><div class="line">true&#123; <span class="hljs-attr">apples</span>: <span class="hljs-number">23</span>, <span class="hljs-attr">oranges</span>: <span class="hljs-number">17</span>, <span class="hljs-attr">grapes</span>: <span class="hljs-number">43</span> &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> dataset = [</span><br><span class="line">  &#123; <span class="attr">apples</span>: <span class="number">5</span>, <span class="attr">oranges</span>: <span class="number">10</span>, <span class="attr">grapes</span>: <span class="number">22</span> &#125;,</span><br><span class="line">true&#123; <span class="attr">apples</span>: <span class="number">4</span>, <span class="attr">oranges</span>: <span class="number">12</span>, <span class="attr">grapes</span>: <span class="number">28</span> &#125;,</span><br><span class="line">true&#123; <span class="attr">apples</span>: <span class="number">2</span>, <span class="attr">oranges</span>: <span class="number">19</span>, <span class="attr">grapes</span>: <span class="number">32</span> &#125;,</span><br><span class="line">true&#123; <span class="attr">apples</span>: <span class="number">7</span>, <span class="attr">oranges</span>: <span class="number">23</span>, <span class="attr">grapes</span>: <span class="number">35</span> &#125;,</span><br><span class="line">true&#123; <span class="attr">apples</span>: <span class="number">23</span>, <span class="attr">oranges</span>: <span class="number">17</span>, <span class="attr">grapes</span>: <span class="number">43</span> &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
 <p>The <code>dataset</code> is organized by <em>column</em>. The stack layout reconfigures the data to be organized by <em>categories</em>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Set up stack method</span></div><div class="line"><span class="hljs-keyword">const</span> stack = d3.stack().keys([<span class="hljs-string">'apples'</span>, <span class="hljs-string">'oranges'</span>, <span class="hljs-string">'grapes'</span>])</div><div class="line"></div><div class="line"><span class="hljs-comment">// Data, stacked</span></div><div class="line"><span class="hljs-keyword">const</span> series = stack(dataset)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Set up stack method</span></span><br><span class="line"><span class="keyword">const</span> stack = d3.stack().keys([<span class="string">&#x27;apples&#x27;</span>, <span class="string">&#x27;oranges&#x27;</span>, <span class="string">&#x27;grapes&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">// Data, stacked</span></span><br><span class="line"><span class="keyword">const</span> series = stack(dataset)</span><br></pre></td></tr></table></figure>
+
 <p>Now <code>series</code> is an array with three values, each one itself an array corresponding to each categorical series: apples, oranges, and grapes(in that order because we specified as such in <code>keys()</code>)</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">//'series', the array formerly known as 'dataset'</span></div><div class="line">[</div><div class="line">true[ [ <span class="hljs-number">0</span>,  <span class="hljs-number">5</span>], [ <span class="hljs-number">0</span>,  <span class="hljs-number">4</span>], [ <span class="hljs-number">0</span>,  <span class="hljs-number">2</span>], [ <span class="hljs-number">0</span>,  <span class="hljs-number">7</span>], [ <span class="hljs-number">0</span>, <span class="hljs-number">23</span>] ],  <span class="hljs-comment">// apples</span></div><div class="line">true[ [ <span class="hljs-number">5</span>, <span class="hljs-number">15</span>], [ <span class="hljs-number">4</span>, <span class="hljs-number">16</span>], [ <span class="hljs-number">2</span>, <span class="hljs-number">21</span>], [ <span class="hljs-number">7</span>, <span class="hljs-number">30</span>], [<span class="hljs-number">23</span>, <span class="hljs-number">40</span>] ],  <span class="hljs-comment">// oranges</span></div><div class="line">true[ [<span class="hljs-number">15</span>, <span class="hljs-number">37</span>], [<span class="hljs-number">16</span>, <span class="hljs-number">44</span>], [<span class="hljs-number">21</span>, <span class="hljs-number">53</span>], [<span class="hljs-number">30</span>, <span class="hljs-number">65</span>], [<span class="hljs-number">40</span>, <span class="hljs-number">83</span>] ]   <span class="hljs-comment">// grapes</span></div><div class="line">]</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//&#x27;series&#x27;, the array formerly known as &#x27;dataset&#x27;</span></span><br><span class="line">[</span><br><span class="line">true[ [ <span class="number">0</span>,  <span class="number">5</span>], [ <span class="number">0</span>,  <span class="number">4</span>], [ <span class="number">0</span>,  <span class="number">2</span>], [ <span class="number">0</span>,  <span class="number">7</span>], [ <span class="number">0</span>, <span class="number">23</span>] ],  <span class="comment">// apples</span></span><br><span class="line">true[ [ <span class="number">5</span>, <span class="number">15</span>], [ <span class="number">4</span>, <span class="number">16</span>], [ <span class="number">2</span>, <span class="number">21</span>], [ <span class="number">7</span>, <span class="number">30</span>], [<span class="number">23</span>, <span class="number">40</span>] ],  <span class="comment">// oranges</span></span><br><span class="line">true[ [<span class="number">15</span>, <span class="number">37</span>], [<span class="number">16</span>, <span class="number">44</span>], [<span class="number">21</span>, <span class="number">53</span>], [<span class="number">30</span>, <span class="number">65</span>], [<span class="number">40</span>, <span class="number">83</span>] ]   <span class="comment">// grapes</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
 <p>To stack element visually, now we can reference each data object’s baseline and top line values.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Add a group for each row of data</span></div><div class="line"><span class="hljs-keyword">const</span> groups = svg.selectAll(<span class="hljs-string">'g'</span>)</div><div class="line">  .data(series)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'g'</span>)</div><div class="line">  .style(<span class="hljs-string">'fill'</span>, (di, i) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> colors(i)</div><div class="line">  &#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// Add a rect for each data value</span></div><div class="line"><span class="hljs-keyword">const</span> rects = groups.selectAll(<span class="hljs-string">'rect'</span>)</div><div class="line">  .data(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> (d))</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'rect'</span>)</div><div class="line">  .attr(<span class="hljs-string">'x'</span>, (d, i) =&gt; &#123;</div><div class="line">    retrun xScale(i)</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'y'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> ySclae(d[<span class="hljs-number">0</span>])</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'height'</span>, (d) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> yScale(d[<span class="hljs-number">1</span>]-d[<span class="hljs-number">0</span>])</div><div class="line">  &#125;)</div><div class="line">  .attr(<span class="hljs-string">'width'</span>, xScale.bandWidth())</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Add a group for each row of data</span></span><br><span class="line"><span class="keyword">const</span> groups = svg.selectAll(<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">  .data(series)</span><br><span class="line">  .enter()</span><br><span class="line">  .append(<span class="string">&#x27;g&#x27;</span>)</span><br><span class="line">  .style(<span class="string">&#x27;fill&#x27;</span>, <span class="function">(<span class="params">di, i</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> colors(i)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Add a rect for each data value</span></span><br><span class="line"><span class="keyword">const</span> rects = groups.selectAll(<span class="string">&#x27;rect&#x27;</span>)</span><br><span class="line">  .data(<span class="function">(<span class="params">d</span>) =&gt;</span> (d))</span><br><span class="line">  .enter()</span><br><span class="line">  .append(<span class="string">&#x27;rect&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;x&#x27;</span>, <span class="function">(<span class="params">d, i</span>) =&gt;</span> &#123;</span><br><span class="line">    retrun xScale(i)</span><br><span class="line">  &#125;)</span><br><span class="line">  .attr(<span class="string">&#x27;y&#x27;</span>, <span class="function">(<span class="params">d</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> ySclae(d[<span class="number">0</span>])</span><br><span class="line">  &#125;)</span><br><span class="line">  .attr(<span class="string">&#x27;height&#x27;</span>, <span class="function">(<span class="params">d</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> yScale(d[<span class="number">1</span>]-d[<span class="number">0</span>])</span><br><span class="line">  &#125;)</span><br><span class="line">  .attr(<span class="string">&#x27;width&#x27;</span>, xScale.bandWidth())</span><br></pre></td></tr></table></figure>
+
 <p>Within each group, we select all the <code>rect</code>s and bind a subset of the data with this line</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.data(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> (d))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.data(<span class="function">(<span class="params">d</span>) =&gt;</span> (d))</span><br></pre></td></tr></table></figure>
+
 <h4 id="A-New-Order"><a href="#A-New-Order" class="headerlink" title="A New Order"></a>A New Order</h4><p>Unless otherwise specified, series will be stacked in the order specified in <code>keys()</code>.</p>
 <p>But you can use <code>order()</code> to specify an alternate sequence to be applied before all the stacked values are calculated.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> stack = d3.stack()</div><div class="line">  .keys([ <span class="hljs-string">'apples'</span>, <span class="hljs-string">'oranges'</span>, <span class="hljs-string">'grapes'</span> ])</div><div class="line">  .order(d3.stackOrderDesending)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> stack = d3.stack()</span><br><span class="line">  .keys([ <span class="string">&#x27;apples&#x27;</span>, <span class="string">&#x27;oranges&#x27;</span>, <span class="string">&#x27;grapes&#x27;</span> ])</span><br><span class="line">  .order(d3.stackOrderDesending)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p>d3.stackOrderNone</p>
 </li>
@@ -448,8 +432,10 @@
 <p>Force layouts are typically used with network data. In computer science, this kind of dataset is called a <code>graph</code>. A simple graph is a list of <code>node</code> and <code>edge</code>. The nodes are entities in the dataset, and the edges are the <code>connection</code>s between nodes. Some nodes will be connected by edges and others won’t.</p>
 <p>Nodea are commonly represented as circles and edges as lines.</p>
 <p>The physical metaphor here is of particles that repel each other, yet are also connected by strings.  The repelling forces push particles away from each other, preventing visual overlap, and the strings prevent them from just flying out into space, thereby keeping them on the screen where we can see them.</p>
-<h4 id="Preparing-the-network-data"><a href="#Preparing-the-network-data" class="headerlink" title="Preparing the network data"></a>Preparing the network data</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> dataset = &#123;</div><div class="line">true<span class="hljs-attr">nodes</span>: [</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Adam"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Bob"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Carrie"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Donovan"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Edward"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Felicity"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"George"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Hannah"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Iris"</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">name</span>: <span class="hljs-string">"Jerry"</span> &#125;</div><div class="line">true],</div><div class="line">true<span class="hljs-attr">edges</span>: [</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">1</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">2</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">3</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">4</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">5</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">5</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">5</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">4</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">8</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">9</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">6</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">7</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">7</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">8</span> &#125;,</div><div class="line">truetrue&#123; <span class="hljs-attr">source</span>: <span class="hljs-number">8</span>, <span class="hljs-attr">target</span>: <span class="hljs-number">9</span> &#125;</div><div class="line">true]</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h4 id="Defining-the-Force-Simulation"><a href="#Defining-the-Force-Simulation" class="headerlink" title="Defining the Force Simulation"></a>Defining the Force Simulation</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Initialize a simple force layout, using the nodes and edges in dataset</span></div><div class="line"><span class="hljs-keyword">const</span> layout = d3.forceSimulation(dataset.nodes)</div><div class="line">  .force(<span class="hljs-string">'charge'</span>, d3.forceManyBody())</div><div class="line">  .force(<span class="hljs-string">'link'</span>, d3.forceLink(dataset.edges))</div><div class="line">  .force(<span class="hljs-string">'center'</span>, d3.forceCenter().x(w/<span class="hljs-number">2</span>).y(h/<span class="hljs-number">2</span>))</div></pre></td></tr></table></figure>
+<h4 id="Preparing-the-network-data"><a href="#Preparing-the-network-data" class="headerlink" title="Preparing the network data"></a>Preparing the network data</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> dataset = &#123;</span><br><span class="line">truenodes: [</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;Adam&quot;</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;Bob&quot;</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;Carrie&quot;</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;Donovan&quot;</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;Edward&quot;</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;Felicity&quot;</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;George&quot;</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;Hannah&quot;</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;Iris&quot;</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">name</span>: <span class="string">&quot;Jerry&quot;</span> &#125;</span><br><span class="line">true],</span><br><span class="line">trueedges: [</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">0</span>, <span class="attr">target</span>: <span class="number">1</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">0</span>, <span class="attr">target</span>: <span class="number">2</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">0</span>, <span class="attr">target</span>: <span class="number">3</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">0</span>, <span class="attr">target</span>: <span class="number">4</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">1</span>, <span class="attr">target</span>: <span class="number">5</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">2</span>, <span class="attr">target</span>: <span class="number">5</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">2</span>, <span class="attr">target</span>: <span class="number">5</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">3</span>, <span class="attr">target</span>: <span class="number">4</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">5</span>, <span class="attr">target</span>: <span class="number">8</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">5</span>, <span class="attr">target</span>: <span class="number">9</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">6</span>, <span class="attr">target</span>: <span class="number">7</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">7</span>, <span class="attr">target</span>: <span class="number">8</span> &#125;,</span><br><span class="line">truetrue&#123; <span class="attr">source</span>: <span class="number">8</span>, <span class="attr">target</span>: <span class="number">9</span> &#125;</span><br><span class="line">true]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Defining-the-Force-Simulation"><a href="#Defining-the-Force-Simulation" class="headerlink" title="Defining the Force Simulation"></a>Defining the Force Simulation</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Initialize a simple force layout, using the nodes and edges in dataset</span></span><br><span class="line"><span class="keyword">const</span> layout = d3.forceSimulation(dataset.nodes)</span><br><span class="line">  .force(<span class="string">&#x27;charge&#x27;</span>, d3.forceManyBody())</span><br><span class="line">  .force(<span class="string">&#x27;link&#x27;</span>, d3.forceLink(dataset.edges))</span><br><span class="line">  .force(<span class="string">&#x27;center&#x27;</span>, d3.forceCenter().x(w/<span class="number">2</span>).y(h/<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+
 <p>Call <code>d3.forceSimulation()</code> and pass in a reference to the nodes. This will generate a new simulator and automatically start running it, but without any forces applied, it won’t be very interesting.</p>
 <p>To create force, call <code>force()</code> as many times as you like, each time specifying an arbitrary name for each force(in case you want to reference it later) and the name of a force function.</p>
 <ul>
@@ -462,238 +448,127 @@
 </ul>
 <h4 id="Creating-the-Visual-Elements"><a href="#Creating-the-Visual-Elements" class="headerlink" title="Creating the Visual Elements"></a>Creating the Visual Elements</h4><p>After defining our force simulation, we proceed to generate visual elements.</p>
 <p>First we create a line for each edge:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Create edges as lines</span></div><div class="line"><span class="hljs-keyword">const</span> edges = svg.selectAll(<span class="hljs-string">'line'</span>)</div><div class="line">  .data(dataset.edges)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'line'</span>)</div><div class="line">  .style(<span class="hljs-string">'stroke'</span>, <span class="hljs-string">'#ccc'</span>)</div><div class="line">  .style(<span class="hljs-string">'stroke-width'</span>, <span class="hljs-number">1</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create edges as lines</span></span><br><span class="line"><span class="keyword">const</span> edges = svg.selectAll(<span class="string">&#x27;line&#x27;</span>)</span><br><span class="line">  .data(dataset.edges)</span><br><span class="line">  .enter()</span><br><span class="line">  .append(<span class="string">&#x27;line&#x27;</span>)</span><br><span class="line">  .style(<span class="string">&#x27;stroke&#x27;</span>, <span class="string">&#x27;#ccc&#x27;</span>)</span><br><span class="line">  .style(<span class="string">&#x27;stroke-width&#x27;</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
 <p>Then create a circle for each node:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> nodes = svg.selectAll(<span class="hljs-string">'circle'</span>)</div><div class="line">  .data(dataset.nodes)</div><div class="line">  .enter()</div><div class="line">  .append(<span class="hljs-string">'circle'</span>)</div><div class="line">  .attr(<span class="hljs-string">'r'</span>, <span class="hljs-number">10</span>)</div><div class="line">  .style(<span class="hljs-string">'fill'</span>, (d, i) =&gt; &#123;</div><div class="line">    <span class="hljs-keyword">return</span> colors(i)</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nodes = svg.selectAll(<span class="string">&#x27;circle&#x27;</span>)</span><br><span class="line">  .data(dataset.nodes)</span><br><span class="line">  .enter()</span><br><span class="line">  .append(<span class="string">&#x27;circle&#x27;</span>)</span><br><span class="line">  .attr(<span class="string">&#x27;r&#x27;</span>, <span class="number">10</span>)</span><br><span class="line">  .style(<span class="string">&#x27;fill&#x27;</span>, <span class="function">(<span class="params">d, i</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> colors(i)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
 <p>Add simple tooltip:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Add a simple tooltip</span></div><div class="line"></div><div class="line">nodes.append(<span class="hljs-string">'title'</span>)</div><div class="line">  .text(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> &#123;</div><div class="line">    <span class="hljs-keyword">return</span> d.name</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Add a simple tooltip</span></span><br><span class="line"></span><br><span class="line">nodes.append(<span class="string">&#x27;title&#x27;</span>)</span><br><span class="line">  .text(<span class="function">(<span class="params">d</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> d.name</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
+
 <h4 id="Updating-Visuals-Over-Time"><a href="#Updating-Visuals-Over-Time" class="headerlink" title="Updating Visuals Over Time"></a>Updating Visuals Over Time</h4><p>D3’s force simulation ‘ticks’ forward through time, just like every other physics simulation. With each tick, the simulation adjusts the position values for each node and edge according to the rules we specified when the layout was first initialized. To see this progress visually, we need to update the associated elements – the lines and circles – on every tick.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Every time the simulation 'ticks', this will be called</span></div><div class="line">force.on(<span class="hljs-string">'tick'</span>, () =&gt; &#123;</div><div class="line">  edges.attr(<span class="hljs-string">'x1'</span>, d =&gt; (d.source.x))</div><div class="line">    .attr(<span class="hljs-string">'y1'</span>, d =&gt; (d.source.y))</div><div class="line">    .attr(<span class="hljs-string">'x2'</span>, d =&gt; (d.target.x))</div><div class="line">    .attr(<span class="hljs-string">'y2'</span>, d =&gt; (d.target.y))</div><div class="line"></div><div class="line">  nodes.attr(<span class="hljs-string">'cx'</span>, d =&gt; (d.x))</div><div class="line">    .attr(<span class="hljs-string">'cy'</span>, d =&gt; (d.y))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Every time the simulation &#x27;ticks&#x27;, this will be called</span></span><br><span class="line">force.on(<span class="string">&#x27;tick&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  edges.attr(<span class="string">&#x27;x1&#x27;</span>, <span class="function"><span class="params">d</span> =&gt;</span> (d.source.x))</span><br><span class="line">    .attr(<span class="string">&#x27;y1&#x27;</span>, <span class="function"><span class="params">d</span> =&gt;</span> (d.source.y))</span><br><span class="line">    .attr(<span class="string">&#x27;x2&#x27;</span>, <span class="function"><span class="params">d</span> =&gt;</span> (d.target.x))</span><br><span class="line">    .attr(<span class="string">&#x27;y2&#x27;</span>, <span class="function"><span class="params">d</span> =&gt;</span> (d.target.y))</span><br><span class="line"></span><br><span class="line">  nodes.attr(<span class="string">&#x27;cx&#x27;</span>, <span class="function"><span class="params">d</span> =&gt;</span> (d.x))</span><br><span class="line">    .attr(<span class="string">&#x27;cy&#x27;</span>, <span class="function"><span class="params">d</span> =&gt;</span> (d.y))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>This tells D3, ‘Ok, every time you tick, take the new (x, y) values for each line and circle and update them in the DOM’</p>
 <p>Here the (x, y) are calculated and appeded by D3.</p>
 <h4 id="Draggable-Nodes"><a href="#Draggable-Nodes" class="headerlink" title="Draggable Nodes"></a>Draggable Nodes</h4><p>Add the <code>call()</code> statement to our <code>Nodes</code>:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">.cal(d3.drag()</div><div class="line">  .on(<span class="hljs-string">'start'</span>, dragStarted)</div><div class="line">  .on(<span class="hljs-string">'drag'</span>, dragging)</div><div class="line">  .on(<span class="hljs-string">'end'</span>, dragEnded))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">.cal(d3.drag()</span><br><span class="line">  .on(<span class="string">&#x27;start&#x27;</span>, dragStarted)</span><br><span class="line">  .on(<span class="string">&#x27;drag&#x27;</span>, dragging)</span><br><span class="line">  .on(<span class="string">&#x27;end&#x27;</span>, dragEnded))</span><br></pre></td></tr></table></figure>
+
 <p>This bit code ‘calls’ the <code>d3.drag()</code> method on each node.</p>
 <p><code>d3.drag()</code>, in turn, sets event listeners for the three drag-related events, and specifies functions to trigger whenever one of those events occurs.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dragStarted</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (!d3.event.active) force.alphaTarget(<span class="hljs-number">0.3</span>).restart()</div><div class="line">  d.fx = d.x</div><div class="line">  d.fy = d.y</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dragging</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  d.fx = d3.event.x</div><div class="line">  d.fy = d3.event.y</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">dragEnded</span> (<span class="hljs-params">d</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (!d3.event.active) force.alphaTarget(<span class="hljs-number">0</span>)</div><div class="line">  d.fx = <span class="hljs-literal">null</span></div><div class="line">  d.fy = <span class="hljs-literal">null</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dragStarted</span> (<span class="params">d</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!d3.event.active) force.alphaTarget(<span class="number">0.3</span>).restart()</span><br><span class="line">  d.fx = d.x</span><br><span class="line">  d.fy = d.y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dragging</span> (<span class="params">d</span>) </span>&#123;</span><br><span class="line">  d.fx = d3.event.x</span><br><span class="line">  d.fy = d3.event.y</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dragEnded</span> (<span class="params">d</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!d3.event.active) force.alphaTarget(<span class="number">0</span>)</span><br><span class="line">  d.fx = <span class="literal">null</span></span><br><span class="line">  d.fy = <span class="literal">null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h1 id="Geomapping"><a href="#Geomapping" class="headerlink" title="Geomapping"></a>Geomapping</h1><p>…</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/">https://ezcook.de/2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/D3/">D3</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/07/10/Simple-Api-of-Mongoose/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Simple Api of Mongoose</div></div></a></div><div class="next-post pull-right"><a href="/2017/07/01/Simple-usage-of-SW/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Simple Usage of SW</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/08/30/Attributes-in-D3/" title="Attributes in D3"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-30</div><div class="relatedPosts_title">Attributes in D3</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/30/Basic-Elements-in-D3/" title="Basic Elements in D3"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-30</div><div class="relatedPosts_title">Basic Elements in D3</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/31/Manipulate-Data-in-D3/" title="Manipulate Data in D3"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-31</div><div class="relatedPosts_title">Manipulate Data in D3</div></div></a></div><div class="relatedPosts_item"><a href="/2017/07/11/Quick-Reference-of-D3/" title="Quick Reference of D3"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-07-11</div><div class="relatedPosts_title">Quick Reference of D3</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/29/Simple-Example-of-Line-Chart-with-D3v4/" title="Simple Example of Line Chart With D3v4"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-29</div><div class="relatedPosts_title">Simple Example of Line Chart With D3v4</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/31/Styles-in-D3/" title="Styles in D3"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-31</div><div class="relatedPosts_title">Styles in D3</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/'
+    this.page.identifier = '2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/'
+    this.page.title = 'Notes on Interactive Data Visualization for the Web'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/D3/">D3</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/07/10/Simple-Api-of-Mongoose/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Simple Api of Mongoose</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/07/01/Simple-usage-of-SW/">
-                <span class="level-item">Simple Usage of SW</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2017/07/07/Notes-on-Interactive-Data-Visualization-for-the-Web/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

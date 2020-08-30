@@ -1,187 +1,127 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Usage of Mock | EzCook</title><meta name="description" content="Installation1yarn add mockjs  Simple Usage1234567const Mock &#x3D; require(&amp;#x27;mock&amp;#x27;)const data &#x3D; Mock.mock(&amp;#123;  &amp;#x27;list|1-10&amp;#x27;: [&amp;#123;    &amp;#x27;id|+1&amp;#x27;: 1  &amp;#125;]&amp;#125;)console.log("><meta name="keywords" content="JavaScript"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2017/08/29/Usage-of-Mock/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Usage of Mock"><meta property="og:url" content="https://ezcook.de/2017/08/29/Usage-of-Mock/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Installation1yarn add mockjs  Simple Usage1234567const Mock &#x3D; require(&amp;#x27;mock&amp;#x27;)const data &#x3D; Mock.mock(&amp;#123;  &amp;#x27;list|1-10&amp;#x27;: [&amp;#123;    &amp;#x27;id|+1&amp;#x27;: 1  &amp;#125;]&amp;#125;)console.log("><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2017-08-29T08:27:11.000Z"><meta property="article:modified_time" content="2020-08-30T12:58:39.866Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Usage of Mock - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:58:39'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Installation"><span class="toc-number">1.</span> <span class="toc-text">Installation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Simple-Usage"><span class="toc-number">2.</span> <span class="toc-text">Simple Usage</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Data-Template-Definition-DTD"><span class="toc-number">3.</span> <span class="toc-text">Data Template Definition(DTD)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Data-Placeholder-Definition-DPD"><span class="toc-number">4.</span> <span class="toc-text">Data Placeholder Definition(DPD)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mock-mock"><span class="toc-number">5.</span> <span class="toc-text">Mock.mock()</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-mock-rurl-rtype-template-function-options"><span class="toc-number">5.1.</span> <span class="toc-text">Mock.mock(rurl?, rtype?, template | function(options))</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Mock-mock-template"><span class="toc-number">5.1.1.</span> <span class="toc-text">Mock.mock(template)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mock-mock-rurl-template"><span class="toc-number">5.1.2.</span> <span class="toc-text">Mock.mock(rurl, template)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mock-mock-rurl-function-options"><span class="toc-number">5.1.3.</span> <span class="toc-text">Mock.mock(rurl, function(options))</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mock-mock-rurl-rtype-template"><span class="toc-number">5.1.4.</span> <span class="toc-text">Mock.mock(rurl, rtype, template)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mock-mock-rurl-rtype-function-options"><span class="toc-number">5.1.5.</span> <span class="toc-text">Mock.mock(rurl, rtype, function(options))</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mock-setup"><span class="toc-number">6.</span> <span class="toc-text">Mock.setup()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mock-Random"><span class="toc-number">7.</span> <span class="toc-text">Mock.Random</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-boolean-min-max-current"><span class="toc-number">7.1.</span> <span class="toc-text">Mock.Random.boolean(min?, max?, current?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-natural-min-max"><span class="toc-number">7.2.</span> <span class="toc-text">Mock.Random.natural(min?, max?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-integer-min-max"><span class="toc-number">7.3.</span> <span class="toc-text">Mock.Random.integer(min?, max?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-float-min-max-dmin-dmax"><span class="toc-number">7.4.</span> <span class="toc-text">Mock.Random.float(min?, max?, dmin?, dmax?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-character-pool"><span class="toc-number">7.5.</span> <span class="toc-text">Mock.Random.character(pool?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-string-pool-min-max"><span class="toc-number">7.6.</span> <span class="toc-text">Mock.Random.string(pool?, min?, max?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-range-start-stop-step"><span class="toc-number">7.7.</span> <span class="toc-text">Mock.Random.range(start?, stop, step?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-date-format"><span class="toc-number">7.8.</span> <span class="toc-text">Mock.Random.date(format?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-time-format"><span class="toc-number">7.9.</span> <span class="toc-text">Mock.Random.time(format?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-datetime-format"><span class="toc-number">7.10.</span> <span class="toc-text">Mock.Random.datetime(format?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-now-unit-format"><span class="toc-number">7.11.</span> <span class="toc-text">Mock.Random.now(unit?, format?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-image-size-background-foreground-format-text"><span class="toc-number">7.12.</span> <span class="toc-text">Mock.Random.image(size?, background?, foreground?, format?, text?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-dataImage-size-text"><span class="toc-number">7.13.</span> <span class="toc-text">Mock.Random.dataImage(size?, text?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-color"><span class="toc-number">7.14.</span> <span class="toc-text">Mock.Random.color()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-hex"><span class="toc-number">7.15.</span> <span class="toc-text">Mock.Random.hex()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-rgb"><span class="toc-number">7.16.</span> <span class="toc-text">Mock.Random.rgb()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-rbga"><span class="toc-number">7.17.</span> <span class="toc-text">Mock.Random.rbga()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-hsl"><span class="toc-number">7.18.</span> <span class="toc-text">Mock.Random.hsl()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-paragraph-null-length-min-max-Mock-Random-cparagraph-null-length-min-max"><span class="toc-number">7.19.</span> <span class="toc-text">Mock.Random.paragraph(null | length | min, max) | Mock.Random.cparagraph(null | length | min, max)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-sentence-null-length-min-max-Mock-Random-csentence-null-length-min-max"><span class="toc-number">7.20.</span> <span class="toc-text">Mock.Random.sentence(null | length | min, max) | Mock.Random.csentence(null | length | min, max)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-workd-null-length-min-max-Mock-Random-cword-pool-min-max"><span class="toc-number">7.21.</span> <span class="toc-text">Mock.Random.workd(null | length | min, max) | Mock.Random.cword(pool?, min?, max?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-title-null-length-min-max-Mock-Random-ctitle-null-length-min-max"><span class="toc-number">7.22.</span> <span class="toc-text">Mock.Random.title(null | length | min, max) | Mock.Random.ctitle(null | length | min, max)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-first-Mock-Random-last-Mock-Random-name-middle-Mock-Random-cfirst-Mock-Random-clast-Mock-Random-cname"><span class="toc-number">7.23.</span> <span class="toc-text">Mock.Random.first() | Mock.Random.last() | Mock.Random.name(middle?) | Mock.Random.cfirst() | Mock.Random.clast() | Mock.Random.cname()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-url-protocol-host"><span class="toc-number">7.24.</span> <span class="toc-text">Mock.Random.url(protocol?, host?)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-protocol-Mock-Random-domain-Mock-Random-tld-Mock-Random-email-domain-Mock-Random-ip"><span class="toc-number">7.25.</span> <span class="toc-text">Mock.Random.protocol() | Mock.Random.domain() | Mock.Random.tld() | Mock.Random.email(domain?) | Mock.Random.ip()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-region-Mock-Random-province-Mock-Random-city-prefix-Mock-Random-county-prefix-Mock-Random-zip"><span class="toc-number">7.26.</span> <span class="toc-text">Mock.Random.region() | Mock.Random.province() | Mock.Random.city(prefix?) | Mock.Random.county(prefix?) | Mock.Random.zip()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-captilize-word-Mock-Random-upper-str-Mock-Random-lower-str-Mock-Random-pick-arr-Mock-Random-shuffle-arr"><span class="toc-number">7.27.</span> <span class="toc-text">Mock.Random.captilize(word) | Mock.Random.upper(str) | Mock.Random.lower(str) | Mock.Random.pick(arr) | Mock.Random.shuffle(arr)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-guid"><span class="toc-number">7.28.</span> <span class="toc-text">Mock.Random.guid()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-id"><span class="toc-number">7.29.</span> <span class="toc-text">Mock.Random.id()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mock-Random-increment-step"><span class="toc-number">7.30.</span> <span class="toc-text">Mock.Random.increment(step?)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mock-valid-template-data"><span class="toc-number">8.</span> <span class="toc-text">Mock.valid(template, data)</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Usage of Mock</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-08-29T08:27:11.000Z" title="Created 2017-08-29 16:27:11">2017-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:58:39.866Z" title="Updated 2020-08-30 20:58:39">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2017/08/29/Usage-of-Mock/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h3 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add mockjs</span><br></pre></td></tr></table></figure>
 
+<h3 id="Simple-Usage"><a href="#Simple-Usage" class="headerlink" title="Simple Usage"></a>Simple Usage</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Mock = <span class="built_in">require</span>(<span class="string">&#x27;mock&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> data = Mock.mock(&#123;</span><br><span class="line">  <span class="string">&#x27;list|1-10&#x27;</span>: [&#123;</span><br><span class="line">    <span class="string">&#x27;id|+1&#x27;</span>: <span class="number">1</span></span><br><span class="line">  &#125;]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(data))</span><br></pre></td></tr></table></figure>
 
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Usage of Mock" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-08-29T08:27:11.000Z">2017-08-29</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 minutes read (About 676 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Usage of Mock
-            
-        </h1>
-        <div class="content">
-            <h3 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add mockjs</div></pre></td></tr></table></figure>
-<h3 id="Simple-Usage"><a href="#Simple-Usage" class="headerlink" title="Simple Usage"></a>Simple Usage</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> Mock = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mock'</span>)</div><div class="line"><span class="hljs-keyword">const</span> data = Mock.mock(&#123;</div><div class="line">  <span class="hljs-string">'list|1-10'</span>: [&#123;</div><div class="line">    <span class="hljs-string">'id|+1'</span>: <span class="hljs-number">1</span></div><div class="line">  &#125;]</div><div class="line">&#125;)</div><div class="line"><span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(data))</div></pre></td></tr></table></figure>
 <h3 id="Data-Template-Definition-DTD"><a href="#Data-Template-Definition-DTD" class="headerlink" title="Data Template Definition(DTD)"></a>Data Template Definition(DTD)</h3><p>Each attribute consists of three parts:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// attribute name</span></div><div class="line"><span class="hljs-comment">// attribute rule</span></div><div class="line"><span class="hljs-comment">// attribute value</span></div><div class="line"></div><div class="line"><span class="hljs-string">'name|rule'</span>: value</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// attribute name</span></span><br><span class="line"><span class="comment">// attribute rule</span></span><br><span class="line"><span class="comment">// attribute value</span></span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;name|rule&#x27;</span>: value</span><br></pre></td></tr></table></figure>
+
 <p>rule is optional</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// rules</span></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">'name|min-max'</span>: value,</div><div class="line">  <span class="hljs-string">'name|count'</span>: value,</div><div class="line">  <span class="hljs-string">'name|min-max.dmin-dmax'</span>: value,</div><div class="line">  <span class="hljs-string">'name|min-max.dcount'</span>: value,</div><div class="line">  <span class="hljs-string">'name|count.dmin-dmax'</span>: value,</div><div class="line">  <span class="hljs-string">'name|count.dcount'</span>: value,</div><div class="line">  <span class="hljs-string">'name|+step'</span>: value,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-string">'name|min-max'</span>: string <span class="hljs-comment">// repeat 'string' less than or equal to 'min', more than or equal 'max'</span></div><div class="line"><span class="hljs-string">'name|count'</span>: string <span class="hljs-comment">// repeat 'string' 'count' times.</span></div><div class="line"><span class="hljs-string">'name|+1'</span>: <span class="hljs-number">0</span>, <span class="hljs-comment">// auto incresing with step 1 from 0</span></div><div class="line"><span class="hljs-string">'name|min-max'</span>: number <span class="hljs-comment">// generate a number &gt;=min and &lt;=max</span></div><div class="line"><span class="hljs-string">'name|min-max.dmin-dmax'</span>: number <span class="hljs-comment">// generate a float, the integer part &gt;=min and &lt;=max, the deciaml part remains dmin - dmax bits.</span></div></pre></td></tr></table></figure>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Mock.mock(&#123;</div><div class="line">    <span class="hljs-string">'number1|1-100.1-10'</span>: <span class="hljs-number">1</span>,</div><div class="line">    <span class="hljs-string">'number2|123.1-10'</span>: <span class="hljs-number">1</span>,</div><div class="line">    <span class="hljs-string">'number3|123.3'</span>: <span class="hljs-number">1</span>,</div><div class="line">    <span class="hljs-string">'number4|123.10'</span>: <span class="hljs-number">1.123</span></div><div class="line">&#125;)</div><div class="line"><span class="hljs-comment">// =&gt;</span></div><div class="line">&#123;</div><div class="line">    <span class="hljs-string">"number1"</span>: <span class="hljs-number">12.92</span>,</div><div class="line">    <span class="hljs-string">"number2"</span>: <span class="hljs-number">123.51</span>,</div><div class="line">    <span class="hljs-string">"number3"</span>: <span class="hljs-number">123.777</span>,</div><div class="line">    <span class="hljs-string">"number4"</span>: <span class="hljs-number">123.1231091814</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// rules</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&#x27;name|min-max&#x27;</span>: value,</span><br><span class="line">  <span class="string">&#x27;name|count&#x27;</span>: value,</span><br><span class="line">  <span class="string">&#x27;name|min-max.dmin-dmax&#x27;</span>: value,</span><br><span class="line">  <span class="string">&#x27;name|min-max.dcount&#x27;</span>: value,</span><br><span class="line">  <span class="string">&#x27;name|count.dmin-dmax&#x27;</span>: value,</span><br><span class="line">  <span class="string">&#x27;name|count.dcount&#x27;</span>: value,</span><br><span class="line">  <span class="string">&#x27;name|+step&#x27;</span>: value,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;name|min-max&#x27;</span>: string <span class="comment">// repeat &#x27;string&#x27; less than or equal to &#x27;min&#x27;, more than or equal &#x27;max&#x27;</span></span><br><span class="line"><span class="string">&#x27;name|count&#x27;</span>: string <span class="comment">// repeat &#x27;string&#x27; &#x27;count&#x27; times.</span></span><br><span class="line"><span class="string">&#x27;name|+1&#x27;</span>: <span class="number">0</span>, <span class="comment">// auto incresing with step 1 from 0</span></span><br><span class="line"><span class="string">&#x27;name|min-max&#x27;</span>: number <span class="comment">// generate a number &gt;=min and &lt;=max</span></span><br><span class="line"><span class="string">&#x27;name|min-max.dmin-dmax&#x27;</span>: number <span class="comment">// generate a float, the integer part &gt;=min and &lt;=max, the deciaml part remains dmin - dmax bits.</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Mock.mock(&#123;</span><br><span class="line">    <span class="string">&#x27;number1|1-100.1-10&#x27;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">&#x27;number2|123.1-10&#x27;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">&#x27;number3|123.3&#x27;</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">&#x27;number4|123.10&#x27;</span>: <span class="number">1.123</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// =&gt;</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;number1&quot;</span>: <span class="number">12.92</span>,</span><br><span class="line">    <span class="string">&quot;number2&quot;</span>: <span class="number">123.51</span>,</span><br><span class="line">    <span class="string">&quot;number3&quot;</span>: <span class="number">123.777</span>,</span><br><span class="line">    <span class="string">&quot;number4&quot;</span>: <span class="number">123.1231091814</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Data-Placeholder-Definition-DPD"><a href="#Data-Placeholder-Definition-DPD" class="headerlink" title="Data Placeholder Definition(DPD)"></a>Data Placeholder Definition(DPD)</h3><p>Placeholder hold a position in attribute string, and will dismiss in result.</p>
 <p>Use Mock.Random to generate data.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@placeholder</div><div class="line">@placeholder(opt1[, opt2])</div></pre></td></tr></table></figure>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">Mock.mock(&#123;</div><div class="line">    <span class="hljs-attr">name</span>: &#123;</div><div class="line">        <span class="hljs-attr">first</span>: <span class="hljs-string">'@FIRST'</span>,</div><div class="line">        <span class="hljs-attr">middle</span>: <span class="hljs-string">'@FIRST'</span>,</div><div class="line">        <span class="hljs-attr">last</span>: <span class="hljs-string">'@LAST'</span>,</div><div class="line">        <span class="hljs-attr">full</span>: <span class="hljs-string">'@first @middle @last'</span></div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line"><span class="hljs-comment">// =&gt;</span></div><div class="line">&#123;</div><div class="line">    <span class="hljs-string">"name"</span>: &#123;</div><div class="line">        <span class="hljs-string">"first"</span>: <span class="hljs-string">"Charles"</span>,</div><div class="line">        <span class="hljs-string">"middle"</span>: <span class="hljs-string">"Brenda"</span>,</div><div class="line">        <span class="hljs-string">"last"</span>: <span class="hljs-string">"Lopez"</span>,</div><div class="line">        <span class="hljs-string">"full"</span>: <span class="hljs-string">"Charles Brenda Lopez"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@placeholder</span><br><span class="line">@placeholder(opt1[, opt2])</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Mock.mock(&#123;</span><br><span class="line">    name: &#123;</span><br><span class="line">        first: <span class="string">&#x27;@FIRST&#x27;</span>,</span><br><span class="line">        middle: <span class="string">&#x27;@FIRST&#x27;</span>,</span><br><span class="line">        last: <span class="string">&#x27;@LAST&#x27;</span>,</span><br><span class="line">        full: <span class="string">&#x27;@first @middle @last&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// =&gt;</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;first&quot;</span>: <span class="string">&quot;Charles&quot;</span>,</span><br><span class="line">        <span class="string">&quot;middle&quot;</span>: <span class="string">&quot;Brenda&quot;</span>,</span><br><span class="line">        <span class="string">&quot;last&quot;</span>: <span class="string">&quot;Lopez&quot;</span>,</span><br><span class="line">        <span class="string">&quot;full&quot;</span>: <span class="string">&quot;Charles Brenda Lopez&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Mock-mock"><a href="#Mock-mock" class="headerlink" title="Mock.mock()"></a>Mock.mock()</h3><h4 id="Mock-mock-rurl-rtype-template-function-options"><a href="#Mock-mock-rurl-rtype-template-function-options" class="headerlink" title="Mock.mock(rurl?, rtype?, template | function(options))"></a>Mock.mock(rurl?, rtype?, template | function(options))</h4><h5 id="Mock-mock-template"><a href="#Mock-mock-template" class="headerlink" title="Mock.mock(template)"></a>Mock.mock(template)</h5><p>Generate mock data</p>
 <h5 id="Mock-mock-rurl-template"><a href="#Mock-mock-rurl-template" class="headerlink" title="Mock.mock(rurl, template)"></a>Mock.mock(rurl, template)</h5><p>Intercept <code>rurl</code>(regexp) request, and generate according template.</p>
 <h5 id="Mock-mock-rurl-function-options"><a href="#Mock-mock-rurl-function-options" class="headerlink" title="Mock.mock(rurl, function(options))"></a>Mock.mock(rurl, function(options))</h5><p>Intercept <code>rurl</code> request and call function(options) to return the mock data.</p>
@@ -192,239 +132,127 @@
 </blockquote>
 <h3 id="Mock-setup"><a href="#Mock-setup" class="headerlink" title="Mock.setup()"></a>Mock.setup()</h3><p>Mock.setup(settings)</p>
 <p>Set action when intercept ajax request.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="hljs-attr">timeout</span>: <span class="hljs-string">''</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  timeout: <span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>timeout: set time responding time, ‘300’, ‘300-600’, default to ‘10-100’</li>
 </ul>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Mock.setup(&#123;</div><div class="line">  <span class="hljs-attr">timeout</span>: <span class="hljs-string">'200-400'</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Mock.setup(&#123;</span><br><span class="line">  timeout: <span class="string">&#x27;200-400&#x27;</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Mock-Random"><a href="#Mock-Random" class="headerlink" title="Mock.Random"></a>Mock.Random</h3><p>Utils to generate Random data.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> Random = Mock.Random</div><div class="line">Random.email()</div><div class="line"></div><div class="line">Mock.mock(<span class="hljs-string">'@email'</span>) <span class="hljs-comment">// use with placeholder</span></div><div class="line"></div><div class="line">Mock.mock(&#123;</div><div class="line">  <span class="hljs-attr">email</span>: <span class="hljs-string">'@email'</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> Random = Mock.Random</span><br><span class="line">Random.email()</span><br><span class="line"></span><br><span class="line">Mock.mock(<span class="string">&#x27;@email&#x27;</span>) <span class="comment">// use with placeholder</span></span><br><span class="line"></span><br><span class="line">Mock.mock(&#123;</span><br><span class="line">  email: <span class="string">&#x27;@email&#x27;</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>| Type | Mehtod |<br>| Baisc | boolean, natural, integer, float, character, string, range, date, time, datetime, now |<br>| Image | image, dataImage |<br>| Color | color |<br>| Text | paragraph, sentence, word, title, cparagraph, csentence, cword, ctitle |<br>| Name | first, last, name, cfirst, clast, cname |<br>| Web | url, domain, email, ip, tld |<br>| Address | area, region |<br>| Helper | capitalize, upper, lower, pick, shuffle |<br>| Miscellaneous | guid, id |</p>
 <h4 id="Mock-Random-boolean-min-max-current"><a href="#Mock-Random-boolean-min-max-current" class="headerlink" title="Mock.Random.boolean(min?, max?, current?)"></a>Mock.Random.boolean(min?, max?, current?)</h4><p>‘min’ and ‘max’ decide the possibility of ‘current’</p>
 <p>‘current’ will appear in possibility of min/(min + max) to max(min + max)</p>
 <h4 id="Mock-Random-natural-min-max"><a href="#Mock-Random-natural-min-max" class="headerlink" title="Mock.Random.natural(min?, max?)"></a>Mock.Random.natural(min?, max?)</h4><h4 id="Mock-Random-integer-min-max"><a href="#Mock-Random-integer-min-max" class="headerlink" title="Mock.Random.integer(min?, max?)"></a>Mock.Random.integer(min?, max?)</h4><h4 id="Mock-Random-float-min-max-dmin-dmax"><a href="#Mock-Random-float-min-max-dmin-dmax" class="headerlink" title="Mock.Random.float(min?, max?, dmin?, dmax?)"></a>Mock.Random.float(min?, max?, dmin?, dmax?)</h4><h4 id="Mock-Random-character-pool"><a href="#Mock-Random-character-pool" class="headerlink" title="Mock.Random.character(pool?)"></a>Mock.Random.character(pool?)</h4><p>pool represents the character pool</p>
-<p>pool: ‘lower/upper/number/symbol’<br><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  lower: &apos;abcdefghijklmnopqrstuvwxyz&apos;,</div><div class="line">  upper: &apos;ABCDEFGHIJKLMNOPQRSTUVWXYZ&apos;,</div><div class="line">  number: 0123456789,</div><div class="line">  symbol: &apos;!@#$%^&amp;*()[]&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>pool: ‘lower/upper/number/symbol’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  lower: &#39;abcdefghijklmnopqrstuvwxyz&#39;,</span><br><span class="line">  upper: &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;,</span><br><span class="line">  number: 0123456789,</span><br><span class="line">  symbol: &#39;!@#$%^&amp;*()[]&#39;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="Mock-Random-string-pool-min-max"><a href="#Mock-Random-string-pool-min-max" class="headerlink" title="Mock.Random.string(pool?, min?, max?)"></a>Mock.Random.string(pool?, min?, max?)</h4><p>pool: available string pool<br>min: min-length, default to 3<br>max: max-length, default to 7</p>
 <h4 id="Mock-Random-range-start-stop-step"><a href="#Mock-Random-range-start-stop-step" class="headerlink" title="Mock.Random.range(start?, stop, step?)"></a>Mock.Random.range(start?, stop, step?)</h4><h4 id="Mock-Random-date-format"><a href="#Mock-Random-date-format" class="headerlink" title="Mock.Random.date(format?)"></a>Mock.Random.date(format?)</h4><h4 id="Mock-Random-time-format"><a href="#Mock-Random-time-format" class="headerlink" title="Mock.Random.time(format?)"></a>Mock.Random.time(format?)</h4><h4 id="Mock-Random-datetime-format"><a href="#Mock-Random-datetime-format" class="headerlink" title="Mock.Random.datetime(format?)"></a>Mock.Random.datetime(format?)</h4><h4 id="Mock-Random-now-unit-format"><a href="#Mock-Random-now-unit-format" class="headerlink" title="Mock.Random.now(unit?, format?)"></a>Mock.Random.now(unit?, format?)</h4><h4 id="Mock-Random-image-size-background-foreground-format-text"><a href="#Mock-Random-image-size-background-foreground-format-text" class="headerlink" title="Mock.Random.image(size?, background?, foreground?, format?, text?)"></a>Mock.Random.image(size?, background?, foreground?, format?, text?)</h4><h4 id="Mock-Random-dataImage-size-text"><a href="#Mock-Random-dataImage-size-text" class="headerlink" title="Mock.Random.dataImage(size?, text?)"></a>Mock.Random.dataImage(size?, text?)</h4><h4 id="Mock-Random-color"><a href="#Mock-Random-color" class="headerlink" title="Mock.Random.color()"></a>Mock.Random.color()</h4><h4 id="Mock-Random-hex"><a href="#Mock-Random-hex" class="headerlink" title="Mock.Random.hex()"></a>Mock.Random.hex()</h4><h4 id="Mock-Random-rgb"><a href="#Mock-Random-rgb" class="headerlink" title="Mock.Random.rgb()"></a>Mock.Random.rgb()</h4><h4 id="Mock-Random-rbga"><a href="#Mock-Random-rbga" class="headerlink" title="Mock.Random.rbga()"></a>Mock.Random.rbga()</h4><h4 id="Mock-Random-hsl"><a href="#Mock-Random-hsl" class="headerlink" title="Mock.Random.hsl()"></a>Mock.Random.hsl()</h4><h4 id="Mock-Random-paragraph-null-length-min-max-Mock-Random-cparagraph-null-length-min-max"><a href="#Mock-Random-paragraph-null-length-min-max-Mock-Random-cparagraph-null-length-min-max" class="headerlink" title="Mock.Random.paragraph(null | length | min, max) | Mock.Random.cparagraph(null | length | min, max)"></a>Mock.Random.paragraph(null | length | min, max) | Mock.Random.cparagraph(null | length | min, max)</h4><h4 id="Mock-Random-sentence-null-length-min-max-Mock-Random-csentence-null-length-min-max"><a href="#Mock-Random-sentence-null-length-min-max-Mock-Random-csentence-null-length-min-max" class="headerlink" title="Mock.Random.sentence(null | length | min, max) | Mock.Random.csentence(null | length | min, max)"></a>Mock.Random.sentence(null | length | min, max) | Mock.Random.csentence(null | length | min, max)</h4><h4 id="Mock-Random-workd-null-length-min-max-Mock-Random-cword-pool-min-max"><a href="#Mock-Random-workd-null-length-min-max-Mock-Random-cword-pool-min-max" class="headerlink" title="Mock.Random.workd(null | length | min, max) | Mock.Random.cword(pool?, min?, max?)"></a>Mock.Random.workd(null | length | min, max) | Mock.Random.cword(pool?, min?, max?)</h4><h4 id="Mock-Random-title-null-length-min-max-Mock-Random-ctitle-null-length-min-max"><a href="#Mock-Random-title-null-length-min-max-Mock-Random-ctitle-null-length-min-max" class="headerlink" title="Mock.Random.title(null | length | min, max) | Mock.Random.ctitle(null | length | min, max)"></a>Mock.Random.title(null | length | min, max) | Mock.Random.ctitle(null | length | min, max)</h4><h4 id="Mock-Random-first-Mock-Random-last-Mock-Random-name-middle-Mock-Random-cfirst-Mock-Random-clast-Mock-Random-cname"><a href="#Mock-Random-first-Mock-Random-last-Mock-Random-name-middle-Mock-Random-cfirst-Mock-Random-clast-Mock-Random-cname" class="headerlink" title="Mock.Random.first() | Mock.Random.last() | Mock.Random.name(middle?) | Mock.Random.cfirst() | Mock.Random.clast() | Mock.Random.cname()"></a>Mock.Random.first() | Mock.Random.last() | Mock.Random.name(middle?) | Mock.Random.cfirst() | Mock.Random.clast() | Mock.Random.cname()</h4><h4 id="Mock-Random-url-protocol-host"><a href="#Mock-Random-url-protocol-host" class="headerlink" title="Mock.Random.url(protocol?, host?)"></a>Mock.Random.url(protocol?, host?)</h4><h4 id="Mock-Random-protocol-Mock-Random-domain-Mock-Random-tld-Mock-Random-email-domain-Mock-Random-ip"><a href="#Mock-Random-protocol-Mock-Random-domain-Mock-Random-tld-Mock-Random-email-domain-Mock-Random-ip" class="headerlink" title="Mock.Random.protocol() | Mock.Random.domain() | Mock.Random.tld() | Mock.Random.email(domain?) | Mock.Random.ip()"></a>Mock.Random.protocol() | Mock.Random.domain() | Mock.Random.tld() | Mock.Random.email(domain?) | Mock.Random.ip()</h4><h4 id="Mock-Random-region-Mock-Random-province-Mock-Random-city-prefix-Mock-Random-county-prefix-Mock-Random-zip"><a href="#Mock-Random-region-Mock-Random-province-Mock-Random-city-prefix-Mock-Random-county-prefix-Mock-Random-zip" class="headerlink" title="Mock.Random.region() | Mock.Random.province() | Mock.Random.city(prefix?) | Mock.Random.county(prefix?) | Mock.Random.zip()"></a>Mock.Random.region() | Mock.Random.province() | Mock.Random.city(prefix?) | Mock.Random.county(prefix?) | Mock.Random.zip()</h4><h4 id="Mock-Random-captilize-word-Mock-Random-upper-str-Mock-Random-lower-str-Mock-Random-pick-arr-Mock-Random-shuffle-arr"><a href="#Mock-Random-captilize-word-Mock-Random-upper-str-Mock-Random-lower-str-Mock-Random-pick-arr-Mock-Random-shuffle-arr" class="headerlink" title="Mock.Random.captilize(word) | Mock.Random.upper(str) | Mock.Random.lower(str) | Mock.Random.pick(arr) | Mock.Random.shuffle(arr)"></a>Mock.Random.captilize(word) | Mock.Random.upper(str) | Mock.Random.lower(str) | Mock.Random.pick(arr) | Mock.Random.shuffle(arr)</h4><h4 id="Mock-Random-guid"><a href="#Mock-Random-guid" class="headerlink" title="Mock.Random.guid()"></a>Mock.Random.guid()</h4><p>Generate a GUID</p>
 <h4 id="Mock-Random-id"><a href="#Mock-Random-id" class="headerlink" title="Mock.Random.id()"></a>Mock.Random.id()</h4><p>Generate a Personal Identity</p>
 <h4 id="Mock-Random-increment-step"><a href="#Mock-Random-increment-step" class="headerlink" title="Mock.Random.increment(step?)"></a>Mock.Random.increment(step?)</h4><h3 id="Mock-valid-template-data"><a href="#Mock-valid-template-data" class="headerlink" title="Mock.valid(template, data)"></a>Mock.valid(template, data)</h3><p>Check if the data is matching the template</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2017/08/29/Usage-of-Mock/">https://ezcook.de/2017/08/29/Usage-of-Mock/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JavaScript/">JavaScript</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/08/29/Simple-Example-of-Line-Chart-with-D3v4/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Simple Example of Line Chart With D3v4</div></div></a></div><div class="next-post pull-right"><a href="/2017/08/29/Start-at-Pug/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Start at Pug</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/11/29/Caution-on-Int8Array/" title="Caution on Int8Array"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-11-29</div><div class="relatedPosts_title">Caution on Int8Array</div></div></a></div><div class="relatedPosts_item"><a href="/2018/04/14/Introduction-to-Object-getOwnPropertyDescriptors/" title="Introduction to Object.getOwnPropertyDescriptors"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-14</div><div class="relatedPosts_title">Introduction to Object.getOwnPropertyDescriptors</div></div></a></div><div class="relatedPosts_item"><a href="/2019/08/30/Methods-of-the-String-in-JavaScript/" title="Methods of the String in JavaScript "><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2019-08-30</div><div class="relatedPosts_title">Methods of the String in JavaScript </div></div></a></div><div class="relatedPosts_item"><a href="/2016/07/20/array-from/" title="Array.from()"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-07-20</div><div class="relatedPosts_title">Array.from()</div></div></a></div><div class="relatedPosts_item"><a href="/2016/07/31/co-module/" title="CO Module"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-07-31</div><div class="relatedPosts_title">CO Module</div></div></a></div><div class="relatedPosts_item"><a href="/2017/02/22/debounce-e5-87-bd-e6-95-b0/" title="Debounce 函数"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-02-22</div><div class="relatedPosts_title">Debounce 函数</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2017/08/29/Usage-of-Mock/'
+    this.page.identifier = '2017/08/29/Usage-of-Mock/'
+    this.page.title = 'Usage of Mock'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/JavaScript/">JavaScript</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/08/29/Simple-Example-of-Line-Chart-with-D3v4/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Simple Example of Line Chart With D3v4</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/08/29/Start-at-Pug/">
-                <span class="level-item">Start at Pug</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2017/08/29/Usage-of-Mock/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

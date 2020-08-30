@@ -1,176 +1,108 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Writing Upgradable Contracts in Solidity | EzCook</title><meta name="description" content="Original Ethereum contracts are immutable – once deployed to the blockchain they cannot be updated, yet the need to change their logic with time is ultimately necessary. During a contract upgrade the"><meta name="keywords" content="Ethereum,Blockchain,Smart Contract,Solidity"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Writing Upgradable Contracts in Solidity"><meta property="og:url" content="https://ezcook.de/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Original Ethereum contracts are immutable – once deployed to the blockchain they cannot be updated, yet the need to change their logic with time is ultimately necessary. During a contract upgrade the"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2018-03-05T06:30:17.000Z"><meta property="article:modified_time" content="2020-08-30T13:01:41.149Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Writing Upgradable Contracts in Solidity - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Writing Upgradable Contracts in Solidity" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-03-05T06:30:17.000Z">2018-03-05</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    5 minutes read (About 812 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Writing Upgradable Contracts in Solidity
-            
-        </h1>
-        <div class="content">
-            <p><a href="https://blog.colony.io/writing-upgradeable-contracts-in-solidity-6743f0eecc88" target="_blank" rel="noopener">Original</a></p>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 21:01:41'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Avoiding-large-data-copy-operations"><span class="toc-number">1.</span> <span class="toc-text">Avoiding large data copy operations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Use-Libraries-to-Encapsulate-Logic"><span class="toc-number">2.</span> <span class="toc-text">Use Libraries to Encapsulate Logic</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Use-%E2%80%98interface%E2%80%99-to-decouple-inter-contract-communication"><span class="toc-number">3.</span> <span class="toc-text">Use ‘interface’ to decouple inter-contract communication</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Writing Upgradable Contracts in Solidity</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2018-03-05T06:30:17.000Z" title="Created 2018-03-05 14:30:17">2018-03-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T13:01:41.149Z" title="Updated 2020-08-30 21:01:41">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p><a target="_blank" rel="noopener" href="https://blog.colony.io/writing-upgradeable-contracts-in-solidity-6743f0eecc88">Original</a></p>
 <p>Ethereum contracts are immutable – once deployed to the blockchain they cannot be updated, yet the need to change their logic with time is ultimately necessary.</p>
 <p>During a contract upgrade the following factors need to be considered:</p>
 <ul>
@@ -186,237 +118,124 @@
 <h3 id="Avoiding-large-data-copy-operations"><a href="#Avoiding-large-data-copy-operations" class="headerlink" title="Avoiding large data copy operations"></a>Avoiding large data copy operations</h3><p>Storing data is expensive(<code>SSTORE</code> operation costs 5000 or 20000 gas) and upgrading contracts containing large storage variables runs the chance of hitting the transaction gas limit during the copying of its data.</p>
 <p><strong>You may therefore want to isolate your datastore from the rest of your code, and make it as flexible as possible, so that it is unlikely to need to be upgrade.</strong></p>
 <p>Depending on your circumstances, how large of a datastore you need and whether you expect its structure to change often, you may choose a strict definition or a loosely typed flat store. Below is an example of the latter which implements support for storing a <em>sha3</em> key and value pairs. It is the more flexible and extensible option. This ensures data schema changes can be implemented without requiring upgrades to the storage contract.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">contract EternalStorage &#123;</div><div class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> uint) UIntStorage;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getUIntValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">return</span> UIntStorage[record];</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setUIntValue</span>(<span class="hljs-params">bytes32 record, uint value</span>) </span>&#123;</div><div class="line">    UIntStorage[record] = value;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> string) StringStorage;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getStringValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">string</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">return</span> StringStorage(record);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setStringValue</span>(<span class="hljs-params">bytes32 record, string value</span>) </span>&#123;</div><div class="line">    StringStorage[record] = value;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> address) AddressStorage;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getAddressValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">address</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">return</span> AddressStorage[record];</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setAddressValue</span>(<span class="hljs-params">bytes32 record, address value</span>) </span>&#123;</div><div class="line">    AddressStorage[record] = value;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  mapping(<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> bytes) BytesStorage;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBytesValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bytes</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">return</span> BytesStorage[record];</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setBytesValue</span>(<span class="hljs-params">bytes32 record, bytes value</span>) </span>&#123;</div><div class="line">    BytesStorage[record] = value;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  mapping (<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> bool) BooleanStorage;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBooleanValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">bool</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">return</span> BooleanStorage[record];</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setBooleanValue</span>(<span class="hljs-params">bytes32 record, bool value</span>) </span>&#123;</div><div class="line">    BooleanStorage[record] = value;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  mapping (<span class="hljs-function"><span class="hljs-params">bytes32</span> =&gt;</span> int) IntStorage;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getIntValue</span>(<span class="hljs-params">bytes32 record</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">int</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">return</span> IntStorage[record];</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setIntValue</span>(<span class="hljs-params">bytes32 record, int value</span>) </span>&#123;</div><div class="line">    IntStorage[record] = value;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">contract EternalStorage &#123;</span><br><span class="line">  mapping(<span class="function"><span class="params">bytes32</span> =&gt;</span> uint) UIntStorage;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getUIntValue</span>(<span class="params">bytes32 record</span>) <span class="title">constant</span> <span class="title">returns</span> (<span class="params">uint</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> UIntStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">setUIntValue</span>(<span class="params">bytes32 record, uint value</span>) </span>&#123;</span><br><span class="line">    UIntStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping(<span class="function"><span class="params">bytes32</span> =&gt;</span> string) StringStorage;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getStringValue</span>(<span class="params">bytes32 record</span>) <span class="title">constant</span> <span class="title">returns</span> (<span class="params">string</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> StringStorage(record);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">setStringValue</span>(<span class="params">bytes32 record, string value</span>) </span>&#123;</span><br><span class="line">    StringStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping(<span class="function"><span class="params">bytes32</span> =&gt;</span> address) AddressStorage;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getAddressValue</span>(<span class="params">bytes32 record</span>) <span class="title">constant</span> <span class="title">returns</span> (<span class="params">address</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> AddressStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">setAddressValue</span>(<span class="params">bytes32 record, address value</span>) </span>&#123;</span><br><span class="line">    AddressStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping(<span class="function"><span class="params">bytes32</span> =&gt;</span> bytes) BytesStorage;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getBytesValue</span>(<span class="params">bytes32 record</span>) <span class="title">constant</span> <span class="title">returns</span> (<span class="params">bytes</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> BytesStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">setBytesValue</span>(<span class="params">bytes32 record, bytes value</span>) </span>&#123;</span><br><span class="line">    BytesStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping (<span class="function"><span class="params">bytes32</span> =&gt;</span> bool) BooleanStorage;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getBooleanValue</span>(<span class="params">bytes32 record</span>) <span class="title">constant</span> <span class="title">returns</span> (<span class="params">bool</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> BooleanStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">setBooleanValue</span>(<span class="params">bytes32 record, bool value</span>) </span>&#123;</span><br><span class="line">    BooleanStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  mapping (<span class="function"><span class="params">bytes32</span> =&gt;</span> int) IntStorage;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getIntValue</span>(<span class="params">bytes32 record</span>) <span class="title">constant</span> <span class="title">returns</span> (<span class="params">int</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> IntStorage[record];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">setIntValue</span>(<span class="params">bytes32 record, int value</span>) </span>&#123;</span><br><span class="line">    IntStorage[record] = value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>For upgrades you can then just switch the upgraded contract to point to the new EternalStorage contract instance without having a copy of its data.</p>
 <h3 id="Use-Libraries-to-Encapsulate-Logic"><a href="#Use-Libraries-to-Encapsulate-Logic" class="headerlink" title="Use Libraries to Encapsulate Logic"></a>Use Libraries to Encapsulate Logic</h3><p>Libraries are special form of contracts that are singletons and not allowed any storage variables.</p>
 <p>The advantage of libraries in the context of upgrades is that they allow encapsulation of business logic or data management logic into singleton instance that cost only upgrading one and not many contracts.</p>
 <p>Example below shows a library used for adding a <em>Proposal</em> to storage.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"EternalStorage.sol"</span>;</div><div class="line"></div><div class="line">library ProposalsLibrary &#123;</div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getProposalCount</span>(<span class="hljs-params">address _storageContract</span>) <span class="hljs-title">constant</span> <span class="hljs-title">returns</span> (<span class="hljs-params">uint256</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">return</span> EternalStorage(_storageContract).getUIntValue(sha3(<span class="hljs-string">"proposalCount"</span>));</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addProposal</span>(<span class="hljs-params">address _storageContract, bytes32 _name</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">var</span> idx = getProposalCount(_storageContract);</div><div class="line">    EternalStorage(_storageContract).setBytes32Value(sha3(<span class="hljs-string">"proposal_name"</span>, idx), _name);</div><div class="line">    EternalStorage(_storageContract).setUIntValue(sha3(<span class="hljs-string">"proposal_eth"</span>, idx), <span class="hljs-number">0</span>);</div><div class="line">    EternalStorage(_storageContract).setUIntValue(sha3(<span class="hljs-string">"ProposalCount"</span>), idx + <span class="hljs-number">1</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;EternalStorage.sol&quot;</span>;</span><br><span class="line"></span><br><span class="line">library ProposalsLibrary &#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getProposalCount</span>(<span class="params">address _storageContract</span>) <span class="title">constant</span> <span class="title">returns</span> (<span class="params">uint256</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> EternalStorage(_storageContract).getUIntValue(sha3(<span class="string">&quot;proposalCount&quot;</span>));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">addProposal</span>(<span class="params">address _storageContract, bytes32 _name</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> idx = getProposalCount(_storageContract);</span><br><span class="line">    EternalStorage(_storageContract).setBytes32Value(sha3(<span class="string">&quot;proposal_name&quot;</span>, idx), _name);</span><br><span class="line">    EternalStorage(_storageContract).setUIntValue(sha3(<span class="string">&quot;proposal_eth&quot;</span>, idx), <span class="number">0</span>);</span><br><span class="line">    EternalStorage(_storageContract).setUIntValue(sha3(<span class="string">&quot;ProposalCount&quot;</span>), idx + <span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Under the cover, library functions are called using <code>delegatecall</code> from the calling contract which has the advantage of passing the <code>msg.sender</code> and <code>msg.value</code> seamlessly. You can therefore write your library code as if it were just part of your contract, without having to worry about the sender or value chagning.</p>
 <p>The example below shows a sample <code>Organization</code> contract using <code>ProposalsLibrary</code> to interact with data storage.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"ProposalsLibrary.sol"</span>;</div><div class="line"></div><div class="line">contract Organization &#123;</div><div class="line">  using ProposalsLibrary <span class="hljs-keyword">for</span> address;</div><div class="line">  address public eternalStorage;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Organization</span>(<span class="hljs-params">address _eternalStorage</span>) </span>&#123;</div><div class="line">    eternalStorage = _eternalStorage;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addProposal</span>(<span class="hljs-params">bytes32 _name</span>) </span>&#123;</div><div class="line">    eternalStorage.addProposal(_name);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;ProposalsLibrary.sol&quot;</span>;</span><br><span class="line"></span><br><span class="line">contract Organization &#123;</span><br><span class="line">  using ProposalsLibrary <span class="keyword">for</span> address;</span><br><span class="line">  address public eternalStorage;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">Organization</span>(<span class="params">address _eternalStorage</span>) </span>&#123;</span><br><span class="line">    eternalStorage = _eternalStorage;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">addProposal</span>(<span class="params">bytes32 _name</span>) </span>&#123;</span><br><span class="line">    eternalStorage.addProposal(_name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>With libraries, there is a slight gas overhead on each call. However, it makes deploying a new contract much cheaper.</p>
 <h3 id="Use-‘interface’-to-decouple-inter-contract-communication"><a href="#Use-‘interface’-to-decouple-inter-contract-communication" class="headerlink" title="Use ‘interface’ to decouple inter-contract communication"></a>Use ‘interface’ to decouple inter-contract communication</h3><p>Abstract Contract implementation behind an interface that only define its function siguatures.</p>
 <p>This is a well known pattern in object oriented programming.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"ITokenLedger.sol"</span>;</div><div class="line"></div><div class="line">contract Organization &#123;</div><div class="line">  ITokenLedger public tokenLedger;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Organization</span>(<span class="hljs-params">address _tokenLedger</span>) </span>&#123;</div><div class="line">    tokenLedger = ITokenLedger(_tokenLedger);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">generateToekns</span>(<span class="hljs-params">uint256 _amount</span>) </span>&#123;</div><div class="line">    tokenLedger.generateTokens(_amount);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;ITokenLedger.sol&quot;</span>;</span><br><span class="line"></span><br><span class="line">contract Organization &#123;</span><br><span class="line">  ITokenLedger public tokenLedger;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">Organization</span>(<span class="params">address _tokenLedger</span>) </span>&#123;</span><br><span class="line">    tokenLedger = ITokenLedger(_tokenLedger);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">generateToekns</span>(<span class="params">uint256 _amount</span>) </span>&#123;</span><br><span class="line">    tokenLedger.generateTokens(_amount);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Here instead of importing the entire <code>TokenLedger.sol</code> contract, we use an interface containing just the function signatures. This eases any possible upgrades to TokenLedger which don’t affect its interface, too, which with this model can be implemented without redeploying the Organization contract.</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/">https://ezcook.de/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Ethereum/">Ethereum</a><a class="post-meta__tags" href="/tags/Blockchain/">Blockchain</a><a class="post-meta__tags" href="/tags/Smart-Contract/">Smart Contract</a><a class="post-meta__tags" href="/tags/Solidity/">Solidity</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2018/03/12/Constant-View-and-Pure-in-Solidity/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Constant, View, and Pure in Solidity</div></div></a></div><div class="next-post pull-right"><a href="/2018/02/28/Dockerizing-a-React-App/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Dockerizing a React App</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/11/14/Common-Patterns-in-Contract/" title="Common Patterns in Contract"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-11-14</div><div class="relatedPosts_title">Common Patterns in Contract</div></div></a></div><div class="relatedPosts_item"><a href="/2018/01/29/Gas-Used-by-Public-and-External-Function-in-Solidity/" title="Gas Used by Public and External Function in Solidity"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-29</div><div class="relatedPosts_title">Gas Used by Public and External Function in Solidity</div></div></a></div><div class="relatedPosts_item"><a href="/2017/09/13/Simple-Example-of-DAPP/" title="Simple Example of DAPP"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-13</div><div class="relatedPosts_title">Simple Example of DAPP</div></div></a></div><div class="relatedPosts_item"><a href="/2017/11/10/Solidity-CheatSheet/" title="Solidity CheatSheet"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-11-10</div><div class="relatedPosts_title">Solidity CheatSheet</div></div></a></div><div class="relatedPosts_item"><a href="/2017/11/14/Solidity-Style-Guide/" title="Solidity Style Guide"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-11-14</div><div class="relatedPosts_title">Solidity Style Guide</div></div></a></div><div class="relatedPosts_item"><a href="/2018/01/29/智能合约编写注意事项/" title="智能合约编写注意事项"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-29</div><div class="relatedPosts_title">智能合约编写注意事项</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/'
+    this.page.identifier = '2018/03/05/Writing-Upgradable-Contracts-in-Solidity/'
+    this.page.title = 'Writing Upgradable Contracts in Solidity'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Blockchain/">Blockchain</a>, <a class="has-link-grey -link" href="/tags/Ethereum/">Ethereum</a>, <a class="has-link-grey -link" href="/tags/Smart-Contract/">Smart Contract</a>, <a class="has-link-grey -link" href="/tags/Solidity/">Solidity</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2018/03/12/Constant-View-and-Pure-in-Solidity/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Constant, View, and Pure in Solidity</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2018/02/28/Dockerizing-a-React-App/">
-                <span class="level-item">Dockerizing a React App</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2018/03/05/Writing-Upgradable-Contracts-in-Solidity/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

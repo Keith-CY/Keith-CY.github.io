@@ -1,275 +1,515 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EzCook - Code Elegantly</title><meta name="description"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/page/10/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="website"><meta property="og:title" content="EzCook"><meta property="og:url" content="https://ezcook.de/page/10/"><meta property="og:site_name" content="EzCook"><meta property="og:description"><meta property="og:image" content="https://ezcook.de/images/yudan.jpg"><meta property="article:published_time" content="2020-08-30T15:58:25.191Z"><meta property="article:modified_time" content="2020-08-30T15:58:25.191Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isSidebar: false,
+  postUpdate: '2020-08-30 23:58:25'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><header class="full_page" id="page-header" style="background-image: url(/images/asphalt-dark-dawn-endless.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="site-info"><h1 id="site_title">EzCook</h1><div id="site_subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/keith-cy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:keithwhisper@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.linkedin.com/in/chen-yu-644b61ba/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></div></div><div id="scroll_down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout_page" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/09/06/redux-form-e7-9a-84-e6-b7-b1-e5-9d-91-e6-85-a2-e6-85-a2-e7-a7-af-e7-b4-af/" title="Redux-Form 的深坑...慢慢积累">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redux-Form 的深坑...慢慢积累"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/06/redux-form-e7-9a-84-e6-b7-b1-e5-9d-91-e6-85-a2-e6-85-a2-e7-a7-af-e7-b4-af/" title="Redux-Form 的深坑...慢慢积累">Redux-Form 的深坑...慢慢积累</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-06T01:56:38.000Z" title="Created 2016-09-06 09:56:38">2016-09-06</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">如果 Field 无法输入, 注意 state 是否是 immutable 的, 如果是, 则需要
+import &#123; Field, reduxForm &#125; from &#39;redux-form/immutable&#39;
+</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/09/05/e7-bc-96-e5-86-99-e6-b5-8b-e8-af-95/" title="编写测试">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="编写测试"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/05/e7-bc-96-e5-86-99-e6-b5-8b-e8-af-95/" title="编写测试">编写测试</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-04T23:21:37.000Z" title="Created 2016-09-05 07:21:37">2016-09-05</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">设置使用 Mocha 作为测试引擎注意因为是在 node 环境下运行, 所以不能访问 DOM
+npm install --save-dev mocha
+`&lt;/pre&gt;
 
-<head>
-    <meta charset="utf-8">
-<title>EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+若想要结合 Babel 使用, 需要在 package.json 的 script 中加入一段
 
+&lt;pre&gt;`&#123;
+  &quot;scripts&quot;: &#123;
+    ...
+    &quot;test&quot;: &quot;mocha --compilers js:babel/register --recursive&quot;,
+    &quot;test:watch&quot;: &quot;npm test -- --watch&quot;
+  &#125;
+&#125;
+`&lt;/pre&gt;
 
+### Action Creators
 
+Redux 里的 action creators 会返回普通对象, 在测试 action creators 的时候我们要测试的不仅是调用了正确的action creators, 还有是否返回了正确的 action
 
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/09/04/redux-promise/" title="Redux-Promise">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redux-Promise"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/04/redux-promise/" title="Redux-Promise">Redux-Promise</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-04T05:36:46.000Z" title="Created 2016-09-04 13:36:46">2016-09-04</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">npm install --save redux-promise
+`&lt;/pre&gt;
 
+&lt;pre&gt;`import promiseMiddleWare from &#39;redux-promise&#39;
+`&lt;/pre&gt;
 
+The default export is a middleware function. If it receives a promise, it will dispatch the resolved value of the promise.
 
-<link rel="icon" href="/images/logo.png">
+It will not dispatch anything if the promise rejects.
 
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
+If it receives an Flux Standard Action whose `payload` is a promise, it will either:
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+dispatch a copy of the action with the resolved value of the promise, and set status to success
 
+dispatch  ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/09/04/usage-of-redux-action/" title="Usage of Redux-Action">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Usage of Redux-Action"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/04/usage-of-redux-action/" title="Usage of Redux-Action">Usage of Redux-Action</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-04T05:22:47.000Z" title="Created 2016-09-04 13:22:47">2016-09-04</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">
+createAction(type, payloadCreator = Identity, ?metaCreator): actionCreator with specified type and it will accept a payload
 
+The more correct name for this function is probably createActionCreator(), but it’s too redundant.
+createAction(&#39;ADD_TODO&#39;)(&#39;Use the Reudx&#39;);
+`&lt;/pre&gt;
 
+&lt;pre&gt;`import &#123; createAction &#125; from &#39;redux-action&#39;
+`&lt;/pre&gt;
 
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
+&lt;pre&gt;`const increment = createAction(&#39;INCREMENT&#39;);
+expect(increment(42)).to.deep.equal(&#123;
+  ty ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/08/29/usage-of-nock/" title="Usage of Nock">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Usage of Nock"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/29/usage-of-nock/" title="Usage of Nock">Usage of Nock</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-28T18:35:24.000Z" title="Created 2016-08-29 02:35:24">2016-08-29</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">Installnpm install ncck
+`&lt;/pre&gt;
 
+### Use
 
+Setup Mocking Obejct like this:
 
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
+&lt;pre&gt;`var nock = require(&#39;nock&#39;)
 
+var couchdb = nock(&#39;http://myapp.iriscouch.com&#39;)
+             .get(&#39;/user/1&#39;)
+             .reply(200,&#123;
+                _id: &#39;123ABC&#39;,
+                _rev: &#39;945B8dDb1&#39;,
+                username: &#39;PG&#39;,
+                email: &#39;PG@testmail.com&#39;
+              &#125;);
+`&lt;/pre&gt;
 
+This setup says that we will intercep ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/08/28/e6-b5-8b-e8-af-95-e7-8e-af-e5-a2-83-e6-90-ad-e5-bb-bamocha-chai-sinon/" title="测试环境搭建(Mocha + Chai + Sinon)">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="测试环境搭建(Mocha + Chai + Sinon)"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/28/e6-b5-8b-e8-af-95-e7-8e-af-e5-a2-83-e6-90-ad-e5-bb-bamocha-chai-sinon/" title="测试环境搭建(Mocha + Chai + Sinon)">测试环境搭建(Mocha + Chai + Sinon)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-28T08:30:42.000Z" title="Created 2016-08-28 16:30:42">2016-08-28</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">
+Mocha: 用于运行测试用例
+Chai: Mocha 用的断言库
+Sinon: 用于创建一些 mocks/stubs/spys
 
+AriBnB 创建了一个专门针对 React 代码测试的开源程序: Enzyme
+Mocha 安装及环境配置npm install --save-dev mocha chai sinon
+`&lt;/pre&gt;
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+安装支持 ES6 语法的插件
 
+&lt;pre&gt;`npm install --save-dev babel-register
+`&lt;/pre&gt;
+
+### 简单测试用例
+
+Mocha 默认会去当前目录下寻找 test 目录, 然后在其中去找后缀为 js 的文件.
+如果需要修改这个目录, 可以用 Mocha 的参数设置.
+
+&lt;pre&gt;`// index.spec.js
+
+import &#123; expect &#125; from &#39;chai&#39;;
+describe(&#39;hello react spac&#39;, () =&amp;gt; &#123;
+  it(&#39;works!&#3 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/08/27/git-cheat-sheet/" title="Git Cheat Sheet">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Git Cheat Sheet"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/27/git-cheat-sheet/" title="Git Cheat Sheet">Git Cheat Sheet</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-27T08:37:26.000Z" title="Created 2016-08-27 16:37:26">2016-08-27</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">
+列出当前配置: git config --list
 
+列出 repository 配置: git config --local --list
+
+列出全局配置: git config --global --list
+
+设置 git 输出彩色: git config --global color.ui auto
+
+显示与上次提交版本的不同: git diff
 
+提交历史: git log
 
+显示所有提交历史: git log --oneline
 
+列出所有分支: git branch
 
+列出远程分支: git branch -r
 
-<link rel="stylesheet" href="/css/back-to-top.css">
+切换分支: git checkout &amp;lt;branch&amp;gt;
 
+给当前版本添加 tag: git tag &amp;lt;tag-name&amp;gt;
 
+列出当前配置的远程端: git remote -v
 
+添加远程端: git remote add &amp;lt;remote-name&amp;gt; &amp;lt;url&amp;gt;
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+下载远程端但不 merge: git fetch &amp;lt;remote&amp; ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/08/27/js-e7-9a-84-date/" title="JS 的 Date">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JS 的 Date"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/27/js-e7-9a-84-date/" title="JS 的 Date">JS 的 Date</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-27T08:10:30.000Z" title="Created 2016-08-27 16:10:30">2016-08-27</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">&amp;gt; var myDate = new Date()
+undefined
+&amp;gt; myDate.getYear()
+116
+&amp;gt; myDate.getFullYear()
+2016
+&amp;gt; myDate.getMonth() // 0 - 11
+7
+&amp;gt; myDate.getDate() // 1 - 31
+28
+&amp;gt; myDate.getDay() // 0 - 6, 西方以周日为一周开始, 所以0是周日
+0
+&amp;gt; myDate.getTime() // 从1970.1.1开始的毫秒数
+1472313859531
+&amp;gt; myDate.getHours()
+0
+&amp;gt; myDate.getMinutes()
+4
+&amp;gt; myDate.getSeconds()
+19
+&amp;gt; myDate.getMilliseconds()
+531
+&amp;gt; myDate.toLocaleDateString()
+&#39;2016-08-28&#39;
+&amp;gt; my ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/08/26/e5-a2-9e-e5-bc-ba-e9-a1-b5-e9-9d-a2-e6-b8-b2-e6-9f-93-e6-80-a7-e8-83-bd/" title="增强页面渲染性能">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="增强页面渲染性能"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/26/e5-a2-9e-e5-bc-ba-e9-a1-b5-e9-9d-a2-e6-b8-b2-e6-9f-93-e6-80-a7-e8-83-bd/" title="增强页面渲染性能">增强页面渲染性能</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-26T07:51:22.000Z" title="Created 2016-08-26 15:51:22">2016-08-26</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">3D transform 启用 GPU 加速例如 transform3D, scaleZ 等可以开启浏览器硬件加速
+实际上并不需要 Z 轴的动画
+will-change当我们的某些行为触发页面进行大面积绘制的时候, 浏览器往往是没有准备的, 只能被动使用 CPU 去计算与重绘. 而will-change会在真正行为触发之前通知浏览器, 以开启 GPU 准备重绘.
+该属性语法:
+will-change: auto;
+will-change: scroll-position;
+will-change: contents;
+will-change: trasnform; // or some
+will-change: opacity; // or some
+will-change: left,top; // or some
 
-    gtag('config', 'UA-136207372-1');
-</script>
+will-change:inherit;
+will-change:initial;
+will-change: unset;
+`&lt;/pre&gt;
 
+其中 auto 是用来重置的
 
+scroll-position 是通知滚动
 
+contents 是通知内容动画
 
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="EzCook" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="homepage">
-  WE CAN REACH HIGH PLACES. VERY HIGH.
-</div>
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
-
-
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
-
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+# ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/08/26/clip-path-polygon-e5-9b-be-e5-bd-a2-e6-9e-84-e5-bb-ba/" title="Clip-Path, Polygon 图形构建">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Clip-Path, Polygon 图形构建"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/26/clip-path-polygon-e5-9b-be-e5-bd-a2-e6-9e-84-e5-bb-ba/" title="Clip-Path, Polygon 图形构建">Clip-Path, Polygon 图形构建</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-26T07:20:04.000Z" title="Created 2016-08-26 15:20:04">2016-08-26</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">clip-path 的前身是 SVG, 支持二维坐标
+polygon 的作用是根据二维点坐标, 依次连线, 最后闭合形成遮罩区域
+clip-path:polygon 生成三角形的过程非常简单
+.path&#123;
+  clip-path: polygon(5px, 10px, 16px, 3px, 16px, 17px);
+&#125;
+polygon 对点的数目没有限制, 所以可以生成各种几何图案
+clip-path 还可以用 transition 过渡或者 animation 动画, 很好的弥补了 CSS3 的 transform 变换的不足
+polygon 动画有一个重要前提, 那就是坐标的数目在变化前后必须一样. 这样就浏览器就能实现连续动画.
+</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/08/26/node-js-e4-b9-8b-path-e6-a8-a1-e5-9d-97/" title="Node.js 之 Path 模块">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Node.js 之 Path 模块"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/26/node-js-e4-b9-8b-path-e6-a8-a1-e5-9d-97/" title="Node.js 之 Path 模块">Node.js 之 Path 模块</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-25T22:57:53.000Z" title="Created 2016-08-26 06:57:53">2016-08-26</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">path模块用于规范化路径连接和解析路径.
+path的功能包括不仅限于:
+
+规范化路径
+连接路径
+路径解析
+查找两个绝对路径的相对关系
+提取路径的组成部分
+
+规范化路径 path.normalize(p)path 模块中的 normalize(p) 用来规范化路径, 可用于处理路径中的 //, .., .等.
+var path = require(&#39;path&#39;);
+path.normalize(&#39;./foo/bar//baz/asfd/que/..&#39;);
+// 处理后
+&#39;foo/bar/baz/asfd&#39;
+`&lt;/pre&gt;
+
+### 连接路径 path.join([path1][, path2][, ...])
+
+将任意个路径字符串连接, 同时也会对路径进行规范化
+
+&lt;pre&gt;`var path = require(&#39;path&#39;);
+//合法的字符串连接
+path.join(&#39;./foo&#39;, &#39;bar&#39;, &#39;baz/asdf&#39;, &#39;quux&#3 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/08/26/react-router-documents/" title="React-Router Documents">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="React-Router Documents"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/26/react-router-documents/" title="React-Router Documents">React-Router Documents</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-25T21:34:50.000Z" title="Created 2016-08-26 05:34:50">2016-08-26</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">安装
+npm install history react-router@latest
+`&lt;/pre&gt;
+
+react-router 依赖 history 模块
+
+&lt;pre&gt;`import &#123;Router, Route, Link&#125; from &#39;react-router&#39;
+
+可以从 lib 目录 require 需要的部分
+`&lt;/pre&gt;
+
+import &#123; Router &#125; from &#39;react-router/lib/Router&#39;
+
+&lt;pre&gt;`import React from &#39;react&#39;
+import &#123; Router, Route, Link &#125; from &#39;react-router&#39;
+
+const App = React.createClass(&#123;/*..*/&#125;)
+const About = React.createClass(&#123;/*...*/&#125;)
+
+const  ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/08/25/h5-e7-a7-bb-e5-8a-a8-e7-ab-af-e6-b3-a8-e6-84-8f-e7-82-b9/" title="H5 移动端注意点">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="H5 移动端注意点"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/25/h5-e7-a7-bb-e5-8a-a8-e7-ab-af-e6-b3-a8-e6-84-8f-e7-82-b9/" title="H5 移动端注意点">H5 移动端注意点</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-25T08:13:17.000Z" title="Created 2016-08-25 16:13:17">2016-08-25</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/Uncategorized/">Uncategorized</a></span></div><div class="content">
+使用 rem 作为单位
+
+给手机这是 100px 的字体大小, 对于320px 的手机匹配是100px, 其他手机都是按比例分配, 因此设计稿上多少像素的话, rem = 设计稿像素/100
+
+禁用 a, button, input, opigroup, select, textare 等标签背景变暗
+
+在移动端使用 a 标签作为按钮或文字链接的时候, 点击按钮会出现一个暗色背景, 需要在 css 中加入
+a, button, input, textarea, optgroud, select&#123;
+  -webkit-tap-highlight-color: rgba(0,0,0,0)
+&#125;
+`&lt;/pre&gt;
+
+meta 基础知识
+页面窗口自动调整到设别宽度, 并禁止用户缩放页面
+`&lt;meta name="viewport" content="width=device-width,initial-width:1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0"/&gt;
+`
+
+忽略页面中的数字 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/08/25/react-e6-80-a7-e8-83-bd-e4-bc-98-e5-8c-96-tip/" title="React 性能优化 Tip">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="React 性能优化 Tip"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/25/react-e6-80-a7-e8-83-bd-e4-bc-98-e5-8c-96-tip/" title="React 性能优化 Tip">React 性能优化 Tip</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-25T07:41:49.000Z" title="Created 2016-08-25 15:41:49">2016-08-25</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">
+慎用 setState, 因为他容易导致重复渲染, 请将数据都交给 redux 管理, 再通过 props 传入. 记得使用 shouldComponentUpdate 比较以确定是否需要重新渲染
+
+请将方法的 bind 一律置于 constructor 中, 可以避免重复绑定, 多个实例的构造函数是共享的.
+
+只传递 component 需要的 props, 传递的太多, 或者传递的太深, 都会加重 shouldComponentUpdate 里面的数据复旦
+
+路由控制与拆包, 当项目变得更大规模与复杂的时候, 我们需要设计成 SPA, 这时路由管理就变得非常重要, 这使得特定 url 参数可以对应特定页面
+
+
+其他常见:
+1\. 使用 immutable 处理 props, state, store
+2\. 使用 pure-render-decorator 与 immutablejs 搭配使用
+3\. 慎用 setState
+4\. 仅传必要的 props
+5\. 将方法的 bind 置于 constructor</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/08/25/applymiddleware-e4-b8-8e-enhancer/" title="applyMiddleware 与 Enhancer">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="applyMiddleware 与 Enhancer"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/25/applymiddleware-e4-b8-8e-enhancer/" title="applyMiddleware 与 Enhancer">applyMiddleware 与 Enhancer</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-25T02:37:57.000Z" title="Created 2016-08-25 10:37:57">2016-08-25</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">import &#123; createStore, applyMiddleware, compose &#125; from &#39;redux&#39;
+
+const store = createStore(
+  reducer,
+  preloadedState, // &amp;lt;----- 可选，前后端同构的数据同步
+  compose( // &amp;lt;------------ 还记得吗？compose 是从右到左的哦！
+    applyMiddleware( // &amp;lt;-- 这货也是 Store Enhancer 哦！但这是关乎中间件的增强器，必须置于 compose 执行链的最后
+      middleware1,
+      middleware2,
+      middleware3
+    ),
+    enhancer3,
+    enhancer2,
+    enhancer1
+  )
+)
+</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/08/24/redux-apis/" title="Redux APIs">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Redux APIs"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/24/redux-apis/" title="Redux APIs">Redux APIs</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-24T04:17:39.000Z" title="Created 2016-08-24 12:17:39">2016-08-24</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">Compose(…funcs)/**
+ * compose(f,h,g)(...args) =&amp;gt; f(g(h(...args)))
+ * 使用了 reduceRight, 从右开始执行
+ * @param &#123;多个函数, 逗号隔开&#125;
+ * @return &#123;函数&#125;
+ */
+
+export default function compose(...funcs)&#123;
+  if(funcs.length === 0)&#123;
+    return arg =&amp;gt; arg
+  &#125;
+
+  if(funcs.length === 1)&#123;
+    return funcs[0]
+  &#125;
+
+  const last = funcs[funcs.length - 1]
+  const rest = funcs.slice(0,-1)
+  return (...args) =&amp;gt; rest.reduceRight((composed, f) =&amp;gt; f(composed), la ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/08/23/middleware/" title="Middleware">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Middleware"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/23/middleware/" title="Middleware">Middleware</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-23T03:14:07.000Z" title="Created 2016-08-23 11:14:07">2016-08-23</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">You can include custom middleware functions to the dispatch method of your store.
+The dispatch function is responsible for sending actions to one or more reducer functions for state changes. The composed specialized functions around the original dispatch method creates the new middleware capable dispatch method.
+Source code for applyMiddleware(from Redux 1.0.1)
+export default function applyMiddleware(...middlewares) &#123;
+  return (next) =&amp;gt; 
+    (reducer, initialState) =&amp;gt; &#123;
+  ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/08/22/connect-e7-9b-b8-e5-85-b3/" title="Connect 相关">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Connect 相关"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/22/connect-e7-9b-b8-e5-85-b3/" title="Connect 相关">Connect 相关</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-22T02:53:22.000Z" title="Created 2016-08-22 10:53:22">2016-08-22</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">预备知识回顾一下 Redux 基本用法
+const reducer = (state = &#123;count: 0&#125;, action ) =&amp;gt; &#123;
+  switch(action.type)&#123;
+  case &quot;INCRESE&quot;: return &#123;count: state.count + 1&#125;
+  case &quot;DECRESE&quot;: return &#123;count: state.count - 1&#125;
+  default: return state;
+  &#125;
+&#125;
+
+const actions = &#123;
+  increase: () =&amp;gt; &#123; type: &#39;INCREASE&#39;&#125;,
+  decrease: () =&amp;gt; &#123; type: &#39;DECREASE&#39;&#125;
+&#125;
+
+const store = createStore(reducer);
+
+st ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/08/22/configuring-eslint/" title="Configuring ESLint">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Configuring ESLint"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/22/configuring-eslint/" title="Configuring ESLint">Configuring ESLint</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-21T18:27:49.000Z" title="Created 2016-08-22 02:27:49">2016-08-22</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">
+Configuration Comments - use JS comments to embed configuration information directly into a file.
+Configuration Files - use a JS, JSON, or YAML file to specify configuration information for an entire directory and all of its subdirectories. This can be in the form of an .eslintrc file or an eslintConfig field in a package.json file, both of which ESLint will look for and reed automatically, or you can specify a configuration file on the command line.
+
+Specifying Parser OptionsESLint allows you  ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/08/21/js-e5-bc-80-e5-8f-91-e5-b7-a5-e5-85-b7/" title="JS 开发工具">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JS 开发工具"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/08/21/js-e5-bc-80-e5-8f-91-e5-b7-a5-e5-85-b7/" title="JS 开发工具">JS 开发工具</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-08-20T23:12:50.000Z" title="Created 2016-08-21 07:12:50">2016-08-21</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">开发工具是让开发人员工作更轻松的一些软件, 传统上包括集成开发环境, 代码检查工具, 编译器, 调试工具和性能测试工具
+但是 JS 是一种动态语言, 伴随他动态本质而来的是对更多运行时开发者工具的需求.
+Quick List
+Atom &amp; Atom-ternjs
+Chrome DevTools
+PageSpeed Insights
+BrowserSycn
+TraceGL
+ironNode
+ESLint
+Babel
+React
+Webpack + Hot Module Replacement
+Redux + Redux DevTools
+
+关于工具, 主要是编辑器和运行时环境(比如浏览器)
+主要用 Atom, 需要 atom-ternjs 来开启 JavaScript 智能识别
+很多很棒的 Atom 插件
+调试器: Chrome DevTools, 注意其 flame charts 和 dominators view 功能
+性能审查: PageSpeed Insights
+BrowserSync是一款测试响应式布局非常好用的工具, 可以一次模拟多种浏览器(电脑, 平板, 手机)可 ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/9/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/11/"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chen Yu</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives"><div class="headline">Articles</div><div class="length_num">304</div></a></div><div class="card-info-data-item is-center">      <a href="/tags"><div class="headline">Tags</div><div class="length_num">73</div></a></div><div class="card-info-data-item is-center"><a href="/categories"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/keith-cy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/keith-cy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:keithwhisper@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.linkedin.com/in/chen-yu-644b61ba/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">Code Elegantly</div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-recent-item"><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/08/27/shorthand-of-ethereum-provider/" title="Shorthand of Ethereum Provider"><img class="aside-post-bg" data-lazy-src="/gallery/thumbnails/eip-1193.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Shorthand of Ethereum Provider"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/08/27/shorthand-of-ethereum-provider/" title="Shorthand of Ethereum Provider">Shorthand of Ethereum Provider</a><time class="aside-post_meta post-meta-date" datetime="2020-08-27T06:03:53.000Z" title="Created 2020-08-27 14:03:53">2020-08-27</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/01/17/Inspect-protobuf-js/" title="Inspect-protobuf.js"><img class="aside-post-bg" data-lazy-src="/gallery/thumbnails/pbjs.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Inspect-protobuf.js"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/01/17/Inspect-protobuf-js/" title="Inspect-protobuf.js">Inspect-protobuf.js</a><time class="aside-post_meta post-meta-date" datetime="2020-01-17T03:30:02.000Z" title="Created 2020-01-17 11:30:02">2020-01-17</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/01/06/crx-config/" title="Crx-Config"><img class="aside-post-bg" data-lazy-src="https://i.loli.net/2020/05/01/IuWi8QbHvzjlOPw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Crx-Config"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/01/06/crx-config/" title="Crx-Config">Crx-Config</a><time class="aside-post_meta post-meta-date" datetime="2020-01-05T17:10:11.000Z" title="Created 2020-01-06 01:10:11">2020-01-06</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2019/12/03/Introduction-to-MACD/" title="Introduction to MACD"><img class="aside-post-bg" data-lazy-src="/gallery/thumbnails/macd-indicator.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Introduction to MACD"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2019/12/03/Introduction-to-MACD/" title="Introduction to MACD">Introduction to MACD</a><time class="aside-post_meta post-meta-date" datetime="2019-12-02T17:43:39.000Z" title="Created 2019-12-03 01:43:39">2019-12-03</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2019/10/10/Basic-components-in-nest-js/" title="Basic Components in nest.js"><img class="aside-post-bg" data-lazy-src="/gallery/thumbnails/nestjs_components.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Basic Components in nest.js"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2019/10/10/Basic-components-in-nest-js/" title="Basic Components in nest.js">Basic Components in nest.js</a><time class="aside-post_meta post-meta-date" datetime="2019-10-10T06:26:41.000Z" title="Created 2019-10-10 14:26:41">2019-10-10</time></div></div></div></div></div><div class="card-widget card-categories"><div class="card-content"><div class="item-headline"><i class="fas fa-folder-open"></i><span>Categories</span></div><ul class="card-category-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Soup/"><span class="card-category-list-name">Soup</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Uncategorized/"><span class="card-category-list-name">Uncategorized</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/github/"><span class="card-category-list-name">github</span><span class="card-category-list-count">2</span></a></li><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/github/note/"><span class="card-category-list-name">note</span><span class="card-category-list-count">1</span></a></li></ul><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/note/"><span class="card-category-list-name">note</span><span class="card-category-list-count">141</span></a></li><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/note/workNote/"><span class="card-category-list-name">workNote</span><span class="card-category-list-count">19</span></a></li></ul><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/workNote/"><span class="card-category-list-name">workNote</span><span class="card-category-list-count">5</span></a></li>
+                       
+            </ul></div></div><div class="card-widget card-tags"><div class="card-content"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/BIP/" style="font-size: 16.5px; color: #999a9c">BIP</a> <a href="/tags/Babel/" style="font-size: 17px; color: #999c9f">Babel</a> <a href="/tags/Bash/" style="font-size: 16px; color: #999">Bash</a> <a href="/tags/Bitcoin/" style="font-size: 16.5px; color: #999a9c">Bitcoin</a> <a href="/tags/Blockchain/" style="font-size: 21.5px; color: #99a8bc">Blockchain</a> <a href="/tags/CITA/" style="font-size: 16px; color: #999">CITA</a> <a href="/tags/CLI/" style="font-size: 16.5px; color: #999a9c">CLI</a> <a href="/tags/CSS/" style="font-size: 22px; color: #99a9bf">CSS</a> <a href="/tags/CSS3/" style="font-size: 17px; color: #999c9f">CSS3</a> <a href="/tags/Chrome/" style="font-size: 17.5px; color: #999da3">Chrome</a> <a href="/tags/Cluster/" style="font-size: 16px; color: #999">Cluster</a> <a href="/tags/D3/" style="font-size: 19.5px; color: #99a2af">D3</a> <a href="/tags/Database/" style="font-size: 19px; color: #99a1ac">Database</a> <a href="/tags/Design/" style="font-size: 16px; color: #999">Design</a> <a href="/tags/Docker/" style="font-size: 16px; color: #999">Docker</a> <a href="/tags/EIP/" style="font-size: 16px; color: #999">EIP</a> <a href="/tags/ESLint/" style="font-size: 16px; color: #999">ESLint</a> <a href="/tags/Economics/" style="font-size: 16px; color: #999">Economics</a> <a href="/tags/Ecto/" style="font-size: 16.5px; color: #999a9c">Ecto</a> <a href="/tags/Elixir/" style="font-size: 17.5px; color: #999da3">Elixir</a> <a href="/tags/Erlang/" style="font-size: 16px; color: #999">Erlang</a> <a href="/tags/Error-Handling/" style="font-size: 16px; color: #999">Error Handling</a> <a href="/tags/Ethereum/" style="font-size: 20.5px; color: #99a5b6">Ethereum</a> <a href="/tags/Extension/" style="font-size: 16px; color: #999">Extension</a> <a href="/tags/Extensions/" style="font-size: 16px; color: #999">Extensions</a> <a href="/tags/Fastify/" style="font-size: 16.5px; color: #999a9c">Fastify</a> <a href="/tags/Functional-Program/" style="font-size: 17px; color: #999c9f">Functional Program</a> <a href="/tags/GenServer/" style="font-size: 16px; color: #999">GenServer</a> <a href="/tags/Git/" style="font-size: 18px; color: #999ea6">Git</a> <a href="/tags/Github-Action/" style="font-size: 16px; color: #999">Github Action</a> <a href="/tags/Go/" style="font-size: 16px; color: #999">Go</a> <a href="/tags/GraphQL/" style="font-size: 18.5px; color: #99a0a9">GraphQL</a> <a href="/tags/Gulp/" style="font-size: 17px; color: #999c9f">Gulp</a> <a href="/tags/HTML/" style="font-size: 20px; color: #99a4b2">HTML</a> <a href="/tags/HTTP/" style="font-size: 18px; color: #999ea6">HTTP</a> <a href="/tags/HTTP2/" style="font-size: 16px; color: #999">HTTP2</a> <a href="/tags/Headless/" style="font-size: 16px; color: #999">Headless</a> <a href="/tags/IPFS/" style="font-size: 16px; color: #999">IPFS</a> <a href="/tags/JSON-RPC/" style="font-size: 16px; color: #999">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 21px; color: #99a6b9">JavaScript</a></div></div></div><div class="card-widget card-archives"><div class="card-content"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/08/"><span class="card-archive-list-date">August 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/01/"><span class="card-archive-list-date">January 2020</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/12/"><span class="card-archive-list-date">December 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/10/"><span class="card-archive-list-date">October 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/09/"><span class="card-archive-list-date">September 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/08/"><span class="card-archive-list-date">August 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/04/"><span class="card-archive-list-date">April 2019</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/03/"><span class="card-archive-list-date">March 2019</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item more is-center"><a class="card-archive-list-link-more" href="/archives">
+              <span>More</span><i class="fas fa-angle-right"  ></i></a></li></ul></div></div><div class="card-widget card-webinfo"><div class="card-content"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="webinfo-article-name">Article :</div><div class="webinfo-article-count">304</div></div><div class="webinfo-item">      <div class="webinfo-site-uv-name">UV :</div><div class="webinfo-site-uv-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="webinfo-site-name">PV :</div><div class="webinfo-site-pv-count" id="busuanzi_value_site_pv"></div></div></div></div></div></div></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function subtitleType () {
+  if (true) { 
+    var typed = new Typed("#subtitle", {
+      strings: "Code Elegantly".split(","),
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: false,
+      backSpeed: 50
+    })
+  } else {
+    document.getElementById("subtitle").innerHTML = 'Code Elegantly'
+  }
+}
+
+if (true) {
+  if (typeof Typed === 'function') subtitleType()
+  else $.getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js', subtitleType)
+} else {
+  subtitleType()
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
+
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
+
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
+
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+})
+
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  $(window).off('scroll')
+
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
+
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

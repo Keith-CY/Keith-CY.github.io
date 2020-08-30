@@ -1,483 +1,256 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ImmutableJS Introduction | EzCook</title><meta name="description" content="Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logi"><meta name="keywords" content="Redux,Functional Program"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2016/08/19/immutablejs-introduction/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="ImmutableJS Introduction"><meta property="og:url" content="https://ezcook.de/2016/08/19/immutablejs-introduction/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logi"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2016-08-18T21:29:36.000Z"><meta property="article:modified_time" content="2020-08-30T12:37:56.141Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>ImmutableJS Introduction - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="ImmutableJS Introduction" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-08-18T21:29:36.000Z">2016-08-19</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    10 minutes read (About 1442 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                ImmutableJS Introduction
-            
-        </h1>
-        <div class="content">
-            <p>Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logic. Persistent data presetns a mutative API which does not update the data in-place, but instead always yields new updated data.</p>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:37:56'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-Started"><span class="toc-number">1.</span> <span class="toc-text">Getting Started</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The-case-for-Immutability"><span class="toc-number">2.</span> <span class="toc-text">The case for Immutability</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JavaScript-first-API"><span class="toc-number">3.</span> <span class="toc-text">JavaScript-first API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Accepts-raw-JavaScript-objects"><span class="toc-number">4.</span> <span class="toc-text">Accepts raw JavaScript objects</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Converts-Back-to-Raw-JS-Obejcts"><span class="toc-number">5.</span> <span class="toc-text">Converts Back to Raw JS Obejcts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Embraces-ES6"><span class="toc-number">6.</span> <span class="toc-text">Embraces ES6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nested-Structures"><span class="toc-number">7.</span> <span class="toc-text">Nested Structures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lazy-Seq"><span class="toc-number">8.</span> <span class="toc-text">Lazy Seq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Equality-treats-Collection-as-Data"><span class="toc-number">9.</span> <span class="toc-text">Equality treats Collection as Data</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Batching-Mutations"><span class="toc-number">10.</span> <span class="toc-text">Batching Mutations</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">ImmutableJS Introduction</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2016-08-18T21:29:36.000Z" title="Created 2016-08-19 05:29:36">2016-08-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:37:56.141Z" title="Updated 2020-08-30 20:37:56">2020-08-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/note/">note</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2016/08/19/immutablejs-introduction/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>Immutable data cannot be changed once created, leading to much simpler application development, no defensive copying, and enabling advanced memoization and change detection techniques with simple logic. Persistent data presetns a mutative API which does not update the data in-place, but instead always yields new updated data.</p>
 <p>Immutable.js provides many Persistent Immutable data structures including: <code>List</code>, <code>Stack</code>, <code>Map</code>, <code>OrderedMap</code>, <code>Set</code>, <code>OrderedSet</code> and <code>Record</code>.</p>
 <p>These data structures are highly efficient on modern JavaScript VMs by using structural sharing via ‘hash maps tries’ and ‘vector tries’ as popularized by Clojure and Scala, minimizing the need to copy or cache data.</p>
 <p>Immutable also provides a lazy <code>Seq</code>, allowing efficient chaining of collection methods like <code>map</code> and <code>filter</code> without creating intermediate representations. Create some <code>Seq</code> with <code>Range</code> and <code>Repeat</code>.</p>
 <h3 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h3><p><code>npm install Immutable</code></p>
-<p><code>var Immutable = require(&#39;immutable&#39;);
-  var map1 = Immutable.Map({a:1,b:2,c:3});
-  var map2 = map1.set(&#39;b&#39;,50);
-  map1.get(&#39;b&#39;); //2
-  map2.get(&#39;b&#39;); //50</code></p>
+<p><code>var Immutable = require(&#39;immutable&#39;);   var map1 = Immutable.Map(&#123;a:1,b:2,c:3&#125;);   var map2 = map1.set(&#39;b&#39;,50);   map1.get(&#39;b&#39;); //2   map2.get(&#39;b&#39;); //50</code></p>
 <h3 id="The-case-for-Immutability"><a href="#The-case-for-Immutability" class="headerlink" title="The case for Immutability"></a>The case for Immutability</h3><p>Much of what makes application development difficult is tracking mutation and maintaining state. Development with immutable data encourages you to think differently about how data flows through your application.</p>
 <p>Subscribing to data event throughout your application.</p>
 <p>Immutable data never change.</p>
 <p>Immutable collections should be treated as <em>value</em> rather than <em>object</em>. While objects represents some thing which could change over time, a value represents the state of that thing at a particular instance of time. This principle is most important to understanding the appropriate use of immutable data. In order to treat Immutable.js collections as values, it’s important to use the <strong>Immutable.is()</strong> function or <strong>.equals()</strong> method to determine value equality instead of <code>===</code> operator which determines object reference identity.</p>
-<p><code>var map1 = Immutable.Map({a:1,b:2,c:3});
-  var map2 = map1.set(&#39;b&#39;,2);
-  assert(map1.equals(map2) === true);
-  var map3 = map1.set(&#39;b&#39;,50);
-  assert(map1.equals(map3) === false);</code></p>
+<p><code>var map1 = Immutable.Map(&#123;a:1,b:2,c:3&#125;);   var map2 = map1.set(&#39;b&#39;,2);   assert(map1.equals(map2) === true);   var map3 = map1.set(&#39;b&#39;,50);   assert(map1.equals(map3) === false);</code></p>
 <p><strong>Note</strong>: As a performance optimization <strong>Immutable</strong> attempts to return the existing collection when an operation would result in an identical collection, allowing for using <code>===</code> reference equality to determine if something definitely has not changed. This can be extremely useful when used within memoization function which would prefer to re-run the function if a deeper equality check could potentially be more costly. The <code>===</code> equality check is also used internally by <strong>Immutable.js</strong> and <code>equals()</code> as a performance as a performance optimization.</p>
 <p>If an object is immutable, it can <strong>be ‘copied’ simply by marking another reference</strong> to it instead of copying the entire object. Because a reference is much smaller than the object itself, this results in memory savings and a potential boost in execution speed for programs which rely on copies(such as an undo-stack).</p>
-<p><code>var map1 = Immutable.Map({&#39;a&#39;:1,&#39;b&#39;:2,&#39;c&#39;:3});
-  var clone = map1;</code></p>
+<p><code>var map1 = Immutable.Map(&#123;&#39;a&#39;:1,&#39;b&#39;:2,&#39;c&#39;:3&#125;);   var clone = map1;</code></p>
 <h3 id="JavaScript-first-API"><a href="#JavaScript-first-API" class="headerlink" title="JavaScript-first API"></a>JavaScript-first API</h3><p>While <code>immutable</code> is inspired by Clojure, Scala, Haskell and other functional programming environments, it’s designed to bring these powerful concepts to JavaScript, and therefore has an Object-Oriented API that closely mirrors that of <strong>ES6 Array, Map, and Set</strong>.</p>
 <p>The difference for the immutable collections is that methods which would mutate the collection, like <code>push</code>, <code>set</code>, <code>unshift</code>, or <code>splice</code> instead of return a new immutable collection. Methods which return new array like <code>slice</code> or <code>concat</code> instead return new immutable collections.</p>
-<p><code>var list1 = Immutable.List.of(1,2);
-  var list2 = list1.push(3,4,5);
-  var list3 = list2.unshift(0);
-  var list4 = list1.concat(list2,list3);
-  assert(list1.size === 2);
-  assert(list2.size === 5);
-  assert(list3.size === 6);
-  assert(list4.size === 13);
-  assert(list4.get(0) === 1);</code></p>
+<p><code>var list1 = Immutable.List.of(1,2);   var list2 = list1.push(3,4,5);   var list3 = list2.unshift(0);   var list4 = list1.concat(list2,list3);   assert(list1.size === 2);   assert(list2.size === 5);   assert(list3.size === 6);   assert(list4.size === 13);   assert(list4.get(0) === 1);</code></p>
 <p>Almost all of the methods on <strong>Array</strong> will be found in similar form on <strong>Immutable.List</strong>, those of <strong>Map</strong> found on <strong>Immutable.Map</strong> and those of <strong>Set</strong> found on<strong>Immutable.Set</strong>, including collection operation like <strong>forEach()</strong>, and <strong>map()</strong>.</p>
-<p><code>var alpha = Immutable.Map({a:1,b:2,c:3,d:4});
-  alpha.map((v,k) =&amp;gt; k.toUpperCase()).join();
-  // &#39;A,B,C,D&#39;</code></p>
+<p><code>var alpha = Immutable.Map(&#123;a:1,b:2,c:3,d:4&#125;);   alpha.map((v,k) =&amp;gt; k.toUpperCase()).join();   // &#39;A,B,C,D&#39;</code></p>
 <h3 id="Accepts-raw-JavaScript-objects"><a href="#Accepts-raw-JavaScript-objects" class="headerlink" title="Accepts raw JavaScript objects"></a>Accepts raw JavaScript objects</h3><p>  ‘immutable’ accepts plain JavaScript Arrays and Objects anywhere a mehtod expects an <strong>Iterable</strong> with no performance penalty.</p>
-<p><code>var map1 = Immutable.Map({a:1,b:2,c:3,d:4});
-  var map2 = Immutable.Map({c:10,a:20,t:30});
-  var obj = {d:100,o:200,g:300};
-  var map3 = map1.merge(map2,obj);
-  // Map {a:20,b2,c:10,d:100,t:30,o:200,g:300}</code></p>
+<p><code>var map1 = Immutable.Map(&#123;a:1,b:2,c:3,d:4&#125;);   var map2 = Immutable.Map(&#123;c:10,a:20,t:30&#125;);   var obj = &#123;d:100,o:200,g:300&#125;;   var map3 = map1.merge(map2,obj);   // Map &#123;a:20,b2,c:10,d:100,t:30,o:200,g:300&#125;</code></p>
 <p><strong>Immutable</strong> can treat any JavaScript Array or Object as an Iterable. You can take advantage of this in order to get sophisticated collection methods on JavaScript Objects, which otherwise have a very sparse native API.</p>
-<p><code>var myObject = {a:1,b:2,c:3};
-  Immutable.Seq(myObject).map(x=&amp;gt;x*x).toObject();
-  // {a:1,b:4,c:9};</code></p>
+<p><code>var myObject = &#123;a:1,b:2,c:3&#125;;   Immutable.Seq(myObject).map(x=&amp;gt;x*x).toObject();   // &#123;a:1,b:4,c:9&#125;;</code></p>
 <p>Keep in Mind, when using JS objects to construct Immutable Maps, that JS Object properties are always <strong>strings</strong>, even if written in a quote-less shorthand, while Immutable Map accept keys of any type.</p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  var obj = &#123;1: &amp;#039;one&amp;#039;&#125;;</div><div class="line">  Object.keys(obj); // [&amp;#039;1&amp;#039;]</div><div class="line">  obj[1]; // &amp;#039;one&amp;#039;</div><div class="line">  obj[&amp;#039;1&amp;#039;]; // &amp;#039;one&amp;#039;</div><div class="line"></div><div class="line">var map = Immutable.fromJS(obj);</div><div class="line">  map.get(&amp;#039;1&amp;#039;); // &amp;#039;one&amp;#039;</div><div class="line">  map.get(1); // undefined</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  var obj &#x3D; &#123;1: &amp;#039;one&amp;#039;&#125;;</span><br><span class="line">  Object.keys(obj); &#x2F;&#x2F; [&amp;#039;1&amp;#039;]</span><br><span class="line">  obj[1]; &#x2F;&#x2F; &amp;#039;one&amp;#039;</span><br><span class="line">  obj[&amp;#039;1&amp;#039;]; &#x2F;&#x2F; &amp;#039;one&amp;#039;</span><br><span class="line"></span><br><span class="line">var map &#x3D; Immutable.fromJS(obj);</span><br><span class="line">  map.get(&amp;#039;1&amp;#039;); &#x2F;&#x2F; &amp;#039;one&amp;#039;</span><br><span class="line">  map.get(1); &#x2F;&#x2F; undefined</span><br></pre></td></tr></table></figure>
+
 <p>Property access for JS Object first converts the key to a string, but since Immutable Map keys can be of any type the argument to <code>get()</code> is not altered.<br>  Namely Immutable Map will treat ‘1’ and 1 differently.</p>
 <h3 id="Converts-Back-to-Raw-JS-Obejcts"><a href="#Converts-Back-to-Raw-JS-Obejcts" class="headerlink" title="Converts Back to Raw JS Obejcts"></a>Converts Back to Raw JS Obejcts</h3><p>  All <strong>Immutable</strong> Iterable can be converted to plain JS Arrays and Objects shallowly with <code>toArray()</code> and <code>toObject()</code> or deeply with <code>toJS()</code>. All Immutable Iterables also implement <code>toJSON()</code> allowing them to be passed to <code>JSON.stringify()</code> directly.</p>
-<p><code>var deep = Immutable.Map({a:1,b:2,c:Immutable.List.of(3,4,5)});
-  deep.toObject() // {a:1,b:2,c:List [3,4,5]}
-  deep.toArray() // [1,2,List [3,4,5]]
-  deep.toJS() // {a:1,b:2,c:[3,4,5]}
-  JSON.stringify(deep) // &#39;{&quot;a&quot;:1,&quot;b&quot;,&quot;c&quot;:[3,4,5]}&#39;</code></p>
+<p><code>var deep = Immutable.Map(&#123;a:1,b:2,c:Immutable.List.of(3,4,5)&#125;);   deep.toObject() // &#123;a:1,b:2,c:List [3,4,5]&#125;   deep.toArray() // [1,2,List [3,4,5]]   deep.toJS() // &#123;a:1,b:2,c:[3,4,5]&#125;   JSON.stringify(deep) // &#39;&#123;&quot;a&quot;:1,&quot;b&quot;,&quot;c&quot;:[3,4,5]&#125;&#39;</code></p>
 <h3 id="Embraces-ES6"><a href="#Embraces-ES6" class="headerlink" title="Embraces ES6"></a>Embraces ES6</h3><p>  <code>Immutable</code> takes advantage of features added to JS ES6, the latest standard version of ECMAScript, including <code>Interators</code>,<code>Arrow Function</code>, <code>Classes</code>, and <code>Modules</code>.</p>
 <h3 id="Nested-Structures"><a href="#Nested-Structures" class="headerlink" title="Nested Structures"></a>Nested Structures</h3><p>The collections in <code>immutable</code> are intended to be nested, allowing for deep trees of data, similar to JSON</p>
-<p><code>var nested = Immutable.fromJS({a:{b:{c:[3,4,5]}}})
-  // Map{ a: Map { b: Map { c: List [3,4,5]}}}</code><br>  A few power-tool allow for reading and operating on nested data. The most useful are <code>mergeDeep</code>, <code>getIn</code>, <code>setIn</code> and <code>updateIn</code> found on <code>List</code>, <code>Map</code> and <code>OrderedMap</code></p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">  var nested2 = nested.mergeDeep(&#123;a:&#123;b:&#123;d:6&#125;&#125;&#125;)</div><div class="line">  // Map &#123;a: Map &#123; b: &#123; c: List [3,4,5], d: 6&#125;&#125;&#125;</div><div class="line"></div><div class="line">nested2.getIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;]); //6</div><div class="line"></div><div class="line">var nested3 = nested2.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;], value =&amp;gt; value + 1); d =&amp;gt; 7</div><div class="line"></div><div class="line">var nest4 = nested3.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;c&amp;#039;], list =&amp;gt; list.push(6)); c =&amp;gt; List [3,4,5,6]</div></pre></td></tr></table></figure>
+<p><code>var nested = Immutable.fromJS(&#123;a:&#123;b:&#123;c:[3,4,5]&#125;&#125;&#125;)   // Map&#123; a: Map &#123; b: Map &#123; c: List [3,4,5]&#125;&#125;&#125;</code><br>  A few power-tool allow for reading and operating on nested data. The most useful are <code>mergeDeep</code>, <code>getIn</code>, <code>setIn</code> and <code>updateIn</code> found on <code>List</code>, <code>Map</code> and <code>OrderedMap</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  var nested2 &#x3D; nested.mergeDeep(&#123;a:&#123;b:&#123;d:6&#125;&#125;&#125;)</span><br><span class="line">  &#x2F;&#x2F; Map &#123;a: Map &#123; b: &#123; c: List [3,4,5], d: 6&#125;&#125;&#125;</span><br><span class="line"></span><br><span class="line">nested2.getIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;]); &#x2F;&#x2F;6</span><br><span class="line"></span><br><span class="line">var nested3 &#x3D; nested2.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;d&amp;#039;], value &#x3D;&gt; value + 1); d &#x3D;&gt; 7</span><br><span class="line"></span><br><span class="line">var nest4 &#x3D; nested3.updateIn([&amp;#039;a&amp;#039;,&amp;#039;b&amp;#039;,&amp;#039;c&amp;#039;], list &#x3D;&gt; list.push(6)); c &#x3D;&gt; List [3,4,5,6]</span><br></pre></td></tr></table></figure>
+
 <h3 id="Lazy-Seq"><a href="#Lazy-Seq" class="headerlink" title="Lazy Seq"></a>Lazy Seq</h3><p>  <strong>Seq</strong> describes a lazy operation, allowing them to efficiently chain use all the Iterable methods.(such as map and filter)</p>
 <p><strong>Seq is immutable</strong> – Once a Seq is created it cannot be changed, appended to, rerranged or otherwise modified. Instead, any mutative method called on a Seq will return a new Seq.</p>
 <p><strong>Seq is lazy</strong> – Seq does as little work as necessary to respond to any method call.</p>
 <p>Once the Seq is used, it performs only the work necessary.</p>
 <p>Any collection can be converted to a lazy Seq with <code>toSeq()</code>.</p>
-<p><code>var seq = Immutable.Map({a:1,b:2,c:3}).toSeq();</code></p>
+<p><code>var seq = Immutable.Map(&#123;a:1,b:2,c:3&#125;).toSeq();</code></p>
 <p>Seq allow for the efficient chaining of sequence operations, especially when converting to a different concrete type(such as to a JS Object)</p>
-<p><code>seq.flip().map(k =&amp;gt; k.toUpperCase()).flip().toObject();
-  // Map {A: 1, B:2, C:3}</code></p>
+<p><code>seq.flip().map(k =&amp;gt; k.toUpperCase()).flip().toObject();   // Map &#123;A: 1, B:2, C:3&#125;</code></p>
 <h3 id="Equality-treats-Collection-as-Data"><a href="#Equality-treats-Collection-as-Data" class="headerlink" title="Equality treats Collection as Data"></a>Equality treats Collection as Data</h3><p><strong>Immutable</strong> provides equality which treats immutable data structures as pure data, performing a deep equality check if necessary.</p>
-<p><code>var map1 = Immutable.Map({a:1,b:1,c:1});
-  var map2 = Immutable.Map({a:1,b:1,c:1});
-  assert(map1 !== map2) // two different instance, not same address
-  assert(Immutable.is(map1,map2)); // have equivalent values
-  assert(map1.equals(map2)); // alternatively use the equals methods.</code></p>
+<p><code>var map1 = Immutable.Map(&#123;a:1,b:1,c:1&#125;);   var map2 = Immutable.Map(&#123;a:1,b:1,c:1&#125;);   assert(map1 !== map2) // two different instance, not same address   assert(Immutable.is(map1,map2)); // have equivalent values   assert(map1.equals(map2)); // alternatively use the equals methods.</code></p>
 <p><strong>Immutable.is()</strong> uses the same measure of equality as <strong>Object.is</strong> including if both are immutable and all keys and values are equal using the same measure of equality.</p>
 <h3 id="Batching-Mutations"><a href="#Batching-Mutations" class="headerlink" title="Batching Mutations"></a>Batching Mutations</h3><p>  Applying a mutation to create a new immutable object results in some overhead, which can add up to a minor performance penalty. If you need to apply a series of mutations locally before returning, <strong>Immutable</strong> gives you the ability to create a temporary mutable(transient) copy of a collection and apply a batch of mutations in a performance manner by using <code>withMutations</code>. In fact, this is exactly how <code>Immutable</code> applies complex mutations itself.</p>
-<p>As an example, building <code>list2</code> results in the creation of 1 , not 3, new immutable Lists<br>  <code>var list1 = Immutable.List.of(1,2,3);
-  var list2 = list1.withMutations(function(list){
-    list.push(4).push(5).push(6)
-  });
-  assert(list1.size === 3);
-  assert(list2.size === 6);</code></p>
+<p>As an example, building <code>list2</code> results in the creation of 1 , not 3, new immutable Lists<br>  <code>var list1 = Immutable.List.of(1,2,3);   var list2 = list1.withMutations(function(list)&#123;     list.push(4).push(5).push(6)   &#125;);   assert(list1.size === 3);   assert(list2.size === 6);</code></p>
 <p><strong>Note</strong>: <strong>Immutable</strong> also provides <code>asMutable</code> and <code>asImmutable</code>, but only encourages their use when <code>withMutations</code> will not suffice. Use caution to not return a mutable copy could result in undesired behavior.</p>
 <p><strong>important</strong>: Only a select few method can be used in <code>withMutations</code> including <code>set</code>, <code>push</code>, <code>pop</code>. These methods can be applied directly against a persistent data-structure where other methods like <code>map</code>,<code>filter</code>,<code>sort</code>and <code>splice</code> will always return new immutable data-structure and never mutate a mutable collection.</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2016/08/19/immutablejs-introduction/">https://ezcook.de/2016/08/19/immutablejs-introduction/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Redux/">Redux</a><a class="post-meta__tags" href="/tags/Functional-Program/">Functional Program</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2016/08/19/webpack-e5-b8-b8-e7-94-a8-plugin-e5-92-8c-loader/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Webpack 常用 Plugin 和 Loader</div></div></a></div><div class="next-post pull-right"><a href="/2016/08/16/redux-e6-90-ad-e9-85-8d-react/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Redux 搭配 React</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/09/05/Notes-on-TS-React-Redux/" title="Notes on TS + React + Redux"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-05</div><div class="relatedPosts_title">Notes on TS + React + Redux</div></div></a></div><div class="relatedPosts_item"><a href="/2016/08/25/applymiddleware-e4-b8-8e-enhancer/" title="applyMiddleware 与 Enhancer"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-08-25</div><div class="relatedPosts_title">applyMiddleware 与 Enhancer</div></div></a></div><div class="relatedPosts_item"><a href="/2017/03/20/baisc-usage-of-redux-observable/" title="Baisc Usage of Redux-Observable"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-03-20</div><div class="relatedPosts_title">Baisc Usage of Redux-Observable</div></div></a></div><div class="relatedPosts_item"><a href="/2016/08/22/connect-e7-9b-b8-e5-85-b3/" title="Connect 相关"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-08-22</div><div class="relatedPosts_title">Connect 相关</div></div></a></div><div class="relatedPosts_item"><a href="/2016/08/20/e9-83-a8-e7-bd-b2react-redux-e7-9a-84-web-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83/" title="部署React + Redux 的 Web 开发环境"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-08-20</div><div class="relatedPosts_title">部署React + Redux 的 Web 开发环境</div></div></a></div><div class="relatedPosts_item"><a href="/2016/11/06/flux-standard-action/" title="Flux Standard Action"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-11-06</div><div class="relatedPosts_title">Flux Standard Action</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2016/08/19/immutablejs-introduction/'
+    this.page.identifier = '2016/08/19/immutablejs-introduction/'
+    this.page.title = 'ImmutableJS Introduction'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Functional-Program/">Functional Program</a>, <a class="has-link-grey -link" href="/tags/Redux/">Redux</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2016/08/19/webpack-e5-b8-b8-e7-94-a8-plugin-e5-92-8c-loader/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Webpack 常用 Plugin 和 Loader</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2016/08/16/redux-e6-90-ad-e9-85-8d-react/">
-                <span class="level-item">Redux 搭配 React</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2016/08/19/immutablejs-introduction/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

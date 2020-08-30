@@ -1,176 +1,108 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Node Child Process | EzCook</title><meta name="description" content="Single-threaded, non-blocking performance in Node works great for a single process. But eventually, one process in one CPU is not going to be enough to handle the increasing workload of your applicat"><meta name="keywords" content="Node.js"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2017/08/22/Node-Child-Process/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Node Child Process"><meta property="og:url" content="https://ezcook.de/2017/08/22/Node-Child-Process/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Single-threaded, non-blocking performance in Node works great for a single process. But eventually, one process in one CPU is not going to be enough to handle the increasing workload of your applicat"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2017-08-22T06:51:20.000Z"><meta property="article:modified_time" content="2020-08-30T12:44:03.507Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Node Child Process - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Node Child Process" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-08-22T06:51:20.000Z">2017-08-22</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    17 minutes read (About 2552 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Node Child Process
-            
-        </h1>
-        <div class="content">
-            <p><img src="https://cdn-images-1.medium.com/max/2000/1*I56pPhzO1VQw8SIsv8wYNA.png" alt=""></p>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:44:03'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#The-Child-Process-Module"><span class="toc-number">1.</span> <span class="toc-text">The Child Process Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spawned-Child-Process"><span class="toc-number">2.</span> <span class="toc-text">Spawned Child Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell-Syntax-and-the-exec-Function"><span class="toc-number">3.</span> <span class="toc-text">Shell Syntax and the exec Function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The-execFile-function"><span class="toc-number">4.</span> <span class="toc-text">The execFile function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The-Sync-Function"><span class="toc-number">5.</span> <span class="toc-text">The *Sync Function</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The-fork-function"><span class="toc-number">6.</span> <span class="toc-text">The fork() function</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Node Child Process</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-08-22T06:51:20.000Z" title="Created 2017-08-22 14:51:20">2017-08-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:44:03.507Z" title="Updated 2020-08-30 20:44:03">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2017/08/22/Node-Child-Process/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p><img src= "/img/loading.gif" data-lazy-src="https://cdn-images-1.medium.com/max/2000/1*I56pPhzO1VQw8SIsv8wYNA.png"></p>
 <p>Single-threaded, non-blocking performance in Node works great for a single process. But eventually, one process in one CPU is not going to be enough to handle the increasing workload of your application.</p>
 <p>Using multiple processes is the best way to scale a Node application. Node is designed for building distributed applications with many nodes.</p>
 <h3 id="The-Child-Process-Module"><a href="#The-Child-Process-Module" class="headerlink" title="The Child Process Module"></a>The Child Process Module</h3><p>We can easily spin a child process using Node’s <code>child_process</code> module and those child processes can easily communicate with each other with a messaging system.</p>
@@ -178,10 +110,12 @@
 <p>We can control that child process input stream, and listen to its output stream. We can also control the arguments to be passed to the underlying OS command, and we can do whatever we want with that command’s output.</p>
 <p>There are four different ways to create a child process in Node: <code>spawn()</code>, <code>fork()</code>, <code>exec()</code>, <code>execFile()</code>.</p>
 <h3 id="Spawned-Child-Process"><a href="#Spawned-Child-Process" class="headerlink" title="Spawned Child Process"></a>Spawned Child Process</h3><p>The <code>spawn</code> function launches a command in a new process and we can use it to pass that command any arguments. For example, here’s code to spawn a new process that will execute the <code>pwd</code> command.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'pwd'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; spawn &#125; = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> child = spawn(<span class="string">&#x27;pwd&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <p>We simply destructure the <code>spawn</code> function out of the <code>child_process</code> module and execute it with the OS command as the first argument.</p>
 <p>The result of executing the <code>spawn</code> function (the <code>child</code> object above) is a <code>ChildProcess</code> instance, which implements the <code>EventEmitter API</code>. This means we can register handlers for events on this child object directly. For example, we can do something when the child process exits by registering a handler for the <code>exit</code> event.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">child.on(<span class="hljs-string">'exit'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">code, signal</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'child process exited with '</span> + <span class="hljs-string">`code <span class="hljs-subst">$&#123;code&#125;</span> and signal <span class="hljs-subst">$&#123;signal&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">child.on(<span class="string">&#x27;exit&#x27;</span>, <span class="function"><span class="keyword">function</span> (<span class="params">code, signal</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;child process exited with &#x27;</span> + <span class="string">`code <span class="subst">$&#123;code&#125;</span> and signal <span class="subst">$&#123;signal&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>The handler above gives us the exit <code>code</code> for the child process and the <code>signal</code>, if any, that was used to terminate the child process. This <code>signal</code> variable is null when the child process exits normally.</p>
 <p>The other events that we can register handlers for with the <code>ChildProcess</code> instances are <code>disconnect</code>, <code>error</code>, <code>close</code>, <code>message</code>.</p>
 <ul>
@@ -197,276 +131,172 @@
 <p>Every child process also gets the three standard <code>stdio</code> streams, which we can access using <code>child.stdin</code>, <code>child.stdout</code>, <code>child.stderr</code>.</p>
 <p>When those streams get closed, the child process that was using them will emit the <code>close</code> event. This <code>close</code> event is different than the <code>exit</code> event because multiple child processes might share the same <code>stdio</code> streams and so one child process exiting does not mean that the streams got closed.</p>
 <p>Since all streams are event emitters, we can listen to different events on those <code>stdio</code> stream that are attached to every child process. Unlike in a normal process though, in a child process, the <code>stdout</code>/<code>stderr</code> streams are readable streams while the <code>stdin</code> stream is a writable one. This is basically the inverse of those types as found in a main process. The events we can use for those streams are the standard ones. Most importantly, on the readable streams, we can listen to the <code>data</code> event, which will have the output of the command or any errorencoutered while executing the command:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">child.stdout.on(<span class="hljs-string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`child stdout:\n<span class="hljs-subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">child.stderr.on(<span class="hljs-string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`child \n<span class="hljs-subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">child.stdout.on(<span class="string">&#x27;data&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`child stdout:\n<span class="subst">$&#123;data&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">child.stderr.on(<span class="string">&#x27;data&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.error(<span class="string">`child \n<span class="subst">$&#123;data&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>The two handlers above will log both cases to the main process <code>stdout</code> and <code>stderr</code>. When we execute the <code>spawn</code> function above, the output of the <code>pwd</code> command gets printed and the child process exits with code <code>0</code>, which means no error occured.</p>
 <p>We can pass arguments to the command that’s executed by the <code>spawn</code> function using the second argument of the <code>spawn</code> function, which is an array of all the arguments to be passed to the command.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'find'</span>, [<span class="hljs-string">'.'</span>, <span class="hljs-string">'-type'</span>, <span class="hljs-string">'f'</span>])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> child = spawn(<span class="string">&#x27;find&#x27;</span>, [<span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;-type&#x27;</span>, <span class="string">&#x27;f&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
 <p>If an error occurs during the execution of the command, for example, if we give find an invalid destination above, the <code>child.stderr</code> <code>data</code> event handler will be triggered and the <code>exit</code> event handler will report an exit code of <code>1</code>, which signifies that an error has occured.</p>
 <p>A child process <code>stdin</code> is a writable stream. We can use it to send a command some input. Just like any writable stream, the easiest way to consume it is using the <code>pipe</code> function. We simply pipe a readable stream into a writable stream. SInce the main process <code>stdin</code> is a readable stream, we can pipe that into a child process <code>stdin</code> stream.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'wc'</span>)</div><div class="line"></div><div class="line">process.stdin.pipe(child.stdin)</div><div class="line"></div><div class="line">child.stdout.on(<span class="hljs-string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`child stdout:\n<span class="hljs-subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; spawn &#125; = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> child = spawn(<span class="string">&#x27;wc&#x27;</span>)</span><br><span class="line"></span><br><span class="line">process.stdin.pipe(child.stdin)</span><br><span class="line"></span><br><span class="line">child.stdout.on(<span class="string">&#x27;data&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`child stdout:\n<span class="subst">$&#123;data&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>In the example above, the child process invokes the <code>wc</code> command, which count lines, words, and characters in Linux. When we pipe the main process <code>stdin</code>(which is a readable stream) into the child process <code>stdin</code>(which is a writable stream). The result of this combination is that we get a standard input mode where we can type somthing and when we hit <code>Ctrl + D</code>, what we typed will be used as the input of the <code>wc</code> command.</p>
 <p>We can also pipe the standard input/output of multiple processes on each other, just like we can do with Linux commands. For example, we can pipe the <code>stdout</code> of the <code>find</code> command to the <code>stdin</code> of the <code>wc</code> command to count all the files in the current directory:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> find = spawn(<span class="hljs-string">'find'</span>, [<span class="hljs-string">'.'</span>, <span class="hljs-string">'-type'</span>, <span class="hljs-string">'f'</span>])</div><div class="line"><span class="hljs-keyword">const</span> wc = spawn(<span class="hljs-string">'wc'</span>, [<span class="hljs-string">'-l'</span>])</div><div class="line"></div><div class="line">find.stdout.pipe(wc.stdin)</div><div class="line"></div><div class="line">wc.stdout.on(<span class="hljs-string">'data'</span>, (data) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Number of files <span class="hljs-subst">$&#123;data&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; spawn &#125; = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> find = spawn(<span class="string">&#x27;find&#x27;</span>, [<span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;-type&#x27;</span>, <span class="string">&#x27;f&#x27;</span>])</span><br><span class="line"><span class="keyword">const</span> wc = spawn(<span class="string">&#x27;wc&#x27;</span>, [<span class="string">&#x27;-l&#x27;</span>])</span><br><span class="line"></span><br><span class="line">find.stdout.pipe(wc.stdin)</span><br><span class="line"></span><br><span class="line">wc.stdout.on(<span class="string">&#x27;data&#x27;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Number of files <span class="subst">$&#123;data&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>Add <code>-l</code> to the <code>wc</code> command to make it count only the lines.</p>
 <h3 id="Shell-Syntax-and-the-exec-Function"><a href="#Shell-Syntax-and-the-exec-Function" class="headerlink" title="Shell Syntax and the exec Function"></a>Shell Syntax and the exec Function</h3><p>By default, the <code>spawn</code> function does not create a <em>shell</em> to execute the command we pass into it. This makes it slightly more efficient than the <code>exec</code> function, which does create a shell. The <code>exec</code> function has one other major difference. It <em>buffers</em> the command’s generated output and passes the whole output value to a callback function(instead of using streams, which is what <code>spawn</code> does).</p>
 <p>Here the is previous <code>find | wc</code> example implemented with an <code>exec</code> function.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; exec &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line">exec(<span class="hljs-string">'find . -type  f | wc -l'</span>, (err, stdout, stderr) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (err) &#123;</div><div class="line">    <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`exec error: <span class="hljs-subst">$&#123;err&#125;</span>`</span>)</div><div class="line">    <span class="hljs-keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Number of files <span class="hljs-subst">$&#123;stdout&#125;</span>`</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; exec &#125; = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>)</span><br><span class="line"></span><br><span class="line">exec(<span class="string">&#x27;find . -type  f | wc -l&#x27;</span>, <span class="function">(<span class="params">err, stdout, stderr</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="built_in">console</span>.error(<span class="string">`exec error: <span class="subst">$&#123;err&#125;</span>`</span>)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`Number of files <span class="subst">$&#123;stdout&#125;</span>`</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>Since the <code>exec</code> function uses a shell to execute the command, we can use the <code>shell syntax</code> directly here making use of the <code>shell pipe</code> feature.</p>
 <p>Note that using the shell syntax comes at a <code>security risk</code> if you’re executing any kind of dynamic input provided externally. A user can simply do a command injection attrack using shell syntax characters like ; and $(For example, <code>commnd + &#39;; rm -rf ~&#39;</code>)</p>
 <p>The <code>exec</code> function buffers the output and passes it to the callback function(the second argument to <code>exec</code>) as the <code>stdout</code> argument there. This <code>stdout</code> argument is the command’s output that we want to print out.</p>
 <p>The <code>exec</code> function is a good choice if you need to use the shell syntax and if the size of the data expected from te command is small(Remember <code>exec</code> will buffer the whole data in memory before returning it).</p>
 <p>The <code>spawn</code> function is a much better choice when the size of the data expected from the command is large, because that data will be streamed with the standard IO objects.</p>
 <p>We can make the spawned child process inherit the standard IO object of its parents if we want to, but also, more importantly, we can ke the <code>spawn</code> function use the shell syntax as well. Here’s the smae <code>find | wc</code> command implemented with the <code>spawn</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'find . -type f'</span>, &#123;</div><div class="line">  <span class="hljs-attr">stdio</span>: <span class="hljs-string">'inherit'</span>,</div><div class="line">  <span class="hljs-attr">shell</span>: <span class="hljs-literal">true</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> child = spawn(<span class="string">&#x27;find . -type f&#x27;</span>, &#123;</span><br><span class="line">  stdio: <span class="string">&#x27;inherit&#x27;</span>,</span><br><span class="line">  shell: <span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>Because of the <code>stdio: &#39;inherit&#39;</code> option above, when we execute the code, the child process inherits the main process <code>stdin</code>, <code>stdout</code> and <code>stderr</code>. This causes the child process data events handlers to be triggered on the main <code>process.stdout</code> stream, making the script output the result right away.</p>
 <p>Because of the <code>shell: true</code> option above, we were able to use the shell syntax in the passed command, just like we did with <code>exec</code>. But with this code, we still get the advantage of the streaming of data that the <code>spawn</code> function gives us. <em>THis is really the best of both worlds</em>.</p>
 <p>There are a few other good options we can use in the last argument to the <code>child_process</code> function besides <code>shell</code> and <code>stdio</code>. We can, for example, use the <code>cwd</code> option to change the working directory of the script.</p>
 <p>Another option we can use is the <code>env</code> option to specify the environment variables that will be visible to the new child process. The default for this option is <code>process.env</code> which gives any command access to the current process environment. If we want ot override that behavior, we can simple pass an empty object as the <code>env</code> option or new value there to be considered as the only environment variables:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'echo $ANSWER'</span>, &#123;</div><div class="line">  <span class="hljs-attr">stdio</span>: <span class="hljs-string">'inherit'</span>,</div><div class="line">  <span class="hljs-attr">shell</span>: <span class="hljs-literal">true</span>,</div><div class="line">  <span class="hljs-attr">env</span>: &#123;</div><div class="line">    <span class="hljs-attr">ANSWER</span>: <span class="hljs-number">12</span>,</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> child = spawn(<span class="string">&#x27;echo $ANSWER&#x27;</span>, &#123;</span><br><span class="line">  stdio: <span class="string">&#x27;inherit&#x27;</span>,</span><br><span class="line">  shell: <span class="literal">true</span>,</span><br><span class="line">  env: &#123;</span><br><span class="line">    ANSWER: <span class="number">12</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>The echo command above does not have access to the parent process’s environment variables. It can’t, for example, access <code>$HOME</code>, but it can accccess <code>$ANSWER</code> because it was passes as a custom environement variable through the <code>env</code> option.</p>
 <p>One last important child process option to explain here is the <code>detached</code> option, which makes the child process run independently of its parent process.</p>
 <p>Assuming we have a file <code>timer.js</code> that keeps the event loop busy:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">setTimeout(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// keep the event loop busy</span></div><div class="line">&#125;, <span class="hljs-number">20000</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// keep the event loop busy</span></span><br><span class="line">&#125;, <span class="number">20000</span>)</span><br></pre></td></tr></table></figure>
+
 <p>We can execute it in the background using the <code>detached</code> option:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123; spawn &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> child = spawn(<span class="hljs-string">'node'</span>, [<span class="hljs-string">'timer.js'</span>], &#123;</div><div class="line">  <span class="hljs-attr">detached</span>: <span class="hljs-literal">true</span>,</div><div class="line">  <span class="hljs-attr">stdio</span>: <span class="hljs-string">'ignore'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">child.unref()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; spawn &#125; = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> child = spawn(<span class="string">&#x27;node&#x27;</span>, [<span class="string">&#x27;timer.js&#x27;</span>], &#123;</span><br><span class="line">  detached: <span class="literal">true</span>,</span><br><span class="line">  stdio: <span class="string">&#x27;ignore&#x27;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">child.unref()</span><br></pre></td></tr></table></figure>
+
 <p>The exact behavior of detached child process depends on the OS. On windows, the detached child process will have its own console window while on Linux the detached child process will be made the leader of a new process groups and session.</p>
 <p>It the <code>unref</code> function is called on the detached process, the parent process can exit independently of the child. This can be useful if the child is executing a long-running process, but to keep it running in the background the child’s <code>stdio</code> configurations also have to be independent of the parent.</p>
 <p>The example above will run a node script(timer.js) in the background by detaching and also ignoring its parent <code>stdio</code> file descriptors so that the parent can terminate while the child keeps running in the background.</p>
 <h3 id="The-execFile-function"><a href="#The-execFile-function" class="headerlink" title="The execFile function"></a>The execFile function</h3><p>If you need to execute a file without using a shell, the <code>execFile</code> function is what you need. It behaves exactly like the <code>exec</code> function, but does not use a shell, which makes it a bit more efficient. On windows, some files cannot be executed on their own, like <code>.bat</code>, <code>.cmd</code> files. Those files cannot be executed with <code>execFile</code> and either <code>exec</code> or <code>spawn</code> with shell set to true is required to execute them.</p>
 <h3 id="The-Sync-Function"><a href="#The-Sync-Function" class="headerlink" title="The *Sync Function"></a>The *Sync Function</h3><p>The functions <code>spawn</code>, <code>exec</code>, <code>execFile</code> from the <code>child_process</code> module also have synchronous blocking versions that will wait until child process exits.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> &#123;</div><div class="line">  spawnSync,</div><div class="line">  execSync,</div><div class="line">  execFileSync,</div><div class="line">&#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  spawnSync,</span><br><span class="line">  execSync,</span><br><span class="line">  execFileSync,</span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <h3 id="The-fork-function"><a href="#The-fork-function" class="headerlink" title="The fork() function"></a>The fork() function</h3><p>THe <code>fork</code> function is a variation of the <code>spawn</code> function for spawning node processes. The biggest difference between <code>spawn</code> and <code>fork</code> is that a communication channel is established to the child process when using <code>fork</code>, so we can use the <code>send</code> function on the forked along with the global <code>process</code> object itself to exchange messsages between the parent and forked processes. We do this through the <code>EventEmitter</code> module interface.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// parent.js</span></div><div class="line"><span class="hljs-keyword">const</span> &#123; fork &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> forked = fork(<span class="hljs-string">'child.js'</span>)</div><div class="line"></div><div class="line">forked.on(<span class="hljs-string">'message'</span>, (msg) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Message from child'</span>, msg)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">forked.send(&#123;</div><div class="line">  <span class="hljs-attr">hello</span>: <span class="hljs-string">'world'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// child.js</span></div><div class="line"></div><div class="line">process.on(<span class="hljs-string">'message'</span>, (msg) =&gt; &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Message from parent:'</span>, msg)</div><div class="line">&#125;)</div><div class="line"><span class="hljs-keyword">let</span> counter = <span class="hljs-number">0</span></div><div class="line"></div><div class="line">setInterval(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  process.send(&#123;</div><div class="line">    <span class="hljs-attr">counter</span>: counter++</div><div class="line">  &#125;)</div><div class="line">&#125;, <span class="hljs-number">1000</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// parent.js</span></span><br><span class="line"><span class="keyword">const</span> &#123; fork &#125; = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> forked = fork(<span class="string">&#x27;child.js&#x27;</span>)</span><br><span class="line"></span><br><span class="line">forked.on(<span class="string">&#x27;message&#x27;</span>, <span class="function">(<span class="params">msg</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Message from child&#x27;</span>, msg)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">forked.send(&#123;</span><br><span class="line">  hello: <span class="string">&#x27;world&#x27;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// child.js</span></span><br><span class="line"></span><br><span class="line">process.on(<span class="string">&#x27;message&#x27;</span>, <span class="function">(<span class="params">msg</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Message from parent:&#x27;</span>, msg)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">let</span> counter = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  process.send(&#123;</span><br><span class="line">    counter: counter++</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;, <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+
 <p>In the parent.js we fork <code>child.js</code>(<strong>which will execute the file with the <code>node</code> command</strong>) and then we listen for the <code>message</code> event. The <code>message</code> event will be emitted whenever the child use <code>process.send</code>.</p>
 <p>The pass down messages from the parent to the child, we can execute the <code>send</code> function one the forked object it self, and then, in the child script we can listen to the <code>message</code> event on the global <code>process</code>.</p>
-<p>When executing the <code>parent.js</code> file, it’ll first send down the <code>{hello: &#39;world&#39;}</code> object to be printed by the forked child process and then the forked child process will send an incremental counter value every second to be printed by the parent process.</p>
+<p>When executing the <code>parent.js</code> file, it’ll first send down the <code>&#123;hello: &#39;world&#39;&#125;</code> object to be printed by the forked child process and then the forked child process will send an incremental counter value every second to be printed by the parent process.</p>
 <p>Let’s do more practical example about the <code>fork</code> function.</p>
 <p>Let’s say we have an http server that handles two endpoints. One of these endpoints(<code>/compute</code> below) is computationally expensive and will take a few seconds to complete. WE can use a long for loop to simulate that:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> longComputation = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span></div><div class="line">  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1e9</span>; i++) &#123;</div><div class="line">    sum += i</div><div class="line">  &#125;</div><div class="line">  <span class="hljs-keyword">return</span> sum</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> server = http.createServer()</div><div class="line"></div><div class="line">server.on(<span class="hljs-string">'request'</span>, (req, res) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (req.url === <span class="hljs-string">'/compute'</span>) &#123;</div><div class="line">    <span class="hljs-keyword">const</span> sum = longComputation()</div><div class="line">    <span class="hljs-keyword">return</span> res.end(<span class="hljs-string">`Sum is <span class="hljs-subst">$&#123;sum&#125;</span>`</span>)</div><div class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">    res.end(<span class="hljs-string">'OK'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">server.listen(<span class="hljs-number">3000</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> longComputation = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e9</span>; i++) &#123;</span><br><span class="line">    sum += i</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> sum</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer()</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">&#x27;request&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (req.url === <span class="string">&#x27;/compute&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> sum = longComputation()</span><br><span class="line">    <span class="keyword">return</span> res.end(<span class="string">`Sum is <span class="subst">$&#123;sum&#125;</span>`</span>)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.end(<span class="string">&#x27;OK&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+
 <p>The program has a big problem: when the <code>/compute</code> endpoint is requested, the server will not be able to handle any other requests because the event loop is busy with the long for loop operation.</p>
 <p>There are a few ways which we can solve this problem depending on the nature of the long operation but one solution that works for all operation is to just move the computational operation into another process using <code>fork</code>.</p>
 <p>We first move the whole <code>longComputation</code> function into its own file and make it invoke that function when instructed via a message from the main process:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// compute.js</span></div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> longComputatioin  = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">let</span> sum = <span class="hljs-number">0</span></div><div class="line">  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1e9</span>; i++) &#123;</div><div class="line">    sum += i;</div><div class="line">  &#125;</div><div class="line">  <span class="hljs-keyword">return</span> sum</div><div class="line">&#125;</div><div class="line"></div><div class="line">process.on(<span class="hljs-string">'message'</span>, (msg) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">const</span> sum = longComputatioin()</div><div class="line">  process.send(sum)</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// server.js</span></div><div class="line"><span class="hljs-keyword">const</span> http = <span class="hljs-built_in">require</span>(<span class="hljs-string">'http'</span>)</div><div class="line"><span class="hljs-keyword">const</span> &#123; fork &#125; = <span class="hljs-built_in">require</span>(<span class="hljs-string">'child_process'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> server = http.createServer()</div><div class="line"></div><div class="line">server.on(<span class="hljs-string">'request'</span>, (req, res) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (req.url === <span class="hljs-string">'/compute'</span>) &#123;</div><div class="line">    <span class="hljs-keyword">const</span> compute = fork(<span class="hljs-string">'compute.js'</span>)</div><div class="line">    compute.send(<span class="hljs-string">'start'</span>)</div><div class="line">    compute.on(<span class="hljs-string">'message'</span>, sum =&gt; &#123;</div><div class="line">      res.end(<span class="hljs-string">`Sum is <span class="hljs-subst">$&#123;sum&#125;</span>`</span>)</div><div class="line">    &#125;)</div><div class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">    res.end(<span class="hljs-string">'OK'</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">server.listen(<span class="hljs-number">3000</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// compute.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> longComputatioin  = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> sum = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">1e9</span>; i++) &#123;</span><br><span class="line">    sum += i;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> sum</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">process.on(<span class="string">&#x27;message&#x27;</span>, <span class="function">(<span class="params">msg</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> sum = longComputatioin()</span><br><span class="line">  process.send(sum)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// server.js</span></span><br><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">&#x27;http&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> &#123; fork &#125; = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer()</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">&#x27;request&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (req.url === <span class="string">&#x27;/compute&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> compute = fork(<span class="string">&#x27;compute.js&#x27;</span>)</span><br><span class="line">    compute.send(<span class="string">&#x27;start&#x27;</span>)</span><br><span class="line">    compute.on(<span class="string">&#x27;message&#x27;</span>, <span class="function"><span class="params">sum</span> =&gt;</span> &#123;</span><br><span class="line">      res.end(<span class="string">`Sum is <span class="subst">$&#123;sum&#125;</span>`</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.end(<span class="string">&#x27;OK&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">3000</span>)</span><br></pre></td></tr></table></figure>
+
 <p>When a request to <code>/compute</code> happens now with the above code, we simply send a message to the forked process to start executing the long operation. The main process’s event loop will not be blocked.</p>
 <p>Once the forked process is done with the long operation, it can send its result back to the parent process using <code>process.send</code>.</p>
 <p>Node’s <code>cluster</code> module is based on this idea of child process forking and load balancing the requests among the many forks.</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2017/08/22/Node-Child-Process/">https://ezcook.de/2017/08/22/Node-Child-Process/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Node-js/">Node.js</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/08/24/Node-js-child-process/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Node.js Child_process</div></div></a></div><div class="next-post pull-right"><a href="/2017/08/22/Scaling-Node-js-App/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Scaling Node.js App</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2019/10/10/Basic-components-in-nest-js/" title="Basic Components in nest.js"><img class="relatedPosts_cover" data-lazy-src="/gallery/thumbnails/nestjs_components.png"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2019-10-10</div><div class="relatedPosts_title">Basic Components in nest.js</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/07/Build-GraphQL-Server-with-Express/" title="Build GraphQL Server With Express"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-07</div><div class="relatedPosts_title">Build GraphQL Server With Express</div></div></a></div><div class="relatedPosts_item"><a href="/2017/09/06/Build-Node-CLI/" title="Build Node CLI"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-06</div><div class="relatedPosts_title">Build Node CLI</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/10/Build-GraphQL-Server-with-Koa/" title="Build GraphQL Server With Koa"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-10</div><div class="relatedPosts_title">Build GraphQL Server With Koa</div></div></a></div><div class="relatedPosts_item"><a href="/2017/06/30/Example-of-node-influx/" title="Example of Node-Influx"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-30</div><div class="relatedPosts_title">Example of Node-Influx</div></div></a></div><div class="relatedPosts_item"><a href="/2017/10/26/Fastify-Plugin-Guide/" title="Fastify Plugin Guide"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-10-26</div><div class="relatedPosts_title">Fastify Plugin Guide</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2017/08/22/Node-Child-Process/'
+    this.page.identifier = '2017/08/22/Node-Child-Process/'
+    this.page.title = 'Node Child Process'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Node-js/">Node.js</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/08/24/Node-js-child-process/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Node.js Child_process</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/08/22/Scaling-Node-js-App/">
-                <span class="level-item">Scaling Node.js App</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2017/08/22/Node-Child-Process/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

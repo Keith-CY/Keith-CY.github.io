@@ -1,445 +1,285 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Note on Sequelize | EzCook</title><meta name="description" content="Sequelize is a promise-based ORM for Node. Example12345678910111213141516const Sequelize &#x3D; require(&amp;#x27;sequelize&amp;#x27;)const sequelize &#x3D; new Sequeslize(&amp;#x27;database&amp;#x27;, &amp;#x27;username&amp;#x27;, &amp;#"><meta name="keywords" content="Database"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2017/08/07/Note-on-Sequelize/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Note on Sequelize"><meta property="og:url" content="https://ezcook.de/2017/08/07/Note-on-Sequelize/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Sequelize is a promise-based ORM for Node. Example12345678910111213141516const Sequelize &#x3D; require(&amp;#x27;sequelize&amp;#x27;)const sequelize &#x3D; new Sequeslize(&amp;#x27;database&amp;#x27;, &amp;#x27;username&amp;#x27;, &amp;#"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2017-08-07T08:19:06.000Z"><meta property="article:modified_time" content="2020-08-30T12:46:17.966Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Note on Sequelize - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:46:17'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">1.</span> <span class="toc-text">Example</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Start"><span class="toc-number">2.</span> <span class="toc-text">Start</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Installation"><span class="toc-number">2.1.</span> <span class="toc-text">Installation</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Setup-a-connection"><span class="toc-number">2.2.</span> <span class="toc-text">Setup a connection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Test-the-connection"><span class="toc-number">2.3.</span> <span class="toc-text">Test the connection</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Model"><span class="toc-number">2.4.</span> <span class="toc-text">Model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Query"><span class="toc-number">2.5.</span> <span class="toc-text">Query</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Application-wide-model-options"><span class="toc-number">2.6.</span> <span class="toc-text">Application wide model options</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Promises"><span class="toc-number">2.7.</span> <span class="toc-text">Promises</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Model-Definition"><span class="toc-number">3.</span> <span class="toc-text">Model Definition</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuration"><span class="toc-number">4.</span> <span class="toc-text">Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Import"><span class="toc-number">5.</span> <span class="toc-text">Import</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Database-Synchronization"><span class="toc-number">6.</span> <span class="toc-text">Database Synchronization</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Expansion-of-models"><span class="toc-number">7.</span> <span class="toc-text">Expansion of models</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Indexes"><span class="toc-number">8.</span> <span class="toc-text">Indexes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Model-Usage"><span class="toc-number">9.</span> <span class="toc-text">Model Usage</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Data-Retrieval-Finders"><span class="toc-number">9.1.</span> <span class="toc-text">Data Retrieval &#x2F; Finders</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#find-search-for-one-specific-element-in-the-database"><span class="toc-number">9.2.</span> <span class="toc-text">find - search for one specific element in the database</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#findOrCreate-Search-for-a-specific-element-or-create-it-if-not-available"><span class="toc-number">9.3.</span> <span class="toc-text">findOrCreate - Search for a specific element or create it if not available</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#fineAndCountAll-Search-for-multiple-elements-in-the-database-returns-both-data-and-total-count"><span class="toc-number">9.4.</span> <span class="toc-text">fineAndCountAll - Search for multiple elements in the database, returns both data and total count</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#findAll-Search-for-multiple-elements-in-the-database"><span class="toc-number">9.5.</span> <span class="toc-text">findAll - Search for multiple elements in the database</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Complex-filtering-OR-NOT-queries"><span class="toc-number">9.6.</span> <span class="toc-text">Complex filtering &#x2F;OR&#x2F;NOT queries</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Manipulating-the-database-with-limit-offset-order-and-group"><span class="toc-number">9.7.</span> <span class="toc-text">Manipulating the database with limit, offset, order and group</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Raw-queries"><span class="toc-number">9.8.</span> <span class="toc-text">Raw queries</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Queries"><span class="toc-number">10.</span> <span class="toc-text">Queries</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Attributes"><span class="toc-number">10.1.</span> <span class="toc-text">Attributes</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Where"><span class="toc-number">10.2.</span> <span class="toc-text">Where</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Basics"><span class="toc-number">10.3.</span> <span class="toc-text">Basics</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Note on Sequelize</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-08-07T08:19:06.000Z" title="Created 2017-08-07 16:19:06">2017-08-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:46:17.966Z" title="Updated 2020-08-30 20:46:17">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2017/08/07/Note-on-Sequelize/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>Sequelize is a promise-based ORM for Node.</p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Sequelize = <span class="built_in">require</span>(<span class="string">&#x27;sequelize&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> sequelize = <span class="keyword">new</span> Sequeslize(<span class="string">&#x27;database&#x27;</span>, <span class="string">&#x27;username&#x27;</span>, <span class="string">&#x27;password&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> User = sequelize.define(<span class="string">&#x27;user&#x27;</span>, &#123;</span><br><span class="line">  username: Sequelize.STRING,</span><br><span class="line">  birthday: Sequelize.DATE,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">sequelize.sync().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  User.create(&#123;</span><br><span class="line">    username: <span class="string">&#x27;Jane&#x27;</span>,</span><br><span class="line">    birthday: <span class="keyword">new</span> <span class="built_in">Date</span>(<span class="number">1980</span>, <span class="number">5</span>, <span class="number">2</span>),</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;).then(<span class="function"><span class="params">jane</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;create successfully&#x27;</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Note on Sequelize" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-08-07T08:19:06.000Z">2017-08-07</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    12 minutes read (About 1751 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Note on Sequelize
-            
-        </h1>
-        <div class="content">
-            <p>Sequelize is a promise-based ORM for Node.</p>
-<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> Sequelize = <span class="hljs-built_in">require</span>(<span class="hljs-string">'sequelize'</span>)</div><div class="line"><span class="hljs-keyword">const</span> sequelize = <span class="hljs-keyword">new</span> Sequeslize(<span class="hljs-string">'database'</span>, <span class="hljs-string">'username'</span>, <span class="hljs-string">'password'</span>)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> User = sequelize.define(<span class="hljs-string">'user'</span>, &#123;</div><div class="line">  <span class="hljs-attr">username</span>: Sequelize.STRING,</div><div class="line">  <span class="hljs-attr">birthday</span>: Sequelize.DATE,</div><div class="line">&#125;)</div><div class="line"></div><div class="line">sequelize.sync().then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  User.create(&#123;</div><div class="line">    <span class="hljs-attr">username</span>: <span class="hljs-string">'Jane'</span>,</div><div class="line">    <span class="hljs-attr">birthday</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(<span class="hljs-number">1980</span>, <span class="hljs-number">5</span>, <span class="hljs-number">2</span>),</div><div class="line">  &#125;)</div><div class="line">&#125;).then(<span class="hljs-function"><span class="hljs-params">jane</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'create successfully'</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h3 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h3><h4 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h4><figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">yarn add sequelize</div><div class="line"><span class="hljs-comment"># add one of the following:</span></div><div class="line">yarn add pg pg-hstore</div><div class="line">yarn add mysql2</div><div class="line">yarn add sqlite3</div><div class="line">yarn add tedious // MSSQL</div></pre></td></tr></table></figure>
+<h3 id="Start"><a href="#Start" class="headerlink" title="Start"></a>Start</h3><h4 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">yarn add sequelize</span><br><span class="line"><span class="comment"># add one of the following:</span></span><br><span class="line">yarn add pg pg-hstore</span><br><span class="line">yarn add mysql2</span><br><span class="line">yarn add sqlite3</span><br><span class="line">yarn add tedious // MSSQL</span><br></pre></td></tr></table></figure>
 <h4 id="Setup-a-connection"><a href="#Setup-a-connection" class="headerlink" title="Setup a connection"></a>Setup a connection</h4><p>Sequelize will setup a connection pool on initialization so you should ideally only ever create one instance per database if you’re connecting to the DB from a single process. If you’re connecting to the DB from multiple processes, you’ll have to create one instance per process, but each instance should have a maximum connection pool size of “max connection pool size divided by number of instances”. So, if you wanted a max connection pool size of 90 and you have 3 worker process, each process’s instance should have a max connection pool size of 30.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> Conn = <span class="hljs-keyword">new</span> Sequelize(<span class="hljs-string">'database'</span>, <span class="hljs-string">'username'</span>, <span class="hljs-string">'password'</span>, &#123;</div><div class="line">  <span class="hljs-attr">host</span>: <span class="hljs-string">'localhost'</span>,</div><div class="line">  <span class="hljs-attr">dialect</span>: <span class="hljs-string">'mysql'</span>|<span class="hljs-string">'sqlite'</span>|<span class="hljs-string">'postgres'</span>|<span class="hljs-string">'mssql'</span>,</div><div class="line">  <span class="hljs-attr">pool</span>: &#123;</div><div class="line">    <span class="hljs-attr">max</span>: <span class="hljs-number">5</span>,</div><div class="line">    <span class="hljs-attr">min</span>: <span class="hljs-number">0</span>,</div><div class="line">    <span class="hljs-attr">idle</span>: <span class="hljs-number">10000</span>,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">storage</span>: <span class="hljs-string">'path/to/database.sqlite'</span>,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// or you can simply use a connection uri</span></div><div class="line"><span class="hljs-keyword">const</span> Conn = <span class="hljs-keyword">new</span> Sequelize(<span class="hljs-string">'postgres://user:pass@example.com:5432/dbname'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Conn = <span class="keyword">new</span> Sequelize(<span class="string">&#x27;database&#x27;</span>, <span class="string">&#x27;username&#x27;</span>, <span class="string">&#x27;password&#x27;</span>, &#123;</span><br><span class="line">  host: <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">  dialect: <span class="string">&#x27;mysql&#x27;</span>|<span class="string">&#x27;sqlite&#x27;</span>|<span class="string">&#x27;postgres&#x27;</span>|<span class="string">&#x27;mssql&#x27;</span>,</span><br><span class="line">  pool: &#123;</span><br><span class="line">    max: <span class="number">5</span>,</span><br><span class="line">    min: <span class="number">0</span>,</span><br><span class="line">    idle: <span class="number">10000</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  storage: <span class="string">&#x27;path/to/database.sqlite&#x27;</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// or you can simply use a connection uri</span></span><br><span class="line"><span class="keyword">const</span> Conn = <span class="keyword">new</span> Sequelize(<span class="string">&#x27;postgres://user:pass@example.com:5432/dbname&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <h4 id="Test-the-connection"><a href="#Test-the-connection" class="headerlink" title="Test the connection"></a>Test the connection</h4><p>You can use the <code>.authenticate()</code> function like this to test the connection.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Conn.authenticate().then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Connection has been established successfully'</span>)</div><div class="line">&#125;).catch(<span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.error(<span class="hljs-string">'Unable to connect to the database: '</span>, e)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h4 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h4><p>Models are defined with <code>Conn.define(&#39;name&#39;, {attributes}, {options})</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> User = Conn.define(<span class="hljs-string">'user'</span>, &#123;</div><div class="line">  <span class="hljs-attr">firstName</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: Sequelize.STRING,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">lastName</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: Sequelize.STRING,</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// force: true will drop the table if it already exists</span></div><div class="line">User.sync(&#123; <span class="hljs-attr">force</span>: <span class="hljs-literal">true</span> &#125;).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// Table created</span></div><div class="line">  <span class="hljs-keyword">return</span> User.create(&#123;</div><div class="line">    <span class="hljs-attr">firstName</span>: <span class="hljs-string">'John'</span>,</div><div class="line">    <span class="hljs-attr">lastName</span>: <span class="hljs-string">'Hank'</span>,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h4 id="Query"><a href="#Query" class="headerlink" title="Query"></a>Query</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">User.findAll().then(<span class="hljs-function"><span class="hljs-params">users</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(users)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Conn.authenticate().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;Connection has been established successfully&#x27;</span>)</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.error(<span class="string">&#x27;Unable to connect to the database: &#x27;</span>, e)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h4><p>Models are defined with <code>Conn.define(&#39;name&#39;, &#123;attributes&#125;, &#123;options&#125;)</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> User = Conn.define(<span class="string">&#x27;user&#x27;</span>, &#123;</span><br><span class="line">  firstName: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">  &#125;,</span><br><span class="line">  lastName: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// force: true will drop the table if it already exists</span></span><br><span class="line">User.sync(&#123; <span class="attr">force</span>: <span class="literal">true</span> &#125;).then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// Table created</span></span><br><span class="line">  <span class="keyword">return</span> User.create(&#123;</span><br><span class="line">    firstName: <span class="string">&#x27;John&#x27;</span>,</span><br><span class="line">    lastName: <span class="string">&#x27;Hank&#x27;</span>,</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Query"><a href="#Query" class="headerlink" title="Query"></a>Query</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User.findAll().then(<span class="function"><span class="params">users</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(users)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h4 id="Application-wide-model-options"><a href="#Application-wide-model-options" class="headerlink" title="Application wide model options"></a>Application wide model options</h4><p>The Sequelize constructor takes a <code>define</code> option which will be used as the default options for all defined models.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> Conn = <span class="hljs-keyword">new</span> Sequelize(<span class="hljs-string">'connectionUri'</span>, &#123;</div><div class="line">  <span class="hljs-attr">define</span>: &#123;</div><div class="line">    <span class="hljs-attr">timestamps</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// true by default</span></div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> User = Conn.define(<span class="hljs-string">'user'</span>, &#123;&#125;) <span class="hljs-comment">// timestamps is false by default</span></div><div class="line"><span class="hljs-keyword">const</span> Post = Conn.define(<span class="hljs-string">'post'</span>, &#123;&#125;, &#123;</div><div class="line">  <span class="hljs-attr">timestamps</span>: <span class="hljs-literal">true</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Conn = <span class="keyword">new</span> Sequelize(<span class="string">&#x27;connectionUri&#x27;</span>, &#123;</span><br><span class="line">  define: &#123;</span><br><span class="line">    timestamps: <span class="literal">false</span>, <span class="comment">// true by default</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> User = Conn.define(<span class="string">&#x27;user&#x27;</span>, &#123;&#125;) <span class="comment">// timestamps is false by default</span></span><br><span class="line"><span class="keyword">const</span> Post = Conn.define(<span class="string">&#x27;post&#x27;</span>, &#123;&#125;, &#123;</span><br><span class="line">  timestamps: <span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h4 id="Promises"><a href="#Promises" class="headerlink" title="Promises"></a>Promises</h4><p>Sequelize uses promises to control async control-flow.</p>
 <p>Basically, a promise represents a value which will be present at some point.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">user = <span class="hljs-keyword">await</span> User.fineOne()</div><div class="line"><span class="hljs-built_in">console</span>.log(user)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">user = <span class="keyword">await</span> User.fineOne()</span><br><span class="line"><span class="built_in">console</span>.log(user)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Model-Definition"><a href="#Model-Definition" class="headerlink" title="Model Definition"></a>Model Definition</h3><p>To define mapping between a model and a table, use the <code>define</code> method. Sequelize will then automatically add the attributes <code>createdAt</code> and <code>updatedAt</code> to it. So you will be able to know when the database entry went into the db and when it was updated the last time.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> Project = Conn.define(<span class="hljs-string">'project'</span>, &#123;</div><div class="line">  <span class="hljs-attr">title</span>: Sequelize.STRING,</div><div class="line">  <span class="hljs-attr">description</span>: Sequelize.TEXT,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> Task = Conn.define(<span class="hljs-string">'tastk'</span>, &#123;</div><div class="line">  <span class="hljs-attr">title</span>: Sequelize.STRING,</div><div class="line">  <span class="hljs-attr">description</span>: Sequelize.TEXT,</div><div class="line">  <span class="hljs-attr">deadline</span>: Sequelize.DATE,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Project = Conn.define(<span class="string">&#x27;project&#x27;</span>, &#123;</span><br><span class="line">  title: Sequelize.STRING,</span><br><span class="line">  description: Sequelize.TEXT,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> Task = Conn.define(<span class="string">&#x27;tastk&#x27;</span>, &#123;</span><br><span class="line">  title: Sequelize.STRING,</span><br><span class="line">  description: Sequelize.TEXT,</span><br><span class="line">  deadline: Sequelize.DATE,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>You can also set some options on each column:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> Foo = Conn.define(<span class="hljs-string">'foo'</span>, &#123;</div><div class="line">  <span class="hljs-comment">// instantiating will automatically set the flat to true if not set</span></div><div class="line">  flag: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: Sequelize.BOOLEAN,</div><div class="line">    <span class="hljs-attr">allowNull</span>: <span class="hljs-literal">false</span>,</div><div class="line">    <span class="hljs-attr">defaultValue</span>: <span class="hljs-literal">true</span>,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">myDate</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: Sequelize.DATE,</div><div class="line">    <span class="hljs-attr">defaultValue</span>: Sequelize.NOW,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">title</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: Sequelize.STRING,</div><div class="line">    <span class="hljs-attr">allowNull</span>: <span class="hljs-literal">false</span>,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">uniqueOne</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: Sequelize.STRING,</div><div class="line">    <span class="hljs-attr">unique</span>: <span class="hljs-string">'compositeIndex'</span>,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">uniqueTwo</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: Sequelize.INTEGER,</div><div class="line">    <span class="hljs-attr">unique</span>: <span class="hljs-string">'compositeIndex'</span>,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">foo</span>: &#123;</div><div class="line">    <span class="hljs-attr">type</span>: Sequelize.STRING,</div><div class="line">    <span class="hljs-attr">validate</span>: &#123;</div><div class="line">      <span class="hljs-attr">isEmail</span>: <span class="hljs-literal">true</span>,</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Foo = Conn.define(<span class="string">&#x27;foo&#x27;</span>, &#123;</span><br><span class="line">  <span class="comment">// instantiating will automatically set the flat to true if not set</span></span><br><span class="line">  flag: &#123;</span><br><span class="line">    type: Sequelize.BOOLEAN,</span><br><span class="line">    allowNull: <span class="literal">false</span>,</span><br><span class="line">    defaultValue: <span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  myDate: &#123;</span><br><span class="line">    type: Sequelize.DATE,</span><br><span class="line">    defaultValue: Sequelize.NOW,</span><br><span class="line">  &#125;,</span><br><span class="line">  title: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    allowNull: <span class="literal">false</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  uniqueOne: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    unique: <span class="string">&#x27;compositeIndex&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  uniqueTwo: &#123;</span><br><span class="line">    type: Sequelize.INTEGER,</span><br><span class="line">    unique: <span class="string">&#x27;compositeIndex&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  foo: &#123;</span><br><span class="line">    type: Sequelize.STRING,</span><br><span class="line">    validate: &#123;</span><br><span class="line">      isEmail: <span class="literal">true</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h3><p>You can also influence the way Sequelize hadnles your column names:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> Bar = Conn.define(<span class="hljs-string">'bar'</span>, &#123;</div><div class="line">  <span class="hljs-comment">/* ... */</span></div><div class="line">&#125;, &#123;</div><div class="line">  <span class="hljs-comment">// don't add the timestamp attributes(updatedAt, createdAt)</span></div><div class="line">  timestamps: <span class="hljs-literal">false</span>,</div><div class="line">  <span class="hljs-comment">// don't delete database entries but set the newly added attribute deletedAt to the current data(when deletion was done)</span></div><div class="line">  paranoid: <span class="hljs-literal">true</span>,</div><div class="line">  <span class="hljs-comment">// don't use camelcase for automatically added attributes but underscore style so updatedAt will be udpated_at</span></div><div class="line">  underscore: <span class="hljs-literal">true</span>,</div><div class="line">  <span class="hljs-comment">// disable the modification of table names; by default, sequelize will automatically transform all passes model names(first parameter of define) into plural. If you don't want that, set the following</span></div><div class="line">  freezeTableName: <span class="hljs-literal">true</span>,</div><div class="line">  <span class="hljs-comment">// define the table's name</span></div><div class="line">  tableName: <span class="hljs-string">'my_very_custom_table_name'</span>,</div><div class="line">  <span class="hljs-comment">// Enable optimistic locking. When enabled, sequelize will add a version count attribute to the model and throw an OptimisticLockingError error when stale instances are saved.</span></div><div class="line">  version: <span class="hljs-literal">true</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Bar = Conn.define(<span class="string">&#x27;bar&#x27;</span>, &#123;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">&#125;, &#123;</span><br><span class="line">  <span class="comment">// don&#x27;t add the timestamp attributes(updatedAt, createdAt)</span></span><br><span class="line">  timestamps: <span class="literal">false</span>,</span><br><span class="line">  <span class="comment">// don&#x27;t delete database entries but set the newly added attribute deletedAt to the current data(when deletion was done)</span></span><br><span class="line">  paranoid: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// don&#x27;t use camelcase for automatically added attributes but underscore style so updatedAt will be udpated_at</span></span><br><span class="line">  underscore: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// disable the modification of table names; by default, sequelize will automatically transform all passes model names(first parameter of define) into plural. If you don&#x27;t want that, set the following</span></span><br><span class="line">  freezeTableName: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// define the table&#x27;s name</span></span><br><span class="line">  tableName: <span class="string">&#x27;my_very_custom_table_name&#x27;</span>,</span><br><span class="line">  <span class="comment">// Enable optimistic locking. When enabled, sequelize will add a version count attribute to the model and throw an OptimisticLockingError error when stale instances are saved.</span></span><br><span class="line">  version: <span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Import"><a href="#Import" class="headerlink" title="Import"></a>Import</h3><p>You can also store your model definitions in a single file using the <code>import</code> method. The returned object is exactly the same as defined in the imported file’s function.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// in your server file</span></div><div class="line"><span class="hljs-keyword">const</span> Project = Conn.import(__dirname, <span class="hljs-string">"/path/to/models/project"</span>)</div><div class="line"></div><div class="line"><span class="hljs-comment">// The model definition file</span></div><div class="line"><span class="hljs-built_in">module</span>.exports = <span class="hljs-function">(<span class="hljs-params">Conn, DataType</span>) =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">return</span> Conn.define(<span class="hljs-string">'project'</span>, &#123;</div><div class="line">    <span class="hljs-attr">name</span>: DataTypes.STRING,</div><div class="line">    <span class="hljs-attr">description</span>: DataTypes.TEXT,</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// in your server file</span></span><br><span class="line"><span class="keyword">const</span> Project = Conn.import(__dirname, <span class="string">&quot;/path/to/models/project&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// The model definition file</span></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function">(<span class="params">Conn, DataType</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> Conn.define(<span class="string">&#x27;project&#x27;</span>, &#123;</span><br><span class="line">    name: DataTypes.STRING,</span><br><span class="line">    description: DataTypes.TEXT,</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>The <code>import</code> method can also accept a callback as an argument</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Conn.import(<span class="hljs-string">'project'</span>, (Conn, DataTypes) =&gt; &#123;</div><div class="line">  <span class="hljs-keyword">return</span> Conn.define(<span class="hljs-string">'project'</span>, &#123;</div><div class="line">    <span class="hljs-attr">name</span>: DataTypes.STRING,</div><div class="line">    <span class="hljs-attr">description</span>: DataTypes.TEXT,</div><div class="line">  &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Conn.import(<span class="string">&#x27;project&#x27;</span>, <span class="function">(<span class="params">Conn, DataTypes</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> Conn.define(<span class="string">&#x27;project&#x27;</span>, &#123;</span><br><span class="line">    name: DataTypes.STRING,</span><br><span class="line">    description: DataTypes.TEXT,</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Database-Synchronization"><a href="#Database-Synchronization" class="headerlink" title="Database Synchronization"></a>Database Synchronization</h3><p>When starting a new project you won’t have a database structure and using sequelize you won’t need to. Just specify your model structures and let the library do the rest. Currently supported is the creation and deletion of tables.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Create the Tables</span></div><div class="line">Project.sync()</div><div class="line">Task.sync()</div><div class="line"></div><div class="line"><span class="hljs-comment">// Force the Creation</span></div><div class="line">Project.sync(&#123; <span class="hljs-attr">force</span>: <span class="hljs-literal">true</span> &#125;) <span class="hljs-comment">// this will drop the table first and re-create it afterwards</span></div><div class="line"></div><div class="line"><span class="hljs-comment">// Drop the Tables</span></div><div class="line">Project.drop()</div><div class="line">Task.drop()</div><div class="line"></div><div class="line"><span class="hljs-comment">// Event Handling</span></div><div class="line">Project.[sync|drop]().then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// ok ... everything is nice</span></div><div class="line">&#125;).catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// ooh, did you enter wrong database credentials</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create the Tables</span></span><br><span class="line">Project.sync()</span><br><span class="line">Task.sync()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Force the Creation</span></span><br><span class="line">Project.sync(&#123; <span class="attr">force</span>: <span class="literal">true</span> &#125;) <span class="comment">// this will drop the table first and re-create it afterwards</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Drop the Tables</span></span><br><span class="line">Project.drop()</span><br><span class="line">Task.drop()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Event Handling</span></span><br><span class="line">Project.[sync|drop]().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ok ... everything is nice</span></span><br><span class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ooh, did you enter wrong database credentials</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>Because synchronizing and dropping all of your tables might be a lot of lines to write, you can also let Sequelize do the work for you:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// sync all models that aren't already in the database</span></div><div class="line">Conn.sync()</div><div class="line"></div><div class="line"><span class="hljs-comment">// Force sync all models</span></div><div class="line">Conn.sync(&#123; <span class="hljs-attr">force</span>: <span class="hljs-literal">true</span> &#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// Drop all Tables</span></div><div class="line">Conn.drop()</div><div class="line"></div><div class="line"><span class="hljs-comment">// Emit Handling</span></div><div class="line">Conn.[sync|drop]().then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// ...</span></div><div class="line">&#125;).catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// ...</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sync all models that aren&#x27;t already in the database</span></span><br><span class="line">Conn.sync()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Force sync all models</span></span><br><span class="line">Conn.sync(&#123; <span class="attr">force</span>: <span class="literal">true</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Drop all Tables</span></span><br><span class="line">Conn.drop()</span><br><span class="line"></span><br><span class="line"><span class="comment">// Emit Handling</span></span><br><span class="line">Conn.[sync|drop]().then(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Expansion-of-models"><a href="#Expansion-of-models" class="headerlink" title="Expansion of models"></a>Expansion of models</h3><p>Sequelize Models are ES6 classes, you can very easily add custom instance or class level methods.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> User = Conn.define(<span class="hljs-string">'user'</span>, &#123;</div><div class="line">  <span class="hljs-attr">firstName</span>: Sequelize.STRING,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// add a class level method</span></div><div class="line">User.classLevelMethod = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</div><div class="line">  retunr <span class="hljs-string">'foo'</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-comment">// add an instance level method</span></div><div class="line">User.prototype.instanceLevelMethod = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;</div><div class="line">  retunr <span class="hljs-string">'bar'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> User = Conn.define(<span class="string">&#x27;user&#x27;</span>, &#123;</span><br><span class="line">  firstName: Sequelize.STRING,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// add a class level method</span></span><br><span class="line">User.classLevelMethod = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  retunr <span class="string">&#x27;foo&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// add an instance level method</span></span><br><span class="line">User.prototype.instanceLevelMethod = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  retunr <span class="string">&#x27;bar&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Indexes"><a href="#Indexes" class="headerlink" title="Indexes"></a>Indexes</h3><p>Sequelize supports adding indexes to the model definition which will be created during <code>Model.sync()</code> or <code>Conn.sync()</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">Conn.define(<span class="hljs-string">'user'</span>, &#123;&#125;, &#123;</div><div class="line">  <span class="hljs-attr">indexes</span>: [</div><div class="line">    <span class="hljs-comment">// Create a unique index on poem</span></div><div class="line">    &#123;</div><div class="line">      <span class="hljs-attr">unique</span>: <span class="hljs-literal">true</span>,</div><div class="line">      <span class="hljs-attr">fields</span>: [<span class="hljs-string">'poen'</span>]</div><div class="line">    &#125;,</div><div class="line">    <span class="hljs-comment">// create a gin index on data with the jsonb_path_ops operator</span></div><div class="line">    &#123;</div><div class="line">      <span class="hljs-attr">fields</span>: [<span class="hljs-string">'data'</span>],</div><div class="line">      <span class="hljs-attr">using</span>: <span class="hljs-string">'gin'</span>,</div><div class="line">      <span class="hljs-attr">operator</span>: <span class="hljs-string">'jsonb_path_ops'</span>,</div><div class="line">    &#125;,</div><div class="line">    <span class="hljs-comment">// by default index name will be [table]_[fields]</span></div><div class="line">    <span class="hljs-comment">// create a multi column partial index</span></div><div class="line">    &#123;</div><div class="line">      <span class="hljs-attr">name</span>: <span class="hljs-string">'public_by_author'</span>,</div><div class="line">      <span class="hljs-attr">fields</span>: [<span class="hljs-string">'author'</span>, <span class="hljs-string">'status'</span>],</div><div class="line">      <span class="hljs-attr">where</span>: &#123;</div><div class="line">        <span class="hljs-attr">status</span>: <span class="hljs-string">'public'</span></div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Conn.define(<span class="string">&#x27;user&#x27;</span>, &#123;&#125;, &#123;</span><br><span class="line">  indexes: [</span><br><span class="line">    <span class="comment">// Create a unique index on poem</span></span><br><span class="line">    &#123;</span><br><span class="line">      unique: <span class="literal">true</span>,</span><br><span class="line">      fields: [<span class="string">&#x27;poen&#x27;</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// create a gin index on data with the jsonb_path_ops operator</span></span><br><span class="line">    &#123;</span><br><span class="line">      fields: [<span class="string">&#x27;data&#x27;</span>],</span><br><span class="line">      using: <span class="string">&#x27;gin&#x27;</span>,</span><br><span class="line">      operator: <span class="string">&#x27;jsonb_path_ops&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// by default index name will be [table]_[fields]</span></span><br><span class="line">    <span class="comment">// create a multi column partial index</span></span><br><span class="line">    &#123;</span><br><span class="line">      name: <span class="string">&#x27;public_by_author&#x27;</span>,</span><br><span class="line">      fields: [<span class="string">&#x27;author&#x27;</span>, <span class="string">&#x27;status&#x27;</span>],</span><br><span class="line">      where: &#123;</span><br><span class="line">        status: <span class="string">&#x27;public&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Model-Usage"><a href="#Model-Usage" class="headerlink" title="Model Usage"></a>Model Usage</h3><h4 id="Data-Retrieval-Finders"><a href="#Data-Retrieval-Finders" class="headerlink" title="Data Retrieval / Finders"></a>Data Retrieval / Finders</h4><p>Finder methods are intended to query data from the database. They do not return plain objects but instead return <em>model instances</em>. Because finder methods return model instances you can call any model instance member.</p>
-<h4 id="find-search-for-one-specific-element-in-the-database"><a href="#find-search-for-one-specific-element-in-the-database" class="headerlink" title="find - search for one specific element in the database"></a>find - search for one specific element in the database</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// search for known id</span></div><div class="line">Project.findById(<span class="hljs-number">123</span>).then(<span class="hljs-function"><span class="hljs-params">project</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// project will be an instance of Project and store the content of the table entry with id 123. If such an entry is not defined you will get null</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// search for attributes</span></div><div class="line">Project.findOne(&#123;</div><div class="line">  <span class="hljs-attr">where</span>: &#123;</div><div class="line">    <span class="hljs-attr">title</span>: <span class="hljs-string">'aProject'</span></div><div class="line">  &#125;</div><div class="line">&#125;).then(<span class="hljs-function"><span class="hljs-params">project</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// project will be the first entry of the Projects table with the title 'aProject' || null</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line">Project.findONe(&#123;</div><div class="line">  <span class="hljs-attr">where</span>: &#123;</div><div class="line">    <span class="hljs-attr">title</span>: <span class="hljs-string">'aProject'</span>,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">attributes</span>: [<span class="hljs-string">'id'</span>, [<span class="hljs-string">'name'</span>, <span class="hljs-string">'title'</span>]]</div><div class="line">&#125;).then(<span class="hljs-function"><span class="hljs-params">project</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// project will be the first entry of the Projects table with the title 'aProject' || null</span></div><div class="line">  <span class="hljs-comment">// project.title will contain the name of the project</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="find-search-for-one-specific-element-in-the-database"><a href="#find-search-for-one-specific-element-in-the-database" class="headerlink" title="find - search for one specific element in the database"></a>find - search for one specific element in the database</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// search for known id</span></span><br><span class="line">Project.findById(<span class="number">123</span>).then(<span class="function"><span class="params">project</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// project will be an instance of Project and store the content of the table entry with id 123. If such an entry is not defined you will get null</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// search for attributes</span></span><br><span class="line">Project.findOne(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    title: <span class="string">&#x27;aProject&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="params">project</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// project will be the first entry of the Projects table with the title &#x27;aProject&#x27; || null</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">Project.findONe(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    title: <span class="string">&#x27;aProject&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  attributes: [<span class="string">&#x27;id&#x27;</span>, [<span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;title&#x27;</span>]]</span><br><span class="line">&#125;).then(<span class="function"><span class="params">project</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// project will be the first entry of the Projects table with the title &#x27;aProject&#x27; || null</span></span><br><span class="line">  <span class="comment">// project.title will contain the name of the project</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h4 id="findOrCreate-Search-for-a-specific-element-or-create-it-if-not-available"><a href="#findOrCreate-Search-for-a-specific-element-or-create-it-if-not-available" class="headerlink" title="findOrCreate - Search for a specific element or create it if not available"></a>findOrCreate - Search for a specific element or create it if not available</h4><p>The method <code>findOrCreate</code> can be used to check if a certain element already exists in the database. If that is the case the method will result in a respective instance, if the element does not yet exists, it will be created.</p>
 <p>Let’s assume we have an empty database with a <code>User</code> model which has a <code>username</code> and a <code>job</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">User.findOrCreate(&#123;</div><div class="line">  <span class="hljs-attr">where</span>: &#123;</div><div class="line">    <span class="hljs-attr">username</span>: <span class="hljs-string">'sdepold'</span>,</div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">defaults</span>: &#123;</div><div class="line">    <span class="hljs-attr">job</span>: <span class="hljs-string">"Technical Lead JS"</span>,</div><div class="line">  &#125;</div><div class="line">&#125;).spread(<span class="hljs-function">(<span class="hljs-params">user, created</span>) =&gt;</span> &#123;</div><div class="line">  <span class="hljs-built_in">console</span>.log(user.get(&#123;</div><div class="line">    <span class="hljs-attr">plain</span>: <span class="hljs-literal">true</span>,</div><div class="line">  &#125;))</div><div class="line">  <span class="hljs-comment">/**</span></div><div class="line">   * findOrCreate returns an array containing the object that was found or created and a boolean will be true if a new object was created, and false if not</div><div class="line">    [ &#123;</div><div class="line">      username: 'sdepold',</div><div class="line">      job: 'Technical Lead JavaScript',</div><div class="line">      id: 1,</div><div class="line">      createdAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET),</div><div class="line">      updatedAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET)</div><div class="line">    &#125;,</div><div class="line">    true ]</div><div class="line">   */</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">User.findOrCreate(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    username: <span class="string">&#x27;sdepold&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  defaults: &#123;</span><br><span class="line">    job: <span class="string">&quot;Technical Lead JS&quot;</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;).spread(<span class="function">(<span class="params">user, created</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(user.get(&#123;</span><br><span class="line">    plain: <span class="literal">true</span>,</span><br><span class="line">  &#125;))</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * findOrCreate returns an array containing the object that was found or created and a boolean will be true if a new object was created, and false if not</span></span><br><span class="line"><span class="comment">    [ &#123;</span></span><br><span class="line"><span class="comment">      username: &#x27;sdepold&#x27;,</span></span><br><span class="line"><span class="comment">      job: &#x27;Technical Lead JavaScript&#x27;,</span></span><br><span class="line"><span class="comment">      id: 1,</span></span><br><span class="line"><span class="comment">      createdAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET),</span></span><br><span class="line"><span class="comment">      updatedAt: Fri Mar 22 2013 21: 28: 34 GMT + 0100(CET)</span></span><br><span class="line"><span class="comment">    &#125;,</span></span><br><span class="line"><span class="comment">    true ]</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>The code created a new instance.</p>
-<h4 id="fineAndCountAll-Search-for-multiple-elements-in-the-database-returns-both-data-and-total-count"><a href="#fineAndCountAll-Search-for-multiple-elements-in-the-database-returns-both-data-and-total-count" class="headerlink" title="fineAndCountAll - Search for multiple elements in the database, returns both data and total count"></a>fineAndCountAll - Search for multiple elements in the database, returns both data and total count</h4><h4 id="findAll-Search-for-multiple-elements-in-the-database"><a href="#findAll-Search-for-multiple-elements-in-the-database" class="headerlink" title="findAll - Search for multiple elements in the database"></a>findAll - Search for multiple elements in the database</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// find multiple entries</span></div><div class="line">Project.findAll().then(<span class="hljs-function"><span class="hljs-params">projects</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// projects will be an array of all Project instances</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// also possible</span></div><div class="line">Project.all().then(<span class="hljs-function"><span class="hljs-params">projects</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// projects will be an array of all Project instances</span></div><div class="line">&#125;)</div><div class="line"><span class="hljs-comment">// search for specific attribute - hash usage</span></div><div class="line">Project.findAll(&#123;</div><div class="line">  <span class="hljs-attr">where</span>: &#123;</div><div class="line">    <span class="hljs-attr">name</span>: <span class="hljs-string">'A Project'</span>,</div><div class="line">  &#125;</div><div class="line">&#125;).then(<span class="hljs-function"><span class="hljs-params">projects</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// ...</span></div><div class="line">&#125;)</div><div class="line"><span class="hljs-comment">// search within a specific range</span></div><div class="line">Project.findAll(&#123;</div><div class="line">  <span class="hljs-attr">where</span>: &#123;</div><div class="line">    <span class="hljs-attr">id</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],</div><div class="line">  &#125;</div><div class="line">&#125;).then(<span class="hljs-function"><span class="hljs-params">projects</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-comment">// return instances with id 1, 2, 3</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h4 id="Complex-filtering-OR-NOT-queries"><a href="#Complex-filtering-OR-NOT-queries" class="headerlink" title="Complex filtering /OR/NOT queries"></a>Complex filtering /OR/NOT queries</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">Project.findAll(&#123;</div><div class="line">  <span class="hljs-attr">where</span>: &#123;</div><div class="line">    <span class="hljs-attr">name</span>: <span class="hljs-string">'a project'</span>,</div><div class="line">    <span class="hljs-attr">$or</span>: [</div><div class="line">      &#123; <span class="hljs-attr">id</span>: [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>] &#125;,</div><div class="line">      &#123; <span class="hljs-attr">id</span>: &#123; <span class="hljs-attr">$gt</span>: <span class="hljs-number">10</span> &#125;&#125;,</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line"></div><div class="line">Project.findAll(&#123;</div><div class="line">  <span class="hljs-attr">where</span>: &#123;</div><div class="line">    <span class="hljs-attr">name</span>: <span class="hljs-string">'a project'</span>,</div><div class="line">    <span class="hljs-attr">id</span>: &#123;</div><div class="line">      <span class="hljs-attr">$or</span>: [</div><div class="line">        [ <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>],</div><div class="line">        &#123; <span class="hljs-attr">$gt</span>: <span class="hljs-number">10</span> &#125;,</div><div class="line">      ]</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h4 id="fineAndCountAll-Search-for-multiple-elements-in-the-database-returns-both-data-and-total-count"><a href="#fineAndCountAll-Search-for-multiple-elements-in-the-database-returns-both-data-and-total-count" class="headerlink" title="fineAndCountAll - Search for multiple elements in the database, returns both data and total count"></a>fineAndCountAll - Search for multiple elements in the database, returns both data and total count</h4><h4 id="findAll-Search-for-multiple-elements-in-the-database"><a href="#findAll-Search-for-multiple-elements-in-the-database" class="headerlink" title="findAll - Search for multiple elements in the database"></a>findAll - Search for multiple elements in the database</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// find multiple entries</span></span><br><span class="line">Project.findAll().then(<span class="function"><span class="params">projects</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// projects will be an array of all Project instances</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// also possible</span></span><br><span class="line">Project.all().then(<span class="function"><span class="params">projects</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// projects will be an array of all Project instances</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// search for specific attribute - hash usage</span></span><br><span class="line">Project.findAll(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    name: <span class="string">&#x27;A Project&#x27;</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="params">projects</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// search within a specific range</span></span><br><span class="line">Project.findAll(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    id: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">  &#125;</span><br><span class="line">&#125;).then(<span class="function"><span class="params">projects</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// return instances with id 1, 2, 3</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="Complex-filtering-OR-NOT-queries"><a href="#Complex-filtering-OR-NOT-queries" class="headerlink" title="Complex filtering /OR/NOT queries"></a>Complex filtering /OR/NOT queries</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Project.findAll(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    name: <span class="string">&#x27;a project&#x27;</span>,</span><br><span class="line">    $or: [</span><br><span class="line">      &#123; <span class="attr">id</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] &#125;,</span><br><span class="line">      &#123; <span class="attr">id</span>: &#123; <span class="attr">$gt</span>: <span class="number">10</span> &#125;&#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">Project.findAll(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    name: <span class="string">&#x27;a project&#x27;</span>,</span><br><span class="line">    id: &#123;</span><br><span class="line">      $or: [</span><br><span class="line">        [ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">        &#123; <span class="attr">$gt</span>: <span class="number">10</span> &#125;,</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>Both pieces of code will generate the following:</p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">SELECT * FROM `Projects` WHERE (</div><div class="line">  `Projects`.`name`=`a project`</div><div class="line">  AND (`Projects`.`id` IN (1,2,3) OR `Projects`.`id`&gt;10)</div><div class="line">  )</div></pre></td></tr></table></figure>
-<h4 id="Manipulating-the-database-with-limit-offset-order-and-group"><a href="#Manipulating-the-database-with-limit-offset-order-and-group" class="headerlink" title="Manipulating the database with limit, offset, order and group"></a>Manipulating the database with limit, offset, order and group</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// limit the results of the query</span></div><div class="line">Project.findAll(&#123; <span class="hljs-attr">limit</span>: <span class="hljs-number">10</span> &#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// step over the first 10 elements</span></div><div class="line">Project.findAll(&#123; <span class="hljs-attr">offset</span>: <span class="hljs-number">10</span> &#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// step over the first 10 element and take 2</span></div><div class="line">Project.findAll(&#123; <span class="hljs-attr">offset</span>: <span class="hljs-number">10</span>, <span class="hljs-attr">limit</span>: <span class="hljs-number">2</span> &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM &#96;Projects&#96; WHERE (</span><br><span class="line">  &#96;Projects&#96;.&#96;name&#96;&#x3D;&#96;a project&#96;</span><br><span class="line">  AND (&#96;Projects&#96;.&#96;id&#96; IN (1,2,3) OR &#96;Projects&#96;.&#96;id&#96;&gt;10)</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+
+<h4 id="Manipulating-the-database-with-limit-offset-order-and-group"><a href="#Manipulating-the-database-with-limit-offset-order-and-group" class="headerlink" title="Manipulating the database with limit, offset, order and group"></a>Manipulating the database with limit, offset, order and group</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// limit the results of the query</span></span><br><span class="line">Project.findAll(&#123; <span class="attr">limit</span>: <span class="number">10</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// step over the first 10 elements</span></span><br><span class="line">Project.findAll(&#123; <span class="attr">offset</span>: <span class="number">10</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// step over the first 10 element and take 2</span></span><br><span class="line">Project.findAll(&#123; <span class="attr">offset</span>: <span class="number">10</span>, <span class="attr">limit</span>: <span class="number">2</span> &#125;)</span><br></pre></td></tr></table></figure>
+
 <p>The syntax for grouping and ordering are equal, so below it is only explained with a single example for group, and the rest for order.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// yields ORDER BY title DESC</span></div><div class="line">Project.findAll(&#123; <span class="hljs-attr">order</span>: <span class="hljs-string">'title DESC'</span> &#125;)</div><div class="line"></div><div class="line"><span class="hljs-comment">// yields GROUP BY name</span></div><div class="line">Project.findAll(&#123; <span class="hljs-attr">group</span>: <span class="hljs-string">'name'</span> &#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// yields ORDER BY title DESC</span></span><br><span class="line">Project.findAll(&#123; <span class="attr">order</span>: <span class="string">&#x27;title DESC&#x27;</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// yields GROUP BY name</span></span><br><span class="line">Project.findAll(&#123; <span class="attr">group</span>: <span class="string">&#x27;name&#x27;</span> &#125;)</span><br></pre></td></tr></table></figure>
+
 <h4 id="Raw-queries"><a href="#Raw-queries" class="headerlink" title="Raw queries"></a>Raw queries</h4><p>Sometimes you might be expecting a massive dataset that you just want to display without manipulation. For each row you select, Sequelize creates an instance with functions for update, delete, get association etc. If you have thousands of rows, this might take some time. If you only need the raw data and don’t want to update anything, you can do like this to get the raw data.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Are you expecting a massive dataset from the DB, and don't want to spend the time building DAOs for each entry? You can pass an extra query option to get the raw data insetead:</span></div><div class="line">Project.findAll(&#123;</div><div class="line">  <span class="hljs-attr">where</span>: &#123;</div><div class="line">    <span class="hljs-comment">// ...</span></div><div class="line">  &#125;,</div><div class="line">  <span class="hljs-attr">raw</span>: <span class="hljs-literal">true</span>,</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Are you expecting a massive dataset from the DB, and don&#x27;t want to spend the time building DAOs for each entry? You can pass an extra query option to get the raw data insetead:</span></span><br><span class="line">Project.findAll(&#123;</span><br><span class="line">  where: &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  raw: <span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Queries"><a href="#Queries" class="headerlink" title="Queries"></a>Queries</h3><h4 id="Attributes"><a href="#Attributes" class="headerlink" title="Attributes"></a>Attributes</h4><p>To select only some attributes, you can use the <code>attributes</code> option. Most often, you pass an array:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Model.findAll(&#123;</div><div class="line">  <span class="hljs-attr">attributes</span>: [<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>]</div><div class="line">&#125;)</div><div class="line"><span class="hljs-comment">// Equal to</span></div><div class="line">SELECT foo, bar ...</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Model.findAll(&#123;</span><br><span class="line">  attributes: [<span class="string">&#x27;foo&#x27;</span>, <span class="string">&#x27;bar&#x27;</span>]</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// Equal to</span></span><br><span class="line">SELECT foo, bar ...</span><br></pre></td></tr></table></figure>
+
 <h4 id="Where"><a href="#Where" class="headerlink" title="Where"></a>Where</h4><p>Whether you are querying with <code>findAll</code>/<code>find</code> or doing bulk <code>updates</code>/<code>destroy</code> you can pass a <code>where</code> object to filte the query.</p>
 <p><code>where</code> generally takes an object from attribute:value pairs, where value can be primitive for equality matches or keyed objects for other operators.</p>
 <p>It’s also possible to generate complex <code>AND</code>/<code>OR</code> conditions by nesting of <code>$or</code> and <code>$and</code></p>
-<h4 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h4>
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Database/">Database</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+<h4 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h4></div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2017/08/07/Note-on-Sequelize/">https://ezcook.de/2017/08/07/Note-on-Sequelize/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Database/">Database</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/08/09/History-API/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">History API</div></div></a></div><div class="next-post pull-right"><a href="/2017/08/07/Build-GraphQL-Server-with-Express/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Build GraphQL Server With Express</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/06/30/APIs-of-InfluxDB/" title="APIs of InfluxDB"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-30</div><div class="relatedPosts_title">APIs of InfluxDB</div></div></a></div><div class="relatedPosts_item"><a href="/2017/06/30/Example-of-node-influx/" title="Example of Node-Influx"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-30</div><div class="relatedPosts_title">Example of Node-Influx</div></div></a></div><div class="relatedPosts_item"><a href="/2017/07/01/Glossary-of-Terms-on-InfluxDB/" title="Glossary of Terms on InfluxDB"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-07-01</div><div class="relatedPosts_title">Glossary of Terms on InfluxDB</div></div></a></div><div class="relatedPosts_item"><a href="/2017/06/30/Querying-InfluxDB-with-the-HTTP-API/" title="Querying InfluxDB With the HTTP API"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-30</div><div class="relatedPosts_title">Querying InfluxDB With the HTTP API</div></div></a></div><div class="relatedPosts_item"><a href="/2017/07/10/Simple-Api-of-Mongoose/" title="Simple Api of Mongoose"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-07-10</div><div class="relatedPosts_title">Simple Api of Mongoose</div></div></a></div><div class="relatedPosts_item"><a href="/2017/06/30/Simple-about-InfluxDB/" title="Simple About InfluxDB"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-30</div><div class="relatedPosts_title">Simple About InfluxDB</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2017/08/07/Note-on-Sequelize/'
+    this.page.identifier = '2017/08/07/Note-on-Sequelize/'
+    this.page.title = 'Note on Sequelize'
+  };
 
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-                
-        </div>
-    </div>
-</div>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/08/09/History-API/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">History API</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/08/07/Build-GraphQL-Server-with-Express/">
-                <span class="level-item">Build GraphQL Server With Express</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2017/08/07/Note-on-Sequelize/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-    </div>
-</div>
+})
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
+  typeof typed === 'object' && typed.destroy()
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

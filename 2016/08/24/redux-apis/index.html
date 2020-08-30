@@ -1,303 +1,231 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Redux APIs | EzCook</title><meta name="description" content="Compose(…funcs)&#x2F;**  * compose(f,h,g)(...args) &#x3D;&amp;gt; f(g(h(...args)))  * 使用了 reduceRight, 从右开始执行  * @param &amp;#123;多个函数, 逗号隔开&amp;#125;  * @return &amp;#123;函数&amp;#125;  *&#x2F;  export default function compose(...f"><meta name="keywords" content="Redux"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2016/08/24/redux-apis/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Redux APIs"><meta property="og:url" content="https://ezcook.de/2016/08/24/redux-apis/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Compose(…funcs)&#x2F;**  * compose(f,h,g)(...args) &#x3D;&amp;gt; f(g(h(...args)))  * 使用了 reduceRight, 从右开始执行  * @param &amp;#123;多个函数, 逗号隔开&amp;#125;  * @return &amp;#123;函数&amp;#125;  *&#x2F;  export default function compose(...f"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2016-08-24T04:17:39.000Z"><meta property="article:modified_time" content="2020-08-30T12:50:11.173Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Redux APIs - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Redux APIs" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2016-08-24T04:17:39.000Z">2016-08-24</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/note/">note</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    6 minutes read (About 836 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Redux APIs
-            
-        </h1>
-        <div class="content">
-            <h3 id="Compose-…funcs"><a href="#Compose-…funcs" class="headerlink" title="Compose(…funcs)"></a>Compose(…funcs)</h3><pre><code>/**
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:50:11'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Compose-%E2%80%A6funcs"><span class="toc-number">1.</span> <span class="toc-text">Compose(…funcs)</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Redux APIs</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2016-08-24T04:17:39.000Z" title="Created 2016-08-24 12:17:39">2016-08-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:50:11.173Z" title="Updated 2020-08-30 20:50:11">2020-08-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/note/">note</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2016/08/24/redux-apis/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h3 id="Compose-…funcs"><a href="#Compose-…funcs" class="headerlink" title="Compose(…funcs)"></a>Compose(…funcs)</h3><pre><code>/**
  * compose(f,h,g)(...args) =&amp;gt; f(g(h(...args)))
  * 使用了 reduceRight, 从右开始执行
- * @param {多个函数, 逗号隔开}
- * @return {函数}
+ * @param &#123;多个函数, 逗号隔开&#125;
+ * @return &#123;函数&#125;
  */
 
-export default function compose(...funcs){
-  if(funcs.length === 0){
+export default function compose(...funcs)&#123;
+  if(funcs.length === 0)&#123;
     return arg =&amp;gt; arg
-  }
+  &#125;
 
-  if(funcs.length === 1){
+  if(funcs.length === 1)&#123;
     return funcs[0]
-  }
+  &#125;
 
   const last = funcs[funcs.length - 1]
   const rest = funcs.slice(0,-1)
   return (...args) =&amp;gt; rest.reduceRight((composed, f) =&amp;gt; f(composed), last(...args))
-}
+&#125;
 `&lt;/pre&gt;
 
 关键在于 reduceRight 可以传入初值
 
 ### createStore(reducer, [initialState])
 
-&lt;pre&gt;`import isPlainObject from &apos;lodash/isPlainObject&apos;
-import $$observable from &apos;symbol-observable&apos;
+&lt;pre&gt;`import isPlainObject from &#39;lodash/isPlainObject&#39;
+import $$observable from &#39;symbol-observable&#39;
 
-export var ActionTypes = {
-  INIT: &apos;@@redux/INIT&apos;
-}
+export var ActionTypes = &#123;
+  INIT: &#39;@@redux/INIT&#39;
+&#125;
 
-export default function createStore(reducer, preloadState, enhancer){
+export default function createStore(reducer, preloadState, enhancer)&#123;
   var currentReducer = reducer
   var currentState = preloadState
   var currentListeners = []
   var nextListeners = currentListeners
   var isDispatching = false
-}
+&#125;
 
-function ensureCanMutateNextListeners(){
-  if(nextListeners === currentListeners){
+function ensureCanMutateNextListeners()&#123;
+  if(nextListeners === currentListeners)&#123;
     nextListeners = currentListeners.slice()
-  }
-}
+  &#125;
+&#125;
 
-function getState(){
+function getState()&#123;
   return currentState
-}
+&#125;
 
-function subscribe(listener){
-  if(typeof listener !== &apos;function&apos;){
-    throw new Error(&apos;Expected listener to be a function&apos;)
-  }
+function subscribe(listener)&#123;
+  if(typeof listener !== &#39;function&#39;)&#123;
+    throw new Error(&#39;Expected listener to be a function&#39;)
+  &#125;
 
   var isSubscribed = true
 
   ensureCanmutateNextListener()
   nextListeners.push(listener)
 
-  return function ubsubscribe(){
-    if(!isSubscribe){
+  return function ubsubscribe()&#123;
+    if(!isSubscribe)&#123;
       return
-    }
+    &#125;
     isSubscribe = false
 
     ensureCanMutateNextListeners()
     var index = nextListeners.indexOf(listener)
     nextListeners.splice(index,1)
-  }
-}
+  &#125;
+&#125;
 
-function dispatch(action){
-  if(isPlainObecjt(action)){
-    throw new Error(&apos;Action must be plain objects &apos; + &apos;Use custom middleware for async action&apos;)
-  }
+function dispatch(action)&#123;
+  if(isPlainObecjt(action))&#123;
+    throw new Error(&#39;Action must be plain objects &#39; + &#39;Use custom middleware for async action&#39;)
+  &#125;
 
-  if(typeof action.type === &apos;undefined&apos;){
-    throw new Error(&apos;Actions may not have an undefined &quot;type&quot; property. &apos; + &apos;Have you misspelled a constant?&apos;)
-  }
+  if(typeof action.type === &#39;undefined&#39;)&#123;
+    throw new Error(&#39;Actions may not have an undefined &quot;type&quot; property. &#39; + &#39;Have you misspelled a constant?&#39;)
+  &#125;
 
-  if(isDispatching){
-    throw new Error(&apos;Reducers may not dispatch actions.&apos;)
-  }
+  if(isDispatching)&#123;
+    throw new Error(&#39;Reducers may not dispatch actions.&#39;)
+  &#125;
 
-  try{
+  try&#123;
     isDispatching = true
     currentState = currentReducer(currentState, action)
-  } finally {
+  &#125; finally &#123;
     isDispatching = false
-  }
+  &#125;
 
   var listeners = currentListeners = nextListeners
 
-  for(var i = 0; i&amp;lt; listeners.length, i++){
+  for(var i = 0; i&amp;lt; listeners.length, i++)&#123;
     listeners[i]()
-  }
+  &#125;
 
   return action
-}
+&#125;
 
-function replaceReducer(nextReducer){
-  if(typeof nextReducer !== &apos;function&apos;){
-    throw new Error(&apos;Expected the nextReducer to be a function&apos;)
-  }
+function replaceReducer(nextReducer)&#123;
+  if(typeof nextReducer !== &#39;function&#39;)&#123;
+    throw new Error(&#39;Expected the nextReducer to be a function&#39;)
+  &#125;
 
   currentReducer = nextReducer
-  dispatch({type:ActionTYpes.INIT})
-}
+  dispatch(&#123;type:ActionTYpes.INIT&#125;)
+&#125;
 
 ### combineReudcers(reducers)
 
 `&lt;/pre&gt;
 
-import { combineReducers } from &apos;redux&apos;
-import counterReducer from &apos;./counterReducer&apos;
-import todosReducer from &apos;./todosReducer&apos;
+import &#123; combineReducers &#125; from &#39;redux&#39;
+import counterReducer from &#39;./counterReducer&#39;
+import todosReducer from &#39;./todosReducer&#39;
 
-const rootReducer = combineReducers({
+const rootReducer = combineReducers(&#123;
   counter: counterReducer,   // &amp;lt;--- 键名是 state 中的属性, 键值是对应 reducer 函数名
 
   todos: todosReducer
-})
+&#125;)
 export default rootReducer
 
 &lt;pre&gt;`
@@ -326,14 +254,14 @@ reducers/
 `&lt;/pre&gt;
 
 /*  reducers/index.js */
-import { combineReducers } from &apos;redux&apos;
-import counterReducer from &apos;./counterReducer&apos;
-import todosReducers from &apos;./todosReducer&apos;
+import &#123; combineReducers &#125; from &#39;redux&#39;
+import counterReducer from &#39;./counterReducer&#39;
+import todosReducers from &#39;./todosReducer&#39;
 
-const rootReducer = combineReducers({
+const rootReducer = combineReducers(&#123;
   counter: counterReducer,
   todos: todosReducers
-})
+&#125;)
 
 export default rootReducer
 
@@ -341,14 +269,14 @@ export default rootReducer
 
 /* reducers/todosReducers/index.js */
 
-import { combineReducers } from &apos;redux&apos;
-import optTimeReducer from &apos;./optTimeReducer&apos;
-import todoListReducer from &apos;./todoListReducer&apos;
+import &#123; combineReducers &#125; from &#39;redux&#39;
+import optTimeReducer from &#39;./optTimeReducer&#39;
+import todoListReducer from &#39;./todoListReducer&#39;
 
-const todosReducers = combineReducers({
+const todosReducers = combineReducers(&#123;
   optTime: optTimeReducer,
   todoList: todoListReducer
-})
+&#125;)
 
 export default todosReducers
 
@@ -365,27 +293,27 @@ Redux 引入中间件机制是为了在 dispatch 前后进行处理
 
 `&lt;/pre&gt;
 
-const printStateMiddleware = ({getState}) =&gt; next =&gt; action =&gt; {
-  console.log(&apos;...&apos;)
+const printStateMiddleware = (&#123;getState&#125;) =&gt; next =&gt; action =&gt; &#123;
+  console.log(&#39;...&#39;)
   let returnValue = next(action)
-  console.log(&apos;...&apos;)
+  console.log(&#39;...&#39;)
   return returnValue
-}
+&#125;
 
 &lt;pre&gt;`
 实际上最内层
 `&lt;/pre&gt;
 
-function printStateMiddleware(middlewareAPI){ //中间件内可以使用的 API, 如 getState 与 dispatch
-   return function(dispatch){ // 传入原 dispatch 的引用
-    return function(action){
+function printStateMiddleware(middlewareAPI)&#123; //中间件内可以使用的 API, 如 getState 与 dispatch
+   return function(dispatch)&#123; // 传入原 dispatch 的引用
+    return function(action)&#123;
       console.log(...)
       var returnValue = dispatch(action)  //  执行 dispatch 行为, dispatch(action) 返回的还是 action
       console.log(...)
       return returnValue // 传给下一个中间件的 action
-    }
-   }
-}
+    &#125;
+   &#125;
+&#125;
 
 &lt;pre&gt;`
 ### Store Enhancer
@@ -398,14 +326,14 @@ Redux 的 applyMiddleware 就是一个 Enhancer
 
 `&lt;/pre&gt;
 
-import compose from &apos;./compose&apos; // 作用就是层层包裹
+import compose from &#39;./compose&#39; // 作用就是层层包裹
 
 // 传入中间件
-export default function applyMiddleware(...middlewares){
+export default function applyMiddleware(...middlewares)&#123;
   // 传入 createStore
-  return function(createStore){
+  return function(createStore)&#123;
     // 返回一个函数签名和 createStore 一样的函数, 即返回一个增强版的 createStore
-    return function(reducer, preloadState, enhancer){
+    return function(reducer, preloadState, enhancer)&#123;
       // 用原 createStore 先生成一个 store, 包含 getState, dispatch, subscribe, replaceReducer 四个 API
       var store = creataStore(reducer, preloadState, enhancer)
 
@@ -413,10 +341,10 @@ export default function applyMiddleware(...middlewares){
   var chain = [] // 存储中间件的数组
 
   //提供给中间件的 API 其实就是 store 的 API
-  var middlewareAPI = {
+  var middlewareAPI = &#123;
     getState: store.getStore,
     dispatch: (action) =&amp;gt; dispatch(action)
-  }
+  &#125;
 
   // 给中间件添加 API
   chain = middlewares.map(middleware =&amp;gt; middleware(middlewareAPI))
@@ -424,229 +352,113 @@ export default function applyMiddleware(...middlewares){
   // 串联中间件, 添加中间件的起点 store.dispatch, 返回经过修饰的 dispatch
   dispatch = compose(...middlewares)(store.dispatch)
 
-  return{
+  return&#123;
     ...store, // store 中保留的原 API
      dispatch  // 用新的 dispatch 覆盖原 dispatch   
+  &#125;
+&#125;</code></pre>
+<p>}<br>}</p>
+<p>```<br><a target="_blank" rel="noopener" href="https://cnodejs.org/topic/57bd23ee1d27b9113348a546">参考</a></p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2016/08/24/redux-apis/">https://ezcook.de/2016/08/24/redux-apis/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Redux/">Redux</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2016/08/25/applymiddleware-e4-b8-8e-enhancer/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">applyMiddleware 与 Enhancer</div></div></a></div><div class="next-post pull-right"><a href="/2016/08/23/middleware/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Middleware</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/09/05/Notes-on-TS-React-Redux/" title="Notes on TS + React + Redux"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-05</div><div class="relatedPosts_title">Notes on TS + React + Redux</div></div></a></div><div class="relatedPosts_item"><a href="/2016/08/25/applymiddleware-e4-b8-8e-enhancer/" title="applyMiddleware 与 Enhancer"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-08-25</div><div class="relatedPosts_title">applyMiddleware 与 Enhancer</div></div></a></div><div class="relatedPosts_item"><a href="/2017/03/20/baisc-usage-of-redux-observable/" title="Baisc Usage of Redux-Observable"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-03-20</div><div class="relatedPosts_title">Baisc Usage of Redux-Observable</div></div></a></div><div class="relatedPosts_item"><a href="/2016/08/22/connect-e7-9b-b8-e5-85-b3/" title="Connect 相关"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-08-22</div><div class="relatedPosts_title">Connect 相关</div></div></a></div><div class="relatedPosts_item"><a href="/2016/08/20/e9-83-a8-e7-bd-b2react-redux-e7-9a-84-web-e5-bc-80-e5-8f-91-e7-8e-af-e5-a2-83/" title="部署React + Redux 的 Web 开发环境"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-08-20</div><div class="relatedPosts_title">部署React + Redux 的 Web 开发环境</div></div></a></div><div class="relatedPosts_item"><a href="/2016/11/06/flux-standard-action/" title="Flux Standard Action"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-11-06</div><div class="relatedPosts_title">Flux Standard Action</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2016/08/24/redux-apis/'
+    this.page.identifier = '2016/08/24/redux-apis/'
+    this.page.title = 'Redux APIs'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
   }
 }
-</code></pre><p>}<br>}<br>```<br><a href="https://cnodejs.org/topic/57bd23ee1d27b9113348a546" target="_blank" rel="noopener">参考</a></p>
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Redux/">Redux</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
-                
-        </div>
-    </div>
-</div>
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2016/08/25/applymiddleware-e4-b8-8e-enhancer/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">applyMiddleware 与 Enhancer</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2016/08/23/middleware/">
-                <span class="level-item">Middleware</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
+})
 
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2016/08/24/redux-apis/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+  typeof typed === 'object' && typed.destroy()
 
-    </div>
-</div>
+  $(window).off('scroll')
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
-
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

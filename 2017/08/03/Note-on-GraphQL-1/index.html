@@ -1,193 +1,131 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Note on GraphQL(1) | EzCook</title><meta name="description" content="GraphQL is a query language for your API, and a server-side runtime for executing queries by using a type system you define for your data. A GraphQL service is created by defining types and fields on"><meta name="keywords" content="GraphQL"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2017/08/03/Note-on-GraphQL-1/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Note on GraphQL(1)"><meta property="og:url" content="https://ezcook.de/2017/08/03/Note-on-GraphQL-1/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="GraphQL is a query language for your API, and a server-side runtime for executing queries by using a type system you define for your data. A GraphQL service is created by defining types and fields on"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2017-08-03T12:00:29.000Z"><meta property="article:modified_time" content="2020-08-30T12:46:08.583Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Note on GraphQL(1) - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Note on GraphQL(1)" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-08-03T12:00:29.000Z">2017-08-03</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    13 minutes read (About 1878 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Note on GraphQL(1)
-            
-        </h1>
-        <div class="content">
-            <p>GraphQL is a query language for your API, and a server-side runtime for executing queries by using a type system you define for your data.</p>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:46:08'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Fields"><span class="toc-number">1.</span> <span class="toc-text">Fields</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Arguments"><span class="toc-number">2.</span> <span class="toc-text">Arguments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Aliases"><span class="toc-number">3.</span> <span class="toc-text">Aliases</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fragments"><span class="toc-number">4.</span> <span class="toc-text">Fragments</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Variables"><span class="toc-number">5.</span> <span class="toc-text">Variables</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Variable-Definitions"><span class="toc-number">5.1.</span> <span class="toc-text">Variable Definitions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Default-Variables"><span class="toc-number">5.2.</span> <span class="toc-text">Default Variables</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Directives"><span class="toc-number">6.</span> <span class="toc-text">Directives</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mutations"><span class="toc-number">7.</span> <span class="toc-text">Mutations</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Multiple-fields-in-mutations"><span class="toc-number">7.1.</span> <span class="toc-text">Multiple fields in mutations</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Inline-Fragments"><span class="toc-number">8.</span> <span class="toc-text">Inline Fragments</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Meta-fields"><span class="toc-number">8.1.</span> <span class="toc-text">Meta fields</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Schemas-and-Types"><span class="toc-number">9.</span> <span class="toc-text">Schemas and Types</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-System"><span class="toc-number">9.1.</span> <span class="toc-text">Type System</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Object-Types-and-Fields"><span class="toc-number">9.2.</span> <span class="toc-text">Object Types and Fields</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Arguments-1"><span class="toc-number">9.3.</span> <span class="toc-text">Arguments</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#The-Query-and-Mutation-Types"><span class="toc-number">9.4.</span> <span class="toc-text">The Query and Mutation Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Scalar-Types"><span class="toc-number">9.5.</span> <span class="toc-text">Scalar Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Enumeration-Types"><span class="toc-number">9.6.</span> <span class="toc-text">Enumeration Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Lists-and-Non-Null"><span class="toc-number">9.7.</span> <span class="toc-text">Lists and Non-Null</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Interfaces"><span class="toc-number">9.8.</span> <span class="toc-text">Interfaces</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Union-Types"><span class="toc-number">9.9.</span> <span class="toc-text">Union Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Input-Types"><span class="toc-number">9.10.</span> <span class="toc-text">Input Types</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Note on GraphQL(1)</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-08-03T12:00:29.000Z" title="Created 2017-08-03 20:00:29">2017-08-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:46:08.583Z" title="Updated 2020-08-30 20:46:08">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2017/08/03/Note-on-GraphQL-1/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p>GraphQL is a query language for your API, and a server-side runtime for executing queries by using a type system you define for your data.</p>
 <p>A GraphQL service is created by defining types and fields on those types, then providing functions for each field on each type.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type Query &#123;</div><div class="line">  <span class="hljs-attr">me</span>: User</div><div class="line">&#125;</div><div class="line"></div><div class="line">type User &#123;</div><div class="line">  <span class="hljs-attr">id</span>: ID</div><div class="line">  name: <span class="hljs-built_in">String</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">type Query &#123;</span><br><span class="line">  me: User</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type User &#123;</span><br><span class="line">  id: ID</span><br><span class="line">  name: <span class="built_in">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Along with functions for each field on each type:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Query_me</span>(<span class="hljs-params">request</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">return</span> request.auth.user;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">User_name</span>(<span class="hljs-params">user</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">return</span> user.getName()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Query_me</span>(<span class="params">request</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> request.auth.user;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User_name</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> user.getName()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Once a GraphQL service is running (typically at a URL on a web service), it can be sent GraphQL queries to validate and execute. A received query is first checked to ensure it only refers to the types and fields defined, then runs the provided functions to produce a result.</p>
 <p>For example the query:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  me &#123;</div><div class="line">    name</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="hljs-comment">// produce</span></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">"me"</span>: &#123;</div><div class="line">    <span class="hljs-string">"name"</span>: <span class="hljs-string">"Luck"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  me &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// produce</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;me&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Luck&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Fields"><a href="#Fields" class="headerlink" title="Fields"></a>Fields</h3><p>GraphQL is about asking for specific fields on objects.</p>
 <p>GraphQL queries can traverse related objects and their fields, letting clients fetch lots of related data in one request, instead of making several roundtrips as one would need in a classic RESTFul architecture.</p>
 <h3 id="Arguments"><a href="#Arguments" class="headerlink" title="Arguments"></a>Arguments</h3><p>In GraphQL, every field and nested object can get its own set of arguments, making GraphQL a complete replacement for making multiple API fetches. You can even pass arguments into scalar fields, to implement data transformations once on the server, instead of on every separately.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  human(id: <span class="hljs-string">'1000'</span>) &#123;</div><div class="line">    name</div><div class="line">    height(uint: FOOT)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  human(id: <span class="string">&#x27;1000&#x27;</span>) &#123;</span><br><span class="line">    name</span><br><span class="line">    height(uint: FOOT)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Arguments can be of many different types. GraphQL comes with a default set of types, but a GraphQL server can also declare its own custom types, as long as they can be serialized into your transport format.</p>
 <h3 id="Aliases"><a href="#Aliases" class="headerlink" title="Aliases"></a>Aliases</h3><p>You can’t directly query for the same field with different arguments, so you need alias to rename the result</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="hljs-attr">empireHero</span>: hero(episode: EMPIRE) &#123;</div><div class="line">    name</div><div class="line">  &#125;</div><div class="line">  jediHero: hero(episode: JEDI) &#123;</div><div class="line">    name</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="hljs-comment">// produce</span></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">"data"</span>: &#123;</div><div class="line">    <span class="hljs-string">"empireHero"</span>: &#123;</div><div class="line">      <span class="hljs-string">"name"</span>: <span class="hljs-string">"..."</span></div><div class="line">    &#125;,</div><div class="line">    <span class="hljs-string">"jediHero"</span>: &#123;</div><div class="line">      <span class="hljs-string">"name"</span>: <span class="hljs-string">"..."</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  empireHero: hero(episode: EMPIRE) &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">  jediHero: hero(episode: JEDI) &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// produce</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;data&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;empireHero&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;name&quot;</span>: <span class="string">&quot;...&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;jediHero&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;name&quot;</span>: <span class="string">&quot;...&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>In the above example, the two <code>hero</code> fields would have conflicted, but since we can alias them to different names, we can get both results in one request.</p>
 <h3 id="Fragments"><a href="#Fragments" class="headerlink" title="Fragments"></a>Fragments</h3><p>GraphQL includes reusable units called <em>fragments</em>. Fragments let you construct sets of fields, and then include them in queries where you need to.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="hljs-attr">leftComparison</span>: hero(episode: EMPIRE) &#123;</div><div class="line">    ...comparisonFields</div><div class="line">  &#125;</div><div class="line">  rightComparison: hero(episode: JEDI) &#123;</div><div class="line">    ...comparisonFields</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">fragment comparisonFields on Character &#123;</div><div class="line">  name</div><div class="line">  appearsIn</div><div class="line">  friends &#123;</div><div class="line">    name</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  leftComparison: hero(episode: EMPIRE) &#123;</span><br><span class="line">    ...comparisonFields</span><br><span class="line">  &#125;</span><br><span class="line">  rightComparison: hero(episode: JEDI) &#123;</span><br><span class="line">    ...comparisonFields</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fragment comparisonFields on Character &#123;</span><br><span class="line">  name</span><br><span class="line">  appearsIn</span><br><span class="line">  friends &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a>Variables</h3><p>When we start working with variables, we need to do three things:</p>
 <ul>
 <li><p>Replace the static values in the query with <code>$variableName</code></p>
@@ -197,14 +135,17 @@
 <li><p>Pass <code>variableName: value</code> in the separate, transport-specific(usually JSON) variables dictionary</p>
 </li>
 </ul>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">query HeroNameAndFriends($episode: Episode) &#123;</div><div class="line">  hero(episode: $episode) &#123;</div><div class="line">    name</div><div class="line">    friends &#123;</div><div class="line">      name</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-comment">// Variables</span></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">'episode'</span>: <span class="hljs-string">'JEDI'</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">query HeroNameAndFriends($episode: Episode) &#123;</span><br><span class="line">  hero(episode: $episode) &#123;</span><br><span class="line">    name</span><br><span class="line">    friends &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Variables</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&#x27;episode&#x27;</span>: <span class="string">&#x27;JEDI&#x27;</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Now in our client code, we can simply pass a different variable rather than needing to construct an entirely new query.</p>
 <h4 id="Variable-Definitions"><a href="#Variable-Definitions" class="headerlink" title="Variable Definitions"></a>Variable Definitions</h4><p>The variable definitions are the part that looks like <code>($episode: Episode)</code> in the query above. It works just like the argument definition for a function in a types language. It lists all of the variables, prefixed by <code>$</code>, followed by their type, in this case <code>Episode</code>.</p>
 <p>All declared variables must be either scalars, enums, or input object types.</p>
 <p>Variable Definition can be optional or required. In the case above, since there isn’t an <code>!</code> next to the <code>Episode</code> type, it’s optional. But if the field you are passing the variable into requires a non-null argument, then the variable must be required.</p>
 <h4 id="Default-Variables"><a href="#Default-Variables" class="headerlink" title="Default Variables"></a>Default Variables</h4><p>Default variables can also be assigned to the variables in the query by adding the default value after the type declaration.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">query HeroNameAndFriends($episode: Episode = <span class="hljs-string">'JEDI'</span>) &#123;</div><div class="line">  hero(episode: $episode) &#123;</div><div class="line">    name</div><div class="line">    friends &#123;</div><div class="line">      name</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Directives"><a href="#Directives" class="headerlink" title="Directives"></a>Directives</h3><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">query Hero($episode: Episode, <span class="hljs-attr">$withFriends</span>: <span class="hljs-built_in">Boolean</span>!) &#123;</div><div class="line">  hero(episode: $episode) &#123;</div><div class="line">    name</div><div class="line">    friends @include(<span class="hljs-keyword">if</span>: $withFriends) &#123;</div><div class="line">      name</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="hljs-comment">// variables</span></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">"episode"</span>: <span class="hljs-string">"JEDI"</span>,</div><div class="line">  <span class="hljs-string">"withFriends"</span>: <span class="hljs-literal">false</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">query HeroNameAndFriends($episode: Episode = <span class="string">&#x27;JEDI&#x27;</span>) &#123;</span><br><span class="line">  hero(episode: $episode) &#123;</span><br><span class="line">    name</span><br><span class="line">    friends &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Directives"><a href="#Directives" class="headerlink" title="Directives"></a>Directives</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">query Hero($episode: Episode, <span class="attr">$withFriends</span>: <span class="built_in">Boolean</span>!) &#123;</span><br><span class="line">  hero(episode: $episode) &#123;</span><br><span class="line">    name</span><br><span class="line">    friends @include(<span class="keyword">if</span>: $withFriends) &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// variables</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;episode&quot;</span>: <span class="string">&quot;JEDI&quot;</span>,</span><br><span class="line">  <span class="string">&quot;withFriends&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>We needed to use a new feature in GraphQL called <em>directive</em>. A directive can be attached to a field or fragment inclusion, and can affect execution of the query in any way the server desires. The core GraphQL specification includes exactly two directives, which must be supported by any spec-compliant GraphQL server implementation:</p>
 <ul>
 <li><p>@include(if: Boolean): Only include this field in the result if the argument is <code>true</code></p>
@@ -213,21 +154,26 @@
 </li>
 </ul>
 <h3 id="Mutations"><a href="#Mutations" class="headerlink" title="Mutations"></a>Mutations</h3><p>If mutation field returns an object type, you can ask for nested fields. This can be useful for fetching the new state of an object after an update.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">mutation CreateReviewForEpisode ($ep: Episode!, <span class="hljs-attr">$review</span>: ReviewInput!) &#123;</div><div class="line">  createReview(episode: $ep, <span class="hljs-attr">review</span>: $Review) &#123;</div><div class="line">    stars</div><div class="line">    commentary</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="hljs-comment">// Variables</span></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">"ep"</span>: <span class="hljs-string">"JEDI"</span>,</div><div class="line">  <span class="hljs-string">"review"</span>: &#123;</div><div class="line">    <span class="hljs-string">"star"</span>: <span class="hljs-number">5</span>,</div><div class="line">    <span class="hljs-string">"commentary"</span>: <span class="hljs-string">"This is a great movie"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mutation CreateReviewForEpisode ($ep: Episode!, $review: ReviewInput!) &#123;</span><br><span class="line">  createReview(episode: $ep, <span class="attr">review</span>: $Review) &#123;</span><br><span class="line">    stars</span><br><span class="line">    commentary</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Variables</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;ep&quot;</span>: <span class="string">&quot;JEDI&quot;</span>,</span><br><span class="line">  <span class="string">&quot;review&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;star&quot;</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="string">&quot;commentary&quot;</span>: <span class="string">&quot;This is a great movie&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Here the <code>createReview</code> returns the <code>star</code> and <code>commentary</code> fields of the newly created review.</p>
 <h4 id="Multiple-fields-in-mutations"><a href="#Multiple-fields-in-mutations" class="headerlink" title="Multiple fields in mutations"></a>Multiple fields in mutations</h4><p>A mutation can contain multiple fields, just like a query. There’s one important distinction between queries and mutations, other than the name.</p>
 <p>While query fields are executed in parallel, mutation fields run in series, one after the other. This means that if we send two <code>incrementCredits</code> mutations in one request, the first is guaranteed to finished before the second begins, ensuring that we don’t end up with a race condition with ourselves.</p>
 <h3 id="Inline-Fragments"><a href="#Inline-Fragments" class="headerlink" title="Inline Fragments"></a>Inline Fragments</h3><p>GraphQL include the ability to define interfaces and union types.</p>
 <p>If you are querying a field that returns an interface or a union type, you will need to use <em>inline fragments</em> to access data on the underlaying concrete type.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">query HeroForEpisode ($ep: Episode!) &#123;</div><div class="line">  hero (episode: $ep) &#123;</div><div class="line">    name</div><div class="line">    ... on Droid &#123;</div><div class="line">      primaryFunction</div><div class="line">    &#125;</div><div class="line">    ... on Human &#123;</div><div class="line">      height</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="hljs-comment">// Variables</span></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">"ep"</span>: <span class="hljs-string">"JEDI"</span></div><div class="line">&#125;</div><div class="line"><span class="hljs-comment">// produce</span></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">"data"</span>: &#123;</div><div class="line">    <span class="hljs-string">"hero"</span>: &#123;</div><div class="line">      <span class="hljs-string">"name"</span>: <span class="hljs-string">"..."</span>,</div><div class="line">      <span class="hljs-string">"primaryFunction"</span>: <span class="hljs-string">"..."</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">query HeroForEpisode ($ep: Episode!) &#123;</span><br><span class="line">  hero (episode: $ep) &#123;</span><br><span class="line">    name</span><br><span class="line">    ... on Droid &#123;</span><br><span class="line">      primaryFunction</span><br><span class="line">    &#125;</span><br><span class="line">    ... on Human &#123;</span><br><span class="line">      height</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Variables</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;ep&quot;</span>: <span class="string">&quot;JEDI&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// produce</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;data&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;hero&quot;</span>: &#123;</span><br><span class="line">      <span class="string">&quot;name&quot;</span>: <span class="string">&quot;...&quot;</span>,</span><br><span class="line">      <span class="string">&quot;primaryFunction&quot;</span>: <span class="string">&quot;...&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 <p>In this query, the <code>hero</code> field returns the type <code>Character</code>, which might be either a <code>Human</code> or a <code>Droid</code> depending on the <code>episode</code> argument. In the direct selection, you can ask for fields that exists on the <code>Character</code> interface such as <code>name</code>.</p>
 <p>To ask for a field on the concrete type, you need to use a <em>inline fragment</em> with a type condition. Because the first fragment is labeled as <code>... on Droid</code>, the <code>primaryFunction</code> field will only be executed if the <code>Character</code> returned from <code>hero</code> is of the <code>Droid</code> type.</p>
 <p>Named fragments can also be used in the same way, since a named fragment always has a type attached.</p>
 <h4 id="Meta-fields"><a href="#Meta-fields" class="headerlink" title="Meta fields"></a>Meta fields</h4><p>Given that there are some situations where you don’t know what type you will get back from the GraphQL service, you need some way to determine how to handle that data on the client. GraphQL allows you to request <code>__typename</code>, a meta field, at any point in a query to get the name of the object type at that point.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  search(text: <span class="hljs-string">"an"</span>) &#123;</div><div class="line">    __typename</div><div class="line">    ... on Human &#123;</div><div class="line">      name</div><div class="line">    &#125;</div><div class="line">    ... on Droid &#123;</div><div class="line">      name</div><div class="line">    &#125;</div><div class="line">    ... on Starship &#123;</div><div class="line">      name</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="hljs-comment">// produce</span></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">"data"</span>: &#123;</div><div class="line">    <span class="hljs-string">"search"</span>: [</div><div class="line">      &#123;</div><div class="line">        <span class="hljs-string">"__typename"</span>: <span class="hljs-string">"Human"</span>,</div><div class="line">        <span class="hljs-string">"name"</span>: <span class="hljs-string">"Han"</span>,</div><div class="line">      &#125;, &#123;</div><div class="line">        <span class="hljs-string">"__typename"</span>: <span class="hljs-string">"Human"</span>,</div><div class="line">        <span class="hljs-string">"name"</span>: <span class="hljs-string">"ELX"</span>,</div><div class="line">      &#125;, &#123;</div><div class="line">        <span class="hljs-string">"__typename"</span>: <span class="hljs-string">"Starship"</span>,</div><div class="line">        <span class="hljs-string">"name"</span>: <span class="hljs-string">"TIE"</span></div><div class="line">      &#125;</div><div class="line">    ]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  search(text: <span class="string">&quot;an&quot;</span>) &#123;</span><br><span class="line">    __typename</span><br><span class="line">    ... on Human &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">    ... on Droid &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">    ... on Starship &#123;</span><br><span class="line">      name</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// produce</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;data&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;search&quot;</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="string">&quot;__typename&quot;</span>: <span class="string">&quot;Human&quot;</span>,</span><br><span class="line">        <span class="string">&quot;name&quot;</span>: <span class="string">&quot;Han&quot;</span>,</span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="string">&quot;__typename&quot;</span>: <span class="string">&quot;Human&quot;</span>,</span><br><span class="line">        <span class="string">&quot;name&quot;</span>: <span class="string">&quot;ELX&quot;</span>,</span><br><span class="line">      &#125;, &#123;</span><br><span class="line">        <span class="string">&quot;__typename&quot;</span>: <span class="string">&quot;Starship&quot;</span>,</span><br><span class="line">        <span class="string">&quot;name&quot;</span>: <span class="string">&quot;TIE&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>In the above query, <code>search</code> returns a union type that can be one of three options. It would be impossible to tell apart the different types from the client without the <code>__typename</code> field.</p>
 <h3 id="Schemas-and-Types"><a href="#Schemas-and-Types" class="headerlink" title="Schemas and Types"></a>Schemas and Types</h3><h4 id="Type-System"><a href="#Type-System" class="headerlink" title="Type System"></a>Type System</h4><p>GraphQL query language is basically about selecting fields on objects.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  hero &#123;</div><div class="line">    name</div><div class="line">    appearsIn</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  hero &#123;</span><br><span class="line">    name</span><br><span class="line">    appearsIn</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ol>
 <li><p>We start with a special ‘root’ object</p>
 </li>
@@ -237,7 +183,8 @@
 </li>
 </ol>
 <h4 id="Object-Types-and-Fields"><a href="#Object-Types-and-Fields" class="headerlink" title="Object Types and Fields"></a>Object Types and Fields</h4><p>The most basic components of a GraphQL schema are object types, which just represent a kind of object you can fetch from your service, and what fields it has. In the GraphQL schema language, we might represent it like this:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">type Character &#123;</div><div class="line">  <span class="hljs-attr">name</span>: <span class="hljs-built_in">String</span>!</div><div class="line">  appearsIn: [Episode]!</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type Character &#123;</span><br><span class="line">  name: <span class="built_in">String</span>!</span><br><span class="line">  appearsIn: [Episode]!</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li><p><code>Character</code> is a <em>GraphQL Type</em>, meaning it’s a type with some fields. Most of the types in your schema will be object types.</p>
 </li>
@@ -251,14 +198,18 @@
 </li>
 </ul>
 <h4 id="Arguments-1"><a href="#Arguments-1" class="headerlink" title="Arguments"></a>Arguments</h4><p>Every field on a GraphQL object type can have zero or more arguments, for example the <code>length</code> field below:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">type Starship &#123;</div><div class="line">  <span class="hljs-attr">id</span>: ID!</div><div class="line">  name: <span class="hljs-built_in">String</span>!</div><div class="line">  length(uint: LengthUint = METER): Float</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">type Starship &#123;</span><br><span class="line">  id: ID!</span><br><span class="line">  name: <span class="built_in">String</span>!</span><br><span class="line">  length(uint: LengthUint = METER): Float</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>All arguments are named.</p>
 <h4 id="The-Query-and-Mutation-Types"><a href="#The-Query-and-Mutation-Types" class="headerlink" title="The Query and Mutation Types"></a>The Query and Mutation Types</h4><p>Most types in schema will just be normal object types, but there are two types that are special within a schema:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">schema &#123;</div><div class="line">  <span class="hljs-attr">query</span>: Query</div><div class="line">  mutation: Mutation</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">schema &#123;</span><br><span class="line">  query: Query</span><br><span class="line">  mutation: Mutation</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Every GraphQL service has a <code>query</code> type and may not have a <code>mutation</code> type. These types are the same as a regular object type, but they are special because they define the <em>entry point</em> of every GraphQL query.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">query &#123;</div><div class="line">  hero &#123;</div><div class="line">    name</div><div class="line">  &#125;</div><div class="line">  droid(id: <span class="hljs-string">'2000'</span>) &#123;</div><div class="line">    name</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">query &#123;</span><br><span class="line">  hero &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">  droid(id: <span class="string">&#x27;2000&#x27;</span>) &#123;</span><br><span class="line">    name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>That means that the GraphQL service needs to have a <code>Query</code> type with <code>hero</code> and <code>droid</code> fields:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">type Query &#123;</div><div class="line">  hero(episode: Episode): Character</div><div class="line">  droid(id: ID!): Droid</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type Query &#123;</span><br><span class="line">  hero(episode: Episode): Character</span><br><span class="line">  droid(id: ID!): Droid</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Mutations work in a similar way - you define fields on the <code>Mutation</code> type, and those are available as the root mutation fields you can call in your query.</p>
 <h4 id="Scalar-Types"><a href="#Scalar-Types" class="headerlink" title="Scalar Types"></a>Scalar Types</h4><ul>
 <li><p><code>Int</code>: A signed 32-bit integer</p>
@@ -273,235 +224,123 @@
 </li>
 </ul>
 <p>In most GraphQL service implementation, there is also a way to specify custom scalar types.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scalar <span class="hljs-built_in">Date</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scalar <span class="built_in">Date</span></span><br></pre></td></tr></table></figure>
+
 <h4 id="Enumeration-Types"><a href="#Enumeration-Types" class="headerlink" title="Enumeration Types"></a>Enumeration Types</h4><p>Also called <em>Enums</em>, enumeration types are a special kind of scalar that is restricted to a particular set of allowed values.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">enum Episode &#123;</div><div class="line">  NEWHOPE</div><div class="line">  EMPIRE</div><div class="line">  JEDI</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">enum Episode &#123;</span><br><span class="line">  NEWHOPE</span><br><span class="line">  EMPIRE</span><br><span class="line">  JEDI</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>This means that wherever we use the type <code>Episode</code> in our schema, we expect it to be exactly one of <code>NEWHOPE</code>, <code>EMPIRE</code>, <code>JEDI</code>.</p>
 <h4 id="Lists-and-Non-Null"><a href="#Lists-and-Non-Null" class="headerlink" title="Lists and Non-Null"></a>Lists and Non-Null</h4><p>Object types, scalars, and enums are the only kinds of types you can define in GraphQL, but when you use the types in other parts of the schema, or in your query variable declarations, you can apply additional <em>type modifier</em> that affects validation of those values.</p>
 <h4 id="Interfaces"><a href="#Interfaces" class="headerlink" title="Interfaces"></a>Interfaces</h4><p>An <em>Interface</em> is an abstract type that includes a certain set of fields that a type must include to implement the interface.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// define</span></div><div class="line">interface Character &#123;</div><div class="line">  <span class="hljs-attr">id</span>: ID!</div><div class="line">  name: <span class="hljs-built_in">String</span>!</div><div class="line">  friends: [Character]</div><div class="line">  appearsIn: [Episode]!</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-comment">// implement</span></div><div class="line">type Human implements Character &#123;</div><div class="line">  <span class="hljs-attr">id</span>: ID!</div><div class="line">  name: <span class="hljs-built_in">String</span>!</div><div class="line">  friends: [Character]</div><div class="line">  appearsIn: [Episode]!</div><div class="line">  starships: [Starship]</div><div class="line">  totalCredits: Int</div><div class="line">&#125;</div><div class="line"></div><div class="line">type Droid implements Character &#123;</div><div class="line">  <span class="hljs-attr">id</span>: ID!</div><div class="line">  name: <span class="hljs-built_in">String</span>!</div><div class="line">  friends: [Character]</div><div class="line">  appearsId: [Episode]!</div><div class="line">  primaryFunction: <span class="hljs-built_in">String</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// define</span></span><br><span class="line">interface Character &#123;</span><br><span class="line">  id: ID!</span><br><span class="line">  name: <span class="built_in">String</span>!</span><br><span class="line">  friends: [Character]</span><br><span class="line">  appearsIn: [Episode]!</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// implement</span></span><br><span class="line">type Human implements Character &#123;</span><br><span class="line">  id: ID!</span><br><span class="line">  name: <span class="built_in">String</span>!</span><br><span class="line">  friends: [Character]</span><br><span class="line">  appearsIn: [Episode]!</span><br><span class="line">  starships: [Starship]</span><br><span class="line">  totalCredits: Int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Droid implements Character &#123;</span><br><span class="line">  id: ID!</span><br><span class="line">  name: <span class="built_in">String</span>!</span><br><span class="line">  friends: [Character]</span><br><span class="line">  appearsId: [Episode]!</span><br><span class="line">  primaryFunction: <span class="built_in">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="Union-Types"><a href="#Union-Types" class="headerlink" title="Union Types"></a>Union Types</h4><p>Union Types are similar to interfaces, but they don’t get to specify any common fields between the types.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">union SearchResult = Human | Droid | Starship</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">union SearchResult = Human | Droid | Starship</span><br></pre></td></tr></table></figure>
+
 <h4 id="Input-Types"><a href="#Input-Types" class="headerlink" title="Input Types"></a>Input Types</h4><p>In GraphQL schema language, input types look exactly the same as regular object types, but with the keyword <code>input</code> instead of <code>type</code>:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">input ReviewInput &#123;</div><div class="line">  <span class="hljs-attr">stars</span>: Int!</div><div class="line">  commentary: <span class="hljs-built_in">String</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">mutation CreateReviewForEpisode($ep: Episode!, <span class="hljs-attr">$review</span>: ReviewInput!) &#123;</div><div class="line">  createReview(episode: $ep, <span class="hljs-attr">review</span>: $review) &#123;</div><div class="line">    stars</div><div class="line">    commentary</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="hljs-comment">// Variables</span></div><div class="line"></div><div class="line">&#123;</div><div class="line">  <span class="hljs-string">"ep"</span>: <span class="hljs-string">"JEDI"</span>,</div><div class="line">  <span class="hljs-string">"review"</span>: &#123;</div><div class="line">    <span class="hljs-string">"stars"</span>: <span class="hljs-number">5</span>,</div><div class="line">    <span class="hljs-string">"commentary"</span>: <span class="hljs-string">"Commentary"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">input ReviewInput &#123;</span><br><span class="line">  stars: Int!</span><br><span class="line">  commentary: <span class="built_in">String</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/GraphQL/">GraphQL</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mutation CreateReviewForEpisode($ep: Episode!, $review: ReviewInput!) &#123;</span><br><span class="line">  createReview(episode: $ep, <span class="attr">review</span>: $review) &#123;</span><br><span class="line">    stars</span><br><span class="line">    commentary</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Variables</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;ep&quot;</span>: <span class="string">&quot;JEDI&quot;</span>,</span><br><span class="line">  <span class="string">&quot;review&quot;</span>: &#123;</span><br><span class="line">    <span class="string">&quot;stars&quot;</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="string">&quot;commentary&quot;</span>: <span class="string">&quot;Commentary&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2017/08/03/Note-on-GraphQL-1/">https://ezcook.de/2017/08/03/Note-on-GraphQL-1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/GraphQL/">GraphQL</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/08/04/Note-on-GraphQL-2/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Note on GraphQL(2)</div></div></a></div><div class="next-post pull-right"><a href="/2017/08/03/List-of-HTTP-Status-Code/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">List of HTTP Status Code</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/10/03/Apollo-with-TypeScript/" title="Apollo With TypeScript"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-10-03</div><div class="relatedPosts_title">Apollo With TypeScript</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/07/Build-GraphQL-Server-with-Express/" title="Build GraphQL Server With Express"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-07</div><div class="relatedPosts_title">Build GraphQL Server With Express</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/10/Build-GraphQL-Server-with-Koa/" title="Build GraphQL Server With Koa"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-10</div><div class="relatedPosts_title">Build GraphQL Server With Koa</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/04/Note-on-GraphQL-2/" title="Note on GraphQL(2)"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-04</div><div class="relatedPosts_title">Note on GraphQL(2)</div></div></a></div><div class="relatedPosts_item"><a href="/2017/09/15/graphql-koa-starter/" title="Graphql-Koa-Starter"><img class="relatedPosts_cover" data-lazy-src="images/asphalt-dark-dawn-endless.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-15</div><div class="relatedPosts_title">Graphql-Koa-Starter</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/06/koa-graphql/" title="Koa-Graphql"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-06</div><div class="relatedPosts_title">Koa-Graphql</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2017/08/03/Note-on-GraphQL-1/'
+    this.page.identifier = '2017/08/03/Note-on-GraphQL-1/'
+    this.page.title = 'Note on GraphQL(1)'
+  };
 
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-                
-        </div>
-    </div>
-</div>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/08/04/Note-on-GraphQL-2/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Note on GraphQL(2)</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/08/03/List-of-HTTP-Status-Code/">
-                <span class="level-item">List of HTTP Status Code</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2017/08/03/Note-on-GraphQL-1/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-    </div>
-</div>
+})
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
+  typeof typed === 'object' && typed.destroy()
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

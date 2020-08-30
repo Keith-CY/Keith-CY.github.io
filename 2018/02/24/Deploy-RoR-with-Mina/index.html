@@ -1,403 +1,222 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Deploy RoR With Mina | EzCook</title><meta name="description" content="Mina SetupLet’s take a look at setting up Mina with Puma. First, you’ll need to add Mina and mina-puma in Gemfile. Then install gems and execute the initial Mina Command for generating a config&#x2F;deploy"><meta name="keywords" content="Ruby,Rails,RoR,Mina"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2018/02/24/Deploy-RoR-with-Mina/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Deploy RoR With Mina"><meta property="og:url" content="https://ezcook.de/2018/02/24/Deploy-RoR-with-Mina/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Mina SetupLet’s take a look at setting up Mina with Puma. First, you’ll need to add Mina and mina-puma in Gemfile. Then install gems and execute the initial Mina Command for generating a config&#x2F;deploy"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2018-02-24T03:05:49.000Z"><meta property="article:modified_time" content="2020-08-30T12:26:28.388Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Deploy RoR With Mina - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Deploy RoR With Mina" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-02-24T03:05:49.000Z">2018-02-24</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    4 minutes read (About 542 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Deploy RoR With Mina
-            
-        </h1>
-        <div class="content">
-            <h3 id="Mina-Setup"><a href="#Mina-Setup" class="headerlink" title="Mina Setup"></a>Mina Setup</h3><p>Let’s take a look at setting up Mina with Puma. First, you’ll need to add Mina and mina-puma in Gemfile.</p>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:26:28'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mina-Setup"><span class="toc-number">1.</span> <span class="toc-text">Mina Setup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Detailed-Explanations-for-the-Mina-deploy-file"><span class="toc-number">2.</span> <span class="toc-text">Detailed Explanations for the Mina deploy file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Puma-Setup"><span class="toc-number">3.</span> <span class="toc-text">Puma Setup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fill-database-yml-and-secrets-yml"><span class="toc-number">4.</span> <span class="toc-text">Fill database.yml and secrets.yml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Setup-nginx"><span class="toc-number">5.</span> <span class="toc-text">Setup nginx</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Deploy RoR With Mina</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2018-02-24T03:05:49.000Z" title="Created 2018-02-24 11:05:49">2018-02-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:26:28.388Z" title="Updated 2020-08-30 20:26:28">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2018/02/24/Deploy-RoR-with-Mina/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h3 id="Mina-Setup"><a href="#Mina-Setup" class="headerlink" title="Mina Setup"></a>Mina Setup</h3><p>Let’s take a look at setting up Mina with Puma. First, you’ll need to add Mina and mina-puma in Gemfile.</p>
 <p>Then install gems and execute the initial Mina Command for generating a <code>config/deploy.rb</code>.</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">bundle</div><div class="line">mina init</div></pre></td></tr></table></figure>
-<h3 id="Detailed-Explanations-for-the-Mina-deploy-file"><a href="#Detailed-Explanations-for-the-Mina-deploy-file" class="headerlink" title="Detailed Explanations for the Mina deploy file"></a>Detailed Explanations for the Mina deploy file</h3><figure class="highlight ruby hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment"># Set the domain or ip address of the remote server.</span></div><div class="line">set <span class="hljs-symbol">:domain</span>, <span class="hljs-string">'yourdomain'</span></div><div class="line"></div><div class="line"><span class="hljs-comment"># Set the folder of the remote server where Mina will deploy your app.</span></div><div class="line">set <span class="hljs-symbol">:deploy_to</span>, <span class="hljs-string">'path/to/directory'</span></div><div class="line"></div><div class="line"><span class="hljs-comment"># Set a link to the repository. Better git protocol.</span></div><div class="line">set <span class="hljs-symbol">:repository</span>, <span class="hljs-string">'git@...'</span></div><div class="line"></div><div class="line"><span class="hljs-comment"># Set the name of a branch you plan to deploy as default master.</span></div><div class="line">set <span class="hljs-symbol">:branch</span>, <span class="hljs-string">'master'</span></div><div class="line"></div><div class="line"><span class="hljs-comment"># Fill in the names of the files and directories that will be symlinks to the shared directory.</span></div><div class="line"><span class="hljs-comment"># All folders will be created automatically on Mina Setup.</span></div><div class="line"><span class="hljs-comment"># Don't forget to add a path to the uploads folder if you are using Dragonfly or Carrierwaves.</span></div><div class="line"><span class="hljs-comment"># Otherwise, you will lose your uploads on each deploy.</span></div><div class="line">set <span class="hljs-symbol">:shared_dirs</span>, fetch(<span class="hljs-symbol">:shared_dirs</span>, []).push(<span class="hljs-string">'log'</span>, <span class="hljs-string">'tmp/pids'</span>, <span class="hljs-string">'tmp/sockets'</span>, <span class="hljs-string">'public/uploads'</span>)</div><div class="line">set <span class="hljs-symbol">:shared_files</span>, fetch(<span class="hljs-symbol">:shared_files</span>, []).push(<span class="hljs-string">'config/database.yml'</span>, <span class="hljs-string">'config/secrets.yml'</span>, <span class="hljs-string">'config/puma.rb'</span>)</div><div class="line"></div><div class="line"><span class="hljs-comment"># Username of ssh for access to the remote server.</span></div><div class="line">set <span class="hljs-symbol">:user</span>, <span class="hljs-string">'root'</span></div><div class="line"></div><div class="line"><span class="hljs-comment"># This is not a required field, you can use it to set an app name for easy recognition.</span></div><div class="line">set <span class="hljs-symbol">:application_name</span>, <span class="hljs-string">'MyApp'</span></div><div class="line"></div><div class="line"><span class="hljs-comment"># Set ruby version. If you have RVM installed globally, you'll also need to set an RVM path,</span></div><div class="line"><span class="hljs-comment"># like set:rvm_use_path, '/usr/local/rvm/scripts/rvm'.</span></div><div class="line"><span class="hljs-comment"># You can find the RVM location with rvm info command.</span></div><div class="line">task <span class="hljs-symbol">:environment</span> <span class="hljs-keyword">do</span></div><div class="line">  invoke <span class="hljs-symbol">:<span class="hljs-string">'rvm:use'</span></span>, <span class="hljs-string">'ruby-2.5.1@default'</span></div><div class="line"><span class="hljs-keyword">end</span></div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bundle</span><br><span class="line">mina init</span><br></pre></td></tr></table></figure>
+
+<h3 id="Detailed-Explanations-for-the-Mina-deploy-file"><a href="#Detailed-Explanations-for-the-Mina-deploy-file" class="headerlink" title="Detailed Explanations for the Mina deploy file"></a>Detailed Explanations for the Mina deploy file</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Set the domain or ip address of the remote server.</span></span><br><span class="line">set <span class="symbol">:domain</span>, <span class="string">&#x27;yourdomain&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set the folder of the remote server where Mina will deploy your app.</span></span><br><span class="line">set <span class="symbol">:deploy_to</span>, <span class="string">&#x27;path/to/directory&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set a link to the repository. Better git protocol.</span></span><br><span class="line">set <span class="symbol">:repository</span>, <span class="string">&#x27;git@...&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set the name of a branch you plan to deploy as default master.</span></span><br><span class="line">set <span class="symbol">:branch</span>, <span class="string">&#x27;master&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Fill in the names of the files and directories that will be symlinks to the shared directory.</span></span><br><span class="line"><span class="comment"># All folders will be created automatically on Mina Setup.</span></span><br><span class="line"><span class="comment"># Don&#x27;t forget to add a path to the uploads folder if you are using Dragonfly or Carrierwaves.</span></span><br><span class="line"><span class="comment"># Otherwise, you will lose your uploads on each deploy.</span></span><br><span class="line">set <span class="symbol">:shared_dirs</span>, fetch(<span class="symbol">:shared_dirs</span>, []).push(<span class="string">&#x27;log&#x27;</span>, <span class="string">&#x27;tmp/pids&#x27;</span>, <span class="string">&#x27;tmp/sockets&#x27;</span>, <span class="string">&#x27;public/uploads&#x27;</span>)</span><br><span class="line">set <span class="symbol">:shared_files</span>, fetch(<span class="symbol">:shared_files</span>, []).push(<span class="string">&#x27;config/database.yml&#x27;</span>, <span class="string">&#x27;config/secrets.yml&#x27;</span>, <span class="string">&#x27;config/puma.rb&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Username of ssh for access to the remote server.</span></span><br><span class="line">set <span class="symbol">:user</span>, <span class="string">&#x27;root&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># This is not a required field, you can use it to set an app name for easy recognition.</span></span><br><span class="line">set <span class="symbol">:application_name</span>, <span class="string">&#x27;MyApp&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Set ruby version. If you have RVM installed globally, you&#x27;ll also need to set an RVM path,</span></span><br><span class="line"><span class="comment"># like set:rvm_use_path, &#x27;/usr/local/rvm/scripts/rvm&#x27;.</span></span><br><span class="line"><span class="comment"># You can find the RVM location with rvm info command.</span></span><br><span class="line">task <span class="symbol">:environment</span> <span class="keyword">do</span></span><br><span class="line">  invoke <span class="symbol">:<span class="string">&#x27;rvm:use&#x27;</span></span>, <span class="string">&#x27;ruby-2.5.1@default&#x27;</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>By default, Mina will create all folders mentioned in shared_dirs and shared_files.</p>
 <p>You deploy section in deploy.rb should look like this:</p>
-<figure class="highlight ruby hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">task <span class="hljs-symbol">:deploy</span> <span class="hljs-keyword">do</span></div><div class="line">  deploy <span class="hljs-keyword">do</span></div><div class="line">    comment <span class="hljs-string">"Deploying <span class="hljs-subst">#&#123;fetch(<span class="hljs-symbol">:application_name</span>)&#125;</span> to <span class="hljs-subst">#&#123;fetch(<span class="hljs-symbol">:domain</span>)&#125;</span>:<span class="hljs-subst">#&#123;fetch(<span class="hljs-symbol">:deploy_to</span>)&#125;</span>"</span></div><div class="line">    invoke <span class="hljs-symbol">:<span class="hljs-string">'git:clone'</span></span></div><div class="line">    invoke <span class="hljs-symbol">:<span class="hljs-string">'deploy:link_shared_paths'</span></span></div><div class="line">    invoke <span class="hljs-symbol">:<span class="hljs-string">'rvm:load_env_vars'</span></span></div><div class="line">    invoke <span class="hljs-symbol">:<span class="hljs-string">'bundle:install'</span></span></div><div class="line">    invoke <span class="hljs-symbol">:<span class="hljs-string">'rails:db_migrate'</span></span></div><div class="line">    command <span class="hljs-string">%&#123;<span class="hljs-subst">#&#123;fetch(<span class="hljs-symbol">:rails</span>) <span class="hljs-symbol">db:</span>seed&#125;</span>&#125;</span></div><div class="line">    invoke <span class="hljs-symbol">:<span class="hljs-string">'rails:assets_precompile'</span></span></div><div class="line">    invoke <span class="hljs-symbol">:<span class="hljs-string">'deploy:cleanup'</span></span></div><div class="line"></div><div class="line">    on <span class="hljs-symbol">:launch</span> <span class="hljs-keyword">do</span></div><div class="line">      invoke <span class="hljs-symbol">:<span class="hljs-string">'puma:phased_restart'</span></span></div><div class="line">    <span class="hljs-keyword">end</span></div><div class="line">  <span class="hljs-keyword">end</span></div><div class="line"><span class="hljs-keyword">end</span></div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">task <span class="symbol">:deploy</span> <span class="keyword">do</span></span><br><span class="line">  deploy <span class="keyword">do</span></span><br><span class="line">    comment <span class="string">&quot;Deploying <span class="subst">#&#123;fetch(<span class="symbol">:application_name</span>)&#125;</span> to <span class="subst">#&#123;fetch(<span class="symbol">:domain</span>)&#125;</span>:<span class="subst">#&#123;fetch(<span class="symbol">:deploy_to</span>)&#125;</span>&quot;</span></span><br><span class="line">    invoke <span class="symbol">:<span class="string">&#x27;git:clone&#x27;</span></span></span><br><span class="line">    invoke <span class="symbol">:<span class="string">&#x27;deploy:link_shared_paths&#x27;</span></span></span><br><span class="line">    invoke <span class="symbol">:<span class="string">&#x27;rvm:load_env_vars&#x27;</span></span></span><br><span class="line">    invoke <span class="symbol">:<span class="string">&#x27;bundle:install&#x27;</span></span></span><br><span class="line">    invoke <span class="symbol">:<span class="string">&#x27;rails:db_migrate&#x27;</span></span></span><br><span class="line">    command <span class="string">%&#123;<span class="subst">#&#123;fetch(<span class="symbol">:rails</span>) <span class="symbol">db:</span>seed&#125;</span>&#125;</span></span><br><span class="line">    invoke <span class="symbol">:<span class="string">&#x27;rails:assets_precompile&#x27;</span></span></span><br><span class="line">    invoke <span class="symbol">:<span class="string">&#x27;deploy:cleanup&#x27;</span></span></span><br><span class="line"></span><br><span class="line">    on <span class="symbol">:launch</span> <span class="keyword">do</span></span><br><span class="line">      invoke <span class="symbol">:<span class="string">&#x27;puma:phased_restart&#x27;</span></span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="Puma-Setup"><a href="#Puma-Setup" class="headerlink" title="Puma Setup"></a>Puma Setup</h3><p>Create or fill a puma.rb file in a config folder</p>
-<figure class="highlight ruby hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">environment <span class="hljs-string">"productino"</span></div><div class="line"></div><div class="line">bind <span class="hljs-string">"unix:///&#123;path_to_your_app&#125;/shared/tmp/sockets/puma.sock"</span></div><div class="line">pidfile <span class="hljs-string">"/&#123;path_to_your_app&#125;/shared/tmp/pids/puma.pid"</span></div><div class="line">state_path <span class="hljs-string">"/&#123;path_to_your_app&#125;/shared/tmp/sockets/puma.state"</span></div><div class="line">directory <span class="hljs-string">"/&#123;path_to_your_app&#125;/current"</span></div><div class="line"></div><div class="line">workers <span class="hljs-number">2</span></div><div class="line">threads <span class="hljs-number">1</span>,<span class="hljs-number">2</span></div><div class="line"></div><div class="line">daemonize <span class="hljs-literal">true</span></div><div class="line"></div><div class="line">activate_control_app <span class="hljs-string">'unix:///&#123;path_to_your_app&#125;/shared/tmp/sockets/pumactl.sock'</span></div><div class="line"></div><div class="line">prune_bundler</div></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">environment <span class="string">&quot;productino&quot;</span></span><br><span class="line"></span><br><span class="line">bind <span class="string">&quot;unix:///&#123;path_to_your_app&#125;/shared/tmp/sockets/puma.sock&quot;</span></span><br><span class="line">pidfile <span class="string">&quot;/&#123;path_to_your_app&#125;/shared/tmp/pids/puma.pid&quot;</span></span><br><span class="line">state_path <span class="string">&quot;/&#123;path_to_your_app&#125;/shared/tmp/sockets/puma.state&quot;</span></span><br><span class="line">directory <span class="string">&quot;/&#123;path_to_your_app&#125;/current&quot;</span></span><br><span class="line"></span><br><span class="line">workers <span class="number">2</span></span><br><span class="line">threads <span class="number">1</span>,<span class="number">2</span></span><br><span class="line"></span><br><span class="line">daemonize <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">activate_control_app <span class="string">&#x27;unix:///&#123;path_to_your_app&#125;/shared/tmp/sockets/pumactl.sock&#x27;</span></span><br><span class="line"></span><br><span class="line">prune_bundler</span><br></pre></td></tr></table></figure>
+
 <h3 id="Fill-database-yml-and-secrets-yml"><a href="#Fill-database-yml-and-secrets-yml" class="headerlink" title="Fill database.yml and secrets.yml"></a>Fill database.yml and secrets.yml</h3><h3 id="Setup-nginx"><a href="#Setup-nginx" class="headerlink" title="Setup nginx"></a>Setup nginx</h3><p>Create file myapp.conf in a <code>/nginx/etc/conf.d</code> folder with similar content.</p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">upstream mysite &#123;</div><div class="line">  server unix:///home/admin/mysite/shared/tmp/sockets/puma.sock fail_timeout=0;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">  listen 80;</div><div class="line">  listen [::]:80;</div><div class="line"></div><div class="line">  server_name mysite.com;</div><div class="line">  root /home/admin/mysite/current/public;</div><div class="line"></div><div class="line">  location ~ ^/assets/ &#123;</div><div class="line">    expires max;</div><div class="line">    gzip_static on;</div><div class="line">    gzip_vary on;</div><div class="line">    add_header Cache-Control public;</div><div class="line">    break;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line">  location / &#123;</div><div class="line">    proxy_pass http://mysite;</div><div class="line">    proxy_set_header Host $host;</div><div class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  location ~ ^/(500|404|422).html &#123;</div><div class="line">    root /home/admin/mysite/current/public;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  error_page 500 502 503 504 /500.html;</div><div class="line">  error_page 404 /404.html;</div><div class="line">  error_page 422 /422.html;</div><div class="line"></div><div class="line">  client_max_body_size 4G;</div><div class="line">  keepalive_timeout 10;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">upstream mysite &#123;</span><br><span class="line">  server unix:&#x2F;&#x2F;&#x2F;home&#x2F;admin&#x2F;mysite&#x2F;shared&#x2F;tmp&#x2F;sockets&#x2F;puma.sock fail_timeout&#x3D;0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">  listen 80;</span><br><span class="line">  listen [::]:80;</span><br><span class="line"></span><br><span class="line">  server_name mysite.com;</span><br><span class="line">  root &#x2F;home&#x2F;admin&#x2F;mysite&#x2F;current&#x2F;public;</span><br><span class="line"></span><br><span class="line">  location ~ ^&#x2F;assets&#x2F; &#123;</span><br><span class="line">    expires max;</span><br><span class="line">    gzip_static on;</span><br><span class="line">    gzip_vary on;</span><br><span class="line">    add_header Cache-Control public;</span><br><span class="line">    break;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  location &#x2F; &#123;</span><br><span class="line">    proxy_pass http:&#x2F;&#x2F;mysite;</span><br><span class="line">    proxy_set_header Host $host;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  location ~ ^&#x2F;(500|404|422).html &#123;</span><br><span class="line">    root &#x2F;home&#x2F;admin&#x2F;mysite&#x2F;current&#x2F;public;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  error_page 500 502 503 504 &#x2F;500.html;</span><br><span class="line">  error_page 404 &#x2F;404.html;</span><br><span class="line">  error_page 422 &#x2F;422.html;</span><br><span class="line"></span><br><span class="line">  client_max_body_size 4G;</span><br><span class="line">  keepalive_timeout 10;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2018/02/24/Deploy-RoR-with-Mina/">https://ezcook.de/2018/02/24/Deploy-RoR-with-Mina/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Ruby/">Ruby</a><a class="post-meta__tags" href="/tags/Rails/">Rails</a><a class="post-meta__tags" href="/tags/RoR/">RoR</a><a class="post-meta__tags" href="/tags/Mina/">Mina</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2018/02/28/Dockerizing-a-React-App/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Dockerizing a React App</div></div></a></div><div class="next-post pull-right"><a href="/2018/02/14/What-Blockchain-came-with/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">What Blockchain Came With</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2018/03/14/Model-Generator-of-Rails/" title="Model Generator of Rails"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-14</div><div class="relatedPosts_title">Model Generator of Rails</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2018/02/24/Deploy-RoR-with-Mina/'
+    this.page.identifier = '2018/02/24/Deploy-RoR-with-Mina/'
+    this.page.title = 'Deploy RoR With Mina'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Mina/">Mina</a>, <a class="has-link-grey -link" href="/tags/Rails/">Rails</a>, <a class="has-link-grey -link" href="/tags/RoR/">RoR</a>, <a class="has-link-grey -link" href="/tags/Ruby/">Ruby</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2018/02/28/Dockerizing-a-React-App/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Dockerizing a React App</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2018/02/14/What-Blockchain-came-with/">
-                <span class="level-item">What Blockchain Came With</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2018/02/24/Deploy-RoR-with-Mina/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

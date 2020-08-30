@@ -1,275 +1,499 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EzCook - Code Elegantly</title><meta name="description"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/page/9/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="website"><meta property="og:title" content="EzCook"><meta property="og:url" content="https://ezcook.de/page/9/"><meta property="og:site_name" content="EzCook"><meta property="og:description"><meta property="og:image" content="https://ezcook.de/images/yudan.jpg"><meta property="article:published_time" content="2020-08-30T15:58:25.188Z"><meta property="article:modified_time" content="2020-08-30T15:58:25.188Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isSidebar: false,
+  postUpdate: '2020-08-30 23:58:25'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><header class="full_page" id="page-header" style="background-image: url(/images/asphalt-dark-dawn-endless.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="site-info"><h1 id="site_title">EzCook</h1><div id="site_subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/keith-cy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:keithwhisper@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.linkedin.com/in/chen-yu-644b61ba/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></div></div><div id="scroll_down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout_page" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/" title="Webpack 2 Config 文件入门">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Webpack 2 Config 文件入门"></a></div><div class="recent-post-info"><a class="article-title" href="/2017/01/29/webpack-2-config-e6-96-87-e4-bb-b6-e5-85-a5-e9-97-a8/" title="Webpack 2 Config 文件入门">Webpack 2 Config 文件入门</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2017-01-29T03:57:13.000Z" title="Created 2017-01-29 11:57:13">2017-01-29</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">webpack 2 config 文件入门
+webpack.config.js 的基本结构var path = require(&#39;path&#39;)
 
-<head>
-    <meta charset="utf-8">
-<title>EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+module.exports = &#123;
+  entry:  &#123;
+    home: &#39;./home.js&#39;,
+    about: &#39;./about.js&#39;,
+    contact: &#39;./contact.js&#39;,
+  &#125;, // 入口文件
+  // string | [string] | object &#123;&amp;lt;key&amp;gt;: string | [string] &#125;
+  // 一个页面搭配一个入口文件
+  output: &#123;
+    // output 包含一系列关于打包后文件的配置
+    // output.chunkFilename: string, 这个参数确定了加载 chunk 的名称
+    // output.crossOriginLoading: boolean | string, 只 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/" title="Webpack 2 起步">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Webpack 2 起步"></a></div><div class="recent-post-info"><a class="article-title" href="/2017/01/29/webpack-2-e8-b5-b7-e6-ad-a5/" title="Webpack 2 起步">Webpack 2 起步</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2017-01-28T23:25:10.000Z" title="Created 2017-01-29 07:25:10">2017-01-29</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">虽然和 webpack1 一样, 还是过一遍
+创建一个 bundlemkdir webpack-demo &amp;amp;&amp;amp; webpack-demo
 
+npm init -y
 
+yarn add --dev webpack@beta
 
+yarn add lodash
+`&lt;/pre&gt;
 
+#### 创建 app/index.js
 
+&lt;pre&gt;`// app/index.js
+import _ from &#39;lodash&#39;
+function component () &#123;
+  let element = document.createElement(&#39;div&#39;);
 
+// use lodash
+  element.innerHtml = _.join([&#39;Hello&#39;, &#39;webpack&#39;], &#39; &#39;)
 
-<link rel="icon" href="/images/logo.png">
+  return element
+&#125;
 
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
+document.body.appendChild(component())
+`&lt;/pre&gt;
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+# ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2017/01/18/stacking-context-e6-88-90-e5-9b-a0-e5-8f-8a-e7-89-b9-e6-80-a7/" title="Stacking Context 成因及特性">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Stacking Context 成因及特性"></a></div><div class="recent-post-info"><a class="article-title" href="/2017/01/18/stacking-context-e6-88-90-e5-9b-a0-e5-8f-8a-e7-89-b9-e6-80-a7/" title="Stacking Context 成因及特性">Stacking Context 成因及特性</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2017-01-18T01:18:57.000Z" title="Created 2017-01-18 09:18:57">2017-01-18</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">会形成Stacking Context 的元素
+root 元素( html )
 
+position 不是 static 且 z-index 不是 auto 的元素
 
+flex item 且 z-index 不是 auto 的元素
 
+opacity 小于 1 的元素
 
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
+transform 不是 none 的元素
 
+mix-blend-mode 不是 normal 的元素
 
+filter 不是 none 的元素
 
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
+isolation 为 isolate 的元素
 
+mobile webkit 和 chrome 22+ 上的 fixed 元素
 
+在 will-change 属性上指定值为上述任意属性的元素
 
+指定 -webkit-overflow-scrolling 为 touch 的元素
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
 
+Stacking Context 的特性
+stacking context 可以嵌套
 
+每个 Stacking context 相对于兄弟元素都是完全独立的, 其内部规则不会影响到外部
 
+每个 stacking context 元素都会被父级 stacking context 视为一个 stacking ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/12/08/web-e5-9d-90-e6-a0-87-e6-95-b4-e7-90-86/" title="Web 坐标整理">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Web 坐标整理"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/12/08/web-e5-9d-90-e6-a0-87-e6-95-b4-e7-90-86/" title="Web 坐标整理">Web 坐标整理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-12-07T20:39:26.000Z" title="Created 2016-12-08 04:39:26">2016-12-08</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">坐标分类
+文档坐标
+窗口坐标
 
+scrollElement.scrollTop: 设置或获得一个元素距离他容器顶部的像素距离, 当一个元素的容器没有产生垂直方向的滚动条, 则他的 scrollTop 的值默认为0
+获得滚动距离var intElementScrollTop = someElement.scrollTop;
+scrollTop可以被设置为任何整数, 但是一下情况会报错:1. 如果一个元素不能被滚动(没有溢出容器或本身不可滚动)的时候设置其 scrollTop 为 0;
 
+设置 scrollTop 的值小于 0, scrollTop 被设为 0
 
+如果设置了超出这个容器可以滚动的值, scrollTop 会被设为最大值
 
-<link rel="stylesheet" href="/css/back-to-top.css">
 
 
+其实就是溢出距离
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+Element.scrollHeight: 计量元素内容高度的只读属性, 包括 overflow 样式属性导致的视图中不可见内容
+没有垂直滚动条的情况下, scrollHeight 值与元素视图填充所有内容所需要的最小值 clientHeight 相同, 包括元素的 padding, 但不包括 margin
 
-    gtag('config', 'UA-136207372-1');
-</script>
+其实就是溢出元素的本 ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/12/07/simple-cheetsheet-of-flex/" title="Simple CheetSheet of Flex">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Simple CheetSheet of Flex"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/12/07/simple-cheetsheet-of-flex/" title="Simple CheetSheet of Flex">Simple CheetSheet of Flex</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-12-07T00:12:30.000Z" title="Created 2016-12-07 08:12:30">2016-12-07</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">FlexParent
+display: flex
 
+flex-direction: row | row-reverse | column | column-reverse
 
+flex-wrap: nowrap | wrap | wrap-reverse
 
+flex-flow: &lt;flex-direction&gt; || &lt;flex-wrap&gt;
 
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+justify-content: flex-start | flex-end | center | space-between | space-around
 
+align-items: flex-start | flex-end | center | stretch | baseline (single row)
 
+align-content: flex-start | flex-end | center | stretch | space-between | space-around (multi-row)
 
-    
 
+Children(flex-item)
+order: &lt;integer&gt;
 
+flex-grow: & ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/11/06/usage-of-redux-action-2/" title="Usage of Redux-Action">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Usage of Redux-Action"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/11/06/usage-of-redux-action-2/" title="Usage of Redux-Action">Usage of Redux-Action</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-11-06T01:42:50.000Z" title="Created 2016-11-06 09:42:50">2016-11-06</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">UsagecreateAction(type, payloadCreator = Identity, ?metaCreator)
+import &#123; createAction &#125; from &#39;redux-action&#39;
+`&lt;/pre&gt;
 
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
+Wraps an action creator so that its return value is the payload of a Flux Standard Action. If no payload creator is passed, or if it&#39;s not a function, the identity function is used.
 
+### Example
 
+&lt;pre&gt;`let increment = createAction(&#39;INCREMENT&#39;, amount =&amp;gt; amount);
+// same as 
+increment = createAction(&#39;INCREMENT&#39;);
 
+expect(inc ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/11/06/flux-standard-action/" title="Flux Standard Action">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flux Standard Action"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/11/06/flux-standard-action/" title="Flux Standard Action">Flux Standard Action</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-11-06T00:47:45.000Z" title="Created 2016-11-06 08:47:45">2016-11-06</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">Example:
+A basic Flux Standard Action
+{  type: ‘ADD_TODO’,  payload: {
+text: &#39;Do something&#39;,
+  }}`
+An FSA that represents an error, analogous to a rejected Promise:
+`{
+  type: 'ADD_TODO',
+  payload: new Error(),
+  error: true, 
+}
 
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
-</head>
 
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="EzCook" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="homepage">
-  WE CAN REACH HIGH PLACES. VERY HIGH.
-</div>
-
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
-
-
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
-
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+Notice:1. An action MUST
+
+be a plain JavaScript Object
+have a type property
+
+
+An action MAY:
+
+
+have a error property
+have a payload property
+have a meta property
+
+
+An action MUST NOT include properties other than type, payload, error, meta
+
+TypeThe type of an ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/10/09/promise-e5-9f-ba-e6-9c-ac-e7-82-b9/" title="Promise 基本点">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Promise 基本点"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/10/09/promise-e5-9f-ba-e6-9c-ac-e7-82-b9/" title="Promise 基本点">Promise 基本点</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-10-08T20:57:23.000Z" title="Created 2016-10-09 04:57:23">2016-10-09</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">Promise 基本用法创建 Promise
+var promise = new Promise(function(resolve, reject)&#123;
+  // do something async
+  if(/* everything ok */)&#123;
+    resolve(&quot;OK&quot;); // it will return Promise.resolve(&quot;OK&quot;), and the downstream will get &quot;OK&quot; as params
+  &#125; else &#123;
+    reject(Error(&quot;Error&quot;)); // it will return Error(&quot;Error&quot;) and the downstream will get Error(&quot;Error&quot;) as params
+  &#125;
+&#125;)
+`&lt;/pre&gt;
+
+Promise 构造器接受一个函数作为参数, 传入两个回调函数re ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/09/27/javascript-e4-ba-8b-e4-bb-b6-e4-b8-8e-e6-80-a7-e8-83-bd/" title="JavaScript 事件与性能">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaScript 事件与性能"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/27/javascript-e4-ba-8b-e4-bb-b6-e4-b8-8e-e6-80-a7-e8-83-bd/" title="JavaScript 事件与性能">JavaScript 事件与性能</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-27T08:23:11.000Z" title="Created 2016-09-27 16:23:11">2016-09-27</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">事件处理程序本质上是一种函数, 是一种对象, 存放在内存中, 设置大量的事件处理程序会使内存中的对象变多, Web 程序的性能会变得越来越差.
+为了更好利用事件处理程序, 出现了事件委托, 用来提升性能
+事件委托Event Delegate: 把若干个子节点上的相同事件的处理函数绑定到父节点, 从父节点统一处理子节点冒泡上来的事件, 这种技术叫做事件委托.
+举例:
+&amp;lt;ul id=&#39;parent-list&#39;&amp;gt;
+    &amp;lt;li id=&#39;list-1&#39;&amp;gt;List 1&amp;lt;/li&amp;gt;
+    &amp;lt;li id=&#39;list-1&#39;&amp;gt;List 1&amp;lt;/li&amp;gt;
+    &amp;lt;li id=&#39;list-1&#39;&amp;gt;List 1&amp;lt;/li&amp;gt;
+    &amp;lt;li id=&#39;list-1&#39;&amp;gt;List 1&amp;lt;/li&amp;gt;
+ ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/09/27/javascript-e5-81-9c-e6-ad-a2-e5-86-92-e6-b3-a1-e5-92-8c-e9-98-bb-e6-ad-a2-e6-b5-8f-e8-a7-88-e5-99-a8-e9-bb-98-e8-ae-a4-e8-a1-8c-e4-b8-ba/" title="JavaScript 停止冒泡和阻止浏览器默认行为">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JavaScript 停止冒泡和阻止浏览器默认行为"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/27/javascript-e5-81-9c-e6-ad-a2-e5-86-92-e6-b3-a1-e5-92-8c-e9-98-bb-e6-ad-a2-e6-b5-8f-e8-a7-88-e5-99-a8-e9-bb-98-e8-ae-a4-e8-a1-8c-e4-b8-ba/" title="JavaScript 停止冒泡和阻止浏览器默认行为">JavaScript 停止冒泡和阻止浏览器默认行为</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-27T07:25:00.000Z" title="Created 2016-09-27 15:25:00">2016-09-27</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">事件兼容function myFn(e)&#123;
+  var evt = e ? e:window.event
+&#125;
+`&lt;/pre&gt;
+
+### JS 停止冒泡
+
+&lt;pre&gt;`function myFn(e)&#123;
+  window.event ? window.event.cancelBubble = true : e.stopPropagation();
+&#125;
+`&lt;/pre&gt;
+
+### JS 阻止默认行为
+
+&lt;pre&gt;`function myFn(e)&#123;
+  window.event ? window.event.returnValue = false : e.preventDefault();
+&#125;
+补充event 表示事件的状态, 例如, event.target 是触发事件的对象
+</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/09/19/koa-router/" title="Koa-Router">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Koa-Router"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/19/koa-router/" title="Koa-Router">Koa-Router</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-18T20:35:48.000Z" title="Created 2016-09-19 04:35:48">2016-09-19</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">
+Express 式路由使用app.get, app.put, app.post 等
+Named URL parameters and regexp captures
+String or regular expression route matching
+Named Routes with URL generation
+Responds to OPTIONS request with allowed methods
+Support for 405 Method Not Allowed and 501 Not Implemented
+Multiple route middleware
+Multiple routers
+
+安装npm install koa-router
+`&lt;/pre&gt;
+
+### 使用
+
+&lt;pre&gt;`var koa = require(&quot;koa&quot;),
+    router = require(&quot;koa-router&quot;),
+    app = koa();
+
+app.use(router(app))
+`&lt;/ ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/" title="编写 Koa 中间件">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="编写 Koa 中间件"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/19/e7-bc-96-e5-86-99-koa-e4-b8-ad-e9-97-b4-e4-bb-b6/" title="编写 Koa 中间件">编写 Koa 中间件</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-18T19:23:36.000Z" title="Created 2016-09-19 03:23:36">2016-09-19</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">Koa middlewares are simple function which return a GeneratorFunction, and accept another (middleware). When the middleware is run by an “upstream” middleware, it must manually yield to the “downstream” middleware.
+For example if you wanted to track how long it takes for a request to propagate through Koa by adding an x-Response-Time header field the middleware would look like the following:
+function *responseTime(next)&#123;
+  var start = new Date;
+  yield next;
+  var ms = new Date - start;
+  th ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/09/19/koa-e4-bd-bf-e7-94-a8/" title="Koa 使用">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Koa 使用"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/19/koa-e4-bd-bf-e7-94-a8/" title="Koa 使用">Koa 使用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-18T19:02:51.000Z" title="Created 2016-09-19 03:02:51">2016-09-19</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">安装Koa 当前需要 node 0.11.x 并开启 –harmony(或– harmony-generators), 因为他依赖于 ES6的 generator 特性node --harmony my-koa-app.js
+应用Koa 应用是一个包含中间件 generator 方法数组的对象. 当请求到来时, 这些方法会以 stack-slice 的顺序执行.
+Koa 的一大设计理念是, 通过其他底层中间件层提供高级”语法糖”, 而不是 Koa, 大大提高了框架的互操作性和健壮性, 并让中间件开发变得有趣.
+简单例子
+var koa = require(&quot;koa&quot;);
+var app = koa();
+app.use(function*()&#123;
+  this.body = &quot;Hello World&quot;;
+&#125;);
+app.listen(3000);
+`&lt;/pre&gt;
+
+**注**: 与普通 function 不同, generator function 以 function* 的形式声明.
+
+### 编写级联代码
+
+ko ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/09/18/xtemplate-e6-a8-a1-e6-9d-bf-e8-af-ad-e6-b3-95/" title="XTemplate 模板语法">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="XTemplate 模板语法"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/18/xtemplate-e6-a8-a1-e6-9d-bf-e8-af-ad-e6-b3-95/" title="XTemplate 模板语法">XTemplate 模板语法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-18T08:21:47.000Z" title="Created 2016-09-18 16:21:47">2016-09-18</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">变量变量会从当前模板的上下文查找值, 如果要输出一个变量的值, 可以使用
+&#123;&#123; variable &#125;&#125;
+`&lt;/pre&gt;
+
+这样模板引擎会从上下文寻找变量`variable`并打印出来. 变量可以使用`.`访问其属性, 和 js 一样也可以通过`[]`访问属性
+
+&lt;pre&gt;`&#123;&#123; user.name &#125;&#125;
+&#123;&#123; user['name'] &#125;&#125;
+`&lt;/pre&gt;
+
+如果一个变量的值是`undefined`或`null`, 那么什么也不会输出, 也不会报错.
+
+### 支持的数据类型
+
+XTemplate 支持 js 中所有基本数据类型
+- Boolean
+- Number
+- String
+- Null
+- Undefined
+- Object
+- Array
+
+### 输出
+
+使用`&#123;&#123; foo &#125;&#125;`来输出`escape`之后的数据, `&#123;&#123;&#123; foo &#125; ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/09/17/flex-e5-b1-9e-e6-80-a7-e8-af-a6-e8-a7-a3/" title="Flex 属性详解">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Flex 属性详解"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/17/flex-e5-b1-9e-e6-80-a7-e8-af-a6-e8-a7-a3/" title="Flex 属性详解">Flex 属性详解</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-17T08:05:53.000Z" title="Created 2016-09-17 16:05:53">2016-09-17</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">
+display: flex|inline-flex; (修饰Flex Container, 也就是 Flex Item的父级元素)该属性修饰的元素, 其子元素将变成 flex 文档流, 称为 Flex Item
+
+注意: CSS 的 columns 在 FlexContainer 上没有作用; float, clear, vertical-align 在 FlexItem 上没有作用
+
+flex-direction: row|row-reverse|column|column-reverse(修饰 Flex Container)用于定义main-axis, 从而定义 flex 文档流方向
+
+flex-wrap: nowrap|wrap|wrap-reverse; (修饰 Flex Container)nowrap: 单行显示; wrap: 多行显示; wrap-reverse: 逆向多行显示
+
+flex-flow: &lt;’flex-direction’&gt;||&lt;’flex-wrap’&gt;; (修饰 Flex Container)这个是 flex-direction  ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/09/16/react-native-basic-component/" title="React-Native Basic Component">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="React-Native Basic Component"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/16/react-native-basic-component/" title="React-Native Basic Component">React-Native Basic Component</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-16T04:54:28.000Z" title="Created 2016-09-16 12:54:28">2016-09-16</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">Textimport React, &#123; Component &#125; from &#39;react&#39;
+import &#123; AppRegistry, Text &#125; from &#39;react-native&#39;
+ const App = () =&amp;gt; &amp;lt;Text&amp;gt;Hello World&amp;lt;/Text&amp;gt;
+
+ AppRegistry.registerComponent(&quot;Project&quot;, () =&amp;gt; App)
+ 12### Image
+import React, &#123; Component &#125; from &#39;react&#39;
+import &#123; AppRegistry, Image &#125; from &#39;react-native&#39;
+
+const App = () =&amp;gt; &amp;lt;Image source = &#123;require(&#39;./img/sample ...</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/09/16/e7-90-86-e8-a7-a3-restful-e6-9e-b6-e6-9e-84/" title="理解 RESTFul 架构">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="理解 RESTFul 架构"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/16/e7-90-86-e8-a7-a3-restful-e6-9e-b6-e6-9e-84/" title="理解 RESTFul 架构">理解 RESTFul 架构</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-16T03:59:53.000Z" title="Created 2016-09-16 11:59:53">2016-09-16</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">REST 全称 Representational State Transfer(表述性状态转移), 十一组架构约束条件和原则. 如果一个架构符合 REST 的约束条件, 那么可以称为 RESTFul 架构
+要理解 REST 原则, 就要从资源的定义, 获取, 表述, 关联, 状态变迁等角度入手
+
+资源与 URI
+统一资源接口
+资源的表述
+资源的链接
+状态的转移
+
+资源与 URI任何事物, 只要有被引用到的必要, 他就是一个资源.
+要让一个资源可以被识别, 需要添加一个唯一标识, 在 Web 中这个唯一标识就是 URI(Uniform Resource Identifier).
+URI 既可以看成资源的地址, 也可以看成资源的名称.
+如果一些信息没有使用 URI 来标识, 说明他不是一个资源
+URI 的设计应该遵循可寻址原则, 具有自描述性, 需要在形式上给人以直觉上的关联
+URI 设计上的一些技巧
+使用 _ 或 - 提高 URI 的可读性
+使用 / 表示资源的层级关系
+使用 ? 过滤资源
+
+统一资源接口RESTFul 结构应该遵循统一接口原则, 统一接口包含了一组受限的预定义操作, 不 ...</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/09/08/e7-a7-bb-e5-8a-a8-e7-ab-af-border-radius-e6-ba-a2-e5-87-ba-e5-a4-84-e7-90-86/" title="移动端 Border-Radius 溢出处理">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="移动端 Border-Radius 溢出处理"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/08/e7-a7-bb-e5-8a-a8-e7-ab-af-border-radius-e6-ba-a2-e5-87-ba-e5-a4-84-e7-90-86/" title="移动端 Border-Radius 溢出处理">移动端 Border-Radius 溢出处理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-08T02:21:25.000Z" title="Created 2016-09-08 10:21:25">2016-09-08</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">问题1: 部分机型下, 设置 border-radius 以及 overflow:hidden 会造成背景颜色溢出
+解决: background-clip: padding-box
+原理: background-clip 是颜色颜色显示区域, 设置为 padding-box
+问题2: transform 的子元素在父元素 overflow:hidden 之后还是会溢出
+解决办法: 在父元素加上一段 css
+-webkit-mask-image: url(&#39;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAACklEQVQI12NgAAAAAgAB4iG8MwAAAABJRU5ErkJggg==&#39;);
+这是一张1px 的纯黑色图片
+原理: -webkit-mask-image:url(‘’), 会在图片上添加蒙版(黑色表示将内容透明, 白色表示将内容显示, 介于中间表示半透明)
+</div></div></div><div class="recent-post-item"><div class="post_cover left_radius"><a href="/2016/09/08/e6-b5-8b-e8-af-95-e5-b0-8f-e6-8a-80-e5-b7-a7/" title="测试小技巧">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="测试小技巧"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/08/e6-b5-8b-e8-af-95-e5-b0-8f-e6-8a-80-e5-b7-a7/" title="测试小技巧">测试小技巧</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-08T02:00:52.000Z" title="Created 2016-09-08 10:00:52">2016-09-08</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">每一个测试都要引入 expect, 可以创建一个test_helper.js 1234567 import &#123; expect &#125; from &#39;expect&#39; import sinon from &#39;sinon&#39;global.expect &#x3D; expect global.sinon &#x3D; sinon &#96;然后在&#96;mocha.opt&#96;中添加&#96; --require .&#x2F;test&#x2F;test_helper.js
+</div></div></div><div class="recent-post-item"><div class="post_cover right_radius"><a href="/2016/09/07/command-line-cheat-sheet/" title="Command Line Cheat Sheet">     <img class="post_bg" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Command Line Cheat Sheet"></a></div><div class="recent-post-info"><a class="article-title" href="/2016/09/07/command-line-cheat-sheet/" title="Command Line Cheat Sheet">Command Line Cheat Sheet</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2016-09-06T19:02:48.000Z" title="Created 2016-09-07 03:02:48">2016-09-07</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox article-meta__icon"></i><a class="article-meta__categories" href="/categories/note/">note</a></span></div><div class="content">Directoriespwd: print working directory
+cd &lt;directory&gt;: change directory to &lt;directory&gt;
+cd ..: change directory to parent one
+ls: list directory  contents
+ls -la: list detailed directory contents, including hidden files
+mkdir &lt;directory&gt;: create new directory named &lt;directory&gt;
+Outputcat &lt;file&gt;: output the contents of &lt;file&gt;
+less &lt;file&gt;: output the contents of &lt;file&gt; using the less command(which supports paginations etc.)
+head &lt;file&gt;: output t ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/8/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/10/"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Chen Yu</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives"><div class="headline">Articles</div><div class="length_num">304</div></a></div><div class="card-info-data-item is-center">      <a href="/tags"><div class="headline">Tags</div><div class="length_num">73</div></a></div><div class="card-info-data-item is-center"><a href="/categories"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/keith-cy"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/keith-cy" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:keithwhisper@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://www.linkedin.com/in/chen-yu-644b61ba/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">Code Elegantly</div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-recent-item"><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/08/27/shorthand-of-ethereum-provider/" title="Shorthand of Ethereum Provider"><img class="aside-post-bg" data-lazy-src="/gallery/thumbnails/eip-1193.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Shorthand of Ethereum Provider"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/08/27/shorthand-of-ethereum-provider/" title="Shorthand of Ethereum Provider">Shorthand of Ethereum Provider</a><time class="aside-post_meta post-meta-date" datetime="2020-08-27T06:03:53.000Z" title="Created 2020-08-27 14:03:53">2020-08-27</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/01/17/Inspect-protobuf-js/" title="Inspect-protobuf.js"><img class="aside-post-bg" data-lazy-src="/gallery/thumbnails/pbjs.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Inspect-protobuf.js"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/01/17/Inspect-protobuf-js/" title="Inspect-protobuf.js">Inspect-protobuf.js</a><time class="aside-post_meta post-meta-date" datetime="2020-01-17T03:30:02.000Z" title="Created 2020-01-17 11:30:02">2020-01-17</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2020/01/06/crx-config/" title="Crx-Config"><img class="aside-post-bg" data-lazy-src="https://i.loli.net/2020/05/01/IuWi8QbHvzjlOPw.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Crx-Config"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2020/01/06/crx-config/" title="Crx-Config">Crx-Config</a><time class="aside-post_meta post-meta-date" datetime="2020-01-05T17:10:11.000Z" title="Created 2020-01-06 01:10:11">2020-01-06</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2019/12/03/Introduction-to-MACD/" title="Introduction to MACD"><img class="aside-post-bg" data-lazy-src="/gallery/thumbnails/macd-indicator.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Introduction to MACD"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2019/12/03/Introduction-to-MACD/" title="Introduction to MACD">Introduction to MACD</a><time class="aside-post_meta post-meta-date" datetime="2019-12-02T17:43:39.000Z" title="Created 2019-12-03 01:43:39">2019-12-03</time></div></div><div class="aside-recent-post"><a class="aside-post-cover" href="/2019/10/10/Basic-components-in-nest-js/" title="Basic Components in nest.js"><img class="aside-post-bg" data-lazy-src="/gallery/thumbnails/nestjs_components.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Basic Components in nest.js"/></a><div class="aside-post-info"><a class="aside-post-title" href="/2019/10/10/Basic-components-in-nest-js/" title="Basic Components in nest.js">Basic Components in nest.js</a><time class="aside-post_meta post-meta-date" datetime="2019-10-10T06:26:41.000Z" title="Created 2019-10-10 14:26:41">2019-10-10</time></div></div></div></div></div><div class="card-widget card-categories"><div class="card-content"><div class="item-headline"><i class="fas fa-folder-open"></i><span>Categories</span></div><ul class="card-category-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Soup/"><span class="card-category-list-name">Soup</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Uncategorized/"><span class="card-category-list-name">Uncategorized</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/github/"><span class="card-category-list-name">github</span><span class="card-category-list-count">2</span></a></li><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/github/note/"><span class="card-category-list-name">note</span><span class="card-category-list-count">1</span></a></li></ul><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/note/"><span class="card-category-list-name">note</span><span class="card-category-list-count">141</span></a></li><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/note/workNote/"><span class="card-category-list-name">workNote</span><span class="card-category-list-count">19</span></a></li></ul><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/workNote/"><span class="card-category-list-name">workNote</span><span class="card-category-list-count">5</span></a></li>
+                       
+            </ul></div></div><div class="card-widget card-tags"><div class="card-content"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/BIP/" style="font-size: 16.5px; color: #999a9c">BIP</a> <a href="/tags/Babel/" style="font-size: 17px; color: #999c9f">Babel</a> <a href="/tags/Bash/" style="font-size: 16px; color: #999">Bash</a> <a href="/tags/Bitcoin/" style="font-size: 16.5px; color: #999a9c">Bitcoin</a> <a href="/tags/Blockchain/" style="font-size: 21.5px; color: #99a8bc">Blockchain</a> <a href="/tags/CITA/" style="font-size: 16px; color: #999">CITA</a> <a href="/tags/CLI/" style="font-size: 16.5px; color: #999a9c">CLI</a> <a href="/tags/CSS/" style="font-size: 22px; color: #99a9bf">CSS</a> <a href="/tags/CSS3/" style="font-size: 17px; color: #999c9f">CSS3</a> <a href="/tags/Chrome/" style="font-size: 17.5px; color: #999da3">Chrome</a> <a href="/tags/Cluster/" style="font-size: 16px; color: #999">Cluster</a> <a href="/tags/D3/" style="font-size: 19.5px; color: #99a2af">D3</a> <a href="/tags/Database/" style="font-size: 19px; color: #99a1ac">Database</a> <a href="/tags/Design/" style="font-size: 16px; color: #999">Design</a> <a href="/tags/Docker/" style="font-size: 16px; color: #999">Docker</a> <a href="/tags/EIP/" style="font-size: 16px; color: #999">EIP</a> <a href="/tags/ESLint/" style="font-size: 16px; color: #999">ESLint</a> <a href="/tags/Economics/" style="font-size: 16px; color: #999">Economics</a> <a href="/tags/Ecto/" style="font-size: 16.5px; color: #999a9c">Ecto</a> <a href="/tags/Elixir/" style="font-size: 17.5px; color: #999da3">Elixir</a> <a href="/tags/Erlang/" style="font-size: 16px; color: #999">Erlang</a> <a href="/tags/Error-Handling/" style="font-size: 16px; color: #999">Error Handling</a> <a href="/tags/Ethereum/" style="font-size: 20.5px; color: #99a5b6">Ethereum</a> <a href="/tags/Extension/" style="font-size: 16px; color: #999">Extension</a> <a href="/tags/Extensions/" style="font-size: 16px; color: #999">Extensions</a> <a href="/tags/Fastify/" style="font-size: 16.5px; color: #999a9c">Fastify</a> <a href="/tags/Functional-Program/" style="font-size: 17px; color: #999c9f">Functional Program</a> <a href="/tags/GenServer/" style="font-size: 16px; color: #999">GenServer</a> <a href="/tags/Git/" style="font-size: 18px; color: #999ea6">Git</a> <a href="/tags/Github-Action/" style="font-size: 16px; color: #999">Github Action</a> <a href="/tags/Go/" style="font-size: 16px; color: #999">Go</a> <a href="/tags/GraphQL/" style="font-size: 18.5px; color: #99a0a9">GraphQL</a> <a href="/tags/Gulp/" style="font-size: 17px; color: #999c9f">Gulp</a> <a href="/tags/HTML/" style="font-size: 20px; color: #99a4b2">HTML</a> <a href="/tags/HTTP/" style="font-size: 18px; color: #999ea6">HTTP</a> <a href="/tags/HTTP2/" style="font-size: 16px; color: #999">HTTP2</a> <a href="/tags/Headless/" style="font-size: 16px; color: #999">Headless</a> <a href="/tags/IPFS/" style="font-size: 16px; color: #999">IPFS</a> <a href="/tags/JSON-RPC/" style="font-size: 16px; color: #999">JSON-RPC</a> <a href="/tags/JavaScript/" style="font-size: 21px; color: #99a6b9">JavaScript</a></div></div></div><div class="card-widget card-archives"><div class="card-content"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/08/"><span class="card-archive-list-date">August 2020</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/01/"><span class="card-archive-list-date">January 2020</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/12/"><span class="card-archive-list-date">December 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/10/"><span class="card-archive-list-date">October 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/09/"><span class="card-archive-list-date">September 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/08/"><span class="card-archive-list-date">August 2019</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/04/"><span class="card-archive-list-date">April 2019</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2019/03/"><span class="card-archive-list-date">March 2019</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item more is-center"><a class="card-archive-list-link-more" href="/archives">
+              <span>More</span><i class="fas fa-angle-right"  ></i></a></li></ul></div></div><div class="card-widget card-webinfo"><div class="card-content"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="webinfo-article-name">Article :</div><div class="webinfo-article-count">304</div></div><div class="webinfo-item">      <div class="webinfo-site-uv-name">UV :</div><div class="webinfo-site-uv-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="webinfo-site-name">PV :</div><div class="webinfo-site-pv-count" id="busuanzi_value_site_pv"></div></div></div></div></div></div></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function subtitleType () {
+  if (true) { 
+    var typed = new Typed("#subtitle", {
+      strings: "Code Elegantly".split(","),
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: false,
+      backSpeed: 50
+    })
+  } else {
+    document.getElementById("subtitle").innerHTML = 'Code Elegantly'
+  }
+}
+
+if (true) {
+  if (typeof Typed === 'function') subtitleType()
+  else $.getScript('https://cdn.jsdelivr.net/npm/typed.js/lib/typed.min.js', subtitleType)
+} else {
+  subtitleType()
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
+
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
+
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
+
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+})
+
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  $(window).off('scroll')
+
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
+
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

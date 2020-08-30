@@ -1,200 +1,143 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Notes on Solidity in Depth | EzCook</title><meta name="description" content="Layout of a Solidity Source FileVersion Pragma1pragma solidity ^0.4.11;  Importing other Source File1234567import &quot;filename&quot;;import * as symbolName from &quot;filename&quot;;import &amp;#123; sy"><meta name="keywords" content="Ethereum,Blockchain,Smart Contract,Solidity"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2017/11/10/Notes-on-Solidity-in-Depth/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Notes on Solidity in Depth"><meta property="og:url" content="https://ezcook.de/2017/11/10/Notes-on-Solidity-in-Depth/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Layout of a Solidity Source FileVersion Pragma1pragma solidity ^0.4.11;  Importing other Source File1234567import &quot;filename&quot;;import * as symbolName from &quot;filename&quot;;import &amp;#123; sy"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2017-11-10T08:33:02.000Z"><meta property="article:modified_time" content="2020-08-30T12:47:24.259Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Notes on Solidity in Depth - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:47:24'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Layout-of-a-Solidity-Source-File"><span class="toc-number">1.</span> <span class="toc-text">Layout of a Solidity Source File</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Version-Pragma"><span class="toc-number">1.1.</span> <span class="toc-text">Version Pragma</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Importing-other-Source-File"><span class="toc-number">1.2.</span> <span class="toc-text">Importing other Source File</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Remapping"><span class="toc-number">1.2.1.</span> <span class="toc-text">Remapping</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Comments"><span class="toc-number">1.3.</span> <span class="toc-text">Comments</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Structure-of-Contract"><span class="toc-number">2.</span> <span class="toc-text">Structure of Contract</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#State-Variables"><span class="toc-number">2.1.</span> <span class="toc-text">State Variables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Functions"><span class="toc-number">2.2.</span> <span class="toc-text">Functions</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Function-Modifiers"><span class="toc-number">2.3.</span> <span class="toc-text">Function Modifiers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Events"><span class="toc-number">2.4.</span> <span class="toc-text">Events</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Struct-Types"><span class="toc-number">2.5.</span> <span class="toc-text">Struct Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Enum-Types"><span class="toc-number">2.6.</span> <span class="toc-text">Enum Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Types"><span class="toc-number">2.7.</span> <span class="toc-text">Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Members-of-Address"><span class="toc-number">2.8.</span> <span class="toc-text">Members of Address</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fixed-size-byte-array"><span class="toc-number">2.9.</span> <span class="toc-text">Fixed-size byte array</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Dynamically-sized-byte-array"><span class="toc-number">2.10.</span> <span class="toc-text">Dynamically-sized byte array</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Address-Liberals"><span class="toc-number">2.11.</span> <span class="toc-text">Address Liberals</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Rational-and-Integer-Literals"><span class="toc-number">2.12.</span> <span class="toc-text">Rational and Integer Literals</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#String-Literals"><span class="toc-number">2.13.</span> <span class="toc-text">String Literals</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Hexadecimal-Literals"><span class="toc-number">2.14.</span> <span class="toc-text">Hexadecimal Literals</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Enums"><span class="toc-number">2.15.</span> <span class="toc-text">Enums</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Function-Types"><span class="toc-number">2.16.</span> <span class="toc-text">Function Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference-Types"><span class="toc-number">2.17.</span> <span class="toc-text">Reference Types</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Data-location"><span class="toc-number">2.18.</span> <span class="toc-text">Data location</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Summary"><span class="toc-number">2.18.1.</span> <span class="toc-text">Summary</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Arrays"><span class="toc-number">2.19.</span> <span class="toc-text">Arrays</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Structs"><span class="toc-number">2.20.</span> <span class="toc-text">Structs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Mappings"><span class="toc-number">2.21.</span> <span class="toc-text">Mappings</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Operators-Involving-LValues"><span class="toc-number">2.22.</span> <span class="toc-text">Operators Involving LValues</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#delete"><span class="toc-number">2.22.1.</span> <span class="toc-text">delete</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Conversions-between-Elementary-Types"><span class="toc-number">2.23.</span> <span class="toc-text">Conversions between Elementary Types.</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Implicit-Conversions"><span class="toc-number">2.23.1.</span> <span class="toc-text">Implicit Conversions</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Explicit-Conversions"><span class="toc-number">2.23.2.</span> <span class="toc-text">Explicit Conversions</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Type-Deduction"><span class="toc-number">2.24.</span> <span class="toc-text">Type Deduction</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Units-and-Globally-Available-Variables"><span class="toc-number">3.</span> <span class="toc-text">Units and Globally Available Variables</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Ether-Units"><span class="toc-number">3.1.</span> <span class="toc-text">Ether Units</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Time-Units"><span class="toc-number">3.2.</span> <span class="toc-text">Time Units</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Notes on Solidity in Depth</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-11-10T08:33:02.000Z" title="Created 2017-11-10 16:33:02">2017-11-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:47:24.259Z" title="Updated 2020-08-30 20:47:24">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2017/11/10/Notes-on-Solidity-in-Depth/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h3 id="Layout-of-a-Solidity-Source-File"><a href="#Layout-of-a-Solidity-Source-File" class="headerlink" title="Layout of a Solidity Source File"></a>Layout of a Solidity Source File</h3><h4 id="Version-Pragma"><a href="#Version-Pragma" class="headerlink" title="Version Pragma"></a>Version Pragma</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br></pre></td></tr></table></figure>
 
+<h4 id="Importing-other-Source-File"><a href="#Importing-other-Source-File" class="headerlink" title="Importing other Source File"></a>Importing other Source File</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;filename&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> symbolName <span class="keyword">from</span> <span class="string">&quot;filename&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; symbol <span class="keyword">as</span> alias, symbol2 &#125; <span class="keyword">from</span> <span class="string">&quot;filename&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;filename&quot;</span> <span class="keyword">as</span> symbolName;</span><br></pre></td></tr></table></figure>
 
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Notes on Solidity in Depth" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-11-10T08:33:02.000Z">2017-11-10</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    16 minutes read (About 2404 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Notes on Solidity in Depth
-            
-        </h1>
-        <div class="content">
-            <h3 id="Layout-of-a-Solidity-Source-File"><a href="#Layout-of-a-Solidity-Source-File" class="headerlink" title="Layout of a Solidity Source File"></a>Layout of a Solidity Source File</h3><h4 id="Version-Pragma"><a href="#Version-Pragma" class="headerlink" title="Version Pragma"></a>Version Pragma</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div></pre></td></tr></table></figure>
-<h4 id="Importing-other-Source-File"><a href="#Importing-other-Source-File" class="headerlink" title="Importing other Source File"></a>Importing other Source File</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"filename"</span>;</div><div class="line"></div><div class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> symbolName <span class="hljs-keyword">from</span> <span class="hljs-string">"filename"</span>;</div><div class="line"></div><div class="line"><span class="hljs-keyword">import</span> &#123; symbol <span class="hljs-keyword">as</span> alias, symbol2 &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">"filename"</span>;</div><div class="line"></div><div class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"filename"</span> <span class="hljs-keyword">as</span> symbolName;</div></pre></td></tr></table></figure>
 <p>In the above, <code>filename</code> is always treated as a path with <code>/</code> as directory seperator.</p>
 <p>All path names are treated as absolute paths unless thay start with <code>.</code> or <code>..</code>.</p>
 <h5 id="Remapping"><a href="#Remapping" class="headerlink" title="Remapping"></a>Remapping</h5><p>For example, remap <code>github.com/ethereum/dapp-bin/library</code> to <code>/usr/local/dapp-bin/library</code></p>
 <p><strong>solc</strong></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">import</span> <span class="hljs-string">"github.com/ethereum/dapp-bin/library/iterable_mapping.sol` as it_mapping;</span></div></pre></td></tr></table></figure>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">solc github.com/ethereum/dapp-bin/=/usr/<span class="hljs-built_in">local</span>/dapp-bin/ source.sol</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/ethereum/dapp-bin/library/iterable_mapping.sol` as it_mapping;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">solc github.com/ethereum/dapp-bin/=/usr/<span class="built_in">local</span>/dapp-bin/ source.sol</span><br></pre></td></tr></table></figure>
+
 <h4 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h4><p>Single Line Comments: <code>//</code></p>
 <p>Multi-line Comments: <code>/* ... */</code></p>
 <p>Natspec Comments: <code>///</code> or <code>/** ... */</code></p>
 <p>Natspec should be used directly above function declarations or statements.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div><div class="line"></div><div class="line"><span class="hljs-comment">/** @title Shape calculator */</span></div><div class="line">contract shapeCaculator &#123;</div><div class="line">  <span class="hljs-comment">/** @dev Calculates a rectangle's surface and perimeter.</span></div><div class="line">    * @param w Width of the rectangle.</div><div class="line">    * @param h Height of the rectangle.</div><div class="line">    * @param s The calculated surface.</div><div class="line">    * @param p The calculated perimeter.</div><div class="line">    */</div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">rectangle</span>(<span class="hljs-params">uint w, uint h</span>) <span class="hljs-title">returns</span> (<span class="hljs-params">uint s, uint p</span>) </span>&#123;</div><div class="line">    s = w * h;</div><div class="line">    p = <span class="hljs-number">2</span> * (w + h);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** <span class="doctag">@title </span>Shape calculator */</span></span><br><span class="line">contract shapeCaculator &#123;</span><br><span class="line">  <span class="comment">/** <span class="doctag">@dev </span>Calculates a rectangle&#x27;s surface and perimeter.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param </span>w Width of the rectangle.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param </span>h Height of the rectangle.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param </span>s The calculated surface.</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@param </span>p The calculated perimeter.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">rectangle</span>(<span class="params">uint w, uint h</span>) <span class="title">returns</span> (<span class="params">uint s, uint p</span>) </span>&#123;</span><br><span class="line">    s = w * h;</span><br><span class="line">    p = <span class="number">2</span> * (w + h);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Structure-of-Contract"><a href="#Structure-of-Contract" class="headerlink" title="Structure of Contract"></a>Structure of Contract</h3><p>Contracts in Solidity are similar to classes in object-oriented languages. Each contract can contain declarations of <strong>State Variables</strong>, <strong>Functions</strong>, <strong>Function Modifiers</strong>, <strong>Events</strong>, <strong>Struct Types</strong> and <strong>Enum Types</strong>.</p>
 <h4 id="State-Variables"><a href="#State-Variables" class="headerlink" title="State Variables"></a>State Variables</h4><p>State variables are values which are permanently stored in contract storage.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div><div class="line"></div><div class="line">contract SimpleStorage &#123;</div><div class="line">  uint storedData; <span class="hljs-comment">// state variable</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract SimpleStorage &#123;</span><br><span class="line">  uint storedData; <span class="comment">// state variable</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="Functions"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</h4><p>Functions are executable units of code within a contract.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div><div class="line"></div><div class="line">contract SimpleAuction &#123;</div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bid</span>(<span class="hljs-params"></span>) <span class="hljs-title">payable</span> </span>&#123;</div><div class="line">    <span class="hljs-comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract SimpleAuction &#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bid</span>(<span class="params"></span>) <span class="title">payable</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="Function-Modifiers"><a href="#Function-Modifiers" class="headerlink" title="Function Modifiers"></a>Function Modifiers</h4><p>Function modifiers can be used to amend the semantics of functions in a declarative way.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div><div class="line"></div><div class="line">contract Purchase &#123;</div><div class="line">  address public seller;</div><div class="line"></div><div class="line">  modifier onlySeller () &#123; <span class="hljs-comment">// Modifier</span></div><div class="line">    <span class="hljs-built_in">require</span>(msg.sender == seller);</div><div class="line">    _;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">abort</span>(<span class="hljs-params"></span>) <span class="hljs-title">onlySeller</span> </span>&#123; <span class="hljs-comment">// Modifier usage</span></div><div class="line">    <span class="hljs-comment">//...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract Purchase &#123;</span><br><span class="line">  address public seller;</span><br><span class="line"></span><br><span class="line">  modifier onlySeller () &#123; <span class="comment">// Modifier</span></span><br><span class="line">    <span class="built_in">require</span>(msg.sender == seller);</span><br><span class="line">    _;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">abort</span>(<span class="params"></span>) <span class="title">onlySeller</span> </span>&#123; <span class="comment">// Modifier usage</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="Events"><a href="#Events" class="headerlink" title="Events"></a>Events</h4><p>Events are convenience interfaces with the EVM logging facilities.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div><div class="line"></div><div class="line">contract SimpleAuction &#123;</div><div class="line">  event HighestBidIncreased(address bidder, uint amount);</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bid</span>(<span class="hljs-params"></span>) <span class="hljs-title">payable</span> </span>&#123;</div><div class="line">    <span class="hljs-comment">// ...</span></div><div class="line">    HighestBidIncreased(msg.sender, msg.value);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract SimpleAuction &#123;</span><br><span class="line">  event HighestBidIncreased(address bidder, uint amount);</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">bid</span>(<span class="params"></span>) <span class="title">payable</span> </span>&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    HighestBidIncreased(msg.sender, msg.value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="Struct-Types"><a href="#Struct-Types" class="headerlink" title="Struct Types"></a>Struct Types</h4><p>Structs are custom defined types that can group several variables.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div><div class="line"></div><div class="line">contract Ballot &#123;</div><div class="line">  struct Voter &#123;</div><div class="line">    uint weight;</div><div class="line">    bool voted;</div><div class="line">    address delegate;</div><div class="line">    uint vote;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="Enum-Types"><a href="#Enum-Types" class="headerlink" title="Enum Types"></a>Enum Types</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.0</span>;</div><div class="line"></div><div class="line">contract Purchase &#123;</div><div class="line">  enum State &#123;</div><div class="line">    Created,</div><div class="line">    Locked,</div><div class="line">    Inactive</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract Ballot &#123;</span><br><span class="line">  struct Voter &#123;</span><br><span class="line">    uint weight;</span><br><span class="line">    bool voted;</span><br><span class="line">    address delegate;</span><br><span class="line">    uint vote;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Enum-Types"><a href="#Enum-Types" class="headerlink" title="Enum Types"></a>Enum Types</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.0</span>;</span><br><span class="line"></span><br><span class="line">contract Purchase &#123;</span><br><span class="line">  enum State &#123;</span><br><span class="line">    Created,</span><br><span class="line">    Locked,</span><br><span class="line">    Inactive</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="Types"><a href="#Types" class="headerlink" title="Types"></a>Types</h4><ul>
 <li><p><code>bool</code>: <code>true</code> or <code>false</code></p>
 <ul>
@@ -244,19 +187,25 @@
 <li><code>call</code>, <code>callcode</code>, and <code>delegatecall</code></li>
 </ul>
 <p>Furthermore, to interface with contracts that do not adhere to the ABI, the function <code>call</code> is provided which takes an arbitrary number of arguments of any type. The arguments are padding to 32 bytes and concatenated. One exception is the case where the first argument is encoded to exactly four bytes. In this case, it is not padding to allow the use of function signatures here.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">address nameReg = <span class="hljs-string">'0x72ba7d8e73fe8eb666ea66babc8116a41bfb10e2'</span>;</div><div class="line">nameReg.call(<span class="hljs-string">'register'</span>, <span class="hljs-string">'MyName'</span>);</div><div class="line">nameReg.call(bytes4(keccak256(<span class="hljs-string">"fun(uint256))), );</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">address nameReg = <span class="string">&#x27;0x72ba7d8e73fe8eb666ea66babc8116a41bfb10e2&#x27;</span>;</span><br><span class="line">nameReg.call(<span class="string">&#x27;register&#x27;</span>, <span class="string">&#x27;MyName&#x27;</span>);</span><br><span class="line">nameReg.call(bytes4(keccak256(<span class="string">&quot;fun(uint256))), );</span></span><br></pre></td></tr></table></figure>
+
 <p><code>call</code> returns a boolean indicating whether the invoked function terminated (true) or caused an EVM exception (false). It is not possible to access the actual data returned.</p>
 <p>It is possible to adjust the supplied gas with the <code>.gas()</code> modifier:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nameReg.call.gas(<span class="hljs-number">1000000000</span>)(<span class="hljs-string">'register'</span>, <span class="hljs-string">'myName'</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameReg.call.gas(<span class="number">1000000000</span>)(<span class="string">&#x27;register&#x27;</span>, <span class="string">&#x27;myName&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
 <p>and supplied Ether value can be controlled too:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nameReg.call.value(<span class="hljs-number">1</span> ether)(<span class="hljs-string">'regiter'</span>, <span class="hljs-string">'myName'</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameReg.call.value(<span class="number">1</span> ether)(<span class="string">&#x27;regiter&#x27;</span>, <span class="string">&#x27;myName&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
 <p>Chained</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nameReg.call.value(<span class="hljs-number">1</span> ether).gas(<span class="hljs-number">100000000</span>)(<span class="hljs-string">'register'</span>, <span class="hljs-string">'myName'</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nameReg.call.value(<span class="number">1</span> ether).gas(<span class="number">100000000</span>)(<span class="string">&#x27;register&#x27;</span>, <span class="string">&#x27;myName&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
 <p>In a similar way, the function <code>delegatecall</code> can be used: the difference is that only the code of the given address is used, all other aspects(storage, balance, …) are taken from the current contract. The purpose of <code>delegatecall</code> is to use library code which is stored in another contract. The user has to ensure that the layout of storage in both contracts is suitable for delegatecall to be used. Prior to homestead, only a limited variant called <code>callcode</code> was available that did not provide access to the original <code>msg.sender</code> and <code>msg.value</code>.</p>
 <p>All three functions <code>call</code>, <code>delegatecall</code>, and <code>callcode</code> are very low-level functions and should only be used as a <em>last resort</em> as they break the type-safety of Solidity.</p>
 <p>The <code>.gas()</code> option is available on all three methods, while the <code>.value()</code> option is not supported for <code>delegatecall</code>.</p>
 <blockquote>
 <p>All Contracts inherit the members of address, so it is possible to query the balance of the current contract using <code>this.balance</code>.</p>
+</blockquote>
+<blockquote>
 <p>The use of <code>callcode</code> is discouraged and will be removed in the future.</p>
 </blockquote>
 <h4 id="Fixed-size-byte-array"><a href="#Fixed-size-byte-array" class="headerlink" title="Fixed-size byte array"></a>Fixed-size byte array</h4><ul>
@@ -276,21 +225,25 @@
 <blockquote>
 <p>Number literal expressions are converted into a non-literal type as soon as they are used with non-literal expressions. Even though we know that the value of the expression assigned to <code>b</code> in the following example evaluates to an integer, but the partial expression <code>2.5 + a</code> does not type check so the code does not compile.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">uint128 a = <span class="hljs-number">1</span>;</div><div class="line">uint128 b = <span class="hljs-number">2.5</span> + a + <span class="hljs-number">0.5</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uint128 a = <span class="number">1</span>;</span><br><span class="line">uint128 b = <span class="number">2.5</span> + a + <span class="number">0.5</span>;</span><br></pre></td></tr></table></figure>
+
 <h4 id="String-Literals"><a href="#String-Literals" class="headerlink" title="String Literals"></a>String Literals</h4><p>String literals are written with either double or sinlge-quotes. They do not imply trailing zeros as in C, <code>&quot;foo&quot;</code> represents three bytes not four.</p>
 <p>String Literal supports escape characters, such as <code>\n</code>, <code>\xNN</code> and <code>\uNNNN</code>.</p>
 <h4 id="Hexadecimal-Literals"><a href="#Hexadecimal-Literals" class="headerlink" title="Hexadecimal Literals"></a>Hexadecimal Literals</h4><p><code>hex&quot;001122FF&quot;</code></p>
 <h4 id="Enums"><a href="#Enums" class="headerlink" title="Enums"></a>Enums</h4><p>Enums are one way to create a user-defined type in Solidity. They are explicitly convertable to and from all integer types but implicit conversion is not allowed. The explicit conversions check the value ranges at runtime, and a failure causes an exception.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div><div class="line"></div><div class="line">contract test &#123;</div><div class="line">  enum ActionChoices &#123;</div><div class="line">    GoLeft,</div><div class="line">    GoRight,</div><div class="line">    GoStraight,</div><div class="line">    GoStill</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  ActionChoices choice;</div><div class="line">  ActionChoices constant defaultChoice = ActionChoices.GoStraight;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setGoStraight</span>(<span class="hljs-params"></span>) </span>&#123;</div><div class="line">    choice = ActionChoices.GoStraight;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getChoice</span>(<span class="hljs-params"></span>) <span class="hljs-title">returns</span> (<span class="hljs-params">ActionChoices</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">return</span> choice;</div><div class="line">  &#125;</div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDefaultChoice</span>(<span class="hljs-params"></span>) <span class="hljs-title">returns</span> (<span class="hljs-params">uint</span>) </span>&#123;</div><div class="line">    <span class="hljs-keyword">return</span> uint(defaultChoice);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract test &#123;</span><br><span class="line">  enum ActionChoices &#123;</span><br><span class="line">    GoLeft,</span><br><span class="line">    GoRight,</span><br><span class="line">    GoStraight,</span><br><span class="line">    GoStill</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ActionChoices choice;</span><br><span class="line">  ActionChoices constant defaultChoice = ActionChoices.GoStraight;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">setGoStraight</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    choice = ActionChoices.GoStraight;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getChoice</span>(<span class="params"></span>) <span class="title">returns</span> (<span class="params">ActionChoices</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> choice;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">getDefaultChoice</span>(<span class="params"></span>) <span class="title">returns</span> (<span class="params">uint</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> uint(defaultChoice);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h4 id="Function-Types"><a href="#Function-Types" class="headerlink" title="Function Types"></a>Function Types</h4><p>Function types are notated as follows:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">&lt;parameter types&gt;</span>) </span>&#123;internal|external&#125; [pure|constant|view|payable] [returns (<span class="hljs-xml"><span class="hljs-tag">&lt;<span class="hljs-name">return</span> <span class="hljs-attr">types</span>&gt;</span>)]</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> (<span class="params">&lt;parameter types&gt;</span>) </span>&#123;internal|external&#125; [pure|constant|view|payable] [returns (<span class="xml"><span class="tag">&lt;<span class="name">return</span> <span class="attr">types</span>&gt;</span>)]</span></span><br></pre></td></tr></table></figure>
+
 <p>In contrast to the parameter types, the return types cannot be empty - if the function type should not return anything, the whole <code>returns (&lt;return type&gt;)</code> part has to be omitted.</p>
 <p>Public (or external) functions have a special member called <code>selector</code>, which returns the <code>ABI function selector</code>:</p>
 <h4 id="Reference-Types"><a href="#Reference-Types" class="headerlink" title="Reference Types"></a>Reference Types</h4><p>Complex types, i.e. types which do not always fit into 256 bits have to be handled more carefully than than the value-types we have already seen. Since copying them can be quite expensive, we have to think about whether we want them to be store in <strong>memory</strong>(which is not persisting) or <strong>storage</strong>(where the state variables are held).</p>
 <h4 id="Data-location"><a href="#Data-location" class="headerlink" title="Data location"></a>Data location</h4><p>Every complex type, i.e. <em>arrays</em> and <em>structs</em> has an additional annotation, the “data location” about where it is stored in <strong>memory</strong> or in <strong>storage</strong>. Depending on the context, there is always a default, but it can be overrideen by appeding either <code>storage</code> or <code>memory</code> to the type. The default for function parameters(including return parameters) is <strong>memory</strong> the default for local variable is <strong>storage</strong> and the location is forced to <strong>storage</strong> for state variables</p>
 <p>There is also a third data location, <strong>calldata</strong>, which is a non-modificable, non-persistent area where function arguments are stored. Function parameter(not return parameters) of external functions are forced to <strong>calldata</strong> and behave mostly like <strong>memory</strong>.</p>
 <p>Data locations are imortant because they change how assignment behave: assignments between storage and memory and also to a state variable always create an independent copy. Assignments to local storage variables only assign a reference though, and this reference always points to the state variable even if the latter is changed in the meantime. On the other hand, assignments from a memory stoted reference type to another memory-stored reference type do not create a copy.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div><div class="line"></div><div class="line">contract C &#123;</div><div class="line">  uint[] x; <span class="hljs-comment">// the data location of x is storage</span></div><div class="line"></div><div class="line">  <span class="hljs-comment">// the data location of memoryArray is memory</span></div><div class="line">  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">uint[] memoryArray</span>) </span>&#123;</div><div class="line">    x = memoryArray; <span class="hljs-comment">// works, copy the whole array to storage</span></div><div class="line">    <span class="hljs-keyword">var</span> y = x; <span class="hljs-comment">// works, assigns a pointer, data location of y is storage</span></div><div class="line">    y[<span class="hljs-number">7</span>]; <span class="hljs-comment">// fine, returns the 8th element</span></div><div class="line">    y.length = <span class="hljs-number">2</span>; <span class="hljs-comment">// fine, modifies x through y</span></div><div class="line">    <span class="hljs-keyword">delete</span> x; <span class="hljs-comment">// fine, clears the array, also modifies y</span></div><div class="line">    <span class="hljs-comment">// the following does not work; it would need to create a new temporary / unamed array in storage, but storage is 'statically' allocated</span></div><div class="line">    <span class="hljs-comment">// y = memoryArray;</span></div><div class="line">    <span class="hljs-comment">// This does not work either, since it would 'reset' the pointer, but there is not sensible location it could point to.</span></div><div class="line">    <span class="hljs-comment">// delete y;</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract C &#123;</span><br><span class="line">  uint[] x; <span class="comment">// the data location of x is storage</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// the data location of memoryArray is memory</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">uint[] memoryArray</span>) </span>&#123;</span><br><span class="line">    x = memoryArray; <span class="comment">// works, copy the whole array to storage</span></span><br><span class="line">    <span class="keyword">var</span> y = x; <span class="comment">// works, assigns a pointer, data location of y is storage</span></span><br><span class="line">    y[<span class="number">7</span>]; <span class="comment">// fine, returns the 8th element</span></span><br><span class="line">    y.length = <span class="number">2</span>; <span class="comment">// fine, modifies x through y</span></span><br><span class="line">    <span class="keyword">delete</span> x; <span class="comment">// fine, clears the array, also modifies y</span></span><br><span class="line">    <span class="comment">// the following does not work; it would need to create a new temporary / unamed array in storage, but storage is &#x27;statically&#x27; allocated</span></span><br><span class="line">    <span class="comment">// y = memoryArray;</span></span><br><span class="line">    <span class="comment">// This does not work either, since it would &#x27;reset&#x27; the pointer, but there is not sensible location it could point to.</span></span><br><span class="line">    <span class="comment">// delete y;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h5 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h5><ul>
 <li><p>Forced data location:</p>
 <ul>
@@ -315,7 +268,8 @@
 <p>Variables of type <code>bytes</code> and <code>string</code> are special arrays. A <code>bytes</code> is similar to <code>byte[]</code>, but it is packed tightly in calldata. <code>string</code> is equal to <code>bytes</code> but does not allow length or index access(for now).</p>
 <p>So <code>bytes</code> should always be preferred over <code>byte[]</code> because it is cheaper.</p>
 <h4 id="Structs"><a href="#Structs" class="headerlink" title="Structs"></a>Structs</h4><p>Solidity provides a way to define new types in the form of structs, which is shown in the following example:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">pragma solidity ^<span class="hljs-number">0.4</span><span class="hljs-number">.11</span>;</div><div class="line"></div><div class="line">contract CrowdFunding &#123;</div><div class="line">  struct Funder &#123;</div><div class="line">    address addr;</div><div class="line">    uint amount;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  struct Campaign &#123;</div><div class="line">    address beneficiary;</div><div class="line">    uint fundingGoal;</div><div class="line">    uint numFunders;</div><div class="line">    uint amount;</div><div class="line">    mapping(<span class="hljs-function"><span class="hljs-params">uint</span> =&gt;</span> Funder) funders;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.11</span>;</span><br><span class="line"></span><br><span class="line">contract CrowdFunding &#123;</span><br><span class="line">  struct Funder &#123;</span><br><span class="line">    address addr;</span><br><span class="line">    uint amount;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  struct Campaign &#123;</span><br><span class="line">    address beneficiary;</span><br><span class="line">    uint fundingGoal;</span><br><span class="line">    uint numFunders;</span><br><span class="line">    uint amount;</span><br><span class="line">    mapping(<span class="function"><span class="params">uint</span> =&gt;</span> Funder) funders;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>It is not possible for a struct to contain a member of its own type, although the struct itself can be the value type of a mapping member. This restriction is necessary, as the size of the struct has to be finite.</p>
 <h4 id="Mappings"><a href="#Mappings" class="headerlink" title="Mappings"></a>Mappings</h4><p>Mapping types are declared as <code>mapping(_keyType =&gt; _valueType)</code>. Here <code>_keyType</code> can be almost any type except for a mapping, a dynamically sized array, a contract, an enum, and a struct. <code>_valueType</code> can actually be any type, including mappings.</p>
 <p>Mappings can be seen as hash tables which are virtually initialized such that every possible key exists and is mapped to a value whose byte-representation is all zeros: a type’s default value.</p>
@@ -328,233 +282,119 @@
 <p>It’s really important to note that <code>delete a</code> really behaves like an assignment to <code>a</code>, it stores a new object in <code>a</code>.</p>
 <h4 id="Conversions-between-Elementary-Types"><a href="#Conversions-between-Elementary-Types" class="headerlink" title="Conversions between Elementary Types."></a>Conversions between Elementary Types.</h4><h5 id="Implicit-Conversions"><a href="#Implicit-Conversions" class="headerlink" title="Implicit Conversions"></a>Implicit Conversions</h5><p>In general, an implicit conversion between value-types is possible if it makes sense semantically and no information is lost: <code>uint8</code> is convertible to <code>uint16</code>, but <code>uint16</code> is not convertible to <code>uint8</code>. And <code>int8</code> is not convertible to <code>uint256</code>(because <code>uint256</code> cannot hold hold e.g. <code>-1</code>).</p>
 <h5 id="Explicit-Conversions"><a href="#Explicit-Conversions" class="headerlink" title="Explicit Conversions"></a>Explicit Conversions</h5><p>If the compiler does not allow implicit conversion but you know what you are doing, an explicit type conversion is sometimes possible.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">int8 y = <span class="hljs-number">-3</span>;</div><div class="line">uint x = uint(y);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int8 y = <span class="number">-3</span>;</span><br><span class="line">uint x = uint(y);</span><br></pre></td></tr></table></figure>
+
 <h4 id="Type-Deduction"><a href="#Type-Deduction" class="headerlink" title="Type Deduction"></a>Type Deduction</h4><p>For convenience, it is not always necessary to explicitly specify the type of a variable, the compiler automatically infers it from the type of the first expression that is assigned to the variable:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">uint24 x = <span class="hljs-number">0x123</span>;</div><div class="line"><span class="hljs-keyword">var</span> y = x;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uint24 x = <span class="number">0x123</span>;</span><br><span class="line"><span class="keyword">var</span> y = x;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Units-and-Globally-Available-Variables"><a href="#Units-and-Globally-Available-Variables" class="headerlink" title="Units and Globally Available Variables"></a>Units and Globally Available Variables</h3><h4 id="Ether-Units"><a href="#Ether-Units" class="headerlink" title="Ether Units"></a>Ether Units</h4><p>A literal number can take a suffix of <code>wei</code>, <code>finney</code>, <code>szabo</code>, or <code>ether</code> to convert between the subdenominations of Ether, where Ether currency numbers without a postfix are assumed to be Wei.</p>
 <p><code>2 ether === 2000 finney</code> evaluates to <code>true</code></p>
 <h4 id="Time-Units"><a href="#Time-Units" class="headerlink" title="Time Units"></a>Time Units</h4><p>Suffixes like <code>seconds</code>, <code>minutes</code>, <code>hours</code>, <code>days</code>, <code>weeks</code> and <code>years</code> after literal numbers can be used to convert between units of time where seconds are the base unit.</p>
 <p>Take care if you perform calendar calculations using these units, because not every year equals 365 days and not even every day has 24 hours because of leap seconds. Due to the fact that leap seconds cannot be predicted, an exact calendar library has to be updated by an external oracle.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">unit start, unit dayAfter</span>) </span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (now &gt;= start + dayAfter + <span class="hljs-number">1</span> days) &#123;</div><div class="line">    <span class="hljs-comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">unit start, unit dayAfter</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (now &gt;= start + dayAfter + <span class="number">1</span> days) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Other Global Variables and Functions:</p>
-<p><a href="http://ezcook.de/2017/11/10/Solidity-CheatSheet/" target="_blank" rel="noopener">Post</a></p>
+<p><a href="http://ezcook.de/2017/11/10/Solidity-CheatSheet/">Post</a></p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2017/11/10/Notes-on-Solidity-in-Depth/">https://ezcook.de/2017/11/10/Notes-on-Solidity-in-Depth/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Ethereum/">Ethereum</a><a class="post-meta__tags" href="/tags/Blockchain/">Blockchain</a><a class="post-meta__tags" href="/tags/Smart-Contract/">Smart Contract</a><a class="post-meta__tags" href="/tags/Solidity/">Solidity</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/11/14/Solidity-Style-Guide/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Solidity Style Guide</div></div></a></div><div class="next-post pull-right"><a href="/2017/11/10/Solidity-CheatSheet/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Solidity CheatSheet</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/11/14/Common-Patterns-in-Contract/" title="Common Patterns in Contract"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-11-14</div><div class="relatedPosts_title">Common Patterns in Contract</div></div></a></div><div class="relatedPosts_item"><a href="/2018/01/29/Gas-Used-by-Public-and-External-Function-in-Solidity/" title="Gas Used by Public and External Function in Solidity"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-01-29</div><div class="relatedPosts_title">Gas Used by Public and External Function in Solidity</div></div></a></div><div class="relatedPosts_item"><a href="/2017/09/13/Simple-Example-of-DAPP/" title="Simple Example of DAPP"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-13</div><div class="relatedPosts_title">Simple Example of DAPP</div></div></a></div><div class="relatedPosts_item"><a href="/2017/11/10/Solidity-CheatSheet/" title="Solidity CheatSheet"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-11-10</div><div class="relatedPosts_title">Solidity CheatSheet</div></div></a></div><div class="relatedPosts_item"><a href="/2017/11/14/Solidity-Style-Guide/" title="Solidity Style Guide"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-11-14</div><div class="relatedPosts_title">Solidity Style Guide</div></div></a></div><div class="relatedPosts_item"><a href="/2018/03/05/Writing-Upgradable-Contracts-in-Solidity/" title="Writing Upgradable Contracts in Solidity"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-03-05</div><div class="relatedPosts_title">Writing Upgradable Contracts in Solidity</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2017/11/10/Notes-on-Solidity-in-Depth/'
+    this.page.identifier = '2017/11/10/Notes-on-Solidity-in-Depth/'
+    this.page.title = 'Notes on Solidity in Depth'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Blockchain/">Blockchain</a>, <a class="has-link-grey -link" href="/tags/Ethereum/">Ethereum</a>, <a class="has-link-grey -link" href="/tags/Smart-Contract/">Smart Contract</a>, <a class="has-link-grey -link" href="/tags/Solidity/">Solidity</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/11/14/Solidity-Style-Guide/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Solidity Style Guide</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/11/10/Solidity-CheatSheet/">
-                <span class="level-item">Solidity CheatSheet</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2017/11/10/Notes-on-Solidity-in-Depth/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

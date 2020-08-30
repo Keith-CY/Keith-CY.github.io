@@ -1,201 +1,131 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Snippet of GitHub Actions | EzCook</title><meta name="description" content="Core Conceptions for GitHub Actions Workflow  A configurable automated process  Workflow run  An instance of the workflow that runs when the pre-configured event occurs  Workflow file  The YAML file t"><meta name="keywords" content="Git,Github Action"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2019/09/16/Snippet-of-GitHub-Actions/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Snippet of GitHub Actions"><meta property="og:url" content="https://ezcook.de/2019/09/16/Snippet-of-GitHub-Actions/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Core Conceptions for GitHub Actions Workflow  A configurable automated process  Workflow run  An instance of the workflow that runs when the pre-configured event occurs  Workflow file  The YAML file t"><meta property="og:image" content="https://ezcook.de/gallery/thumbnails/github_actions.png"><meta property="article:published_time" content="2019-09-16T07:14:02.000Z"><meta property="article:modified_time" content="2020-08-30T15:22:44.596Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Snippet of GitHub Actions - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Snippet of GitHub Actions" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-image">
-        <span  class="image is-7by1">
-            <img class="thumbnail" src="/gallery/thumbnails/github_actions.png" alt="Snippet of GitHub Actions">
-        </span>
-    </div>
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-09-16T07:14:02.000Z">2019-09-16</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    8 minutes read (About 1264 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Snippet of GitHub Actions
-            
-        </h1>
-        <div class="content">
-            <h2 id="Core-Conceptions-for-GitHub-Actions"><a href="#Core-Conceptions-for-GitHub-Actions" class="headerlink" title="Core Conceptions for GitHub Actions"></a>Core Conceptions for GitHub Actions</h2><ol>
-<li><p>Workflow</p>
-<p>A configurable automated process</p>
-</li>
-<li><p>Workflow run</p>
-<p>An instance of the workflow that runs when the pre-configured event occurs</p>
-</li>
-<li><p>Workflow file</p>
-<p>The YAML file that defines the workflow configuration with at least one job.</p>
-</li>
-<li><p>Job</p>
-<p>A defined task made up of steps. Each job is run in a <em>fresh instance</em> of the virtual environement.</p>
-</li>
-<li><p>Step</p>
-<p>A step is a set of tasks performed by a job. Each step in a job executes in the same virtual environment, allowing the actions in that job to share information using the filesystem.</p>
-</li>
-<li><p>Action</p>
-<p>Individual tasks that combined as steps to create a job. Actions are the smallest portable building block of a workflow.</p>
-</li>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 23:22:44'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Core-Conceptions-for-GitHub-Actions"><span class="toc-number">1.</span> <span class="toc-text">Core Conceptions for GitHub Actions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Configuring-a-workflow"><span class="toc-number">2.</span> <span class="toc-text">Configuring a workflow</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#About-workflows"><span class="toc-number">2.1.</span> <span class="toc-text">About workflows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-workflow-file"><span class="toc-number">2.2.</span> <span class="toc-text">Create a workflow file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuring-a-build-matrix"><span class="toc-number">2.3.</span> <span class="toc-text">Configuring a build matrix</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Using-the-checkout-action"><span class="toc-number">2.4.</span> <span class="toc-text">Using the checkout action</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Referencing-actions-in-your-workflow"><span class="toc-number">2.5.</span> <span class="toc-text">Referencing actions in your workflow</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Workflow-syntax-for-GitHub-Actions"><span class="toc-number">3.</span> <span class="toc-text">Workflow syntax for GitHub Actions</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#name"><span class="toc-number">3.1.</span> <span class="toc-text">name</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#on"><span class="toc-number">3.2.</span> <span class="toc-text">on</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#on-lt-push-pull-request-gt-lt-tag-branches-gt"><span class="toc-number">3.2.1.</span> <span class="toc-text">on.&lt;push|pull_request&gt;.&lt;tag|branches&gt;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#on-lt-push-pull-request-gt-paths"><span class="toc-number">3.2.2.</span> <span class="toc-text">on.&lt;push|pull_request&gt;.paths</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#jobs"><span class="toc-number">3.3.</span> <span class="toc-text">jobs</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#jobs-1"><span class="toc-number">3.3.1.</span> <span class="toc-text">jobs.</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jobs-name"><span class="toc-number">3.3.2.</span> <span class="toc-text">jobs..name</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jobs-needs"><span class="toc-number">3.3.3.</span> <span class="toc-text">jobs..needs</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jobs-runs-on"><span class="toc-number">3.3.4.</span> <span class="toc-text">jobs.runs-on</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#jobs-steps"><span class="toc-number">3.3.5.</span> <span class="toc-text">jobs..steps</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#jobs-steps-id"><span class="toc-number">3.3.5.1.</span> <span class="toc-text">jobs..steps.id</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#jobs-steps-if"><span class="toc-number">3.3.5.2.</span> <span class="toc-text">jobs..steps.if</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#jobs-step-name"><span class="toc-number">3.3.5.3.</span> <span class="toc-text">jobs..step.name</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#jobs-steps-uses"><span class="toc-number">3.3.5.4.</span> <span class="toc-text">jobs..steps.uses</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#jobs-steps-with"><span class="toc-number">3.3.5.5.</span> <span class="toc-text">jobs..steps.with</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#jobs-steps-with-args"><span class="toc-number">3.3.5.6.</span> <span class="toc-text">jobs..steps.with.args</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#jobs-steps-with-entrypoint"><span class="toc-number">3.3.5.7.</span> <span class="toc-text">jobs.steps.with.entrypoint</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#jobs-steps-env"><span class="toc-number">3.3.5.8.</span> <span class="toc-text">jobs..steps.env</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(/gallery/thumbnails/github_actions.png)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Snippet of GitHub Actions</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2019-09-16T07:14:02.000Z" title="Created 2019-09-16 15:14:02">2019-09-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T15:22:44.596Z" title="Updated 2020-08-30 23:22:44">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2019/09/16/Snippet-of-GitHub-Actions/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="Core-Conceptions-for-GitHub-Actions"><a href="#Core-Conceptions-for-GitHub-Actions" class="headerlink" title="Core Conceptions for GitHub Actions"></a>Core Conceptions for GitHub Actions</h2><ol>
+<li>Workflow</li>
 </ol>
+<p>A configurable automated process</p>
+<ol start="2">
+<li>Workflow run</li>
+</ol>
+<p>An instance of the workflow that runs when the pre-configured event occurs</p>
+<ol start="3">
+<li>Workflow file</li>
+</ol>
+<p>The YAML file that defines the workflow configuration with at least one job.</p>
+<ol start="4">
+<li>Job</li>
+</ol>
+<p>A defined task made up of steps. Each job is run in a <em>fresh instance</em> of the virtual environement.</p>
+<ol start="5">
+<li>Step</li>
+</ol>
+<p>A step is a set of tasks performed by a job. Each step in a job executes in the same virtual environment, allowing the actions in that job to share information using the filesystem.</p>
+<ol start="6">
+<li>Action</li>
+</ol>
+<p>Individual tasks that combined as steps to create a job. Actions are the smallest portable building block of a workflow.</p>
 <h2 id="Configuring-a-workflow"><a href="#Configuring-a-workflow" class="headerlink" title="Configuring a workflow"></a>Configuring a workflow</h2><h3 id="About-workflows"><a href="#About-workflows" class="headerlink" title="About workflows"></a>About workflows</h3><ol>
 <li>Store workflows in the <code>.github/workflows</code> directory in the root of the repository</li>
 </ol>
@@ -205,20 +135,24 @@
 <li>Use <code>Workflow syntax for GitHub Actions</code> reference documentation to choose events to trigger an action, add actions, and customize the workflows.</li>
 <li>Commit the changes in the workflow file to the branch where the workflow is desired to run.</li>
 </ol>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">name:</span> <span class="hljs-string">Greet</span> <span class="hljs-string">Everyone</span></div><div class="line"><span class="hljs-comment"># This workflow is triggered on pushes to the repository</span></div><div class="line"><span class="hljs-attr">on:</span> <span class="hljs-string">[push]</span></div><div class="line"></div><div class="line"><span class="hljs-attr">jobs:</span></div><div class="line"><span class="hljs-attr">  build:</span></div><div class="line">    <span class="hljs-comment"># Job name is Greeting</span></div><div class="line"><span class="hljs-attr">    name:</span> <span class="hljs-string">Greeting</span></div><div class="line">    <span class="hljs-comment"># This job runs on Linux</span></div><div class="line"><span class="hljs-attr">    runs-on:</span> <span class="hljs-string">ubuntu-latest</span></div><div class="line"><span class="hljs-attr">    steps:</span></div><div class="line">      <span class="hljs-comment"># This step uses GitHub's hello-world-javascript-action</span></div><div class="line"><span class="hljs-attr">      - name:</span> <span class="hljs-string">Hello</span> <span class="hljs-string">World</span></div><div class="line"><span class="hljs-attr">        use:</span> <span class="hljs-string">actions/hello-world-javascript-action@v1</span></div><div class="line"><span class="hljs-attr">        with:</span></div><div class="line"><span class="hljs-attr">          who-to-greet:</span> <span class="hljs-string">'Mona the Octocat'</span></div><div class="line"><span class="hljs-attr">        id:</span> <span class="hljs-string">hello</span></div><div class="line">      <span class="hljs-comment"># This step prints an output (time) from the previous step's action</span></div><div class="line"><span class="hljs-attr">      - name:</span> <span class="hljs-string">Echo</span> <span class="hljs-string">the</span> <span class="hljs-string">greeting's</span> <span class="hljs-string">time</span></div><div class="line"><span class="hljs-attr">        run:</span> <span class="hljs-string">echo</span> <span class="hljs-string">'The time was $\&#123;\&#123; steps.hello.outputs.time &#125;&#125;.'</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Greet</span> <span class="string">Everyone</span></span><br><span class="line"><span class="comment"># This workflow is triggered on pushes to the repository</span></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="comment"># Job name is Greeting</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Greeting</span></span><br><span class="line">    <span class="comment"># This job runs on Linux</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="comment"># This step uses GitHub&#x27;s hello-world-javascript-action</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Hello</span> <span class="string">World</span></span><br><span class="line">        <span class="attr">use:</span> <span class="string">actions/hello-world-javascript-action@v1</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">who-to-greet:</span> <span class="string">&#x27;Mona the Octocat&#x27;</span></span><br><span class="line">        <span class="attr">id:</span> <span class="string">hello</span></span><br><span class="line">      <span class="comment"># This step prints an output (time) from the previous step&#x27;s action</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Echo</span> <span class="string">the</span> <span class="string">greeting&#x27;s</span> <span class="string">time</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">echo</span> <span class="string">&#x27;The time was $\&#123;\&#123; steps.hello.outputs.time &#125;&#125;.&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="Configuring-a-build-matrix"><a href="#Configuring-a-build-matrix" class="headerlink" title="Configuring a build matrix"></a>Configuring a build matrix</h3><p>To test across multiple operating system, platforms, and language versions at the same time, a matrix could be set up.</p>
 <p>A build matrix provides different configurations for the virtual environment to test.</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">runs-on:</span> <span class="hljs-string">$\&#123;\&#123;</span> <span class="hljs-string">matrix.os</span> <span class="hljs-string">&#125;&#125;</span></div><div class="line"><span class="hljs-attr">strategy:</span></div><div class="line"><span class="hljs-attr">  matrix:</span><span class="hljs-string">:</span></div><div class="line"><span class="hljs-attr">    os:</span> <span class="hljs-string">[ubuntu-14.04,</span> <span class="hljs-string">ubuntu-18.04]</span></div><div class="line"><span class="hljs-attr">    node:</span> <span class="hljs-string">[6,</span> <span class="hljs-number">8</span><span class="hljs-string">,</span> <span class="hljs-number">10</span><span class="hljs-string">]</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">runs-on:</span> <span class="string">$\&#123;\&#123;</span> <span class="string">matrix.os</span> <span class="string">&#125;&#125;</span></span><br><span class="line"><span class="attr">strategy:</span></span><br><span class="line">  <span class="attr">matrix::</span></span><br><span class="line">    <span class="attr">os:</span> [<span class="string">ubuntu-14.04</span>, <span class="string">ubuntu-18.04</span>]</span><br><span class="line">    <span class="attr">node:</span> [<span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>]</span><br></pre></td></tr></table></figure>
+
 <h3 id="Using-the-checkout-action"><a href="#Using-the-checkout-action" class="headerlink" title="Using the checkout action"></a>Using the checkout action</h3><p>There are several standard actions you can use in your workflow. The checkout action is a standard action that you must include in your workflow before other actions when:</p>
 <ul>
 <li>Your workflow requires a copy of your repository’s code, such as when you’re building and testing your repository or using continuous integration.</li>
 <li>There’s at least one action in your workflow that is defined in the same repository.</li>
 </ul>
 <p>To use the standard checkout action without furthur specifications, including this step:</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">- uses:</span> <span class="hljs-string">actions/checkout@v1</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v1</span></span><br></pre></td></tr></table></figure>
+
 <p>Using <code>v1</code> in this example ensures you’re using a stable version of the checkout action.</p>
 <p>The <em>shallow clone</em> your repository, or copy only the latest version of your repository, set the <code>fetch-deptch</code> with the <code>with</code> syntax:</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">- uses:</span> <span class="hljs-string">actions/checkout@v1</span></div><div class="line"><span class="hljs-attr">  with:</span></div><div class="line"><span class="hljs-attr">    fetch-depth:</span> <span class="hljs-number">1</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v1</span></span><br><span class="line">  <span class="attr">with:</span></span><br><span class="line">    <span class="attr">fetch-depth:</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="Referencing-actions-in-your-workflow"><a href="#Referencing-actions-in-your-workflow" class="headerlink" title="Referencing actions in your workflow"></a>Referencing actions in your workflow</h3><p>To reference actions in your workflow file with the correct syntax, you must consider where the action is defined.</p>
 <p>Workflows can use actions defined in</p>
 <ul>
@@ -226,264 +160,156 @@
 <li>The same repository where your workflow file references the actions</li>
 <li>A publised Docker container image on Docker Hub</li>
 </ul>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">jobs:</span></div><div class="line"><span class="hljs-attr">  my_first_job:</span></div><div class="line"><span class="hljs-attr">    steps:</span></div><div class="line"><span class="hljs-attr">      - uses:</span> <span class="hljs-string">actions/setup-node@v1</span></div><div class="line"><span class="hljs-attr">        with:</span></div><div class="line"><span class="hljs-attr">          node-version:</span> <span class="hljs-number">10.</span><span class="hljs-string">x</span></div><div class="line"><span class="hljs-attr">      - uses:</span> <span class="hljs-string">./.github/actions/hello-world-action</span></div><div class="line"><span class="hljs-attr">      - uses:</span> <span class="hljs-attr">docker://alpine:3.8</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">my_first_job:</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/setup-node@v1</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="number">10.</span><span class="string">x</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">./.github/actions/hello-world-action</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">docker://alpine:3.8</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="Workflow-syntax-for-GitHub-Actions"><a href="#Workflow-syntax-for-GitHub-Actions" class="headerlink" title="Workflow syntax for GitHub Actions"></a>Workflow syntax for GitHub Actions</h2><h3 id="name"><a href="#name" class="headerlink" title="name"></a>name</h3><p>The name of the workflow.</p>
-<h3 id="on"><a href="#on" class="headerlink" title="on"></a>on</h3><p><strong>Required</strong> The name of the <a href="https://help.github.com/en/articles/events-that-trigger-workflows" target="_blank" rel="noopener">GitHub event</a> that triggers the workflow.<br><code>string</code>, <code>array</code> and <code>map</code> are acceptable</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">on:</span> <span class="hljs-string">push</span></div><div class="line"><span class="hljs-attr">on:</span> <span class="hljs-string">[push,</span> <span class="hljs-string">pull_request]</span></div></pre></td></tr></table></figure>
-<h4 id="on-1"><a href="#on-1" class="headerlink" title="on.."></a>on.<push|pull_request>.<tag|branches></tag|branches></push|pull_request></h4><p>When using the <code>push</code> and <code>pull_request</code> events, you can configure a workflow to run on specific branches or tags</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">on:</span></div><div class="line"><span class="hljs-attr">  push:</span></div><div class="line"><span class="hljs-attr">    branches:</span></div><div class="line"><span class="hljs-bullet">      -</span> <span class="hljs-string">master</span></div><div class="line"><span class="hljs-bullet">      -</span> <span class="hljs-string">'release/*'</span></div><div class="line"><span class="hljs-attr">    tags:</span></div><div class="line"><span class="hljs-bullet">      -</span> <span class="hljs-string">v1</span></div><div class="line"><span class="hljs-bullet">      -</span> <span class="hljs-string">v1.0</span></div></pre></td></tr></table></figure>
-<h4 id="on-paths"><a href="#on-paths" class="headerlink" title="on..paths"></a>on.<push|pull_request>.paths</push|pull_request></h4><p>When using the <code>push</code> and <code>pull_request</code> events, you can configure a workflow to run when at least one modified file matches a pattern defined in <code>paths</code>.</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">on:</span></div><div class="line"><span class="hljs-attr">  push:</span></div><div class="line"><span class="hljs-attr">    paths:</span></div><div class="line"><span class="hljs-bullet">      -</span> <span class="hljs-string">'*'</span></div><div class="line"><span class="hljs-bullet">      -</span> <span class="hljs-string">'!*.js'</span></div><div class="line">      <span class="hljs-string">```</span></div></pre></td></tr></table></figure>
+<h3 id="on"><a href="#on" class="headerlink" title="on"></a>on</h3><p><strong>Required</strong> The name of the <a target="_blank" rel="noopener" href="https://help.github.com/en/articles/events-that-trigger-workflows">GitHub event</a> that triggers the workflow.<br><code>string</code>, <code>array</code> and <code>map</code> are acceptable</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">on:</span> <span class="string">push</span></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>, <span class="string">pull_request</span>]</span><br></pre></td></tr></table></figure>
+
+<h4 id="on-lt-push-pull-request-gt-lt-tag-branches-gt"><a href="#on-lt-push-pull-request-gt-lt-tag-branches-gt" class="headerlink" title="on.&lt;push|pull_request&gt;.&lt;tag|branches&gt;"></a>on.&lt;push|pull_request&gt;.&lt;tag|branches&gt;</h4><p>When using the <code>push</code> and <code>pull_request</code> events, you can configure a workflow to run on specific branches or tags</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">master</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;release/*&#x27;</span></span><br><span class="line">    <span class="attr">tags:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">v1</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">v1.0</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="on-lt-push-pull-request-gt-paths"><a href="#on-lt-push-pull-request-gt-paths" class="headerlink" title="on.&lt;push|pull_request&gt;.paths"></a>on.&lt;push|pull_request&gt;.paths</h4><p>When using the <code>push</code> and <code>pull_request</code> events, you can configure a workflow to run when at least one modified file matches a pattern defined in <code>paths</code>.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">paths:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;*&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;!*.js&#x27;</span></span><br><span class="line">      <span class="string">```</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="jobs"><a href="#jobs" class="headerlink" title="jobs"></a>jobs</h3><p>A workflow run is made up of one or more jobs. Jobs run in <em>parallel</em> by default. To run jobs sequentially, you can define dependencies on other jobs using the <code>jobs.&lt;job_id&gt;.needs</code> keywords.</p>
 <p>Each job runs in a <em>fresh instance</em> of the virtual environment specified by <code>runs-on</code>.</p>
-<h4 id="jobs-1"><a href="#jobs-1" class="headerlink" title="jobs."></a>jobs.<job_id></job_id></h4><p>Each job must have an id to associate with the job. The key <code>job_id</code> is a string and its value is a map of the job’s configuration data.</p>
+<h4 id="jobs-1"><a href="#jobs-1" class="headerlink" title="jobs."></a>jobs.<job_id></h4><p>Each job must have an id to associate with the job. The key <code>job_id</code> is a string and its value is a map of the job’s configuration data.</p>
 <p>You must replace <code>&lt;job_id&gt;</code> with a string that is unique to the <code>jobs</code> object. The <code>&lt;job_id&gt;</code> must start with a letter or <code>_</code> and contain only alphanumeric characters, <code>-</code> or <code>_</code>.</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">jobs:</span></div><div class="line"><span class="hljs-attr">  my_first_job:</span></div><div class="line"><span class="hljs-attr">    name:</span> <span class="hljs-string">My</span> <span class="hljs-string">first</span> <span class="hljs-string">job</span></div><div class="line"><span class="hljs-attr">  my_second_job:</span></div><div class="line"><span class="hljs-attr">    name:</span> <span class="hljs-string">My</span> <span class="hljs-string">second</span> <span class="hljs-string">job</span></div></pre></td></tr></table></figure>
-<h4 id="jobs-name"><a href="#jobs-name" class="headerlink" title="jobs..name"></a>jobs.<job_id>.name</job_id></h4><p>The name of the job displayed on GitHub</p>
-<h4 id="jobs-needs"><a href="#jobs-needs" class="headerlink" title="jobs..needs"></a>jobs.<job_id>.needs</job_id></h4><p>Identifies any jobs that must complete successfully before this job will run. It can be a string or array of string</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">jobs:</span></div><div class="line"><span class="hljs-attr">  job1:</span></div><div class="line"><span class="hljs-attr">  job2:</span></div><div class="line"><span class="hljs-attr">    needs:</span> <span class="hljs-string">job1</span></div><div class="line"><span class="hljs-attr">  job3:</span></div><div class="line"><span class="hljs-attr">    needs:</span> <span class="hljs-string">[job1,</span> <span class="hljs-string">job2]</span></div></pre></td></tr></table></figure>
-<h4 id="jobs-runs-on"><a href="#jobs-runs-on" class="headerlink" title="jobs.runs-on"></a>jobs<job_id>.runs-on</job_id></h4><p><strong>Required</strong> The type of virtual host machine to run the job on. Each job runs with a fresh instance of the virtual environment specified by <code>runs-on</code>:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">my_first_job:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">My</span> <span class="string">first</span> <span class="string">job</span></span><br><span class="line">  <span class="attr">my_second_job:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">My</span> <span class="string">second</span> <span class="string">job</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="jobs-name"><a href="#jobs-name" class="headerlink" title="jobs..name"></a>jobs.<job_id>.name</h4><p>The name of the job displayed on GitHub</p>
+<h4 id="jobs-needs"><a href="#jobs-needs" class="headerlink" title="jobs..needs"></a>jobs.<job_id>.needs</h4><p>Identifies any jobs that must complete successfully before this job will run. It can be a string or array of string</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">job1:</span></span><br><span class="line">  <span class="attr">job2:</span></span><br><span class="line">    <span class="attr">needs:</span> <span class="string">job1</span></span><br><span class="line">  <span class="attr">job3:</span></span><br><span class="line">    <span class="attr">needs:</span> [<span class="string">job1</span>, <span class="string">job2</span>]</span><br></pre></td></tr></table></figure>
+
+<h4 id="jobs-runs-on"><a href="#jobs-runs-on" class="headerlink" title="jobs.runs-on"></a>jobs<job_id>.runs-on</h4><p><strong>Required</strong> The type of virtual host machine to run the job on. Each job runs with a fresh instance of the virtual environment specified by <code>runs-on</code>:</p>
 <p>Available virtual machine types are:</p>
 <ul>
 <li>ubuntu-latest, ubuntu-18.04 or ubuntu-16.04</li>
 <li>windows-latest, windows-2019 or windows-2016</li>
 <li>macOS-latest, macOS-10.14</li>
 </ul>
-<h4 id="jobs-steps"><a href="#jobs-steps" class="headerlink" title="jobs..steps"></a>jobs.<job_id>.steps</job_id></h4><p>A job contains a sequence of tasks called <code>steps</code>. Steps can run commands, run setup tasks, or run an action in your repository, a public repository, or an action published in a Docker registry.</p>
+<h4 id="jobs-steps"><a href="#jobs-steps" class="headerlink" title="jobs..steps"></a>jobs.<job_id>.steps</h4><p>A job contains a sequence of tasks called <code>steps</code>. Steps can run commands, run setup tasks, or run an action in your repository, a public repository, or an action published in a Docker registry.</p>
 <p>Each step run in its own <em>process</em> in the virtual environment and has access to the workspace and filesystem. Because steps run in their own process, changes to environment variables are not preserved between steps.</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">name:</span> <span class="hljs-string">Greeting</span> <span class="hljs-string">from</span> <span class="hljs-string">Mona</span></div><div class="line"></div><div class="line"><span class="hljs-attr">on:</span> <span class="hljs-string">push</span></div><div class="line"></div><div class="line"><span class="hljs-attr">jobs:</span></div><div class="line"><span class="hljs-attr">  my-job:</span></div><div class="line"><span class="hljs-attr">    name:</span> <span class="hljs-string">My</span> <span class="hljs-string">Job</span></div><div class="line"><span class="hljs-attr">    runs-on:</span> <span class="hljs-string">ubuntu-latest</span></div><div class="line"><span class="hljs-attr">    steps:</span></div><div class="line"><span class="hljs-attr">      - name:</span> <span class="hljs-string">Print</span> <span class="hljs-string">a</span> <span class="hljs-string">greeting</span></div><div class="line"><span class="hljs-attr">        env:</span></div><div class="line"><span class="hljs-attr">          MY_VAR:</span> <span class="hljs-string">Hi</span> <span class="hljs-string">there!</span> <span class="hljs-string">My</span> <span class="hljs-string">name</span> <span class="hljs-string">is</span></div><div class="line"><span class="hljs-attr">          FIRST_NAME:</span> <span class="hljs-string">Mona</span></div><div class="line"><span class="hljs-attr">          LAST_NAME:</span> <span class="hljs-string">Octocat</span></div><div class="line"><span class="hljs-attr">        run:</span> <span class="hljs-string">|</span></div><div class="line">          echo $MY_VAR $FIRST_NAME $LAST_NAME.</div></pre></td></tr></table></figure>
-<h5 id="jobs-steps-id"><a href="#jobs-steps-id" class="headerlink" title="jobs..steps.id"></a>jobs.<job_id>.steps.id</job_id></h5><p>A unique identifier for the step. You can use the <code>id</code> to reference the step in contexts.</p>
-<h5 id="jobs-steps-if"><a href="#jobs-steps-if" class="headerlink" title="jobs..steps.if"></a>jobs.<job_id>.steps.if</job_id></h5><p>You can use the <code>if</code> conditional to prevent a step from running unless a condition is met.</p>
-<p>Expression in an <code>if</code> conditional do not require the <code>$\{\{ }}</code> syntax.</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">steps:</span></div><div class="line"><span class="hljs-attr">  - name:</span> <span class="hljs-string">My</span> <span class="hljs-string">first</span> <span class="hljs-string">step</span></div><div class="line"><span class="hljs-attr">    if:</span> <span class="hljs-string">github.event_name</span> <span class="hljs-string">==</span> <span class="hljs-string">'pull_request'</span> <span class="hljs-string">&amp;&amp;</span> <span class="hljs-string">github.event.action</span> <span class="hljs-string">==</span> <span class="hljs-string">'unassigned'</span></div><div class="line"><span class="hljs-attr">    run:</span> <span class="hljs-string">echo</span> <span class="hljs-string">This</span> <span class="hljs-string">event</span> <span class="hljs-string">is</span> <span class="hljs-string">a</span> <span class="hljs-string">pull</span> <span class="hljs-string">request</span> <span class="hljs-string">that</span> <span class="hljs-string">had</span> <span class="hljs-string">an</span> <span class="hljs-string">assignee</span> <span class="hljs-string">removed</span></div></pre></td></tr></table></figure>
-<h5 id="jobs-step-name"><a href="#jobs-step-name" class="headerlink" title="jobs..step.name"></a>jobs.<job_id>.step.name</job_id></h5><p>A name for the step to display on GitHub.</p>
-<h5 id="jobs-steps-uses"><a href="#jobs-steps-uses" class="headerlink" title="jobs..steps.uses"></a>jobs.<job_id>.steps.uses</job_id></h5><p>Selects an action to run as part of a step in your job. An action is a reusable unit of code.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Greeting</span> <span class="string">from</span> <span class="string">Mona</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span> <span class="string">push</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">my-job:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">My</span> <span class="string">Job</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Print</span> <span class="string">a</span> <span class="string">greeting</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="attr">MY_VAR:</span> <span class="string">Hi</span> <span class="string">there!</span> <span class="string">My</span> <span class="string">name</span> <span class="string">is</span></span><br><span class="line">          <span class="attr">FIRST_NAME:</span> <span class="string">Mona</span></span><br><span class="line">          <span class="attr">LAST_NAME:</span> <span class="string">Octocat</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line">          <span class="string">echo</span> <span class="string">$MY_VAR</span> <span class="string">$FIRST_NAME</span> <span class="string">$LAST_NAME.</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="jobs-steps-id"><a href="#jobs-steps-id" class="headerlink" title="jobs..steps.id"></a>jobs.<job_id>.steps.id</h5><p>A unique identifier for the step. You can use the <code>id</code> to reference the step in contexts.</p>
+<h5 id="jobs-steps-if"><a href="#jobs-steps-if" class="headerlink" title="jobs..steps.if"></a>jobs.<job_id>.steps.if</h5><p>You can use the <code>if</code> conditional to prevent a step from running unless a condition is met.</p>
+<p>Expression in an <code>if</code> conditional do not require the <code>$\&#123;\&#123; &#125;&#125;</code> syntax.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">steps:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">My</span> <span class="string">first</span> <span class="string">step</span></span><br><span class="line">    <span class="attr">if:</span> <span class="string">github.event_name</span> <span class="string">==</span> <span class="string">&#x27;pull_request&#x27;</span> <span class="string">&amp;&amp;</span> <span class="string">github.event.action</span> <span class="string">==</span> <span class="string">&#x27;unassigned&#x27;</span></span><br><span class="line">    <span class="attr">run:</span> <span class="string">echo</span> <span class="string">This</span> <span class="string">event</span> <span class="string">is</span> <span class="string">a</span> <span class="string">pull</span> <span class="string">request</span> <span class="string">that</span> <span class="string">had</span> <span class="string">an</span> <span class="string">assignee</span> <span class="string">removed</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="jobs-step-name"><a href="#jobs-step-name" class="headerlink" title="jobs..step.name"></a>jobs.<job_id>.step.name</h5><p>A name for the step to display on GitHub.</p>
+<h5 id="jobs-steps-uses"><a href="#jobs-steps-uses" class="headerlink" title="jobs..steps.uses"></a>jobs.<job_id>.steps.uses</h5><p>Selects an action to run as part of a step in your job. An action is a reusable unit of code.</p>
 <p>The version of the action is strongly recommended to be included in the action by specifying a Git Ref, SHA, or Docker tag number.</p>
-<h5 id="jobs-steps-with"><a href="#jobs-steps-with" class="headerlink" title="jobs..steps.with"></a>jobs.<job_id>.steps.with</job_id></h5><p>A <code>map</code> of the input parameters defined by the action. Each input parameter is a key/pair. Input parameters are set as environment variables.</p>
+<h5 id="jobs-steps-with"><a href="#jobs-steps-with" class="headerlink" title="jobs..steps.with"></a>jobs.<job_id>.steps.with</h5><p>A <code>map</code> of the input parameters defined by the action. Each input parameter is a key/pair. Input parameters are set as environment variables.</p>
 <p>The variable is prefixed with <code>INPUT_</code> and converted to uppercase.</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">jobs:</span></div><div class="line"><span class="hljs-attr">  my_first_step:</span></div><div class="line"><span class="hljs-attr">    steps:</span></div><div class="line"><span class="hljs-attr">      - name:</span> <span class="hljs-string">My</span> <span class="hljs-string">first</span> <span class="hljs-string">step</span></div><div class="line"><span class="hljs-attr">        uses:</span> <span class="hljs-string">actions/hello_world@master</span></div><div class="line"><span class="hljs-attr">        with:</span></div><div class="line"><span class="hljs-attr">          first_name:</span> <span class="hljs-string">Mona</span> <span class="hljs-comment"># INPUT_FIRST_NAME</span></div><div class="line"><span class="hljs-attr">          middle_name:</span> <span class="hljs-string">The</span> <span class="hljs-comment"># INPUT_MIDDLE_NAME</span></div><div class="line"><span class="hljs-attr">          last_name:</span> <span class="hljs-string">Octocat</span> <span class="hljs-comment"># INPUT_LAST_NAME</span></div></pre></td></tr></table></figure>
-<h5 id="jobs-steps-with-args"><a href="#jobs-steps-with-args" class="headerlink" title="jobs..steps.with.args"></a>jobs.<job_id>.steps.with.args</job_id></h5><p>// TODO:</p>
-<h5 id="jobs-steps-with-entrypoint"><a href="#jobs-steps-with-entrypoint" class="headerlink" title="jobs.steps.with.entrypoint"></a>jobs<job_id>.steps.with.entrypoint</job_id></h5><p>// TODO:</p>
-<h5 id="jobs-steps-env"><a href="#jobs-steps-env" class="headerlink" title="jobs..steps.env"></a>jobs.<job_id>.steps.env</job_id></h5><p>Sets environment variables for steps to use in the virtual environment. Public actions may specify expected environment variables in the README file.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">my_first_step:</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">My</span> <span class="string">first</span> <span class="string">step</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/hello_world@master</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">first_name:</span> <span class="string">Mona</span> <span class="comment"># INPUT_FIRST_NAME</span></span><br><span class="line">          <span class="attr">middle_name:</span> <span class="string">The</span> <span class="comment"># INPUT_MIDDLE_NAME</span></span><br><span class="line">          <span class="attr">last_name:</span> <span class="string">Octocat</span> <span class="comment"># INPUT_LAST_NAME</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="jobs-steps-with-args"><a href="#jobs-steps-with-args" class="headerlink" title="jobs..steps.with.args"></a>jobs.<job_id>.steps.with.args</h5><p>// TODO:</p>
+<h5 id="jobs-steps-with-entrypoint"><a href="#jobs-steps-with-entrypoint" class="headerlink" title="jobs.steps.with.entrypoint"></a>jobs<job_id>.steps.with.entrypoint</h5><p>// TODO:</p>
+<h5 id="jobs-steps-env"><a href="#jobs-steps-env" class="headerlink" title="jobs..steps.env"></a>jobs.<job_id>.steps.env</h5><p>Sets environment variables for steps to use in the virtual environment. Public actions may specify expected environment variables in the README file.</p>
 <p>If you are setting a secret in an environment variable, you must set secrets using the <code>secrets</code> context.</p>
-<figure class="highlight yaml hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-attr">steps:</span></div><div class="line"><span class="hljs-attr">  - name:</span> <span class="hljs-string">My</span> <span class="hljs-string">first</span> <span class="hljs-string">step</span></div><div class="line"><span class="hljs-attr">    env:</span></div><div class="line"><span class="hljs-attr">      GITHUB_TOKEN:</span> <span class="hljs-string">$\&#123;\&#123;</span> <span class="hljs-string">secrets.GITHUB_TOKEN</span> <span class="hljs-string">&#125;&#125;</span></div></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">steps:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">My</span> <span class="string">first</span> <span class="string">step</span></span><br><span class="line">    <span class="attr">env:</span></span><br><span class="line">      <span class="attr">GITHUB_TOKEN:</span> <span class="string">$\&#123;\&#123;</span> <span class="string">secrets.GITHUB_TOKEN</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2019/09/16/Snippet-of-GitHub-Actions/">https://ezcook.de/2019/09/16/Snippet-of-GitHub-Actions/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Git/">Git</a><a class="post-meta__tags" href="/tags/Github-Action/">Github Action</a></div><div class="post_share"><div class="social-share" data-image="/gallery/thumbnails/github_actions.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2019/10/10/Basic-components-in-nest-js/"><img class="prev-cover" data-lazy-src="/gallery/thumbnails/nestjs_components.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Basic Components in nest.js</div></div></a></div><div class="next-post pull-right"><a href="/2019/08/30/Methods-of-the-String-in-JavaScript/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Methods of the String in JavaScript </div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2016/05/26/e5-9b-be-e8-a7-a3-git/" title="图解 Git"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-05-26</div><div class="relatedPosts_title">图解 Git</div></div></a></div><div class="relatedPosts_item"><a href="/2016/08/27/git-cheat-sheet/" title="Git Cheat Sheet"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-08-27</div><div class="relatedPosts_title">Git Cheat Sheet</div></div></a></div><div class="relatedPosts_item"><a href="/2016/05/21/git-commands/" title="Git Commands"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2016-05-21</div><div class="relatedPosts_title">Git Commands</div></div></a></div><div class="relatedPosts_item"><a href="/2017/06/14/git-merge-and-rebase/" title="Git Merge and Rebase"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-14</div><div class="relatedPosts_title">Git Merge and Rebase</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2019/09/16/Snippet-of-GitHub-Actions/'
+    this.page.identifier = '2019/09/16/Snippet-of-GitHub-Actions/'
+    this.page.title = 'Snippet of GitHub Actions'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Git/">Git</a>, <a class="has-link-grey -link" href="/tags/Github-Action/">Github Action</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/10/10/Basic-components-in-nest-js/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Basic Components in nest.js</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2019/08/30/Methods-of-the-String-in-JavaScript/">
-                <span class="level-item">Methods of the String in JavaScript </span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2019/09/16/Snippet-of-GitHub-Actions/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

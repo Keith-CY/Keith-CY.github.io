@@ -1,178 +1,111 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Usage of Node-Influx | EzCook</title><meta name="description" content="IntroductionInfluxDB is a time series database, so it would make sense that the concept of time is moderately important when dealing with it. By default, Influx will store all dates you give to it as"><meta name="keywords" content="Database"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2017/06/30/Usage-of-Node-Influx/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Usage of Node-Influx"><meta property="og:url" content="https://ezcook.de/2017/06/30/Usage-of-Node-Influx/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="IntroductionInfluxDB is a time series database, so it would make sense that the concept of time is moderately important when dealing with it. By default, Influx will store all dates you give to it as"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2017-06-30T02:29:34.000Z"><meta property="article:modified_time" content="2020-08-30T12:58:58.762Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Usage of Node-Influx - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Usage of Node-Influx" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-06-30T02:29:34.000Z">2017-06-30</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    6 minutes read (About 826 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Usage of Node-Influx
-            
-        </h1>
-        <div class="content">
-            <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>InfluxDB is a time series database, so it would make sense that the concept of time is moderately important when dealing with it.</p>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:58:58'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Browser-Setup"><span class="toc-number">2.</span> <span class="toc-text">Browser Setup</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Reference"><span class="toc-number">3.</span> <span class="toc-text">Reference</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Class-Summary"><span class="toc-number">3.1.</span> <span class="toc-text">Class Summary</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#interface-Summary"><span class="toc-number">3.1.1.</span> <span class="toc-text">interface Summary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Function-Summary"><span class="toc-number">3.1.2.</span> <span class="toc-text">Function Summary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Variable-Summary"><span class="toc-number">3.1.3.</span> <span class="toc-text">Variable Summary</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Typedef-Summary"><span class="toc-number">3.1.4.</span> <span class="toc-text">Typedef Summary</span></a></li></ol></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Usage of Node-Influx</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-06-30T02:29:34.000Z" title="Created 2017-06-30 10:29:34">2017-06-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:58:58.762Z" title="Updated 2020-08-30 20:58:58">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2017/06/30/Usage-of-Node-Influx/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>InfluxDB is a time series database, so it would make sense that the concept of time is moderately important when dealing with it.</p>
 <p>By default, Influx will store all dates you give to it as a nanosecond precision timestamp, whereas in JavaScript, most of the time we’re dealing with millisecond precision timestamps, which we get from <code>Date.now()</code> or <code>myDate.getTime()</code>. This presents a bit of a problem for us JavaScripters, since nanosecond-precision timestamps are stored as 64-bit unsigned integers that JavaScript simply cannot represent accurately.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">node-influx git:(master) node</div><div class="line">&gt; <span class="hljs-number">1475985480231035677</span></div><div class="line"><span class="hljs-number">1475985480231035600</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">node-influx git:(master) node</span><br><span class="line">&gt; <span class="number">1475985480231035677</span></span><br><span class="line"><span class="number">1475985480231035600</span></span><br></pre></td></tr></table></figure>
+
 <p>This module tries to make dates as easy as possible for you to deal with, and out of the box everything should ‘just work’.</p>
 <p>There are three places that dates can get passed around:</p>
 <ul>
@@ -184,313 +117,340 @@
 </li>
 </ul>
 <p>To deal with this, we introduce a new type called <code>NanoDate</code>. These dates behave just like the normal <code>Date</code> type, but have two additional methods: <code>.getNanoTime()</code> and <code>.getNanoISOString()</code>. They behave just like the normal <code>.getTime()</code> and <code>getISOString</code> methods, but they both return nanosecond-precision strings instead of millisecond-precision numbers and timestamps.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">expect(myNanoDate.getTime()).to.equal(<span class="hljs-number">1475985480231</span>)</div><div class="line">expect(myNanoDate.getNanoTime()).to.equal(<span class="hljs-string">'1475985480231035677'</span>)</div><div class="line">expect(myNanoDate.toISOString()).to.equal(<span class="hljs-string">'2016-10-09T03:58:00.231Z'</span>)</div><div class="line">expect(myNanoDate.toNanoISOString()).to.equal(<span class="hljs-string">'2016-10-09T03:58:00.231035677Z'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">expect(myNanoDate.getTime()).to.equal(<span class="number">1475985480231</span>)</span><br><span class="line">expect(myNanoDate.getNanoTime()).to.equal(<span class="string">&#x27;1475985480231035677&#x27;</span>)</span><br><span class="line">expect(myNanoDate.toISOString()).to.equal(<span class="string">&#x27;2016-10-09T03:58:00.231Z&#x27;</span>)</span><br><span class="line">expect(myNanoDate.toNanoISOString()).to.equal(<span class="string">&#x27;2016-10-09T03:58:00.231035677Z&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <p>All times returned from Influx queries are parsed to INanoDates. For example you can do something like the following:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">influx.query(<span class="hljs-string">'select * from perf'</span>).then(<span class="hljs-function"><span class="hljs-params">results</span> =&gt;</span> &#123;</div><div class="line">  result.forEach(<span class="hljs-function"><span class="hljs-params">row</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(<span class="hljs-string">`Used <span class="hljs-subst">$&#123;row.cpu&#125;</span> at <span class="hljs-subst">$&#123;row.time.toNanoISOString()&#125;</span>`</span>))</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">influx.query(<span class="string">&#x27;select * from perf&#x27;</span>).then(<span class="function"><span class="params">results</span> =&gt;</span> &#123;</span><br><span class="line">  result.forEach(<span class="function"><span class="params">row</span> =&gt;</span> <span class="built_in">console</span>.log(<span class="string">`Used <span class="subst">$&#123;row.cpu&#125;</span> at <span class="subst">$&#123;row.time.toNanoISOString()&#125;</span>`</span>))</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <p>When writing data to Influx, all write methods accept INanoDates in all situation. This means if you select data from Influx and want to update a data point, you can pass the time right back into <code>write</code> method. (Remember, points within series are unique by their time) If you have a nanosecond timestamp from some external source, you can convert it to INanoDate using <code>toNanoDate</code>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">import</span> &#123; toNanoDate &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'influx'</span></div><div class="line"></div><div class="line"><span class="hljs-keyword">const</span> myNanoDate = toNanoDate(<span class="hljs-string">'1475985480231035600'</span>)</div><div class="line">expect(myNanoDate.getTime()).to.equal(<span class="hljs-number">1475985480231</span>)</div><div class="line">expect(myNanoDate.getNanoTime()).to.equal(<span class="hljs-string">'1475985480231035600'</span>)</div><div class="line">expect(myNanoDate.toNanoISOString()).to.equal(<span class="hljs-string">'2016-10-09T03:58:00.231035600Z'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; toNanoDate &#125; <span class="keyword">from</span> <span class="string">&#x27;influx&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> myNanoDate = toNanoDate(<span class="string">&#x27;1475985480231035600&#x27;</span>)</span><br><span class="line">expect(myNanoDate.getTime()).to.equal(<span class="number">1475985480231</span>)</span><br><span class="line">expect(myNanoDate.getNanoTime()).to.equal(<span class="string">&#x27;1475985480231035600&#x27;</span>)</span><br><span class="line">expect(myNanoDate.toNanoISOString()).to.equal(<span class="string">&#x27;2016-10-09T03:58:00.231035600Z&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <p>Finally, if you want to embed a iNanoDate into an Influx query, you should use <code>toNanoString</code> to do so:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">influx.query(<span class="hljs-string">`select * from perf where time &gt; "<span class="hljs-subst">$&#123;myNanoDate.toNanoISOString()&#125;</span>"`</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">influx.query(<span class="string">`select * from perf where time &gt; &quot;<span class="subst">$&#123;myNanoDate.toNanoISOString()&#125;</span>&quot;`</span>)</span><br></pre></td></tr></table></figure>
+
 <h1 id="Browser-Setup"><a href="#Browser-Setup" class="headerlink" title="Browser Setup"></a>Browser Setup</h1><p>For Node.js, <code>influx</code> can be installed and you can use it out of the box.</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yarn add influx@next</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add influx@next</span><br></pre></td></tr></table></figure>
+
 <p>You can tell Webpack to use this module by adding the following section in your <code>webpack.config.js</code>:</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> http = path.resolve(__dirname, <span class="hljs-string">'node_modules/stream-http/index.js'</span>)</div><div class="line"></div><div class="line"><span class="hljs-built_in">module</span>.exports = &#123;</div><div class="line">  <span class="hljs-attr">resolve</span>: &#123;</div><div class="line">    <span class="hljs-attr">alias</span>: &#123; http, <span class="hljs-attr">https</span>: http &#125;,</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = path.resolve(__dirname, <span class="string">&#x27;node_modules/stream-http/index.js&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    alias: &#123; http, <span class="attr">https</span>: http &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><h2 id="Class-Summary"><a href="#Class-Summary" class="headerlink" title="Class Summary"></a>Class Summary</h2><table>
 <thead>
 <tr>
-<th style="text-align:center">attr</th>
-<th style="text-align:left">name</th>
+<th align="center">attr</th>
+<th align="left">name</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">public</td>
-<td style="text-align:left">ExponentialBackoff</td>
+<tbody><tr>
+<td align="center">public</td>
+<td align="left">ExponentialBackoff</td>
 </tr>
 <tr>
-<td style="text-align:center">public</td>
-<td style="text-align:left">Expression:<br></td>
+<td align="center">public</td>
+<td align="left">Expression:<br></td>
 </tr>
-</tbody>
-</table>
-<p>Expression is used to build filtering expression, like those used in WHERE clauses<br>public | InfluxDB:<br><br>InfluxDB is the public interface to run queries against your database<br>public | Measurement:<br><br>Measurement creates a reference to a particular measurement<br>public | Pool:<br><br>The Pool maintains a list available Influx hosts and dispatches requests to them<br>public | Raw:<br><br>You can provide Raw values to Influx methods to prevent it from escaping your provided string.<br>public | RequestError:<br><br>An RequestError is thrown when a query generates errorful results in a 300&lt;= error &lt;=500<br>public | ResultError:<br><br>An ResultError is thrown when a query generates errorful results from Influx<br>public | ServiceNotAvailableError:<br><br>An ServiceNotAvailableError is returned as an error from requests that result in a &gt;500 error code</p>
+<tr>
+<td align="center">Expression is used to build filtering expression, like those used in WHERE clauses</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">InfluxDB:<br></td>
+</tr>
+<tr>
+<td align="center">InfluxDB is the public interface to run queries against your database</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">Measurement:<br></td>
+</tr>
+<tr>
+<td align="center">Measurement creates a reference to a particular measurement</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">Pool:<br></td>
+</tr>
+<tr>
+<td align="center">The Pool maintains a list available Influx hosts and dispatches requests to them</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">Raw:<br></td>
+</tr>
+<tr>
+<td align="center">You can provide Raw values to Influx methods to prevent it from escaping your provided string.</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">RequestError:<br></td>
+</tr>
+<tr>
+<td align="center">An RequestError is thrown when a query generates errorful results in a 300&lt;= error &lt;=500</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">ResultError:<br></td>
+</tr>
+<tr>
+<td align="center">An ResultError is thrown when a query generates errorful results from Influx</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">ServiceNotAvailableError:<br></td>
+</tr>
+<tr>
+<td align="center">An ServiceNotAvailableError is returned as an error from requests that result in a &gt;500 error code</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
 <h3 id="interface-Summary"><a href="#interface-Summary" class="headerlink" title="interface Summary"></a>interface Summary</h3><table>
 <thead>
 <tr>
-<th style="text-align:center">attr</th>
-<th style="text-align:left">name</th>
+<th align="center">attr</th>
+<th align="left">name</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">public</td>
-<td style="text-align:left">IBackoffStrategy:<br></td>
+<tbody><tr>
+<td align="center">public</td>
+<td align="left">IBackoffStrategy:<br></td>
 </tr>
-</tbody>
-</table>
-<p>The IBackoffStrategy dictates behavior to use when hosts in the connection pool start failing<br>public | INanoDate:<br><br>An INanoDate is a type of Date that holds a nanosecond-precision unix timestamp<br>public | IResults:<br><br>IResults are returned from the InfluxBD#query mehtod</p>
+<tr>
+<td align="center">The IBackoffStrategy dictates behavior to use when hosts in the connection pool start failing</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">INanoDate:<br></td>
+</tr>
+<tr>
+<td align="center">An INanoDate is a type of Date that holds a nanosecond-precision unix timestamp</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">IResults:<br></td>
+</tr>
+<tr>
+<td align="center">IResults are returned from the InfluxBD#query mehtod</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
 <h3 id="Function-Summary"><a href="#Function-Summary" class="headerlink" title="Function Summary"></a>Function Summary</h3><table>
 <thead>
 <tr>
-<th style="text-align:center">attr</th>
-<th style="text-align:left">name</th>
+<th align="center">attr</th>
+<th align="left">name</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">public</td>
-<td style="text-align:left">toNanoDate(timestamp: String): NanoDate:<br></td>
+<tbody><tr>
+<td align="center">public</td>
+<td align="left">toNanoDate(timestamp: String): NanoDate:<br></td>
 </tr>
-</tbody>
-</table>
-<p>Covers a nanoseconds unix timestamp to a INanoDate for node-influx.</p>
+<tr>
+<td align="center">Covers a nanoseconds unix timestamp to a INanoDate for node-influx.</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
 <h3 id="Variable-Summary"><a href="#Variable-Summary" class="headerlink" title="Variable Summary"></a>Variable Summary</h3><table>
 <thead>
 <tr>
-<th style="text-align:center">attr</th>
-<th style="text-align:left">name</th>
+<th align="center">attr</th>
+<th align="left">name</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">public</td>
-<td style="text-align:left">Precision: Object</td>
+<tbody><tr>
+<td align="center">public</td>
+<td align="left">Precision: Object</td>
 </tr>
-</tbody>
-</table>
-<p><string, string="">:<br>Precision is a map of available influx time precision</string,><br>public | escape: Object:<br><br>tagEscaper escapes tag keys, tag values and field keys.</p>
+</tbody></table>
+<p>&lt;string, string=””&gt;:<br>Precision is a map of available influx time precision&lt;/string,&gt;<br>public | escape: Object:<br><br>tagEscaper escapes tag keys, tag values and field keys.</p>
 <h3 id="Typedef-Summary"><a href="#Typedef-Summary" class="headerlink" title="Typedef Summary"></a>Typedef Summary</h3><table>
 <thead>
 <tr>
-<th style="text-align:center">attr</th>
-<th style="text-align:left">name</th>
+<th align="center">attr</th>
+<th align="left">name</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td style="text-align:center">public</td>
-<td style="text-align:left">FieldType: Number:<br></td>
+<tbody><tr>
+<td align="center">public</td>
+<td align="left">FieldType: Number:<br></td>
 </tr>
-</tbody>
-</table>
-<p>FieldType is an enumeration of influxDB field data types<br>public | IClusterConfig: Object:<br><br>A IClusterConfig can be provided into <code>new InfluxDB(config)</code> when you have a multiple influx nodes to connect to<br>public | IPingStats: Object:<br><br>IPingStats is returned from InfluxDB#ping<br>public | IPoint: Object<br><br>IPoint is passed to the client’s write methods to store a point in InfluxDB<br>public | IPoolOptions: Object<br><br>Pool options can be passed into the database to configure the behavior of the connection Pool<br>public | IQueryOptions: Object<br><br>The IQueryOptions allows you to configure how queries are run against Influx<br>public | ISchemaOptions: Object<br><br>Schema options can be passed into the <code>new InfluxDB()</code> constructor to help define the shape of your data.<br>public | ISingleHostConfig: Object<br><br>A ISingleHostConfig can be provided into <code>new InfluxDB(config)</code> when you have a single Influx address to connect to<br>public | IWriteOptions: Object<br><br>IWriteOptions configure how points are written in the database.</p>
+<tr>
+<td align="center">FieldType is an enumeration of influxDB field data types</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">IClusterConfig: Object:<br></td>
+</tr>
+<tr>
+<td align="center">A IClusterConfig can be provided into <code>new InfluxDB(config)</code> when you have a multiple influx nodes to connect to</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">IPingStats: Object:<br></td>
+</tr>
+<tr>
+<td align="center">IPingStats is returned from InfluxDB#ping</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">IPoint: Object<br></td>
+</tr>
+<tr>
+<td align="center">IPoint is passed to the client’s write methods to store a point in InfluxDB</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">IPoolOptions: Object<br></td>
+</tr>
+<tr>
+<td align="center">Pool options can be passed into the database to configure the behavior of the connection Pool</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">IQueryOptions: Object<br></td>
+</tr>
+<tr>
+<td align="center">The IQueryOptions allows you to configure how queries are run against Influx</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">ISchemaOptions: Object<br></td>
+</tr>
+<tr>
+<td align="center">Schema options can be passed into the <code>new InfluxDB()</code> constructor to help define the shape of your data.</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">ISingleHostConfig: Object<br></td>
+</tr>
+<tr>
+<td align="center">A ISingleHostConfig can be provided into <code>new InfluxDB(config)</code> when you have a single Influx address to connect to</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">public</td>
+<td align="left">IWriteOptions: Object<br></td>
+</tr>
+<tr>
+<td align="center">IWriteOptions configure how points are written in the database.</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2017/06/30/Usage-of-Node-Influx/">https://ezcook.de/2017/06/30/Usage-of-Node-Influx/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Database/">Database</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/06/30/Simple-about-InfluxDB/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Simple About InfluxDB</div></div></a></div><div class="next-post pull-right"><a href="/2017/06/30/Example-of-node-influx/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Example of Node-Influx</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/06/30/APIs-of-InfluxDB/" title="APIs of InfluxDB"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-30</div><div class="relatedPosts_title">APIs of InfluxDB</div></div></a></div><div class="relatedPosts_item"><a href="/2017/06/30/Example-of-node-influx/" title="Example of Node-Influx"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-30</div><div class="relatedPosts_title">Example of Node-Influx</div></div></a></div><div class="relatedPosts_item"><a href="/2017/07/01/Glossary-of-Terms-on-InfluxDB/" title="Glossary of Terms on InfluxDB"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-07-01</div><div class="relatedPosts_title">Glossary of Terms on InfluxDB</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/07/Note-on-Sequelize/" title="Note on Sequelize"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-07</div><div class="relatedPosts_title">Note on Sequelize</div></div></a></div><div class="relatedPosts_item"><a href="/2017/06/30/Querying-InfluxDB-with-the-HTTP-API/" title="Querying InfluxDB With the HTTP API"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-30</div><div class="relatedPosts_title">Querying InfluxDB With the HTTP API</div></div></a></div><div class="relatedPosts_item"><a href="/2017/07/10/Simple-Api-of-Mongoose/" title="Simple Api of Mongoose"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-07-10</div><div class="relatedPosts_title">Simple Api of Mongoose</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2017/06/30/Usage-of-Node-Influx/'
+    this.page.identifier = '2017/06/30/Usage-of-Node-Influx/'
+    this.page.title = 'Usage of Node-Influx'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Database/">Database</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/06/30/Simple-about-InfluxDB/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Simple About InfluxDB</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/06/30/Example-of-node-influx/">
-                <span class="level-item">Example of Node-Influx</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2017/06/30/Usage-of-Node-Influx/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

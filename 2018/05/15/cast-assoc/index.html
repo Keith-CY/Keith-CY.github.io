@@ -1,176 +1,108 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Difference Bwtween Build_assoc, Put_assoc, and Cast_assoc | EzCook</title><meta name="description" content="Cast Assoc code cast_assoc(changeset, name, opts \ [])  Casts the given association with the changeset params This function should be used when working withe the entire association at once(and not a s"><meta name="keywords" content="Elixir,Ecto"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2018/05/15/cast-assoc/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Difference Bwtween Build_assoc, Put_assoc, and Cast_assoc"><meta property="og:url" content="https://ezcook.de/2018/05/15/cast-assoc/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="Cast Assoc code cast_assoc(changeset, name, opts \ [])  Casts the given association with the changeset params This function should be used when working withe the entire association at once(and not a s"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2018-05-15T03:20:43.000Z"><meta property="article:modified_time" content="2020-08-30T12:19:24.778Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Difference Bwtween Build_assoc, Put_assoc, and Cast_assoc - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Difference Bwtween Build_assoc, Put_assoc, and Cast_assoc" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2018-05-15T03:20:43.000Z">2018-05-15</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    7 minutes read (About 1026 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Difference Bwtween Build_assoc, Put_assoc, and Cast_assoc
-            
-        </h1>
-        <div class="content">
-            <h3 id="Cast-Assoc-code"><a href="#Cast-Assoc-code" class="headerlink" title="Cast Assoc code"></a>Cast Assoc <a href="https://github.com/elixir-ecto/ecto/blob/v2.2.10/lib/ecto/changeset.ex#L659" target="_blank" rel="noopener">code</a></h3><blockquote>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:19:24'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cast-Assoc-code"><span class="toc-number">1.</span> <span class="toc-text">Cast Assoc code</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Code"><span class="toc-number">1.0.1.</span> <span class="toc-text">Code</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Put-Assoc"><span class="toc-number">2.</span> <span class="toc-text">Put Assoc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Example"><span class="toc-number">3.</span> <span class="toc-text">Example</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Build-Assoc"><span class="toc-number">3.0.1.</span> <span class="toc-text">Build_Assoc</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Put-Assoc-1"><span class="toc-number">3.0.2.</span> <span class="toc-text">Put_Assoc</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">4.</span> <span class="toc-text">Conclusion</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Difference Bwtween Build_assoc, Put_assoc, and Cast_assoc</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2018-05-15T03:20:43.000Z" title="Created 2018-05-15 11:20:43">2018-05-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:19:24.778Z" title="Updated 2020-08-30 20:19:24">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2018/05/15/cast-assoc/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h3 id="Cast-Assoc-code"><a href="#Cast-Assoc-code" class="headerlink" title="Cast Assoc code"></a>Cast Assoc <a target="_blank" rel="noopener" href="https://github.com/elixir-ecto/ecto/blob/v2.2.10/lib/ecto/changeset.ex#L659">code</a></h3><blockquote>
 <p>cast_assoc(changeset, name, opts \ [])</p>
 </blockquote>
 <p>Casts the given association with the <code>changeset params</code></p>
@@ -178,9 +110,11 @@
 <p>When updating the data, this function requires the association to have been preloaded in the changeset struct. Missing data will invoke the <code>:on_replace</code> behaviour defined on the association. Preloading is not necessary for newly built structs.</p>
 <p>The parameters for the given association will be retrieved from <code>changeset.params</code>. Those parameters are expected to be a map with attributes, similar to the ones passed to <code>cast/4</code>. Once parameter are retrieved, <code>cast_assoc/3</code> will match those parameters with the associations already in the changeset record</p>
 <p>For example, imagine a user has many addresses relationship where post data is sent as follow</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">%&#123;<span class="hljs-string">"name"</span> =&gt; <span class="hljs-string">"John Doe"</span>, <span class="hljs-string">"addresses"</span> =&gt; [</div><div class="line">  %&#123;<span class="hljs-string">"street"</span> =&gt; <span class="hljs-string">"Some where"</span>, <span class="hljs-string">"country"</span> =&gt; <span class="hljs-string">"Brzil"</span>, <span class="hljs-string">"id"</span> =&gt; 1&#125;,</div><div class="line">  %&#123;<span class="hljs-string">"street"</span> =&gt; <span class="hljs-string">"Else where"</span>, <span class="hljs-string">"country"</span> =&gt; <span class="hljs-string">"Poland"</span>&#125;,</div><div class="line">]&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">%&#123;<span class="string">&quot;name&quot;</span> =&gt; <span class="string">&quot;John Doe&quot;</span>, <span class="string">&quot;addresses&quot;</span> =&gt; [</span><br><span class="line">  %&#123;<span class="string">&quot;street&quot;</span> =&gt; <span class="string">&quot;Some where&quot;</span>, <span class="string">&quot;country&quot;</span> =&gt; <span class="string">&quot;Brzil&quot;</span>, <span class="string">&quot;id&quot;</span> =&gt; 1&#125;,</span><br><span class="line">  %&#123;<span class="string">&quot;street&quot;</span> =&gt; <span class="string">&quot;Else where&quot;</span>, <span class="string">&quot;country&quot;</span> =&gt; <span class="string">&quot;Poland&quot;</span>&#125;,</span><br><span class="line">]&#125;</span><br></pre></td></tr></table></figure>
+
 <p>and then</p>
-<figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">user</div><div class="line">|&gt; Repo.preload(<span class="hljs-symbol">:addresses</span>)</div><div class="line">|&gt; Ecto.Changeset.cast(params, [])</div><div class="line">|&gt; Ecto.Changeset.cast_assoc(<span class="hljs-symbol">:addresses</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">user</span><br><span class="line">|&gt; Repo.preload(<span class="symbol">:addresses</span>)</span><br><span class="line">|&gt; Ecto.Changeset.cast(params, [])</span><br><span class="line">|&gt; Ecto.Changeset.cast_assoc(<span class="symbol">:addresses</span>)</span><br></pre></td></tr></table></figure>
+
 <p>Once <code>cast_assoc/3</code> is called, Ecto will compare those params with the addresses already associated with the user and acts as follows:</p>
 <ul>
 <li><p>If the parameter does not contain an ID, the parameter data will be passed to <code>changeset/2</code> with a new struct and become an insert operation</p>
@@ -192,239 +126,128 @@
 <li><p>If there is an associated child with an ID and its ID is not given as parameter, the <code>:on_replace</code> callback for that association will be invoked</p>
 </li>
 </ul>
-<h5 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h5><figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">`cast_assoc/<span class="hljs-number">3</span>` is useful <span class="hljs-keyword">when</span> the associated data is managed alongside the parent struct, all at once.</div><div class="line"></div><div class="line">To work with a single element of an association, other functions are more appropriate. For example to insert a single associated struct <span class="hljs-keyword">for</span> a `has_many` association it<span class="hljs-string">'s much easier to construct the associated struct with `Ecto.build_assoc/3` and persist it directly with `Ecto.Repo.insert/2`</span></div><div class="line"></div><div class="line">Furthurmore, if each side of the association is managed seperately, it is prefereable to use `put_assoc/3` and directly instruct Ecto how the association should look like.</div><div class="line"></div><div class="line">For example, imagine you are receiving a set of tags you want to associate to an user. Those tags are meant to **exist upfront**. Using `cast_assoc/3` won't work as desired because the tags are <span class="hljs-keyword">not</span> managed alongside the user. In such cases, `put_assoc/<span class="hljs-number">3</span>` will work as desired. With the given <span class="hljs-symbol">parameters:</span></div><div class="line"></div><div class="line">  %&#123;<span class="hljs-string">"name"</span> =&gt; <span class="hljs-string">"John Doe"</span>, <span class="hljs-string">"tags"</span> =&gt; [<span class="hljs-string">"linear"</span>]&#125;</div><div class="line"></div><div class="line"><span class="hljs-keyword">and</span> <span class="hljs-keyword">then</span></div><div class="line"></div><div class="line">  tags = Repo.all(from t <span class="hljs-keyword">in</span> Tag, <span class="hljs-symbol">where:</span> t.name <span class="hljs-keyword">in</span> ^params[<span class="hljs-string">"tags"</span>])</div><div class="line"></div><div class="line">  user</div><div class="line">  |&gt; Repo.preload(<span class="hljs-symbol">:tags</span>)</div><div class="line">  |&gt; Ecto.Changeset.cast(params) <span class="hljs-comment"># no need to allow :tags as we put them directly</span></div><div class="line">  |&gt; Ecto.Changeset.put_assoc(<span class="hljs-symbol">:tags</span>, tags) <span class="hljs-comment"># explicitly set the tags</span></div><div class="line"></div><div class="line">note the changeset must have been previously `cast` using `cast/<span class="hljs-number">4</span>` before this function is called.</div></pre></td></tr></table></figure>
-<figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">cast_assoc</span></span>(changeset, name, opts \\ []) <span class="hljs-keyword">when</span> is_atom(name) <span class="hljs-keyword">do</span></div><div class="line">  cast_relation(<span class="hljs-symbol">:assoc</span>, changeset, name, opts)</div><div class="line"><span class="hljs-keyword">end</span></div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">defp</span> <span class="hljs-title">cast_relation</span></span>(type, %Changeset&#123;&#125; = changeset, key, opts) <span class="hljs-keyword">do</span></div><div class="line">  &#123; key, param_key &#125; = cast_key(key)</div><div class="line">  %&#123;<span class="hljs-symbol">data:</span> data, <span class="hljs-symbol">types:</span> types, <span class="hljs-symbol">params:</span> params, changes, changes &#125; = changeset</div><div class="line">  %&#123;<span class="hljs-symbol">related:</span> related&#125; = relation = relation!(<span class="hljs-symbol">:cast</span>, type, key, Map.get(types, key))</div><div class="line">  params = params || %&#123;&#125;</div><div class="line"></div><div class="line">  &#123;changeset, required?&#125; = if opts[<span class="hljs-symbol">:required</span>] <span class="hljs-keyword">do</span></div><div class="line">    &#123;update_in(changeset.required, &amp;[key|&amp;<span class="hljs-number">1</span>]), <span class="hljs-keyword">true</span>&#125;</div><div class="line">  else</div><div class="line">    &#123;changeset, <span class="hljs-keyword">false</span>&#125;</div><div class="line">  <span class="hljs-keyword">end</span></div><div class="line"></div><div class="line">  on_cast = Keyword.get_lazy(opts, <span class="hljs-symbol">:with</span>, <span class="hljs-keyword">fn</span> -&gt; on_cast_default(type, related) <span class="hljs-keyword">end</span>)</div><div class="line">  original = Map.get(data, key)</div><div class="line"></div><div class="line">  changeset = <span class="hljs-keyword">case</span> Map.fetch(params, params_key) <span class="hljs-keyword">do</span></div><div class="line">    &#123;<span class="hljs-symbol">:ok</span>, value&#125; -&gt;</div><div class="line">      current = Relation.load!(data, original)</div><div class="line">      <span class="hljs-keyword">case</span> Relation.cast(relation, value, current, on_cast) <span class="hljs-keyword">do</span></div><div class="line">        &#123;<span class="hljs-symbol">:ok</span>, change, relation_valid?&#125; <span class="hljs-keyword">when</span> change != original -&gt;</div><div class="line">          missing_relation(%&#123;changeset |  <span class="hljs-symbol">change:</span> Map.put(changes, key, changes), <span class="hljs-symbol">valid?:</span> changeset.valid? <span class="hljs-keyword">and</span> relation_valid?&#125;, key, current, required?, relation, opts)</div><div class="line">        <span class="hljs-symbol">:error</span> -&gt;</div><div class="line">          %&#123;changeset | <span class="hljs-symbol">errors:</span> [&#123;key, &#123;message(opts, <span class="hljs-symbol">:invalid_message</span>, <span class="hljs-string">"is invalid"</span>), [<span class="hljs-symbol">type:</span> expected_relation_type(relation)]&#125;&#125; | changeset.errors], valid? <span class="hljs-keyword">false</span>&#125;</div><div class="line">        <span class="hljs-number">_</span> -&gt; missing_relation(changeset, key, current, required?, relation, opts)</div><div class="line">      <span class="hljs-keyword">end</span></div><div class="line">    <span class="hljs-symbol">:error</span> -&gt; missing_relation(changeset, key, current, required?, relation, opts)</div><div class="line">  <span class="hljs-keyword">end</span></div><div class="line"></div><div class="line">  update_in changeset.types[key], <span class="hljs-keyword">fn</span> &#123;type, relation&#125; -&gt;</div><div class="line">    &#123;type, %&#123;relation | <span class="hljs-symbol">on_cast:</span> on_cast&#125;&#125;</div><div class="line">  <span class="hljs-keyword">end</span></div><div class="line"><span class="hljs-keyword">end</span></div></pre></td></tr></table></figure>
+<h5 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h5><figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">`cast_assoc/<span class="number">3</span>` is useful <span class="keyword">when</span> the associated data is managed alongside the parent struct, all at once.</span><br><span class="line"></span><br><span class="line">To work <span class="keyword">with</span> a single element of an association, other functions are more appropriate. For example to insert a single associated struct <span class="keyword">for</span> a `has_many` association it<span class="string">&#x27;s much easier to construct the associated struct with `Ecto.build_assoc/3` and persist it directly with `Ecto.Repo.insert/2`</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Furthurmore, if each side of the association is managed seperately, it is prefereable to use `put_assoc/3` and directly instruct Ecto how the association should look like.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">For example, imagine you are receiving a set of tags you want to associate to an user. Those tags are meant to **exist upfront**. Using `cast_assoc/3` won&#x27;</span>t work as desired because the tags are <span class="keyword">not</span> managed alongside the user. In such cases, `put_assoc/<span class="number">3</span>` will work as desired. With the given <span class="symbol">parameters:</span></span><br><span class="line"></span><br><span class="line">  %&#123;<span class="string">&quot;name&quot;</span> =&gt; <span class="string">&quot;John Doe&quot;</span>, <span class="string">&quot;tags&quot;</span> =&gt; [<span class="string">&quot;linear&quot;</span>]&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">and</span> <span class="keyword">then</span></span><br><span class="line"></span><br><span class="line">  tags = Repo.all(from t <span class="keyword">in</span> Tag, <span class="symbol">where:</span> t.name <span class="keyword">in</span> ^params[<span class="string">&quot;tags&quot;</span>])</span><br><span class="line"></span><br><span class="line">  user</span><br><span class="line">  |&gt; Repo.preload(<span class="symbol">:tags</span>)</span><br><span class="line">  |&gt; Ecto.Changeset.cast(params) <span class="comment"># no need to allow :tags as we put them directly</span></span><br><span class="line">  |&gt; Ecto.Changeset.put_assoc(<span class="symbol">:tags</span>, tags) <span class="comment"># explicitly set the tags</span></span><br><span class="line"></span><br><span class="line">note the changeset must have been previously `cast` using `cast/<span class="number">4</span>` before this function is called.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cast_assoc</span></span>(changeset, name, opts \\ []) <span class="keyword">when</span> is_atom(name) <span class="keyword">do</span></span><br><span class="line">  cast_relation(<span class="symbol">:assoc</span>, changeset, name, opts)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">defp</span> <span class="title">cast_relation</span></span>(type, %Changeset&#123;&#125; = changeset, key, opts) <span class="keyword">do</span></span><br><span class="line">  &#123; key, param_key &#125; = cast_key(key)</span><br><span class="line">  %&#123;<span class="symbol">data:</span> data, <span class="symbol">types:</span> types, <span class="symbol">params:</span> params, changes, changes &#125; = changeset</span><br><span class="line">  %&#123;<span class="symbol">related:</span> related&#125; = relation = relation!(<span class="symbol">:cast</span>, type, key, Map.get(types, key))</span><br><span class="line">  params = params || %&#123;&#125;</span><br><span class="line"></span><br><span class="line">  &#123;changeset, required?&#125; = if opts[<span class="symbol">:required</span>] <span class="keyword">do</span></span><br><span class="line">    &#123;update_in(changeset.required, &amp;[key|&amp;<span class="number">1</span>]), <span class="keyword">true</span>&#125;</span><br><span class="line">  else</span><br><span class="line">    &#123;changeset, <span class="keyword">false</span>&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  on_cast = Keyword.get_lazy(opts, <span class="symbol">:with</span>, <span class="keyword">fn</span> -&gt; on_cast_default(type, related) <span class="keyword">end</span>)</span><br><span class="line">  original = Map.get(data, key)</span><br><span class="line"></span><br><span class="line">  changeset = <span class="keyword">case</span> Map.fetch(params, params_key) <span class="keyword">do</span></span><br><span class="line">    &#123;<span class="symbol">:ok</span>, value&#125; -&gt;</span><br><span class="line">      current = Relation.load!(data, original)</span><br><span class="line">      <span class="keyword">case</span> Relation.cast(relation, value, current, on_cast) <span class="keyword">do</span></span><br><span class="line">        &#123;<span class="symbol">:ok</span>, change, relation_valid?&#125; <span class="keyword">when</span> change != original -&gt;</span><br><span class="line">          missing_relation(%&#123;changeset |  <span class="symbol">change:</span> Map.put(changes, key, changes), <span class="symbol">valid?:</span> changeset.valid? <span class="keyword">and</span> relation_valid?&#125;, key, current, required?, relation, opts)</span><br><span class="line">        <span class="symbol">:error</span> -&gt;</span><br><span class="line">          %&#123;changeset | <span class="symbol">errors:</span> [&#123;key, &#123;message(opts, <span class="symbol">:invalid_message</span>, <span class="string">&quot;is invalid&quot;</span>), [<span class="symbol">type:</span> expected_relation_type(relation)]&#125;&#125; | changeset.errors], valid? <span class="keyword">false</span>&#125;</span><br><span class="line">        _ -&gt; missing_relation(changeset, key, current, required?, relation, opts)</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">    <span class="symbol">:error</span> -&gt; missing_relation(changeset, key, current, required?, relation, opts)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  update_in changeset.types[key], <span class="keyword">fn</span> &#123;type, relation&#125; -&gt;</span><br><span class="line">    &#123;type, %&#123;relation | <span class="symbol">on_cast:</span> on_cast&#125;&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="Put-Assoc"><a href="#Put-Assoc" class="headerlink" title="Put Assoc"></a>Put Assoc</h3><p>As alternative to <code>cast_assoc/3</code></p>
 <p><code>cast_assoc/3</code> is useful when the associated data is managed alongside the parent struct, all at once.</p>
 <p>If each side of the association is managed seperately, it is preferable to use <code>put_assoc/3</code> and directly instruct Ecto how the association should look like.</p>
 <p>For example, imagine you are receiving a set of tags you want to associate to an user. Those tags are meant to exist upfront. Using <code>cast_assoc/3</code> won’t work as desired because the tags are not managed alongside the user. In such cases, <code>put_assoc/3</code> will work as desired.</p>
-<figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">%&#123;<span class="hljs-string">"name"</span> =&gt; <span class="hljs-string">"John Doe"</span>, <span class="hljs-string">"tags"</span> =&gt; [<span class="hljs-string">"lieanr"</span>]&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%&#123;<span class="string">&quot;name&quot;</span> =&gt; <span class="string">&quot;John Doe&quot;</span>, <span class="string">&quot;tags&quot;</span> =&gt; [<span class="string">&quot;lieanr&quot;</span>]&#125;</span><br></pre></td></tr></table></figure>
+
 <p>and then:</p>
-<figure class="highlight elixir hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">tags = Repo.all(from t <span class="hljs-keyword">in</span> Tag, <span class="hljs-symbol">where:</span> t.name <span class="hljs-keyword">in</span> ^params[<span class="hljs-string">"tags"</span>])</div><div class="line"></div><div class="line">user</div><div class="line">|&gt; Repo.preload(<span class="hljs-symbol">:tags</span>)</div><div class="line">|&gt; Ecto.Changeset.cast(params)</div><div class="line">|&gt;  Ecto.Changeset.put_assoc(<span class="hljs-symbol">:tags</span>, tags)</div></pre></td></tr></table></figure>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tags = Repo.all(from t <span class="keyword">in</span> Tag, <span class="symbol">where:</span> t.name <span class="keyword">in</span> ^params[<span class="string">&quot;tags&quot;</span>])</span><br><span class="line"></span><br><span class="line">user</span><br><span class="line">|&gt; Repo.preload(<span class="symbol">:tags</span>)</span><br><span class="line">|&gt; Ecto.Changeset.cast(params)</span><br><span class="line">|&gt;  Ecto.Changeset.put_assoc(<span class="symbol">:tags</span>, tags)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><h5 id="Build-Assoc"><a href="#Build-Assoc" class="headerlink" title="Build_Assoc"></a>Build_Assoc</h5><p>Gen an instance with foreign key</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">iex&gt; post = Ecto.build_assoc(user, :posts, %&#123;header: <span class="hljs-string">"Clickbait header"</span>, body: <span class="hljs-string">"No real contet"</span>&#125;)</div><div class="line">%EctoAssoc.Post&#123;__meta__: <span class="hljs-comment">#Ecto.Schema.Metadata&lt;:built, "posts"&gt;,</span></div><div class="line">  body: <span class="hljs-string">"No real content"</span>, header: <span class="hljs-string">"Clickbait header"</span>, id: nil,</div><div class="line">  user: <span class="hljs-comment">#Ecto.Association.NotLoaded&lt;association :user is not loaded&gt;, user_id: 1&#125;</span></div><div class="line"></div><div class="line">iex&gt; Repo.insert!(post)</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">iex&gt; post = Ecto.build_assoc(user, :posts, %&#123;header: <span class="string">&quot;Clickbait header&quot;</span>, body: <span class="string">&quot;No real contet&quot;</span>&#125;)</span><br><span class="line">%EctoAssoc.Post&#123;__meta__: <span class="comment">#Ecto.Schema.Metadata&lt;:built, &quot;posts&quot;&gt;,</span></span><br><span class="line">  body: <span class="string">&quot;No real content&quot;</span>, header: <span class="string">&quot;Clickbait header&quot;</span>, id: nil,</span><br><span class="line">  user: <span class="comment">#Ecto.Association.NotLoaded&lt;association :user is not loaded&gt;, user_id: 1&#125;</span></span><br><span class="line"></span><br><span class="line">iex&gt; Repo.insert!(post)</span><br></pre></td></tr></table></figure>
+
 <h5 id="Put-Assoc-1"><a href="#Put-Assoc-1" class="headerlink" title="Put_Assoc"></a>Put_Assoc</h5><p>Add association to changeset which is not persisted</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">iex&gt; post_changeset = Ecto.Changeset.change(post)</div><div class="line">iex&gt; post_with_tags = Ecto.Changeset.put_assoc(post_changeset, :tags, [misc_tag])</div><div class="line">iex&gt; Repo.insert!(post_with_tags)</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iex&gt; post_changeset = Ecto.Changeset.change(post)</span><br><span class="line">iex&gt; post_with_tags = Ecto.Changeset.put_assoc(post_changeset, :tags, [misc_tag])</span><br><span class="line">iex&gt; Repo.insert!(post_with_tags)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p><code>cast_assoc</code> when you want to cast external parameters, like the ones from a form, into an association.</p>
 <p><code>put_assoc</code> when you already have an <strong>association struct</strong></p>
 <p><code>build_assoc</code> receive an existing struct(for example <code>user</code>), that was persisted to the database, and builds a struct(for example <code>post</code>, based on its association(for example <code>:posts</code>), with the foreign key field(for example <code>user_id</code>).</p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2018/05/15/cast-assoc/">https://ezcook.de/2018/05/15/cast-assoc/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Elixir/">Elixir</a><a class="post-meta__tags" href="/tags/Ecto/">Ecto</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2018/05/15/Association-in-Phoenix/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Association in Phoenix</div></div></a></div><div class="next-post pull-right"><a href="/2018/04/14/Introduction-to-Object-getOwnPropertyDescriptors/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Introduction to Object.getOwnPropertyDescriptors</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2018/05/15/Association-in-Phoenix/" title="Association in Phoenix"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-05-15</div><div class="relatedPosts_title">Association in Phoenix</div></div></a></div><div class="relatedPosts_item"><a href="/2018/05/16/GenServer-in-Erlang/" title="GenServer in Erlang"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-05-16</div><div class="relatedPosts_title">GenServer in Erlang</div></div></a></div><div class="relatedPosts_item"><a href="/2018/04/06/enable-sass-scss-in-phoenix/" title="Enable Sass/scss in Phoenix"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-04-06</div><div class="relatedPosts_title">Enable Sass/scss in Phoenix</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2018/05/15/cast-assoc/'
+    this.page.identifier = '2018/05/15/cast-assoc/'
+    this.page.title = 'Difference Bwtween Build_assoc, Put_assoc, and Cast_assoc'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Ecto/">Ecto</a>, <a class="has-link-grey -link" href="/tags/Elixir/">Elixir</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2018/05/15/Association-in-Phoenix/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Association in Phoenix</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2018/04/14/Introduction-to-Object-getOwnPropertyDescriptors/">
-                <span class="level-item">Introduction to Object.getOwnPropertyDescriptors</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2018/05/15/cast-assoc/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

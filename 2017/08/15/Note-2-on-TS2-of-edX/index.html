@@ -1,213 +1,155 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Note(2) on TS2 of edX | EzCook</title><meta name="description" content="ModulesModules are used for code organization as well as code sharing. Modules are executed within their own scope, not in the global scope. This means that variables, functions, classes, etc. declare"><meta name="keywords" content="Node.js"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2017/08/15/Note-2-on-TS2-of-edX/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Note(2) on TS2 of edX"><meta property="og:url" content="https://ezcook.de/2017/08/15/Note-2-on-TS2-of-edX/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="ModulesModules are used for code organization as well as code sharing. Modules are executed within their own scope, not in the global scope. This means that variables, functions, classes, etc. declare"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2017-08-15T09:20:51.000Z"><meta property="article:modified_time" content="2020-08-30T12:44:37.393Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Note(2) on TS2 of edX - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Note(2) on TS2 of edX" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-08-15T09:20:51.000Z">2017-08-15</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    9 minutes read (About 1335 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Note(2) on TS2 of edX
-            
-        </h1>
-        <div class="content">
-            <h3 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h3><p>Modules are used for code organization as well as code sharing.</p>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:44:37'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Modules"><span class="toc-number">1.</span> <span class="toc-text">Modules</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Export"><span class="toc-number">1.1.</span> <span class="toc-text">Export</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Default-exports"><span class="toc-number">1.2.</span> <span class="toc-text">Default exports</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Declaration-Files"><span class="toc-number">2.</span> <span class="toc-text">Declaration Files</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#d-ts-files-and-ts-files"><span class="toc-number">2.1.</span> <span class="toc-text">.d.ts files and .ts files</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Working-with-other-JavaScript-Libraries"><span class="toc-number">3.</span> <span class="toc-text">Working with other JavaScript Libraries.</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Ambient-Modules"><span class="toc-number">3.1.</span> <span class="toc-text">Ambient Modules</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Module-Resolution"><span class="toc-number">4.</span> <span class="toc-text">Module Resolution</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Relative-vs-Non-relative-module-imports"><span class="toc-number">4.1.</span> <span class="toc-text">Relative vs Non-relative module imports</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Module-Resolution-Strategies"><span class="toc-number">4.2.</span> <span class="toc-text">Module Resolution Strategies</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Modules-or-Namespaces"><span class="toc-number">5.</span> <span class="toc-text">Modules or Namespaces</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Namespaces-vs-Modules"><span class="toc-number">5.1.</span> <span class="toc-text">Namespaces vs Modules</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#When-to-use-namespaces-and-when-to-use-moduels"><span class="toc-number">5.2.</span> <span class="toc-text">When to use namespaces and when to use moduels</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reg-Flags"><span class="toc-number">6.</span> <span class="toc-text">Reg Flags</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Best-Practice"><span class="toc-number">7.</span> <span class="toc-text">Best Practice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Working-with-External-Libraries"><span class="toc-number">8.</span> <span class="toc-text">Working with External Libraries</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Combine-two-namespaces-with-same-identifier"><span class="toc-number">8.1.</span> <span class="toc-text">Combine two namespaces with same identifier</span></a></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Note(2) on TS2 of edX</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-08-15T09:20:51.000Z" title="Created 2017-08-15 17:20:51">2017-08-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:44:37.393Z" title="Updated 2020-08-30 20:44:37">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2017/08/15/Note-2-on-TS2-of-edX/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h3 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h3><p>Modules are used for code organization as well as code sharing.</p>
 <p>Modules are executed within their own scope, not in the global scope. This means that variables, functions, classes, etc. declared in a module are not visible outside the module unless they are explicitly exported using <code>export</code>. Conversely, to consume a variable, function, class, interface, etc. exported from a different module, it has to be imported using <code>import</code>.</p>
 <p>Modules are declarative.</p>
 <p>In TypeScript any file containing a top-level <code>import</code> or <code>export</code> is considered a module.</p>
 <h4 id="Export"><a href="#Export" class="headerlink" title="Export"></a>Export</h4><p>Exporting a declaration.</p>
 <p>Any declaration(such as variable, function, class, type alias, or interface) can be exported by adding the <code>export</code> keyword.</p>
 <p>A module can wrap one or more modules and combine all their exports using <code>export * from</code> syntax.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// allValidator.ts</span></div><div class="line"><span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./StringValidator'</span></div><div class="line"><span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./LetterOnlyValidator'</span></div><div class="line"><span class="hljs-keyword">export</span> * <span class="hljs-keyword">from</span> <span class="hljs-string">'./ZipCodeValidator'</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// allValidator.ts</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">&#x27;./StringValidator&#x27;</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">&#x27;./LetterOnlyValidator&#x27;</span></span><br><span class="line"><span class="keyword">export</span> * <span class="keyword">from</span> <span class="string">&#x27;./ZipCodeValidator&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <p>Import can be renamed.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">import</span> &#123; ZipCodeValidator <span class="hljs-keyword">as</span> ZCV &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./ZipCodeValidator'</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ZipCodeValidator <span class="keyword">as</span> ZCV &#125; <span class="keyword">from</span> <span class="string">&#x27;./ZipCodeValidator&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <h4 id="Default-exports"><a href="#Default-exports" class="headerlink" title="Default exports"></a>Default exports</h4><p>Each module can optionally export a <code>default</code> export. Default exports are marked with the keyword <code>default</code>, and there can only be one <code>default</code> export per module.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// jQuery.ts</span></div><div class="line">declare <span class="hljs-keyword">let</span> $: Jquery;</div><div class="line"><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> $;</div><div class="line"></div><div class="line"><span class="hljs-comment">// App.ts</span></div><div class="line"><span class="hljs-keyword">import</span> $ <span class="hljs-keyword">from</span> <span class="hljs-string">'jQuery'</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// jQuery.ts</span></span><br><span class="line">declare <span class="keyword">let</span> $: Jquery;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> $;</span><br><span class="line"></span><br><span class="line"><span class="comment">// App.ts</span></span><br><span class="line"><span class="keyword">import</span> $ <span class="keyword">from</span> <span class="string">&#x27;jQuery&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="Declaration-Files"><a href="#Declaration-Files" class="headerlink" title="Declaration Files"></a>Declaration Files</h3><p>Declarations are used to describe code that exists elsewhere using the <code>declare</code> keyword. The goad of this is to be able to use this code in TypeScript applications without having to rewrite the code in TypeScript.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">declare <span class="hljs-keyword">var</span> mynumber: any;</div><div class="line">mynumber = <span class="hljs-number">300</span>; <span class="hljs-comment">// ok</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">declare <span class="keyword">var</span> mynumber: any;</span><br><span class="line">mynumber = <span class="number">300</span>; <span class="comment">// ok</span></span><br></pre></td></tr></table></figure>
+
 <p>You can save these declaration in a <code>.ts</code> file or in a <code>.d.ts</code> file, we call these file with <code>.d.ts</code> extension <strong>declaration files</strong>.</p>
 <p>It’s good practice to keep your declarations in separate <code>.d.ts</code> file.</p>
 <p>If a file has the extension <code>.d.ts</code> then each root level definition must have the <code>declare</code> keyword prefixed to it. This tells the developer that there will be no code emitted by TypeScript. The developer needs to ensure that the declared item will exist at runtime.</p>
 <p>For example, lets assume we have the following JavaScript code(message.js)</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">showMessage</span> (<span class="hljs-params">message</span>) </span>&#123;</div><div class="line">  alert(message)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showMessage</span> (<span class="params">message</span>) </span>&#123;</span><br><span class="line">  alert(message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>If you want to call the <code>showMessage</code> function in your TypeScript code, TypeScript will not recognize that this function exists. It does not know its name or its parameter. This can be fixed by describing the <code>showMessage</code> function in a definition file as (message.d.ts):</p>
-<figure class="highlight bash hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-built_in">declare</span> <span class="hljs-keyword">function</span> showMessage(message: string)</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">declare</span> <span class="keyword">function</span> showMessage(message: string)</span><br></pre></td></tr></table></figure>
+
 <p>Now you can use the function <code>showMessage</code> in TypeScript without compile errors.</p>
 <h4 id="d-ts-files-and-ts-files"><a href="#d-ts-files-and-ts-files" class="headerlink" title=".d.ts files and .ts files"></a>.d.ts files and .ts files</h4><p>Anything allowed in a <code>.d.ts</code> file mayu also appear in a <code>.ts</code> file, but not the reverse. Therefore, <code>.d.ts</code> allows a subset of TypeScript features. A <code>.d.ts</code> file is only allowed to contain TypeScript code that doesn’t generate any JavaSAcript code in the output. If you attempt to use any feature of TypeScript that would generate JavaScript, you’ll get an error.</p>
 <p>Interfaces are allowed, because they disappear completely after compilation.</p>
 <p>Const enums are also allowed, unlike ordinary enums which generate an object in the output JavaScript.</p>
 <p>Top level classes, variables, modules, and functions must be prefixed with <code>declare</code>.</p>
 <p>It is a common practice to see a top-lvel <code>declare module</code> and then all definition inside it are therefore also declaraion.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">declare <span class="hljs-built_in">module</span> Something &#123;</div><div class="line">  <span class="hljs-keyword">var</span> x;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">declare <span class="built_in">module</span> Something &#123;</span><br><span class="line">  <span class="keyword">var</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h3 id="Working-with-other-JavaScript-Libraries"><a href="#Working-with-other-JavaScript-Libraries" class="headerlink" title="Working with other JavaScript Libraries."></a>Working with other JavaScript Libraries.</h3><p>To describe the shape of libraries not written in TypeScript, we need to declare the API that the library exposes.</p>
 <p>We call declarations that don’t define an implementation ‘ambient’. Typically these are defined in <code>.d.ts</code> files.</p>
 <h4 id="Ambient-Modules"><a href="#Ambient-Modules" class="headerlink" title="Ambient Modules"></a>Ambient Modules</h4><p>We can define each module in its own <code>.d.ts</code> file with top-level export declarations, but it’s more convenient to write them as one large <code>.d.ts</code> file. To do so, we use a construct similar to ambient namespaces, but we use the <code>module</code> keyword and the quoted name of the module which will be available to a later import.</p>
-<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// node.d.ts</div><div class="line">declare module &apos;url&apos; &#123;</div><div class="line">  export interface Url &#123;</div><div class="line">    protocol?: string;</div><div class="line">    hostname?: string;</div><div class="line">    pathname?: string;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  export function parse (urlStr: string, parseQueryString?, slashesDenotateHost?): Url</div><div class="line">&#125;</div><div class="line"></div><div class="line">declare module &apos;path&apos; &#123;</div><div class="line">  export function normalize(p: string): string;</div><div class="line">  export function join(...paths: any[]): string;</div><div class="line">  export var sep: string;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; node.d.ts</span><br><span class="line">declare module &#39;url&#39; &#123;</span><br><span class="line">  export interface Url &#123;</span><br><span class="line">    protocol?: string;</span><br><span class="line">    hostname?: string;</span><br><span class="line">    pathname?: string;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  export function parse (urlStr: string, parseQueryString?, slashesDenotateHost?): Url</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">declare module &#39;path&#39; &#123;</span><br><span class="line">  export function normalize(p: string): string;</span><br><span class="line">  export function join(...paths: any[]): string;</span><br><span class="line">  export var sep: string;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Now we can use <code>/// &lt;reference&gt;node.d.ts</code> and then load the modules using <code>import url = require(&#39;url&#39;)</code> or <code>import * as URL from &#39;url&#39;</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">/// &lt;reference path='node.d.ts' /&gt;</span></div><div class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> URL <span class="hljs-keyword">from</span> <span class="hljs-string">'url'</span></div><div class="line"><span class="hljs-keyword">let</span> myUrl = URL.parse(<span class="hljs-string">'http://www.typescriptlang.org'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// &lt;reference path=&#x27;node.d.ts&#x27; /&gt;</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> URL <span class="keyword">from</span> <span class="string">&#x27;url&#x27;</span></span><br><span class="line"><span class="keyword">let</span> myUrl = URL.parse(<span class="string">&#x27;http://www.typescriptlang.org&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <h3 id="Module-Resolution"><a href="#Module-Resolution" class="headerlink" title="Module Resolution"></a>Module Resolution</h3><h4 id="Relative-vs-Non-relative-module-imports"><a href="#Relative-vs-Non-relative-module-imports" class="headerlink" title="Relative vs Non-relative module imports"></a>Relative vs Non-relative module imports</h4><p>Module imports are resolved differently based on whether the module reference is relative or non-relative.</p>
 <p>A <em>relative import</em> is one that starts with <code>/, ./, ../</code>.</p>
 <p>Any other import is considered <em>non-relative</em>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> $ <span class="hljs-keyword">from</span> <span class="hljs-string">'jquery'</span></div><div class="line"><span class="hljs-keyword">import</span> &#123; Component &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'@angular/core'</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> $ <span class="keyword">from</span> <span class="string">&#x27;jquery&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; Component &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/core&#x27;</span></span><br></pre></td></tr></table></figure>
+
 <p>A relative import is resolved relative to the importing file and <em>cannot</em> resolve to an ambient module declaration.</p>
 <p>A non-relative import can be resolved relative to <code>baseUrl</code>, or through path mapping. They can also resolve to ambient module declaations.</p>
 <h4 id="Module-Resolution-Strategies"><a href="#Module-Resolution-Strategies" class="headerlink" title="Module Resolution Strategies"></a>Module Resolution Strategies</h4><p>There are two possible module resolution strategies: <code>Node</code> and <code>Classic</code>.</p>
@@ -224,7 +166,7 @@
 <h3 id="Reg-Flags"><a href="#Reg-Flags" class="headerlink" title="Reg Flags"></a>Reg Flags</h3><p><strong>Dont’t use namespace in modules</strong></p>
 <p>All of the following are reg flags for module structuring.</p>
 <ul>
-<li><p>A file whose only top-level declaration is <code>export namespace Foo { ... }</code>(remove <code>Foo</code> and move everything ‘up’ a level.)</p>
+<li><p>A file whose only top-level declaration is <code>export namespace Foo &#123; ... &#125;</code>(remove <code>Foo</code> and move everything ‘up’ a level.)</p>
 </li>
 <li><p>A file that has a single <code>export class</code> or <code>export function</code>(consider using <code>export default</code>)</p>
 </li>
@@ -247,224 +189,107 @@
 <li><p>Using TyepSearch: This will automatically install the definition files for the imported libraries. The TypeSearch project that is a Microsoft initiative that uses npm to install lthe library definition files automatically with no need to manually copy any files.</p>
 </li>
 </ul>
-<h4 id="Combine-two-namespaces-with-same-identifier"><a href="#Combine-two-namespaces-with-same-identifier" class="headerlink" title="Combine two namespaces with same identifier"></a>Combine two namespaces with same identifier</h4><figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// extendedNamespace_part2.d.ts</span></div><div class="line">namespace ArrayUtilities &#123;</div><div class="line">  <span class="hljs-comment">// ...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-comment">// extendedNamespace_part1.d.ts</span></div><div class="line"><span class="hljs-comment">/// &lt;reference path="extendedNamespace_part2.d.t.s" /&gt;</span></div><div class="line">namespace ArrayUtilities &#123;</div><div class="line">  <span class="hljs-comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Combine-two-namespaces-with-same-identifier"><a href="#Combine-two-namespaces-with-same-identifier" class="headerlink" title="Combine two namespaces with same identifier"></a>Combine two namespaces with same identifier</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// extendedNamespace_part2.d.ts</span></span><br><span class="line">namespace ArrayUtilities &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// extendedNamespace_part1.d.ts</span></span><br><span class="line"><span class="comment">/// &lt;reference path=&quot;extendedNamespace_part2.d.t.s&quot; /&gt;</span></span><br><span class="line">namespace ArrayUtilities &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2017/08/15/Note-2-on-TS2-of-edX/">https://ezcook.de/2017/08/15/Note-2-on-TS2-of-edX/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Node-js/">Node.js</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/08/17/Advanced-Topics-of-TS/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Advanced Topics of TS</div></div></a></div><div class="next-post pull-right"><a href="/2017/08/11/Note-on-TS2-of-edX/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Note on TS2 of edX</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2019/10/10/Basic-components-in-nest-js/" title="Basic Components in nest.js"><img class="relatedPosts_cover" data-lazy-src="/gallery/thumbnails/nestjs_components.png"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2019-10-10</div><div class="relatedPosts_title">Basic Components in nest.js</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/07/Build-GraphQL-Server-with-Express/" title="Build GraphQL Server With Express"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-07</div><div class="relatedPosts_title">Build GraphQL Server With Express</div></div></a></div><div class="relatedPosts_item"><a href="/2017/09/06/Build-Node-CLI/" title="Build Node CLI"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-06</div><div class="relatedPosts_title">Build Node CLI</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/10/Build-GraphQL-Server-with-Koa/" title="Build GraphQL Server With Koa"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-10</div><div class="relatedPosts_title">Build GraphQL Server With Koa</div></div></a></div><div class="relatedPosts_item"><a href="/2017/06/30/Example-of-node-influx/" title="Example of Node-Influx"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-06-30</div><div class="relatedPosts_title">Example of Node-Influx</div></div></a></div><div class="relatedPosts_item"><a href="/2017/10/26/Fastify-Plugin-Guide/" title="Fastify Plugin Guide"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-10-26</div><div class="relatedPosts_title">Fastify Plugin Guide</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2017/08/15/Note-2-on-TS2-of-edX/'
+    this.page.identifier = '2017/08/15/Note-2-on-TS2-of-edX/'
+    this.page.title = 'Note(2) on TS2 of edX'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/Node-js/">Node.js</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/08/17/Advanced-Topics-of-TS/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">Advanced Topics of TS</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/08/11/Note-on-TS2-of-edX/">
-                <span class="level-item">Note on TS2 of edX</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2017/08/15/Note-2-on-TS2-of-edX/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

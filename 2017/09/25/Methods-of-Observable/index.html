@@ -1,176 +1,108 @@
-<!DOCTYPE html>
-<html  lang="en">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Methods of Observable | EzCook</title><meta name="description" content="OriginalPlayground ObservableDirect Subclass ConnectableObservable  GroupedObservable  Subject   Indirect Subclass AnonymousSubject  AsyncSubject  BehaviorSubject  ReplaySubject   Static Public Method"><meta name="keywords" content="RxJS"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/images/logo.png"><link rel="canonical" href="https://ezcook.de/2017/09/25/Methods-of-Observable/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Methods of Observable"><meta property="og:url" content="https://ezcook.de/2017/09/25/Methods-of-Observable/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="OriginalPlayground ObservableDirect Subclass ConnectableObservable  GroupedObservable  Subject   Indirect Subclass AnonymousSubject  AsyncSubject  BehaviorSubject  ReplaySubject   Static Public Method"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2017-09-25T07:14:53.000Z"><meta property="article:modified_time" content="2020-08-30T12:42:53.054Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
 
-<head>
-    <meta charset="utf-8">
-<title>Methods of Observable - EzCook</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
 
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
 
-
-
-
-
-
-<link rel="icon" href="/images/logo.png">
-
-<link href="https://fonts.googleapis.com/css?family=Averia+Serif+Libre|DM+Serif+Text&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-
-
-
-
-    
-    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
-    
-
-
-
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
-    
-
-
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/css/back-to-top.css">
-
-
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-136207372-1');
-</script>
-
-
-
-
-<link rel="stylesheet" href="/css/progressbar.css">
-<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
-
-
-
-    
-
-
-
-    
-        <script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-
-
-
-
-<link rel="stylesheet" href="/css/style.css">
-<script data-ad-client="ca-pub-8896169856986797" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-</head>
-
-<body class="is-3-column">
-    <nav class="navbar navbar-main">
-    <div class="container">
-        <div class="navbar-brand is-flex-center">
-            <a class="navbar-item navbar-logo" href="/">
-            
-                <img src="/images/logo.png" alt="Methods of Observable" height="28">
-            
-            </a>
-        </div>
-        <div class="navbar-menu">
-            
-            <div class="navbar-start">
-                
-                <a class="navbar-item"
-                href="/">Home</a>
-                
-                <a class="navbar-item"
-                href="/archives">Archives</a>
-                
-                <a class="navbar-item"
-                href="/projects">Projects</a>
-                
-                <a class="navbar-item"
-                href="https://wiki.digit-map.de/">Digit Map</a>
-                
-            </div>
-            
-            <div class="navbar-end">
-                
-                    
-                    
-                    <a class="navbar-item" target="_blank" title="GitHub" href="https://github.com/keith-CY">
-                        
-                        <i class="fab fa-github"></i>
-                        
-                    </a>
-                    
-                    <a class="navbar-item" target="_blank" title="Gmail" href="mailto:keithwhisper@gmail.com">
-                        
-                        <i class="fas fa-envelope"></i>
-                        
-                    </a>
-                    
-                
-                
-                
-                <a class="navbar-item search" title="Search" href="javascript:;">
-                    <i class="fas fa-search"></i>
-                </a>
-                
-            </div>
-        </div>
-    </div>
-</nav>
-
-    <div class="card">
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2017-09-25T07:14:53.000Z">2017-09-25</time>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    33 minutes read (About 5017 words)
-                </span>
-                
-                
-                <span class="level-item has-text-grey" id="busuanzi_container_page_pv">
-                    <i class="far fa-eye"></i>
-                    <span id="busuanzi_value_page_pv">0</span> visits
-                </span>
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                Methods of Observable
-            
-        </h1>
-        <div class="content">
-            <p><a href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-switchMap" target="_blank" rel="noopener">Original</a><br><a href="https://rxviz.com" target="_blank" rel="noopener">Playground</a></p>
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-08-30 20:42:53'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" data-lazy-src="/images/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">304</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">73</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Observable"><span class="toc-number">1.</span> <span class="toc-text">Observable</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Direct-Subclass"><span class="toc-number">1.0.1.</span> <span class="toc-text">Direct Subclass</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Indirect-Subclass"><span class="toc-number">1.0.2.</span> <span class="toc-text">Indirect Subclass</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Static-Public-Methods"><span class="toc-number">1.1.</span> <span class="toc-text">Static Public Methods</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#More-in-Origin-Article"><span class="toc-number">1.1.1.</span> <span class="toc-text">More in Origin Article</span></a></li></ol></li></ol></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Methods of Observable</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2017-09-25T07:14:53.000Z" title="Created 2017-09-25 15:14:53">2017-09-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-08-30T12:42:53.054Z" title="Updated 2020-08-30 20:42:53">2020-08-30</time></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2017/09/25/Methods-of-Observable/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><p><a target="_blank" rel="noopener" href="http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html#instance-method-switchMap">Original</a><br><a target="_blank" rel="noopener" href="https://rxviz.com/">Playground</a></p>
 <h3 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h3><h5 id="Direct-Subclass"><a href="#Direct-Subclass" class="headerlink" title="Direct Subclass"></a>Direct Subclass</h5><ul>
 <li><p>ConnectableObservable</p>
 </li>
@@ -209,25 +141,28 @@
 <li>combineLatest</li>
 </ul>
 <p><code>public static combineLatest(observable1: ObservableInput, observable2: ObservableInput, project: function, schedular: Schedular): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/combineLatest.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/combineLatest.png"></p>
 <p>Combines multiple Observables to create an Observable whose values are calculated from the latest values of each of its input Observables.</p>
 <blockquote>
 <p><strong>Whenever</strong> any input Observable emits a value, it computes a formula using the latest values from all the inputs, then emits the output of the formula.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// combine two timer Observable</span></div><div class="line"><span class="hljs-keyword">const</span> firstTimer = Rx.Observable.timer(<span class="hljs-number">0</span>, <span class="hljs-number">1000</span>)</div><div class="line"><span class="hljs-keyword">const</span> secondTimer = Rx.Observable.timer(<span class="hljs-number">500</span>, <span class="hljs-number">1000</span>)</div><div class="line"><span class="hljs-keyword">const</span> combineTimers = Rx.Observable.combineLatest(firstTimer, secondTimer)</div><div class="line">combineTimers.subscribe(<span class="hljs-built_in">console</span>.log)</div><div class="line"><span class="hljs-comment">// logs</span></div><div class="line"><span class="hljs-comment">// [0, 0] after 0.5s, triggered by secondTimer</span></div><div class="line"><span class="hljs-comment">// [1, 0] after 1s, triggered by firstTimer</span></div><div class="line"><span class="hljs-comment">// [1, 1.5] after 1.5s, triggered by secondTimer</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="hljs-comment">// combine an array of observable</span></div><div class="line"><span class="hljs-keyword">const</span> observables = [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">4</span>].map(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> Rx.Observable.of(n).delay(n * <span class="hljs-number">1000</span>).startWith(<span class="hljs-number">0</span>))</div><div class="line"><span class="hljs-keyword">const</span> combined = Rx.Observable.combineLatest(observables)</div><div class="line">combined.subscribe(<span class="hljs-built_in">console</span>.log)</div><div class="line"><span class="hljs-comment">// logs</span></div><div class="line"><span class="hljs-comment">// [0, 0, 0] immediately</span></div><div class="line"><span class="hljs-comment">// [1, 0, 0] after 1s triggered by observables[0]</span></div><div class="line"><span class="hljs-comment">// [1, 2, 0] after 2s triggered by observables[1]</span></div><div class="line"><span class="hljs-comment">// [1, 2, 4] after 4s triggered by observables[2]</span></div><div class="line"></div><div class="line"><span class="hljs-comment">// use project function to dynamically calculate the body-mass index</span></div><div class="line"><span class="hljs-keyword">const</span> weight = Rx.Observable.of(<span class="hljs-number">70</span>, <span class="hljs-number">72</span>, <span class="hljs-number">76</span>, <span class="hljs-number">79</span>, <span class="hljs-number">75</span>)</div><div class="line"><span class="hljs-keyword">const</span> height = Rx.Observable.of(<span class="hljs-number">1.76</span>, <span class="hljs-number">1.77</span>, <span class="hljs-number">1.78</span>)</div><div class="line"><span class="hljs-keyword">const</span> bmi = Rx.Observable.combineLatest(weight, height, (w, h) =&gt; w/(h*h))</div><div class="line">bmi.subscribe(<span class="hljs-built_in">console</span>.log)</div><div class="line"><span class="hljs-comment">// With output to console:</span></div><div class="line"><span class="hljs-comment">// BMI is 24.212293388429753</span></div><div class="line"><span class="hljs-comment">// BMI is 23.93948099205209</span></div><div class="line"><span class="hljs-comment">// BMI is 23.671253629592222</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// combine two timer Observable</span></span><br><span class="line"><span class="keyword">const</span> firstTimer = Rx.Observable.timer(<span class="number">0</span>, <span class="number">1000</span>)</span><br><span class="line"><span class="keyword">const</span> secondTimer = Rx.Observable.timer(<span class="number">500</span>, <span class="number">1000</span>)</span><br><span class="line"><span class="keyword">const</span> combineTimers = Rx.Observable.combineLatest(firstTimer, secondTimer)</span><br><span class="line">combineTimers.subscribe(<span class="built_in">console</span>.log)</span><br><span class="line"><span class="comment">// logs</span></span><br><span class="line"><span class="comment">// [0, 0] after 0.5s, triggered by secondTimer</span></span><br><span class="line"><span class="comment">// [1, 0] after 1s, triggered by firstTimer</span></span><br><span class="line"><span class="comment">// [1, 1.5] after 1.5s, triggered by secondTimer</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// combine an array of observable</span></span><br><span class="line"><span class="keyword">const</span> observables = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>].map(<span class="function"><span class="params">n</span> =&gt;</span> Rx.Observable.of(n).delay(n * <span class="number">1000</span>).startWith(<span class="number">0</span>))</span><br><span class="line"><span class="keyword">const</span> combined = Rx.Observable.combineLatest(observables)</span><br><span class="line">combined.subscribe(<span class="built_in">console</span>.log)</span><br><span class="line"><span class="comment">// logs</span></span><br><span class="line"><span class="comment">// [0, 0, 0] immediately</span></span><br><span class="line"><span class="comment">// [1, 0, 0] after 1s triggered by observables[0]</span></span><br><span class="line"><span class="comment">// [1, 2, 0] after 2s triggered by observables[1]</span></span><br><span class="line"><span class="comment">// [1, 2, 4] after 4s triggered by observables[2]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// use project function to dynamically calculate the body-mass index</span></span><br><span class="line"><span class="keyword">const</span> weight = Rx.Observable.of(<span class="number">70</span>, <span class="number">72</span>, <span class="number">76</span>, <span class="number">79</span>, <span class="number">75</span>)</span><br><span class="line"><span class="keyword">const</span> height = Rx.Observable.of(<span class="number">1.76</span>, <span class="number">1.77</span>, <span class="number">1.78</span>)</span><br><span class="line"><span class="keyword">const</span> bmi = Rx.Observable.combineLatest(weight, height, <span class="function">(<span class="params">w, h</span>) =&gt;</span> w/(h*h))</span><br><span class="line">bmi.subscribe(<span class="built_in">console</span>.log)</span><br><span class="line"><span class="comment">// With output to console:</span></span><br><span class="line"><span class="comment">// BMI is 24.212293388429753</span></span><br><span class="line"><span class="comment">// BMI is 23.93948099205209</span></span><br><span class="line"><span class="comment">// BMI is 23.671253629592222</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>concat</li>
 </ul>
 <p><code>public static concat(input1: ObservableInput, input2: ObservableInput, scheduler: Schedular): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/concat.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/concat.png"></p>
 <p>Creates an output Observable which sequentially emits all values from given Observable and then moves on to the next.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// Concatenate a timer counting form 0 to 3 with a synchronous sequence from 1 to 10</span></div><div class="line"><span class="hljs-keyword">var</span> timer = Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">4</span>)</div><div class="line"><span class="hljs-keyword">var</span> sequence = Rx.Observable.range(<span class="hljs-number">1</span>, <span class="hljs-number">10</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = Rx.Observable.concat(timer, sequence)</div><div class="line"></div><div class="line"><span class="hljs-comment">// concatenate an array of 3 Observables, different from the one above</span></div><div class="line"><span class="hljs-keyword">var</span> timer1 = Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">10</span>)</div><div class="line"><span class="hljs-keyword">var</span> timer2 = Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">6</span>)</div><div class="line"><span class="hljs-keyword">var</span> timer3 = Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">10</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = Rx.Observable.concat([timer1, timer2, timer3])</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Concatenate a timer counting form 0 to 3 with a synchronous sequence from 1 to 10</span></span><br><span class="line"><span class="keyword">var</span> timer = Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">4</span>)</span><br><span class="line"><span class="keyword">var</span> sequence = Rx.Observable.range(<span class="number">1</span>, <span class="number">10</span>)</span><br><span class="line"><span class="keyword">var</span> result = Rx.Observable.concat(timer, sequence)</span><br><span class="line"></span><br><span class="line"><span class="comment">// concatenate an array of 3 Observables, different from the one above</span></span><br><span class="line"><span class="keyword">var</span> timer1 = Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">10</span>)</span><br><span class="line"><span class="keyword">var</span> timer2 = Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">6</span>)</span><br><span class="line"><span class="keyword">var</span> timer3 = Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">10</span>)</span><br><span class="line"><span class="keyword">var</span> result = Rx.Observable.concat([timer1, timer2, timer3])</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>create</li>
 </ul>
 <p><code>public static create(onSubscription: function(observer: Observer): TearDownLogic): Observable</code></p>
 <p>Creates a new Observable, that will execute the specified function when an Observer subscribes to it.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> observable = Rx.Observable.create(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">observer</span>) </span>&#123;</div><div class="line">  observer.next(<span class="hljs-number">1</span>)</div><div class="line">  observer.next(<span class="hljs-number">2</span>)</div><div class="line">  observer.next(<span class="hljs-number">3</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> observable = Rx.Observable.create(<span class="function"><span class="keyword">function</span>(<span class="params">observer</span>) </span>&#123;</span><br><span class="line">  observer.next(<span class="number">1</span>)</span><br><span class="line">  observer.next(<span class="number">2</span>)</span><br><span class="line">  observer.next(<span class="number">3</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>defer</li>
 </ul>
@@ -236,8 +171,9 @@
 <blockquote>
 <p>Creates the Observable lazily, that is, only when it is subscribed.</p>
 </blockquote>
-<p><img src="http://reactivex.io/rxjs/img/defer.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// when defer is called, it returns an Observable</span></div><div class="line"><span class="hljs-keyword">var</span> clicksOrInterval = Rx.Observable.defer(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>&#123;</div><div class="line">  <span class="hljs-keyword">if</span> (<span class="hljs-built_in">Math</span>.random() &gt; <span class="hljs-number">0.5</span>) &#123;</div><div class="line">    <span class="hljs-keyword">return</span> Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">  &#125; <span class="hljs-keyword">else</span> &#123;</div><div class="line">    <span class="hljs-keyword">return</span> Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/defer.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// when defer is called, it returns an Observable</span></span><br><span class="line"><span class="keyword">var</span> clicksOrInterval = Rx.Observable.defer(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">Math</span>.random() &gt; <span class="number">0.5</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Rx.Observable.interval(<span class="number">1000</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>empty</li>
 </ul>
@@ -246,8 +182,9 @@
 <blockquote>
 <p>Just emits ‘complete’ and nothing else</p>
 </blockquote>
-<p><img src="http://reactivex.io/rxjs/img/empty.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> result = Rx.Observable.empty().startWith(<span class="hljs-number">8</span>)</div></pre></td></tr></table></figure>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/empty.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result = Rx.Observable.empty().startWith(<span class="number">8</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>from</li>
 </ul>
@@ -256,7 +193,7 @@
 <blockquote>
 <p>Convert almost anything to an Observable</p>
 </blockquote>
-<p><img src="http://reactivex.io/rxjs/img/from.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/from.png"></p>
 <ul>
 <li>fromEvent</li>
 </ul>
@@ -264,17 +201,19 @@
 <blockquote>
 <p>Creates an Observable from DOM events, or Node EventEmitter events or others</p>
 </blockquote>
-<p><img src="http://reactivex.io/rxjs/img/fromEvent.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div></pre></td></tr></table></figure>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/fromEvent.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>fromEventPattern</li>
 </ul>
 <p><code>public static fromEventPattern(addHandler: function(handler: Function): any, removeHandler: function(handler: Function, signal?: any): void, selector: function(...args: any): T): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/fromEventPattern.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/fromEventPattern.png"></p>
 <blockquote>
 <p>Converts any addHandler/removeHandler API to an Observable</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addClickHandler</span>(<span class="hljs-params">handler</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">'click'</span>, handler)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeClick</span>(<span class="hljs-params">handler</span>) </span>&#123;</div><div class="line">  <span class="hljs-built_in">document</span>.removeEventListener(<span class="hljs-string">'click'</span>, handler)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEventPattern(</div><div class="line">  addClickHandler,</div><div class="line">  removeClickHandler,</div><div class="line">)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addClickHandler</span>(<span class="params">handler</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.addEventListener(<span class="string">&#x27;click&#x27;</span>, handler)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeClick</span>(<span class="params">handler</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.removeEventListener(<span class="string">&#x27;click&#x27;</span>, handler)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEventPattern(</span><br><span class="line">  addClickHandler,</span><br><span class="line">  removeClickHandler,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>fromPromise</li>
 </ul>
@@ -282,12 +221,13 @@
 <blockquote>
 <p>Returns an Observable that just emit the Promise’s resolved value, then complete</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> result = Rx.Observable.fromPromise(fetch(<span class="hljs-string">'reqres.in/api/users'</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> result = Rx.Observable.fromPromise(fetch(<span class="string">&#x27;reqres.in/api/users&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>interval</li>
 </ul>
 <p><code>public static interval(period: number, scheduler: Scheduler): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/interval.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/interval.png"></p>
 <blockquote>
 <p>Emits incremental numbers periodically in time</p>
 </blockquote>
@@ -295,27 +235,29 @@
 <li>merge</li>
 </ul>
 <p><code>public static merge(observables: ...ObservableInput, concurrent: number, scheduler: Scheduler): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/merge.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/merge.png"></p>
 <p>Creates an output Observable which concurrently emits all values from every given input Observable</p>
 <blockquote>
 <p>Flatten multiple Observables together by blending their values into one Observable</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> timer = Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line"><span class="hljs-keyword">var</span> clicksOrTimer = Rx.Observable.merge(clicks, timer)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> timer = Rx.Observable.interval(<span class="number">1000</span>)</span><br><span class="line"><span class="keyword">var</span> clicksOrTimer = Rx.Observable.merge(clicks, timer)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>never</li>
 </ul>
 <p><code>public static never(): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/never.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/never.png"></p>
 <p>Creates an Observable that emits no items to the Observer</p>
 <blockquote>
 <p>An Observable that never emits anything</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.never().startWith(<span class="hljs-number">7</span>).subscribe(<span class="hljs-built_in">console</span>.log)</div><div class="line"><span class="hljs-comment">// won't console 7</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Rx.Observable.never().startWith(<span class="number">7</span>).subscribe(<span class="built_in">console</span>.log)</span><br><span class="line"><span class="comment">// won&#x27;t console 7</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>of</li>
 </ul>
 <p><code>public static of(values: ...T, scheduler: Scheduler): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/of.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/of.png"></p>
 <p>Creates an Observbale that emits some values you specify as arguments, immediately one after the other, and then emits a complete notification.</p>
 <blockquote>
 <p>Emits the arguments you provide, then complete.</p>
@@ -324,7 +266,7 @@
 <li>range</li>
 </ul>
 <p><code>public static range(start: number, count: number, scheduler: Scheduler): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/range.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/range.png"></p>
 <p>Creates an Observable that emits a sequence of numbers within a specified range.</p>
 <blockquote>
 <p>Emits a sequence of numbers in a range</p>
@@ -333,7 +275,7 @@
 <li>throw</li>
 </ul>
 <p><code>public static throw(error: any, scheduler: Scheduler): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/throw.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/throw.png"></p>
 <blockquote>
 <p>Just emit ‘error’ and nothing else.</p>
 </blockquote>
@@ -341,7 +283,7 @@
 <li>timer</li>
 </ul>
 <p><code>public static timer(initialDelay: number|Date, period: number, scheduler: Scheduler): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/timer.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/timer.png"></p>
 <p>Creates an Observable that starts emitting after an <code>initialDelay</code> and emits ever increasing numbers after each <code>period</code> of time thereafter.</p>
 <blockquote>
 <p>It’s like interval, but you can specify when should the emissions start.</p>
@@ -350,13 +292,15 @@
 <li>webSocket</li>
 </ul>
 <p><code>public static webSocket(urlConfigOrSource: string | WebSocketSubjectConfig): Observable</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">let</span> subject = Rx.Observable.webSocket(<span class="hljs-string">'ws://localhost:8001'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> subject = Rx.Observable.webSocket(<span class="string">&#x27;ws://localhost:8001&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>zip</li>
 </ul>
 <p><code>public static zip(observables: *): Observable&lt;R&gt;</code></p>
 <p>Combines multiple Observables to create an Observable whose values are calculated from the valeus, in order, of each of its input Observables.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">let</span> age$ = Rx.Observable.of(<span class="hljs-number">27</span>, <span class="hljs-number">25</span>, <span class="hljs-number">29</span>)</div><div class="line"><span class="hljs-keyword">let</span> name$ = Rx.Observable.of(<span class="hljs-string">'Foo'</span>, <span class="hljs-string">'Bar'</span>, <span class="hljs-string">'Beer'</span>)</div><div class="line"><span class="hljs-keyword">let</span> isDev$ = Rx.Observable.of(<span class="hljs-literal">true</span>, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>)</div><div class="line"></div><div class="line">Rx.Observable.zip(age$, name$, isDev$, (age, name, isDev) =&gt; (&#123;age, name, isDev&#125;))</div><div class="line"><span class="hljs-comment">// outputs</span></div><div class="line"><span class="hljs-comment">// &#123; age: 27, name: 'Foo', isDev: true &#125;</span></div><div class="line"><span class="hljs-comment">// &#123; age: 25, name: 'Bar', isDev: true &#125;</span></div><div class="line"><span class="hljs-comment">// &#123; age: 29, name: 'Beer', isDev: false &#125;</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> age$ = Rx.Observable.of(<span class="number">27</span>, <span class="number">25</span>, <span class="number">29</span>)</span><br><span class="line"><span class="keyword">let</span> name$ = Rx.Observable.of(<span class="string">&#x27;Foo&#x27;</span>, <span class="string">&#x27;Bar&#x27;</span>, <span class="string">&#x27;Beer&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> isDev$ = Rx.Observable.of(<span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">false</span>)</span><br><span class="line"></span><br><span class="line">Rx.Observable.zip(age$, name$, isDev$, <span class="function">(<span class="params">age, name, isDev</span>) =&gt;</span> (&#123;age, name, isDev&#125;))</span><br><span class="line"><span class="comment">// outputs</span></span><br><span class="line"><span class="comment">// &#123; age: 27, name: &#x27;Foo&#x27;, isDev: true &#125;</span></span><br><span class="line"><span class="comment">// &#123; age: 25, name: &#x27;Bar&#x27;, isDev: true &#125;</span></span><br><span class="line"><span class="comment">// &#123; age: 29, name: &#x27;Beer&#x27;, isDev: false &#125;</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>constructor</li>
 </ul>
@@ -365,25 +309,26 @@
 <li>audit</li>
 </ul>
 <p><code>public audit(durationSelector: function(value: T): SubscribableOrPromise): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/audit.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/audit.png"></p>
 <p>Ignores source value for a duration determined by another Observable, then emis the most recent value from the source Observable, then repeats this process.</p>
 <blockquote>
 <p>It’s like auditTime, but the silencing duration is determined by a second Observable.</p>
 </blockquote>
 <p><code>audit</code> is similar to <code>throttle</code>, but emits the last value from the silenced time window.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = clicks.audit(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> Rx.Observable.interval(<span class="hljs-number">1000</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> result = clicks.audit(<span class="function"><span class="params">ev</span> =&gt;</span> Rx.Observable.interval(<span class="number">1000</span>))</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>auditTime</li>
 </ul>
 <p><code>public auditTime(duration: number, scheduler: Scheduler): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/auditTime.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/auditTime.png"></p>
 <p>Ignores source values for <code>duration</code> milliseconds, then emits the most recent value from the source Observable, then repeats this process.</p>
 <p>Similar to <code>throttleTime</code></p>
 <ul>
 <li>buffer</li>
 </ul>
 <p><code>public buffer(closingNotifier: Observable&lt;any&gt;): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/buffer.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/buffer.png"></p>
 <p>Buffers the source Observable values until <code>closingNotifier</code> emits.</p>
 <blockquote>
 <p>Collect values from the past as an array, and emits that array when another Observable emits.</p>
@@ -392,13 +337,14 @@
 <li>bufferCount</li>
 </ul>
 <p><code>public bufferCount(bufferSize: number, startBufferEvery: number): Observable&lt;T[]&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/bufferCount.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> interval = Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line">interval.bufferCount(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>)</div></pre></td></tr></table></figure>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/bufferCount.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> interval = Rx.Observable.interval(<span class="number">1000</span>)</span><br><span class="line">interval.bufferCount(<span class="number">3</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>bufferTime</li>
 </ul>
 <p><code>public bufferTime(bufferTimeSpan: number, bufferCreationIntervel: number, maxBufferSize: number, scheduler: Scheduler): Observable&lt;T[]&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/bufferTime.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/bufferTime.png"></p>
 <p>Buffers the source Observable values for a specific time period.</p>
 <blockquote>
 <p>Collect values from the past as an array, and emits those array periodically in time.</p>
@@ -407,36 +353,38 @@
 <li>bufferToggle</li>
 </ul>
 <p><code>public bufferToggle(openings: SubscribableOrPromise&lt;O&gt;, closingSelector: function(value: O): SubscribableOrPromise): Observable&lt;T[]&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/bufferToggle.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/bufferToggle.png"></p>
 <ul>
 <li>bufferWhen</li>
 </ul>
 <p><code>public bufferWhen(closingSelector: function(): Obversable): Obversable&lt;T[]&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/bufferWhen.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/bufferWhen.png"></p>
 <p>Buffers the source Observable values, using a factory function of closing Observables to determine when to close, emit and reset the buffer.</p>
 <ul>
 <li>catch</li>
 </ul>
 <p><code>public catch(selector: function): Obversable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/catch.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/catch.png"></p>
 <p>Catches errors on the observable to be handled by returning a new obversable or throwing an error.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>)</div><div class="line">.map(<span class="hljs-function"><span class="hljs-params">n</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">if</span> (n === <span class="hljs-number">4</span>) <span class="hljs-keyword">throw</span> <span class="hljs-string">'four'</span></div><div class="line">  <span class="hljs-keyword">return</span> n</div><div class="line">&#125;).catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> Rx.Observable.of(<span class="hljs-string">'I'</span> , <span class="hljs-string">'II'</span>, <span class="hljs-string">'III'</span>, <span class="hljs-string">'IV'</span>, <span class="hljs-string">'V'</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Rx.Observable.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line">.map(<span class="function"><span class="params">n</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (n === <span class="number">4</span>) <span class="keyword">throw</span> <span class="string">&#x27;four&#x27;</span></span><br><span class="line">  <span class="keyword">return</span> n</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> Rx.Observable.of(<span class="string">&#x27;I&#x27;</span> , <span class="string">&#x27;II&#x27;</span>, <span class="string">&#x27;III&#x27;</span>, <span class="string">&#x27;IV&#x27;</span>, <span class="string">&#x27;V&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>combineAll</li>
 </ul>
 <p><code>public combineAll(project: function): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/combineAll.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/combineAll.png"></p>
 <p>Convert a higher-order Observable into a first-order Observable by waiting for the outer Observable to complete, then applying <code>combineLatest</code></p>
 <p>Similar to CombineLatest</p>
 <blockquote>
 <p>Flatten an Observable-of-Observables by applying combineLatest when the Observable-of-Observable completes</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>);</div><div class="line"><span class="hljs-keyword">var</span> higherOrder = clicks.map(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span></div><div class="line">  Rx.Observable.interval(<span class="hljs-built_in">Math</span>.random()*<span class="hljs-number">2000</span>).take(<span class="hljs-number">13</span>)</div><div class="line">).take(<span class="hljs-number">3</span>);</div><div class="line"><span class="hljs-keyword">var</span> result = higherOrder.combineAll();</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> higherOrder = clicks.map(<span class="function"><span class="params">ev</span> =&gt;</span></span><br><span class="line">  Rx.Observable.interval(<span class="built_in">Math</span>.random()*<span class="number">2000</span>).take(<span class="number">13</span>)</span><br><span class="line">).take(<span class="number">3</span>);</span><br><span class="line"><span class="keyword">var</span> result = higherOrder.combineAll();</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>combineLatest</li>
 </ul>
 <p><code>public combineLatest(other: ObservableInput, project: function): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/combineLatest.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/combineLatest.png"></p>
 <p>Combines multiple Observables to create an Observable whose values are calculated from the latest values of each of its input Observable.</p>
 <ul>
 <li>concat</li>
@@ -446,7 +394,7 @@
 <li>concatAll</li>
 </ul>
 <p><code>public concatAll(): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/concatAll.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/concatAll.png"></p>
 <p>Converts a higher-order Observable into a first-order Observable by concatenating the inner Observable in order.</p>
 <blockquote>
 <p>Flatten an Observable-of-Observable by putting one inner Observable after the other</p>
@@ -455,18 +403,19 @@
 <li>concatMap</li>
 </ul>
 <p><code>public concatMap(project: function(value: T, ?index: number): ObservableInput, resultSelector: function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/concatMap.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/concatMap.png"></p>
 <p>Projects each source value to an Observable which is merged in the output Observable, in a serialized fashion waiting for each one to complete before merging the next.</p>
 <p>Map =&gt; Concat</p>
 <blockquote>
 <p>Map each value to an Observable, then flatten all of these inner Observables using concatAll</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = clicks.concatMap(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> &#123;</div><div class="line">  <span class="hljs-keyword">return</span> Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">4</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> result = clicks.concatMap(<span class="function"><span class="params">ev</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">4</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>concatMaoTo</li>
 </ul>
 <p><code>public concatMapTo(innerObservable: ObservableInput, resultSelector: function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any): Observer</code></p>
-<p><img src="http://reactivex.io/rxjs/img/concatMapTo.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/concatMapTo.png"></p>
 <blockquote>
 <p>It’s like concatMap, but maps each value always to the same inner Observable</p>
 </blockquote>
@@ -475,22 +424,24 @@
 </ul>
 <p><code>public count(predicate: function(value: T, i: number, source: Observable&lt;T&gt;): boolean): Observable</code></p>
 <p>Counts the number of emissions on the source and emits the number when the source completes.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// count how many seconds have passed before the first click</span></div><div class="line"><span class="hljs-keyword">var</span> seconds = Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> secondsBeforeClick = seconds.takeUntil(clicks)</div><div class="line">secondsBeforeClick.count()</div><div class="line"></div><div class="line"><span class="hljs-comment">// count how many odd numbers are there between 1 and 7</span></div><div class="line"><span class="hljs-keyword">var</span> numbers = Rx.Observable.range(<span class="hljs-number">1</span>, <span class="hljs-number">7</span>)</div><div class="line">numbers.count(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> i % <span class="hljs-number">2</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// count how many seconds have passed before the first click</span></span><br><span class="line"><span class="keyword">var</span> seconds = Rx.Observable.interval(<span class="number">1000</span>)</span><br><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> secondsBeforeClick = seconds.takeUntil(clicks)</span><br><span class="line">secondsBeforeClick.count()</span><br><span class="line"></span><br><span class="line"><span class="comment">// count how many odd numbers are there between 1 and 7</span></span><br><span class="line"><span class="keyword">var</span> numbers = Rx.Observable.range(<span class="number">1</span>, <span class="number">7</span>)</span><br><span class="line">numbers.count(<span class="function"><span class="params">i</span> =&gt;</span> i % <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>debounce</li>
 </ul>
 <p><code>public debounce(durationSelector: function(value: T): SubscribableOrPromise): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/debounce.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/debounce.png"></p>
 <p>Emits a value from the source Observable only after a particular time span determined by another Observable has passes without another source emission.</p>
 <blockquote>
 <p>It’s like debounceTime, but the time span of emission silence is determined by a second Observable.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> result = clicks.debounce(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> Rx.Observable.interval(<span class="hljs-number">1000</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> result = clicks.debounce(<span class="function">() =&gt;</span> Rx.Observable.interval(<span class="number">1000</span>))</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>debounceTime</li>
 </ul>
 <p><code>public debounceTime(dueTime: number, scheduler: Scheduler): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/debounceTime.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/debounceTime.png"></p>
 <p>Emits a value from the source Observable only after a particular time span has passed without another source emission.</p>
 <blockquote>
 <p>It’s like delay, but passes only the most recent value from each burst of emissions.</p>
@@ -498,18 +449,19 @@
 <ul>
 <li>defaultEmpty</li>
 </ul>
-<p><img src="http://reactivex.io/rxjs/img/defaultIfEmpty.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/defaultIfEmpty.png"></p>
 <p><code>public defaultIfEmpty(defaultValue: any): Observable</code></p>
 <p>Emits a given value if the source Observable completes without emitting any <code>next</code> value, otherwise mirrors the source Observable.</p>
 <blockquote>
 <p>If the source Observable turns out to be empty, then this operator will emit a default value.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> clicksBeforeFive = clicks.takeUntil(Rx.Observable.interval(<span class="hljs-number">5000</span>))</div><div class="line">clicksBeforeFive.defaultIfEmpty(<span class="hljs-string">'no click'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> clicksBeforeFive = clicks.takeUntil(Rx.Observable.interval(<span class="number">5000</span>))</span><br><span class="line">clicksBeforeFive.defaultIfEmpty(<span class="string">&#x27;no click&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>delay</li>
 </ul>
 <p><code>public delay(delay: number|Date, scheduler: Scheduler): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/delay.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/delay.png"></p>
 <p>Delays the emission of items from the source Observable by a given timeout or until a given Date.</p>
 <ul>
 <li>delayWhen</li>
@@ -522,19 +474,21 @@
 <li>dematerialize</li>
 </ul>
 <p><code>public dematerialize(): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/dematerialize.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/dematerialize.png"></p>
 <p>Convert an Observable of Notification objects into the emissions that they represent.</p>
 <blockquote>
 <p>Unwraps Notification objects as actual next, error, and complete emissions. The opposite of materialize.</p>
 </blockquote>
 <p><code>dematerialize</code> is assumed to operate an Observable that only emits <code>Notification</code> objects as <code>next</code> emission, and does not emit any <code>error</code>. Such Observable is the output of a <code>materialize</code> operation. Those notifications are then unwrapped using the metadata they contain, and emitted as <code>next</code>, <code>error</code>and <code>complete</code> on the output Observable.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> notiA = <span class="hljs-keyword">new</span> Rx.Notification(<span class="hljs-string">'N'</span>, <span class="hljs-string">'A'</span>)</div><div class="line"><span class="hljs-keyword">var</span> notiB = <span class="hljs-keyword">new</span> Rx.Notification(<span class="hljs-string">'N'</span>, <span class="hljs-string">'B'</span>)</div><div class="line"><span class="hljs-keyword">var</span> notiE = <span class="hljs-keyword">new</span> Rx.Notification(<span class="hljs-string">'E'</span>, <span class="hljs-keyword">void</span> <span class="hljs-number">0</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'x.toUpperCase is not a function'</span>))</div><div class="line"><span class="hljs-keyword">var</span> materialized = Rx.Observable.of(notiA, notiB, notiE)</div><div class="line"><span class="hljs-keyword">var</span> upperCase = materialized.dematerialize()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> notiA = <span class="keyword">new</span> Rx.Notification(<span class="string">&#x27;N&#x27;</span>, <span class="string">&#x27;A&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> notiB = <span class="keyword">new</span> Rx.Notification(<span class="string">&#x27;N&#x27;</span>, <span class="string">&#x27;B&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> notiE = <span class="keyword">new</span> Rx.Notification(<span class="string">&#x27;E&#x27;</span>, <span class="keyword">void</span> <span class="number">0</span>, <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">&#x27;x.toUpperCase is not a function&#x27;</span>))</span><br><span class="line"><span class="keyword">var</span> materialized = Rx.Observable.of(notiA, notiB, notiE)</span><br><span class="line"><span class="keyword">var</span> upperCase = materialized.dematerialize()</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>distinct</li>
 </ul>
 <p><code>public distinct(keySelector: function, flushes: Observable): Observable</code></p>
 <p>Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from previous item<strong>s</strong>.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">67</span>,<span class="hljs-number">6</span>,<span class="hljs-number">6</span>,).distinct()</div><div class="line"><span class="hljs-comment">// 1,2,3,4,5,67,6</span></div><div class="line"><span class="hljs-comment">// repeated 1 omitted</span></div><div class="line"></div><div class="line"><span class="hljs-comment">// keySelector</span></div><div class="line">interface Person &#123;</div><div class="line">  <span class="hljs-attr">age</span>: number</div><div class="line">  name: string</div><div class="line">&#125;</div><div class="line"></div><div class="line">Rx.Observable.of&lt;Person&gt;(</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">7</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Bar'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span> &#125;,</div><div class="line">).distinct(<span class="hljs-function">(<span class="hljs-params">p: Person</span>) =&gt;</span> p.name)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Rx.Observable.of(<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">67</span>,<span class="number">6</span>,<span class="number">6</span>,).distinct()</span><br><span class="line"><span class="comment">// 1,2,3,4,5,67,6</span></span><br><span class="line"><span class="comment">// repeated 1 omitted</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// keySelector</span></span><br><span class="line">interface Person &#123;</span><br><span class="line">  age: number</span><br><span class="line">  name: string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Rx.Observable.of&lt;Person&gt;(</span><br><span class="line">  &#123; <span class="attr">age</span>: <span class="number">4</span>, <span class="attr">name</span>: <span class="string">&#x27;Foo&#x27;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">age</span>: <span class="number">7</span>, <span class="attr">name</span>: <span class="string">&#x27;Bar&#x27;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">age</span>: <span class="number">5</span>, <span class="attr">name</span>: <span class="string">&#x27;Foo&#x27;</span> &#125;,</span><br><span class="line">).distinct(<span class="function">(<span class="params">p: Person</span>) =&gt;</span> p.name)</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>Note: ‘1’ is different from 1</p>
 </blockquote>
@@ -547,12 +501,13 @@
 <li>distinctUntilKeyChanged</li>
 </ul>
 <p><code>public distinctUntilKeyChanged(key: string, compare: function): Observable</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">interface Person &#123;</div><div class="line">  <span class="hljs-attr">age</span>: number</div><div class="line">  name: string</div><div class="line">&#125;</div><div class="line"></div><div class="line">Rx.Observable.of&lt;Person&gt;(</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">5</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Bar'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">naem</span>: <span class="hljs-string">'For'</span> &#125;,</div><div class="line">).distinctUntilKeyChanged(<span class="hljs-string">'name'</span>, (x: string, <span class="hljs-attr">y</span>: string) =&gt; x.substring(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>) === y.substring(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">interface Person &#123;</span><br><span class="line">  age: number</span><br><span class="line">  name: string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Rx.Observable.of&lt;Person&gt;(</span><br><span class="line">  &#123; <span class="attr">age</span>: <span class="number">4</span>, <span class="attr">name</span>: <span class="string">&#x27;Foo&#x27;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">age</span>: <span class="number">5</span>, <span class="attr">name</span>: <span class="string">&#x27;Bar&#x27;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">age</span>: <span class="number">3</span>, <span class="attr">naem</span>: <span class="string">&#x27;For&#x27;</span> &#125;,</span><br><span class="line">).distinctUntilKeyChanged(<span class="string">&#x27;name&#x27;</span>, <span class="function">(<span class="params">x: string, y: string</span>) =&gt;</span> x.substring(<span class="number">0</span>, <span class="number">2</span>) === y.substring(<span class="number">0</span>, <span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>do</li>
 </ul>
 <p><code>public do(nextOrObserver: Observer|function, error: function, complete: function): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/do.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/do.png"></p>
 <p>Perform a <strong>side effect</strong> for every emission on the source Observable, but return an Observable that is <strong>identical</strong> to the source.</p>
 <blockquote>
 <p>Intercepts each emission on the source and runs a function, but returns an output which is identical to the source.</p>
@@ -561,63 +516,68 @@
 <li>elemetnAt</li>
 </ul>
 <p><code>public elementAt(index: number, defaultValue: T): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/elementAt.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/elementAt.png"></p>
 <p>Emits the single value at the specified <code>index</code> in a sequence of emissions from the source Observable.</p>
 <blockquote>
 <p>Emits only the i-th value , then completes.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks.elementAt(<span class="hljs-number">2</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line">clicks.elementAt(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>every</li>
 </ul>
 <p><code>public every(predicate: function, thisArg: any): Observable</code></p>
 <p>Returns an Observable that emits whether or not every item of the source satisfies the condition specified.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-comment">// all elements are less than 5, otherwise false</span></div><div class="line">Observable.of(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>)</div><div class="line">  .every(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> x &lt; <span class="hljs-number">5</span>)</div><div class="line">  .subscribe(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(x)); <span class="hljs-comment">// -&gt; false</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// all elements are less than 5, otherwise false</span></span><br><span class="line">Observable.of(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>)</span><br><span class="line">  .every(<span class="function"><span class="params">x</span> =&gt;</span> x &lt; <span class="number">5</span>)</span><br><span class="line">  .subscribe(<span class="function"><span class="params">x</span> =&gt;</span> <span class="built_in">console</span>.log(x)); <span class="comment">// -&gt; false</span></span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>exhaust</li>
 </ul>
 <p><code>public exhaust(): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/exhaust.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/exhaust.png"></p>
 <p>Convert a higher-order Observable into a first-order Observable by dropping inner Observables while the previoud inner Observable has not yet completed.</p>
 <blockquote>
 <p>Flatten an Observable-of-Observables by dropping the next inner Observable while the current inner is still executing.</p>
 </blockquote>
 <p><code>exhaust</code> ingores every new inner Observable if the previous Observable has not yet completed.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">var</span> higherOrder = clicks.map(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> Rx.Observable.interval(<span class="hljs-number">1000</span>).take(<span class="hljs-number">3</span>))</div><div class="line">higherOrder.exhaust()</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> higherOrder = clicks.map(<span class="function"><span class="params">ev</span> =&gt;</span> Rx.Observable.interval(<span class="number">1000</span>).take(<span class="number">3</span>))</span><br><span class="line">higherOrder.exhaust()</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>exhaustMap</li>
 </ul>
 <p><code>public exhaustMap(project: function(value: T, ?index: number): ObservableInput, resultSelector: function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/exhaustMap.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/exhaustMap.png"></p>
 <p>Projects each source value to an Observable which is merged in the output Observable only if the previous projected Observable has completed.</p>
 <ul>
 <li>expand</li>
 </ul>
 <p><code>public expand(project: function(value: T, index: number), concurrent: number, scheduler: Scheduler): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/expand.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/expand.png"></p>
 <p>Recursively projects each source value to an Observable which is merged in the output Observable.</p>
 <blockquote>
 <p>It’s similar to mergeMap, but applies the projection function to every source value as well as every output value. It’s recursive.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks.mapTo(<span class="hljs-number">1</span>).expand(<span class="hljs-function"><span class="hljs-params">x</span> =&gt;</span> Rx.Observable.of(<span class="hljs-number">2</span>*x).delay(<span class="hljs-number">1000</span>)).take(<span class="hljs-number">10</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line">clicks.mapTo(<span class="number">1</span>).expand(<span class="function"><span class="params">x</span> =&gt;</span> Rx.Observable.of(<span class="number">2</span>*x).delay(<span class="number">1000</span>)).take(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>filter</li>
 </ul>
 <p><code>public filter(predicate: function(value T, index: number): boolean, thisArg: any): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/filter.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/filter.png"></p>
 <p>Filter items emitted by the source Observable by only emitting those that satisfy a specified predicate.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks.filter(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> <span class="hljs-built_in">Math</span>.random() &gt; <span class="hljs-number">0.4</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line">clicks.filter(<span class="function"><span class="params">ev</span> =&gt;</span> <span class="built_in">Math</span>.random() &gt; <span class="number">0.4</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>find</li>
 </ul>
 <p><code>public find(predicate: function(value: T, index: number, source: Observable&lt;T&gt;): boolean, thisArg: any): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/find.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/find.png"></p>
 <p>Emits only the first value emitted by the source Observable that meets some condition.</p>
 <ul>
 <li>findIndex</li>
 </ul>
 <p><code>public findIndex(predicate: function(value: T, index: number, source: Observable&lt;T&gt;): boolean, thisArg: any): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/findIndex.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/findIndex.png"></p>
 <blockquote>
 <p>It’s like find, but emits the index of the found value, not the value itself.</p>
 </blockquote>
@@ -625,7 +585,7 @@
 <li>first</li>
 </ul>
 <p><code>public first(predicate: function(value: T, index: number, source: Obsevable&lt;T&gt;): boolean, resultSelector: function(value: T, index: number): R, defaultValue: R): Observable&lt;T|R&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/first.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/first.png"></p>
 <p>Emits only the first value (or the fisrt value that meets some condition) emitted by the source Obsevable</p>
 <ul>
 <li>forEach</li>
@@ -635,23 +595,23 @@
 <li>groupBy</li>
 </ul>
 <p><code>public groupBy(keySelector: function(value: T): K, elementSelector: functioN(value: T): R, durationSelector: function(grouped: GroupedObservable&lt;K|R&gt;): Observable&lt;any&gt;): Observable&lt;GroupedObservable&lt;K, R&gt;&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/groupBy.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/groupBy.png"></p>
 <ul>
 <li>ignoreElements</li>
 </ul>
 <p><code>public ignoreElements(): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/ignoreElements.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/ignoreElements.png"></p>
 <p>Iggnores all items emitted by the source Observable and only pass calls of <code>complete</code> or <code>error</code></p>
 <ul>
 <li>isEmpty()</li>
 </ul>
 <p><code>public isEmpty(): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/isEmpty.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/isEmpty.png"></p>
 <ul>
 <li>last</li>
 </ul>
 <p><code>public last(predicate: function): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/last.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/last.png"></p>
 <ul>
 <li>letProto</li>
 </ul>
@@ -668,32 +628,34 @@
 <li>map</li>
 </ul>
 <p><code>public map(project: function(value: T, index: number): R, thisArg: any): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/map.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/map.png"></p>
 <p>Applies a given <code>project</code> function to each value emitted by the source Observable, and emits the resulting values as an Observable.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks.map(<span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> ev.clientX)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line">clicks.map(<span class="function"><span class="params">ev</span> =&gt;</span> ev.clientX)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>mapTo</li>
 </ul>
 <p><code>public mapTo(value: any): Observbale</code></p>
-<p><img src="http://reactivex.io/rxjs/img/mapTo.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/mapTo.png"></p>
 <p>Emits the given constant value on the output Observable every time the source Observable emits a value.</p>
 <ul>
 <li>materialize</li>
 </ul>
 <p><code>public materialize(): Observable&lt;Notification&lt;T&gt;&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/materialize.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/materialize.png"></p>
 <p>Represents all of the notifications from the source Observable as <code>next</code> emission marked with their orignal types within <code>Notification</code> objects.</p>
 <ul>
 <li>max</li>
 </ul>
 <p><code>public max(comparer: Function): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/max.png" alt=""></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="hljs-number">5</span>, <span class="hljs-number">3</span>, <span class="hljs-number">9</span>, <span class="hljs-number">8</span>).max()</div><div class="line"></div><div class="line">interface Person &#123;</div><div class="line">  <span class="hljs-attr">name</span>: string</div><div class="line">  age: number</div><div class="line">&#125;</div><div class="line"></div><div class="line">Rx.Observable.of&lt;Person&gt;(</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">7</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Foo'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">8</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'Bar'</span> &#125;,</div><div class="line">  &#123; <span class="hljs-attr">age</span>: <span class="hljs-number">0</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">'For'</span> &#125;,</div><div class="line">)</div><div class="line">.max&lt;Person&gt;<span class="hljs-function">(<span class="hljs-params">(a, b</span>) =&gt;</span> a.age - b.age)</div></pre></td></tr></table></figure>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/max.png"></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Rx.Observable.of(<span class="number">5</span>, <span class="number">3</span>, <span class="number">9</span>, <span class="number">8</span>).max()</span><br><span class="line"></span><br><span class="line">interface Person &#123;</span><br><span class="line">  name: string</span><br><span class="line">  age: number</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Rx.Observable.of&lt;Person&gt;(</span><br><span class="line">  &#123; <span class="attr">age</span>: <span class="number">7</span>, <span class="attr">name</span>: <span class="string">&#x27;Foo&#x27;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">age</span>: <span class="number">8</span>, <span class="attr">name</span>: <span class="string">&#x27;Bar&#x27;</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">age</span>: <span class="number">0</span>, <span class="attr">name</span>: <span class="string">&#x27;For&#x27;</span> &#125;,</span><br><span class="line">)</span><br><span class="line">.max&lt;Person&gt;(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a.age - b.age)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>merge</li>
 </ul>
 <p><code>public merge(other: ObservableInpt, concurrent: number, scheduler: Scheduer): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/merge.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/merge.png"></p>
 <p>Creates an output Observable which concurrently emits all values from every given input Observable.</p>
 <blockquote>
 <p>Flatten multiple Observable together by blending their values into one Observable.</p>
@@ -702,30 +664,32 @@
 <li>mergeAll</li>
 </ul>
 <p><code>public mergeAll(concurrent: number): Obsevable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/mergeAll.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/mergeAll.png"></p>
 <p>Converts a higher-order Observable into a first-order Observable which concurrently delivers all values that are emitted on the inner Observables.</p>
 <ul>
 <li>mergeMap</li>
 </ul>
 <p><code>public mergeMap(project: function(value: T, ?index: number): ObservableInput, resultSelector: function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any, concurrent: number): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/mergeMap.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/mergeMap.png"></p>
 <p>Projects each source value to an Observable which is merged in the output Observable.</p>
 <blockquote>
 <p>Map each value to an Observable, then flattn all of these inner Observable using mergeAll</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">var</span> letters = Rx.Observable.of(<span class="hljs-string">'a'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>)</div><div class="line">letters.mergeMap(<span class="hljs-function"><span class="hljs-params">letter</span> =&gt;</span> Rx.Observable.interval(<span class="hljs-number">1000</span>).map(<span class="hljs-function"><span class="hljs-params">i</span> =&gt;</span> i+letter))</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> letters = Rx.Observable.of(<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>, <span class="string">&#x27;c&#x27;</span>)</span><br><span class="line">letters.mergeMap(<span class="function"><span class="params">letter</span> =&gt;</span> Rx.Observable.interval(<span class="number">1000</span>).map(<span class="function"><span class="params">i</span> =&gt;</span> i+letter))</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>mergeMapTo</li>
 </ul>
 <p><code>public mergeMapTo(innerObservable: ObservableInput, resultSelector: function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any, concurrent: number): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/mergeMapTo.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/mergeMapTo.png"></p>
 <p>Projects each source value to the same Observable which is merged multiple times in the output Observable.</p>
 <ul>
 <li>mergeScan</li>
 </ul>
 <p><code>public mergeScan(accumulator: function(acc: R, value: T): Observable&lt;R&gt;, seed: *, concurrent: number): Observable&lt;R&gt;</code></p>
 <p>Applies an accumulator function over the source Observable where the accumulator function itself retunrs an Observable, then each intermediate Observable is merged into the output Obsevable.</p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> click$ = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">const</span> one$ = click$.mapTo(<span class="hljs-number">1</span>)</div><div class="line"><span class="hljs-keyword">const</span> seed = <span class="hljs-number">0</span></div><div class="line"><span class="hljs-keyword">const</span> count$ = one$.mergeScan(<span class="hljs-function">(<span class="hljs-params">acc, one</span>) =&gt;</span> Rx.Observable.of(acc + one), seed)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> click$ = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> one$ = click$.mapTo(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">const</span> seed = <span class="number">0</span></span><br><span class="line"><span class="keyword">const</span> count$ = one$.mergeScan(<span class="function">(<span class="params">acc, one</span>) =&gt;</span> Rx.Observable.of(acc + one), seed)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>min</li>
 </ul>
@@ -734,7 +698,7 @@
 <li>multicast</li>
 </ul>
 <p><code>public multicast(subjectOrSubjectFactory: Function | Subject, selector: Function): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/multicast.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/multicast.png"></p>
 <p>Returns an Observable tghat emits the results of invoking a specified selector on items emitted by a ConnectableObservable that shares a single subscription to the underlying stream.</p>
 <ul>
 <li>observeOn</li>
@@ -744,7 +708,7 @@
 <li>pairwise</li>
 </ul>
 <p><code>public pairwise(): Observable&lt;Array&lt;T&gt;&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/pairwise.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/pairwise.png"></p>
 <p>Groups pairs of consecutive emissions together and emits them as an array of two values.</p>
 <blockquote>
 <p>Puts the current value and previous value together as an array, and emits that.</p>
@@ -752,8 +716,8 @@
 <ul>
 <li>partition</li>
 </ul>
-<p>`public partition(predicate: function(value: T, index: number): Boolean, thisArg: this): [Observable<t>, Observable<t>]</t></t></p>
-<p><img src="http://reactivex.io/rxjs/img/partition.png" alt=""></p>
+<p>`public partition(predicate: function(value: T, index: number): Boolean, thisArg: this): [Observable<T>, Observable<T>]</p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/partition.png"></p>
 <p>Splits the source Observable into two, one with values that satisfy a predicate, and another values that don’t satisfy the predicate.</p>
 <blockquote>
 <p>It’s like filter, but returns two Observable, one like the output of filter, and the other with values that did not pass the condition.</p>
@@ -762,12 +726,13 @@
 <li>pluck</li>
 </ul>
 <p><code>public pluck(properties: ...string): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/pluck.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/pluck.png"></p>
 <p>Maps each source value (an object) to its specified nested property</p>
 <blockquote>
 <p>Like map, but meant only for picking on eof the nested properties of every emitted object.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">const</span> clicks$ = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line">clicks$.pluck(<span class="hljs-string">'target'</span>, <span class="hljs-string">'tagName'</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> clicks$ = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line">clicks$.pluck(<span class="string">&#x27;target&#x27;</span>, <span class="string">&#x27;tagName&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>publish</li>
 </ul>
@@ -789,33 +754,33 @@
 <li>reduce</li>
 </ul>
 <p><code>public reduce(accumulator: function(acc: R, value: T, index: number): R, seed: R): Observable&lt;R&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/reduce.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/reduce.png"></p>
 <ul>
 <li>repeat</li>
 </ul>
 <p><code>public repeat(count: number): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/repeat.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/repeat.png"></p>
 <ul>
 <li>repeatWhen</li>
 </ul>
 <p><code>public repeatWhen(notifier: functioN(notification: Observable): Observable): Observable</code></p>
-<p>1<a href="http://reactivex.io/rxjs/img/repeatWhen.png" target="_blank" rel="noopener"></a></p>
+<p>1<a target="_blank" rel="noopener" href="http://reactivex.io/rxjs/img/repeatWhen.png"></a></p>
 <ul>
 <li>retry</li>
 </ul>
 <p><code>public retry(count: number): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/retry.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/retry.png"></p>
 <p>Returns an Observable that mirrors the source Observable with the exception of an <code>error</code>, if the source Observable calls <code>error</code>, this method will resubscribe to the source Observable for a maximum of <code>count</code> resubscriptions rather than propagating the <code>error</code> call.</p>
 <ul>
 <li>retryWhen</li>
 </ul>
 <p><code>public retryWhen(notifier: function(errors: Observable): Observable): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/retryWhen.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/retryWhen.png"></p>
 <ul>
 <li>sample</li>
 </ul>
 <p><code>public sample(notifier: Observable&lt;any&gt;): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/sample.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/sample.png"></p>
 <p>Emits the most recently emitted value from the source Observable whenever another Observable, the <code>notifier</code> emits.</p>
 <blockquote>
 <p>It’s like sampleTime, but sampels whenever the notifier Observable emits.</p>
@@ -824,12 +789,12 @@
 <li>sampleTime</li>
 </ul>
 <p><code>public sampleTime(period: number, scheduler: Scheduler): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/sampleTime.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/sampleTime.png"></p>
 <ul>
 <li>scan</li>
 </ul>
 <p><code>public scan(accumulate: function(acc: R, value: T, index: number): R, seed: T|R): Observable&lt;R&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/scan.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/scan.png"></p>
 <p>Applies an accumulator function over the source Observable, and returns each intermediate result, with an optional seed value.</p>
 <blockquote>
 <p>It’s like reduce, but emits the current accumulation whenever the source emits a value</p>
@@ -837,7 +802,7 @@
 <ul>
 <li>sequenceEqual(compareTo: Observbale, comparor: function): Observable`</li>
 </ul>
-<p><img src="http://reactivex.io/rxjs/img/sequenceEqual.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/sequenceEqual.png"></p>
 <p>Compares all values of two observbales in sequence using an optional comparor function and returns an observable of a single boolean value representing whether or not the two sequences are equal.</p>
 <blockquote>
 <p>Checks to see of all values emitted by both observables are equal in order.</p>
@@ -846,47 +811,47 @@
 <li>share</li>
 </ul>
 <p><code>public share(): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/share.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/share.png"></p>
 <p>Returns a new Observable that multicasts (shares) the original Observable. As long as there is at least one Subscriber this Observable will be subscribed and emitting data. When all subscribers have unsubscribed it will unsubscribe from the source Observable. Because the Observable is multicasting it makes the stream hot. This is an alias for .publish().refCount().</p>
 <ul>
 <li>single</li>
 </ul>
 <p><code>public single(predicate: Function): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/single.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/single.png"></p>
 <ul>
 <li>skip</li>
 </ul>
 <p><code>public skip(count: number): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/skip.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/skip.png"></p>
 <ul>
 <li>skipUntil</li>
 </ul>
 <p><code>public skipUntil(notifier: Observable): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/skipUntil.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/skipUntil.png"></p>
 <p>Returns an Observable that skips items emitted by the source Observable until a second Observable emits an item.</p>
 <ul>
 <li>skipWhile</li>
 </ul>
 <p><code>public skipWhile(predicate: Function): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/skipWhile.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/skipWhile.png"></p>
 <p>Returns an Observable that skips all items emitted by the source Observable as long as a specified condition holds true, but emits all further source items as soon as the condition becomes false.</p>
 <ul>
 <li>startWith</li>
 </ul>
 <p><code>public startWith(values: ...T, scheduler: Scheduler): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/startWith.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/startWith.png"></p>
 <p>Returns an Observable that emits the items you specified before it begins to emit items by the source Observable.</p>
 <ul>
 <li>subscribeOn</li>
 </ul>
 <p><code>public subscribeOn(scheduler: Scheduler): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/subscribeOn.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/subscribeOn.png"></p>
 <p>Asynchornously subscribes Observables to this Observable on the specified Scheduler.</p>
 <ul>
 <li>switch</li>
 </ul>
 <p><code>public switch(): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/switch.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/switch.png"></p>
 <p>Converts a higher-order Observable into a first-order Observable by subscribing to only the most recently emitted of those inner Observables.</p>
 <blockquote>
 <p>Flatten an Observable-of-Observables by dropping the previous inner Obsevable once a new one appears.</p>
@@ -895,7 +860,7 @@
 <li>switchMap</li>
 </ul>
 <p><code>public switchMap(project: function(value: T, ?index: number): ObservableInput, resultSelector: function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/switchMap.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/switchMap.png"></p>
 <p>Projects each source value to an Observable which is merged in the output Observable, emitting values only from the most recent projected Observable.</p>
 <blockquote>
 <p>Map each value to an Observable, then flatten all of these Observable using switch.</p>
@@ -904,7 +869,7 @@
 <li>take</li>
 </ul>
 <p><code>public take(count: number): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/take.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/take.png"></p>
 <p>Emits only the first <code>count</code> values emitted by the source Observable.</p>
 <blockquote>
 <p>Take the first count value from the source, then complete.</p>
@@ -913,7 +878,7 @@
 <li>takeLast</li>
 </ul>
 <p><code>takeLast(count: number): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/takeLast.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/takeLast.png"></p>
 <p>Emits only the last <code>count</code> values emitted by the source Observable.</p>
 <blockquote>
 <p>Remembers the latest count values, then emits those only when the source completes.</p>
@@ -922,7 +887,7 @@
 <li>takeUntil</li>
 </ul>
 <p><code>public takeUntil(notifier: Observable): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/takeUntil.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/takeUntil.png"></p>
 <p>Emits the values emitted by the source Observable until a <code>notifier</code> Observable emits a value.</p>
 <blockquote>
 <p>Let values pass until a second Observable, notifier, emits something. Then, it completes.</p>
@@ -931,7 +896,7 @@
 <li>takeWhile</li>
 </ul>
 <p><code>public takeWhile(predicate: function(value: T, index: number): boolean): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/takeWhile.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/takeWhile.png"></p>
 <p>Emits values emitted by the source Observable so long as each value satisfies the given <code>predicate</code>, and then completes as soon as this <code>predicate</code> is not satisfied.</p>
 <blockquote>
 <p>Take values from the source only while they pass the condition given, when the first value does not satisfy, it completes.</p>
@@ -940,7 +905,7 @@
 <li>throttle</li>
 </ul>
 <p><code>public throttle(durationSelector: function(value: T): SubscribableOrPromise): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/throttle.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/throttle.png"></p>
 <p>Emits a value from the source Observable, then ignores subsequent source values for a duration determined by another Observable, then repeats this process.</p>
 <blockquote>
 <p>It’s like throttleTime, but the silencing duration is determined by a second Observable.</p>
@@ -950,7 +915,7 @@
 <li>throttleTime</li>
 </ul>
 <p><code>public throttleTime(duration: number, scheduler: Scheduler): Observable&lt;T&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/throttleTime.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/throttleTime.png"></p>
 <p>Emits a value from the source Observable, then ignores subsequent source values for <code>duration</code> milliseconds, then repeats this process.</p>
 <blockquote>
 <p>Lets a value pass, then ignores source values for the next duration milliseconds.</p>
@@ -979,22 +944,24 @@
 <li>toPromise</li>
 </ul>
 <p><code>public toPromise(PromiseCtor: *): Promise&lt;T&gt;</code></p>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Rx.Observable.of(<span class="hljs-number">42</span>).toPromise().then(<span class="hljs-built_in">console</span>.log)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Rx.Observable.of(<span class="number">42</span>).toPromise().then(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>window</li>
 </ul>
 <p><code>public window(windowBoundaries: Observable&lt;any&gt;): Observable&lt;Observable&lt;T&gt;&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/window.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/window.png"></p>
 <p>Branch out the source Observable values as a nested Observable whenever <code>windowBoundaries</code> emits.</p>
 <blockquote>
 <p>It’s like buffer, but emits a nested Observable instead of an array.</p>
 </blockquote>
-<figure class="highlight javascript hljs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="hljs-keyword">let</span> clicks = Rx.Observable.fromEvent(<span class="hljs-built_in">document</span>, <span class="hljs-string">'click'</span>)</div><div class="line"><span class="hljs-keyword">let</span> interval = Rx.Observable.interval(<span class="hljs-number">1000</span>)</div><div class="line">clicks.window(interval)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> clicks = Rx.Observable.fromEvent(<span class="built_in">document</span>, <span class="string">&#x27;click&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> interval = Rx.Observable.interval(<span class="number">1000</span>)</span><br><span class="line">clicks.window(interval)</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>windowCount</li>
 </ul>
 <p><code>public windowCount(windowSize: number, startWindowEvery: number): Observable&lt;Observable&lt;T&gt;&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/windowCount.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/windowCount.png"></p>
 <p>Branch out the source Observable values as a nested Observable with each nested Observable emitting at most <code>windowSize</code> values.</p>
 <blockquote>
 <p>It’s like bufferCount, but emits a nested Observable instead of an array.</p>
@@ -1003,10 +970,10 @@
 <li>windowToggle</li>
 </ul>
 <p><code>public windowToggle(openings: Observable&lt;O&gt;, closingSelectors: function(value: O): Observable): Observable&lt;Observable&lt;T&gt;&gt;</code></p>
-<p><img src="http://reactivex.io/rxjs/img/windowToggle.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/windowToggle.png"></p>
 <p>Branch out the source Observable values as a nested Observable starting from an emission from <code>openings</code> and ending when the output of <code>closingSelector</code></p>
 <ul>
-<li>windowWhen(closingSelector: function(): Observable): Observable<observable<t>&gt;`</observable<t></li>
+<li>windowWhen(closingSelector: function(): Observable): Observable&lt;Observable<T>&gt;`</li>
 </ul>
 <p>Branch out the source Observable values as a nested Observable using a factory function of closing Observables to determine when to start a new window.</p>
 <blockquote>
@@ -1016,7 +983,7 @@
 <li>withLatestFrom</li>
 </ul>
 <p><code>public withLatestFrom(other: ObservableInput, project: Function): Observable</code></p>
-<p><img src="http://reactivex.io/rxjs/img/withLatestFrom.png" alt=""></p>
+<p><img src= "/img/loading.gif" data-lazy-src="http://reactivex.io/rxjs/img/withLatestFrom.png"></p>
 <p>Combines the source Observable with other Observables to create an Observable whose values are calculated from the latest values of each, only when the source emit.</p>
 <blockquote>
 <p>Whenever the source Observable emits a value, it computes a formula using that value plus the latest values from other input Observables, then emits the output of that formula.</p>
@@ -1029,223 +996,106 @@
 <li>zipProto</li>
 </ul>
 <p><code>public zipProto(observables: *): Observable&lt;R&gt;</code></p>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2017/09/25/Methods-of-Observable/">https://ezcook.de/2017/09/25/Methods-of-Observable/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/RxJS/">RxJS</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2017/09/29/react-hot-loader-in-with-ts-loader/"><img class="prev-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">React-Hot-Loader in Webpack With Ts-Loader</div></div></a></div><div class="next-post pull-right"><a href="/2017/09/25/HTTP-Timings-in-Node-js/"><img class="next-cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">HTTP Timings in Node.js</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2017/05/08/Rxjs-API/" title="RxJS API"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-05-08</div><div class="relatedPosts_title">RxJS API</div></div></a></div><div class="relatedPosts_item"><a href="/2018/07/10/RxjsV6/" title="RxjsV6"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2018-07-10</div><div class="relatedPosts_title">RxjsV6</div></div></a></div><div class="relatedPosts_item"><a href="/2017/08/01/Short-Clip-of-RxJS/" title="Short Clip of RxJS"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-08-01</div><div class="relatedPosts_title">Short Clip of RxJS</div></div></a></div><div class="relatedPosts_item"><a href="/2017/03/20/baisc-usage-of-redux-observable/" title="Baisc Usage of Redux-Observable"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-03-20</div><div class="relatedPosts_title">Baisc Usage of Redux-Observable</div></div></a></div><div class="relatedPosts_item"><a href="/2017/09/05/start-up-with-ts-react-router-redux-rxjs/" title="Start Up With Ts, React, Router, Redux, Rxjs"><img class="relatedPosts_cover" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2017-09-05</div><div class="relatedPosts_title">Start Up With Ts, React, Router, Redux, Rxjs</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2017/09/25/Methods-of-Observable/'
+    this.page.identifier = '2017/09/25/Methods-of-Observable/'
+    this.page.title = 'Methods of Observable'
+  };
 
-        </div>
-        
-        <div class="level is-size-7 is-uppercase">
-            <div class="level-start">
-                <div class="level-item">
-                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
-                    <a class="has-link-grey -link" href="/tags/RxJS/">RxJS</a>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-    </div>
-</div>
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
 
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
 
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="menu-label has-text-centered">Like this article? Support the author with</h3>
-        <div class="buttons is-centered">
-            
-                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
 
-<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
-    <span class="icon is-small">
-        <i class="fab fa-paypal"></i>
-    </span>
-    <span>Paypal</span>
-</a>
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
-    <input type="hidden" name="cmd" value="_donations" />
-    <input type="hidden" name="business" value="chen.yu.keith@foxmail.com" />
-    <input type="hidden" name="currency_code" value="USD" />
-</form>
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
 
-                
-        </div>
-    </div>
-</div>
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
 
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
 
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
 
-<div class="card card-transparent">
-    <div class="level post-navigation is-flex-wrap is-mobile">
-        
-        <div class="level-start">
-            <a class="level level-item has-link-grey  article-nav-prev" href="/2017/09/29/react-hot-loader-in-with-ts-loader/">
-                <i class="level-item fas fa-chevron-left"></i>
-                <span class="level-item">React-Hot-Loader in Webpack With Ts-Loader</span>
-            </a>
-        </div>
-        
-        
-        <div class="level-end">
-            <a class="level level-item has-link-grey  article-nav-next" href="/2017/09/25/HTTP-Timings-in-Node-js/">
-                <span class="level-item">HTTP Timings in Node.js</span>
-                <i class="level-item fas fa-chevron-right"></i>
-            </a>
-        </div>
-        
-    </div>
-</div>
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
 
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
 
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
 
-<div class="card">
-    <div class="card-content">
-        <h3 class="title is-5 has-text-weight-normal">Comments</h3>
-        
-<div id="comment-container"></div>
-<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-<script>
-	var gitment = new Gitment({
-		id: '2017/09/25/Methods-of-Observable/',
-		owner: 'Keith-CY',
-		repo: 'Keith-CY.github.io',
-		oauth: {
-			client_id: '56319e1ce36ed4313555',
-			client_secret: 'ca7f10a8357d52290f5509fb54e5173a8bea0a5d',
-		},
-	})
-	gitment.render('comment-container')
-</script>
+})
 
-    </div>
-</div>
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
-<script>moment.locale("en");</script>
+  typeof typed === 'object' && typed.destroy()
 
+  $(window).off('scroll')
 
-    
-    
-    
-    <script src="/js/animation.js"></script>
-    
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
 
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
-    <script src="/js/gallery.js" defer></script>
-    
-
-    
-    
-
-<div id="outdated">
-    <h6>Your browser is out-of-date!</h6>
-    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
-            my browser now </a></p>
-    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        outdatedBrowser({
-            bgColor: '#f25648',
-            color: '#ffffff',
-            lowerThan: 'flex'
-        });
-    });
-</script>
-
-
-    
-    
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    MathJax.Hub.Config({
-        'HTML-CSS': {
-            matchFontHeight: false
-        },
-        SVG: {
-            matchFontHeight: false
-        },
-        CommonHTML: {
-            matchFontHeight: false
-        },
-        tex2jax: {
-            inlineMath: [
-                ['$','$'],
-                ['\\(','\\)']
-            ]
-        }
-    });
-});
-</script>
-
-    
-    
-
-<a id="back-to-top" title="Back to Top" href="javascript:;">
-    <i class="fas fa-chevron-up"></i>
-</a>
-<script src="/js/back-to-top.js" defer></script>
-
-
-    
-    
-
-    
-    
-    
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
-    <script src="/js/clipboard.js" defer></script>
-    
-
-    
-    
-    
-
-    
-
-
-<script src="/js/main.js" defer></script>
-
-    
-    <div class="searchbox ins-search">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <input type="text" class="searchbox-input ins-search-input" placeholder="Type something..." />
-            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
-        </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container"></div>
-        </div>
-    </div>
-</div>
-<script>
-    (function (window) {
-        var INSIGHT_CONFIG = {
-            TRANSLATION: {
-                POSTS: 'Posts',
-                PAGES: 'Pages',
-                CATEGORIES: 'Categories',
-                TAGS: 'Tags',
-                UNTITLED: '(Untitled)',
-            },
-            CONTENT_URL: '/content.json',
-        };
-        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-    })(window);
-</script>
-<script src="/js/insight.js" defer></script>
-<link rel="stylesheet" href="/css/search.css">
-<link rel="stylesheet" href="/css/insight.css">
-    
-</body>
-
-</html>
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>

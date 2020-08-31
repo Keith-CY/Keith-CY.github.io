@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Type Id on CKB</title>
+      <link href="/2020/08/31/type-id-on-ckb/"/>
+      <url>/2020/08/31/type-id-on-ckb/</url>
+      
+        <content type="html"><![CDATA[<h2 id="How-to-Create-a-Unique-Type-Script"><a href="#How-to-Create-a-Unique-Type-Script" class="headerlink" title="How to Create a Unique Type Script"></a>How to Create a Unique Type Script</h2><p>There are 4 rules to deploy an unique type script(with unique <code>args</code>)</p><ol><li><p>Count how many output cells use current <strong>type script</strong>, if there’re more than one cell with current <strong>type script</strong>, throw an error since an attacker is trying to create more than one cells with the same type script, which is not expected.</p></li><li><p>Count how many input cells use current <strong>type script</strong>, if there’s only one input cell with the current <strong>type script</strong>, return success.</p></li><li><p>Use CKB Syscall to read the first input’s OutPoint in the current transaction and if it matches the <code>args</code> field of the type script, return success.</p><ul><li>Since the first input can only be comsumed once, its unique OutPoint guarantees the uniqueness of the type script.</li><li>An attacker cannot use the same <code>args</code> to deploy the type script since the unique cell has been consumed.</li></ul></li><li><p>Otherwise throw an error.</p></li></ol><h2 id="Get-Unique-Type-Id"><a href="#Get-Unique-Type-Id" class="headerlink" title="Get Unique Type Id"></a>Get Unique Type Id</h2><p>Simply hash the type script</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hash(&#123;</span><br><span class="line">    codeHash: &#39;&#39;,</span><br><span class="line">    hashType: &#39;&#39;,</span><br><span class="line">    args: &#39;&#39;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure><h2 id="Resolve-Scripts-in-CKB-Transaction-via-Type-Id"><a href="#Resolve-Scripts-in-CKB-Transaction-via-Type-Id" class="headerlink" title="Resolve Scripts in CKB Transaction via Type Id"></a>Resolve Scripts in CKB Transaction via Type Id</h2><p>Since Type Script is used, the contract depends on it has <code>hash type = type</code>.</p><p>In this case, the ckb vm loops all cell deps and try to find a dep whose type script has the corresponding <code>hash(type script)</code>.</p><p>Once a cell dep meeting the condition is found, it’s used as the dependency of the contract.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CKB </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Shorthand of Ethereum Provider</title>
       <link href="/2020/08/27/shorthand-of-ethereum-provider/"/>
       <url>/2020/08/27/shorthand-of-ethereum-provider/</url>

@@ -4880,12 +4880,6 @@
         <content type="html"><![CDATA[<p>Thanks to <a href="https://github.com/vikingmute/webpack-for-fools/blob/master/entries/chapter-2.md">Webpack 傻瓜指南</a></p><h3 id="启用-Source-Map"><a href="#启用-Source-Map" class="headerlink" title="启用 Source Map"></a>启用 Source Map</h3><p>在 webpack.config.js 中添加字段</p><pre><code>devtool: &#39;eval-source-map&#39;,`&lt;/pre&gt;这样出错后会采用 sourceMap 直接显示出错位置### 配置 webpack-dev-server在 webpack.config.js 中添加字段&lt;pre&gt;`devServer: &#123;  historyApiFallback: true,  hot: true,  inline: true,  progress: true,&#125;`&lt;/pre&gt;### 使用 preLoaders 和 postLoaderspreLoaders 在 loaders 之前执行, 总体顺序是 preLoader -&gt; loaders -&gt; postLoaders#### 安装 jshint&lt;pre&gt;`npm install --save-dev jshint-loader`&lt;/pre&gt;在 config 中配置&lt;pre&gt;`module:&#123;  preloaders:[    &#123;      test: /\.jsx$/,      loader:&#39;jshint-loader&#39;    &#125;  ]&#125;jshint:&#123;  &#39;esnext&#39;:true&#125;`&lt;/pre&gt;### 部署上线项目开发完成后需要部署上线, 此时应该创建一个新的 config, 因为部署上线使用的 webpack 不需要 dev-tools, dev-server, jshint 等复制现有的 config 文件, 命名为 webpack.production.config.js, 将里面与开发有关的东西删除, 在 package.json 中添加&lt;pre&gt;`&quot;scripts&quot;:&#123;  &quot;build&quot;: &quot;webpack --progress --profile  --colors --config webpack.production.config.js&quot;&#125;,`&lt;/pre&gt;上线的时候运行&lt;pre&gt;`npm run build`&lt;/pre&gt;### 分离第三方库如果第三方库很多, 会导致最后 bundle 文件很大, 减慢加载速度, 因此需要把第三方库和 app 本身的代码分开#### 修改 entry 入口文件&lt;pre&gt;`entry:&#123;  app: path.resolve(APP_PATH, &#39;index.js&#39;),  //添加要打包在 vendors 里面的库  vendors: [&#39;jquery&#39;, [moment]]&#125;,`&lt;/pre&gt;#### 添加 CommonsChunkPlugin&lt;pre&gt;`plugins: [  //使用 uglifyJs 压缩 js 代码  new webpack.optimize.UglifyJsPlugin(&#123;minimize: true&#125;),  //把入口文件里的数组打包成 vendors.js  new webpack.optimize.CommonsChunkPlugin(&#39;vendors&#39;,&#39;vendors.js&#39;),  new HtmlWebpackPlugin(&#123;title: &#39;Welcome&#39;&#125;)]`&lt;/pre&gt;运行 build 后会生成 vendor.js### 生成多页面假设需求是生成两个页面, 一个叫 index.html, 需要引用 app.js 和 vendors.js 两个文件; 另一个是 mobile.html, 需要应用 mobie.js 和 vendor.js 这两个文件首先新建一个叫 mobile.js 的文件入口, 比 app.js 简单一些&lt;pre&gt;`import &#39;./main.scss&#39;;import $ from &#39;jquery&#39;;import &#39;imports?jQuery=jQuery!./plugin.js&#39;;$(document).ready(function()&#123;  let app = document.createElement(&#39;div&#39;);  app.innerHTML = &#39;&amp;lt;h1&amp;gt;Hello World&amp;lt;/h1&amp;gt;&#39;;  document.body.appendChild(app);  $(&#39;h1&#39;).greenify();&#125;);`&lt;/pre&gt;在 config 修改入口文件和输出配置&lt;pre&gt;`entry:&#123;  // 三个入口文件: app, mobile, vendors  app: path.resolve(APP_PATH, &#39;index.js&#39;),  mobile: path.resolve(APP_PATH, &#39;mobile.js&#39;),  vendors: [&#39;jquery&#39;,&#39;moment&#39;]&#125;,output:&#123;   path: DIST_PATH,   filename: &#39;[name].js&#39;&#125;,`&lt;/pre&gt;为 html-webpack-plugin 设置模板, 并保存于 templates&lt;pre&gt;`// index.html&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html&amp;gt;  &amp;lt;head&amp;gt;    &amp;lt;title&amp;gt;&#123;%= o.htmlWebpackPlugin.options.title %&#125;&amp;lt;/title&amp;gt;  &amp;lt;/head&amp;gt;  &amp;lt;body&amp;gt;    &amp;lt;h3&amp;gt;Welcome to Index&amp;lt;/h3&amp;gt;  &amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;//mobile.html&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html&amp;gt;  &amp;lt;head&amp;gt;    &amp;lt;title&amp;gt;&#123;%= o.HtmlWebpackPlugin.options.title %&#125;&amp;lt;/title&amp;gt;  &amp;lt;/head&amp;gt;  &amp;lt;body&amp;gt;    &amp;lt;h3&amp;gt;Welcome to Mobile&amp;lt;/h3&amp;gt;  &amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;`&lt;/pre&gt;继续配置 config.js, 让 HtmlWebpackPlugin 可以生成多个文件&lt;pre&gt;`//Templates 的文件夹路径var TEM_PATH = path.resolve(ROOT_PATE, &#39;templates&#39;);...plugins:[  //创建两个 HtmlWebpackPlugin 的实例, 生成两个页面  new HtmlWebpackPlugin(&#123;    title: &#39;Hello World App&#39;,    template: path.resolve(TEM_PATH, &#39;index.html&#39;),    filename: &#39;index.html&#39;    //chunks 这个参数告诉插件要引用 chunks 中的那几个入口    chunks: [&#39;app&#39;,&#39;vendors&#39;],    //scripts 要插入的位置    inject: &#39;body&#39;  &#125;),  new HtmlWebpackPlugin(&#123;    title: &#39;Hello Mobile App&#39;,    template: path.resolve(TEM_PATH, &#39;mobile.html&#39;),    filename: &#39;mobile.html&#39;,    chunks: [&#39;mobile&#39;,&#39;vendors&#39;],    inject: &#39;body&#39;  &#125;)]</code></pre><h3 id="生成-hash-名称的-script-来防止缓存"><a href="#生成-hash-名称的-script-来防止缓存" class="headerlink" title="生成 hash 名称的 script 来防止缓存"></a>生成 hash 名称的 script 来防止缓存</h3><p>webpack 基于 md5 可以生成 hash 名称</p><p>```<br>output:{<br>  path: DIST_Path,<br>  filename: ‘[name].[hash].js’<br>},</p>]]></content>
       
       
-      <categories>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -4980,14 +4974,6 @@
         <content type="html"><![CDATA[<p>The DOM returned from render() is virtual, so called Virtual DOM, and we can get any factual input(value) from a virtual object, such as access to value from a <input> component.</p><h3 id="The-ref-returned-from-ReactDOM-render"><a href="#The-ref-returned-from-ReactDOM-render" class="headerlink" title="The ref returned from ReactDOM.render"></a>The ref returned from ReactDOM.render</h3><p>ReactDOM.render() will return a reference to your component’s <strong>backing instance</strong>(or null for stateless components)</p><p><code>var myComponent = ReactDOM.render(&amp;lt;MyComponent /&amp;gt;, myContainer)</code></p><p>However, that the JSX doesn’t return a component. It’s just a <strong>ReactElement</strong>: a lightweight representation that tells React what the mounted component should look like.</p><pre><code>var myComponentElement = &amp;lt;MyComponent title = &#39;title&#39;/&amp;gt;; //This is just a ReactElement`&lt;/pre&gt;&lt;pre&gt;`var myComponentInstance = ReactDOM.render(myComponent, myContainer); //a Virtual DOM`&lt;/pre&gt;### The ref Callback AttributeReact supports a special attribute that you can attach to any component. The &#39;ref&#39; attribute ca be a callback function, and this callback will be executed **immediately after the component is mounted**. The referenced component will be passed in as a parameter, and the callback function may use the component immediately, or save the reference for future use.It&#39;s as simple as adding a `ref` attribute to anything returned from render:&lt;pre&gt;`render: function()&#123;  return (    &amp;lt;TextInput ref=&#123;function(input)&#123;      if(input != nill)&#123;        input.focus();      &#125;    &#125;&#125; /&amp;gt;  );&#125;,`&lt;/pre&gt;or use ES6 arrow funciton:&lt;pre&gt;`render: function()&#123;  return &amp;lt;TextInput ref=&#123;(c) =&amp;gt; this._input = c&#125; /&amp;gt;;&#125;,componentDidMount: function&#123;  this._input.focus();&#125;`&lt;/pre&gt;### The ref String AttributeReact also supports using a string as a ref prop on any component.Add `ref` attribute to component so you can access to them via `this.refs`</code></pre><ol><li><p>Assign a <code>ref</code> attribute to anything returned from <code>render</code> such as:</p><pre>`&lt;input ref='myInput'&gt;`</pre></li><li><p>In some other code, access the <strong>backing instance</strong> via <code>this.refs</code> as in</p><pre>`var input = this.refs.myInput;var inputValue = input.value;`</pre><h3 id="A-Complete-Example"><a href="#A-Complete-Example" class="headerlink" title="A Complete Example"></a>A Complete Example</h3><pre>`var MyComponent = React.createClass({  handleClick: function(){    if(this.myTextInput != null){      this.myTextInput.focus()    }  },  render: function(){    return(      &lt;div&gt;        &lt;input type='text' ref={(ref) =&gt; this.myTextInput = ref} /&gt;        &lt;input type='button' value='Focus the text input' onClick = {this.handleClick} /&gt;      &lt;/div&gt;    );  }});ReactDOM.render(&lt;MyComponent /&gt;, document.getElementById('example'));</li></ol><p>Note: <code>ref</code> will be destroyed as component unmounted.</p>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5006,14 +4992,6 @@
       
         <content type="html"><![CDATA[<h3 id="setState-nextState-obj-callback-function"><a href="#setState-nextState-obj-callback-function" class="headerlink" title="setState(nextState(obj)[, callback(function)])"></a>setState(nextState(obj)[, callback(function)])</h3><p>设置 nextState 的某个键值, 然后下一次 EventLoop 的时候 this.state 会被更新<br><strong>注意</strong>, setState 方法中的回调函数在组件重新渲染后才被调用</p><h3 id="replaceState-nextState-obj-callback-function"><a href="#replaceState-nextState-obj-callback-function" class="headerlink" title="replaceState(nextState(obj)[, callback(function)])"></a>replaceState(nextState(obj)[, callback(function)])</h3><p>类似于 setState(), 但是会删除已存在的 state 键, 相当于重新初始化State</p><h3 id="forceUpdate-callback-function"><a href="#forceUpdate-callback-function" class="headerlink" title="forceUpdate([callback(function)])"></a>forceUpdate([callback(function)])</h3><p>强制渲染组件<br><strong>注意</strong>该方法的回调函数也是在组件重新渲染完成后调用</p><h3 id="getDOMNode"><a href="#getDOMNode" class="headerlink" title="getDOMNode()"></a>getDOMNode()</h3><p>返回组件所处的 DOM 元素</p><h3 id="isMounted"><a href="#isMounted" class="headerlink" title="isMounted()"></a>isMounted()</h3><p>返回一个 Boolean 值, 如果组件加载到了 DOM, isMount() 返回 true.</p>]]></content>
       
-      
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -5034,14 +5012,6 @@
         <content type="html"><![CDATA[<h3 id="React-createClass-obj"><a href="#React-createClass-obj" class="headerlink" title="React.createClass(obj)"></a>React.createClass(obj)</h3><p>创建一个 ReactClass(组件类), 参数是一个对象且必须有 render 属性. 该方法必须返回一个封闭的容器或 null/false(表示不渲染)</p><p>在该方法中, 所有的 this 都会在最终调用的时候绑定到创建的组件的构造器上.</p><h3 id="React-createElement-TYPE-string-ReactClass-PROPS-CHILDREN-ReactElement"><a href="#React-createElement-TYPE-string-ReactClass-PROPS-CHILDREN-ReactElement" class="headerlink" title="React.createElement(TYPE(string|ReactClass)[, PROPS[, CHILDREN(ReactElement)]])"></a>React.createElement(TYPE(string|ReactClass)[, PROPS[, CHILDREN(ReactElement)]])</h3><p>创建一个指定类型的 React 元素(要区分 ReactClass(通性) 和 ReactElement( 个性) 和 Virtual DOM(实例), 通过 ReactClass 创建 ReactElement, 然后实例化成 Virtual DOM: 比如 ButtonComponent 是 Class, 而&lt;ButtonCompoennt /&gt;则是 Element, 最后通过 ReactDOM.render() 生成Virtual DOM)<br>第三个参数 Children 可以是人一个书的 React 元素</p><pre><code>React.createElement(&#39;div&#39;, null,   React.createElement(&#39;p&#39;, null,     React.createElement(Component, &#123;a:1&#125;)  ))`&lt;/pre&gt;### React.cloneElement(TYPE(ReactElement)[, PROPS(object)[, CHILDREN(ReactElement)]])克隆并返回一个新的 ReactElement(内部子元素也会随之克隆), 新返回的元素会保留就元素的 props, ref, key, 也会集成新的 props( 如果第二个参数不为 null)&lt;pre&gt;`var Hello = React.createClass(&#123;  render: function()&#123;    var span = &amp;lt;span a = &#39;1&#39;&amp;gt;Span&amp;lt;/span&amp;gt;;    var newSpan = React.cloneElement(span,&#123;b:&#39;2&#39;&#125;, &amp;lt;em&amp;gt;EM&amp;lt;/em&amp;gt;);    console.log(newSpan.props);    return &amp;lt;div&amp;gt;Hello &#123;span&#125;,&#123;newSpan&#125;&amp;lt;/div&amp;gt;;  &#125;&#125;);`&lt;/pre&gt;注意 createElement的第一个参数必须是字符串或者 ReactClass, 而 cloneElement 的第一个参数只能是 ReactClass### React.createFactory(TYPE(string|ReactElement))返回一个某种类型的 ReactElement 工厂函数, 可以利用返回的函数来创建一个 ReactElement( 配置 props 和 children)&lt;pre&gt;`var Component = React.createClass(&#123;  render:function()&#123;    return this.props.a == 1? &amp;lt;p&amp;gt;123&amp;lt;/p&amp;gt; : null;  &#125;&#125;);var p = React.createFactory(Component),    ReactElementP = p&#123;&#123;a:1&#125;&#125;,    div = React.createFactory(&#39;div&#39;),    ReactElementDiv = div(null, ReactElementP);React.render(  ReactElementDiv, document.body);`&lt;/pre&gt;### React.render(REACTELEMENT(ReactElement), CONTAINER(DOMElement)[, CALLBACK(function)])渲染一个 ReactElement 到 container 指定的 DOM 中, 并返回一个到该组件的引用. 如果提供了可选的回调函数, 则该函数会在组件渲染或更新之后调用如果我们希望在组件外部可以获得组件内部(能通过 this 访问)的东西, 可以将 React.render 的返回值赋予一个变量, 在后续的调用中访问变量即可.### React.unmountComponentAtNode(CONTAINER(DOMElement)从 container 指定的 DOM 中移除已经加载的 ReactElement, 清楚相应的事件处理器和 state, 如果在 container 中没有存在的组件, 则不作处理如果组件清除成功, 则返回 true### React.renderToString(REACTELEMENT(ReactElement))React 为服务端提供的一个方法, 可以直接输出 ReactElement 为 HTML 字符串, 将这些标记发送(比如 res.write(HTMLString))给客户端, 可以获得更快的页面加载速度, 并有利于搜索引擎的抓取&lt;pre&gt;`var com = &amp;lt;Component /&amp;gt;comHTML = React.renderToString(com) //HTMLString`&lt;/pre&gt;### React.renderToStaticMarkup类似于 React.renderToString, 但只生成纯粹的 HTML 标记字符串, 不会包含类似 dta-reactid 之类的 React 属性, 从而节约字节数### React.initializeTouchs(ShouldUserTouch(boolean))开启或关闭 React 的触摸事件机制, 传入参数 true 使 React 响应 Touch 事件### React.Chilren#### React.Children.map(obj children, function[, object context])遍历子元素, 映射为一个新的子元素集合&lt;pre&gt;`var Component = React.createClass(&#123;  render: function()&#123;    return (      &amp;lt;ul&amp;gt;        &#123;React.Children.map&#123;          this.props.children, function()&#123;            return &amp;lt;li&amp;gt;&#123;child&#125;&amp;lt;/li&amp;gt;            &#125;          &#125;        &#125;      &amp;lt;/ul&amp;gt;    )  &#125;&#125;)</code></pre><h4 id="React-Children-forEach-obj-children-function-obj-context"><a href="#React-Children-forEach-obj-children-function-obj-context" class="headerlink" title="React.Children.forEach(obj children, function[, obj context])"></a>React.Children.forEach(obj children, function[, obj context])</h4><p>遍历子元素, 对每个子元素执行回调, 但不会返回一个新的集合</p><h4 id="React-Children-count-obj-children"><a href="#React-Children-count-obj-children" class="headerlink" title="React.Children.count(obj children)"></a>React.Children.count(obj children)</h4><p>返回子元素总个数</p>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5060,14 +5030,6 @@
       
         <content type="html"><![CDATA[<h3 id="What-does-React-render-do"><a href="#What-does-React-render-do" class="headerlink" title="What does React.render do"></a>What does React.render do</h3><ol><li>First, validate the inputs</li><li>If there was no previous component, render as a new component</li><li>Otherwise, compare the next component to the previous component using <strong>“shouldCUpdateComponent”</strong></li><li>If <strong>“shouldUpdateComponent”</strong> is true, update the component using ReactComponent.updateComponent. Otherwise, unmount and continue to render as a new component</li></ol><p><code>React.render</code> gives you a declarative way to use React’s update flow at the top level, similar to how re-rendering works inside a component. Many times, however, you can create a wrapper component so that you only have a single <code>React.render</code> call. This allows you to keep the logic inside components, which may be cleaner.</p>]]></content>
       
-      
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -5088,14 +5050,6 @@
         <content type="html"><![CDATA[<h3 id="Mounting-组件初始化相关"><a href="#Mounting-组件初始化相关" class="headerlink" title="Mounting/组件初始化相关"></a>Mounting/组件初始化相关</h3><p>componentWillMount<br>componentDidMount</p><h3 id="Updating-组件更新相关"><a href="#Updating-组件更新相关" class="headerlink" title="Updating/组件更新相关"></a>Updating/组件更新相关</h3><p>componentWillReceiveProps<br>shouldComponentUpdate<br>componentWillUpdate<br>componentDidUpdate</p><h3 id="Unmounting-组件移除相关"><a href="#Unmounting-组件移除相关" class="headerlink" title="Unmounting/组件移除相关"></a>Unmounting/组件移除相关</h3><p>componentWillUnmount</p><h3 id="Initial-相关"><a href="#Initial-相关" class="headerlink" title="Initial 相关"></a>Initial 相关</h3><p>getDefaultProps<br>getInitialState</p><h4 id="componentWillMount"><a href="#componentWillMount" class="headerlink" title="componentWillMount"></a>componentWillMount</h4><p>在组件初始化前执行, 但仅执行一次, 即使多次重复渲染该组件,或者改变组件的 state<br>如果希望该回调能执行多次, 可以使用 React.unmountComponentAtNode 移除已有的组件, 然后重新 render</p><h4 id="componentDidMount"><a href="#componentDidMount" class="headerlink" title="componentDidMount"></a>componentDidMount</h4><p>在组件初始化完成时触发, 同样只能触发一次</p><h4 id="componentWillReceiveProps"><a href="#componentWillReceiveProps" class="headerlink" title="componentWillReceiveProps"></a>componentWillReceiveProps</h4><p>在组件接收到新的 props 的时间点之前调用, 注意初始化的时候不会触发(此时初始化 props, 而不是获得新的 props), 但是如果组件重复渲染(没有移除), 则会触发此事件</p><h4 id="shouldComponentUpdate"><a href="#shouldComponentUpdate" class="headerlink" title="shouldComponentUpdate"></a>shouldComponentUpdate</h4><p>组件接收到新的 props 或 state 的时候(此时还没进行下一次 render) 会立即调用, 然后通过返回布尔值决定是否要重新渲染当前组件<br>该接口接收两个参数, 第一个参数表示新的props, 第二个表示新的 state</p><pre><code>shouldComponentUpdate:function()&#123;return true&#125; //重新渲染组件</code></pre><h4 id="componentWillUpdate"><a href="#componentWillUpdate" class="headerlink" title="componentWillUpdate"></a>componentWillUpdate</h4><p>shouldComponentUpdate 返回 true 的时候调用, 此时 props 和 state 都是更新后的值, 而组件尚未重新渲染</p><h4 id="componentDidUpdate"><a href="#componentDidUpdate" class="headerlink" title="componentDidUpdate"></a>componentDidUpdate</h4><p>重新渲染后才会触发</p><h4 id="componentWillUnmount"><a href="#componentWillUnmount" class="headerlink" title="componentWillUnmount"></a>componentWillUnmount</h4><p>组件被移除之前触发, 用于做一些必要的清理, 比如无效的定时器等</p><h4 id="getDefaultProps"><a href="#getDefaultProps" class="headerlink" title="getDefaultProps"></a>getDefaultProps</h4><p>该方法是最先触发的, 可以在该方法中 return 一个对象作为组件的默认 Props(当然如果有从父组件传来的 props, 则以传进来的为主)<br>只在组件初始化的时候执行一次</p><h4 id="getInitialState"><a href="#getInitialState" class="headerlink" title="getInitialState"></a>getInitialState</h4>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5114,14 +5068,6 @@
       
         <content type="html"><![CDATA[<p>Webpack 是一款模块加载兼打包工具, 能把各种资源, 例如 JS(X), coffee, css(sass/less), 图片等都作为模块来使用和处理</p><p>可以直接使用 require 的形式来引入各模块, 即时他们可能需要经过编译, webpack 上有各种健全的加载器(loader)会处理这些事情.</p><h3 id="Webpack-优势"><a href="#Webpack-优势" class="headerlink" title="Webpack 优势"></a>Webpack 优势</h3><ol><li>webpack 是一 commonJS 的形式来书写脚本的, 但对 AMD/CMD 的支持也很全面, 方便就项目进行代码迁移</li><li>能被模块化的不仅是 JS 了</li><li>开发便捷, 能替代部分 grunt/gulp 工作, 比如打包, 压缩混淆, 图片转 base64等</li><li>扩展性强, 插件机制完善, 特别支持 React 热拔插(react-hot-loader).</li></ol><h3 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h3><p>常规使用 npm 安装<br><code>$npm install -g webpack</code><br>如果是常规项目, 还是把依赖写入 package.json 更好</p><pre><code>$npm init$npm install --save-dev webpack`&lt;/pre&gt;### 配置每个项目下都必须配置一个 webpack.config.js, 他的作用如同常规的 gulpfile.js, 就是一个配置项, 告诉 webpack 需要做什么比如:&lt;pre&gt;`var webpack = require(&#39;webpack&#39;);var commonsPlugin = new webpack.optimize.CommonsChunkPlugin(&#39;common.js&#39;);module.exports = &#123;  //插件项  plugins: [commonsPlugin],  //页面入口文件配置  entry:&#123;    index: &#39;./src/js/page/entry1.js&#39;  &#125;,  //文件输出配置  output:&#123;    path: &#39;dist/js/page&#39;,    filename: &#39;[name].js&#39;  &#125;,  module:&#123;    //加载器配置    loaders:[      &#123;test: /\.css$/, loader: &#39;style-loader!css-loader&#39;&#125;,      &#123;test: /\.js$/, loader: &#39;jsx-loader?harmony&#39;&#125;,      &#123;test: /\.scss$/, loader: &#39;style!css!sass?sourceMap&#39;&#125;,      &#123;test: /\.(png|jpg)$/, loader: &#39;url-loader?limit-8192&#39;&#125;    ]  &#125;,&#125;;`&lt;/pre&gt;#### plugins 插件项这里使用了一个 CommonsChunkPlugin 的插件, 用于提取多个入口文件的公共部分, 然后生成一个 common.js 来访方便多页面之间的复用#### entry 是页面入口文件配置, output 是输出配置决定入口文件要生成什么名字的文件, 存放到哪里&lt;pre&gt;`&#123;  entry: &#123;    page1: &#39;./page1&#39;,    //支持数组, 将加载数组中的所有模块, 但一最后一个模块为输出    page2: [&#39;./entry1&#39;,&#39;./entry2&#39;]  &#125;,  output:&#123;    path:&#39;dist/js/page&#39;,    filename: &#39;[name].bundle.js&#39;  &#125;&#125;`&lt;/pre&gt;这段代码最终会生成一个page1.bundle.js, 和一个page2.bundle.js, 并存放到./dist/page下#### module.loaders 是最关键的配置告诉 webpack 每一种文件都要用什么加载器来处理多个 loader 之间用&#39;!&#39;连接所有加载器都要通过 npm 来加载配置信息的参数&#39;?limit=8192&#39;表示将所有小于8kb的图片都转为 base64格式, 超过8kb 的图片用 url-loader 来处理### 运行 webpack`$webpack --display-error-details`后面的参数&#39;--display-error-details&#39; 是推荐加上的, 方便出错的时候能查阅更详细的信息其他主要参数有&lt;pre&gt;`$webpack --config XXX.js //使用另一份配置文件$webpack --watch //监听变动并自动打包$webpack -p //压缩混淆脚本, 这个很重要$webpack -d //生成 map 隐射文件, 告知哪些模块被最终打包到哪里`&lt;/pre&gt;### 模块引入#### HTML直接在页面&amp;lt;body&amp;gt;中引入 webpack 最终生成的页面脚本即可&lt;pre&gt;`&amp;lt;body&amp;gt;  &amp;lt;script scr = &#39;dist/js/page/common.js&#39;&amp;gt;&amp;lt;/script&amp;gt;  &amp;lt;script scr = &#39;dist/js/page/index.js&#39;&amp;gt;&amp;lt;/script&amp;gt;&amp;lt;/body&amp;gt;`&lt;/pre&gt;可以看到连样式都不需要, 脚本执行的时候会动态生成&amp;lt;style&amp;gt;并注入 head#### JS各脚本模块可以直接用 commonJS 来书写, 并可以直接引入未经编译的模块, 比如 JSX, Sass, coffee 等(只要在 webpack.config.js 中配置好加载器)看一下编译前的页面入口文件(index.js)&lt;pre&gt;`require(&#39;../../css/reset.scss&#39;); //加载 Reset 模块require(&#39;../../css/allComponent.scss&#39;); //加载组件模块var React = require(&#39;react&#39;);var AppWrap = require(&#39;redux&#39;).createRedux;var Provider = require(&#39;redux/react&#39;).Provider;var stores = require(&#39;AppStore&#39;);var redux = createRedux(stores);var App = React.createClass(&#123;  render: function()&#123;    return (      &amp;lt;Provider redux = &#123;redux&#125;&amp;gt;        &#123;function() &#123;return &amp;lt;AppWrap /&amp;gt;;&#125;&#125;      &amp;lt;/Provider&amp;gt;    );  &#125;&#125;);ReactDOM.render(  &amp;lt;App /&amp;gt;,document.body);</code></pre><p>后续的都由 webpack 处理</p>]]></content>
       
-      
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -5142,14 +5088,6 @@
         <content type="html"><![CDATA[<p>Array.from() 方法可以将一个类数组对象或可遍历对象转化为真正的数组.<br>在 ES6 中, Class 语法允许我们为内置类型(比如 Array) 和自定义类新建子类(比如叫 subArray), 这些子类也会继承父类的静态方法, 比如 subArray.from(), 调用该方法后会返回子类 subArray 一个实例, 而不是 Array 的实例.</p><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><pre><code>Array.from(arrayLike[, mapFn[, thisArg]])`&lt;/pre&gt;### 参数#### arrayLike想要转换成真实数组的类数组对象或可遍历对象#### manFn可选参数, 如果制定了该参数, 则最后生成的数组会经过 map 操作#### this.Arg可选参数, 执行 mapFn 时的 this 的值### 描述可以使用 Array.from()将下面的两种对象转换成数组- 类数组对象(拥有 length 属性和若干索引属性的任意对象)- 可遍历对象(可以迭代出其他对象, 比如有 Map 和 Set)Array.from(obj,mapFn,thisArg) 相当于 Array.from(obj).map(mapFn,thisArg)### 应用&lt;pre&gt;`var obj = &#123;length:5&#125;; // return &#123;length:5&#125;var arr =Array.from(obj); // namely Array.from(&#123;length:5&#125;), return [undefined * 5]Array.isArray(arr); //return truevar arr1 = Array.from(obj,(v,k) =&amp;gt; k); //return [0,1,2,3,4]</code></pre>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5168,14 +5106,6 @@
       
         <content type="html"><![CDATA[<h3 id="name"><a href="#name" class="headerlink" title="name"></a>name</h3><p>package.json 中最重要的属性是 name 和 version. 这两个属性是必须要有的, 否则模块无法被安装. 这两个属性一起形成了一个 npm 模块的唯一标识符.<br>模块中内容变化的同时, 模块版本也应该一起变化.<br>name 属性就是你的模块名称, 下面是一些命名规则:</p><ul><li>name 必须小于等于214字节, 包括前缀名称在内(如../..module)</li><li>name 不能以’_’或’.’开头</li><li>不能有大写字母</li><li>name 会成为 url 的一部分, 不能有 url 非法字符</li><li>不要使用和 node 核心模块一样的名称</li><li>name 中不要有 ‘js’ 和 ‘node’</li></ul><h3 id="version"><a href="#version" class="headerlink" title="version"></a>version</h3><p>version 必须可以被 npm 依赖的一个 node-server 模块解析</p><h3 id="description"><a href="#description" class="headerlink" title="description"></a>description</h3><p>一个描述, 方便别人了解你的模块的作用, 搜索的时候也有用</p><h3 id="keywords"><a href="#keywords" class="headerlink" title="keywords"></a>keywords</h3><p>一个字符串数组, 方便别人搜到本模块</p><h3 id="homepage"><a href="#homepage" class="headerlink" title="homepage"></a>homepage</h3><p>项目主页 url<br>注意: 这个项目主页 url 和 url 属性不同, npm 注册工具会认为你把项目发布到其他地方了, 获取模块的时候不是从官方仓库后去, 而是去 url 配置的地址</p><h3 id="bugs"><a href="#bugs" class="headerlink" title="bugs"></a>bugs</h3><p>填写一个提交 bug 的地址或邮箱</p><pre><code>&#123; &#39;url&#39;: &#39;https://www.ezcook.de/project/issue&#39;, &#39;email&#39;: &#39;project@ezcook.de&#39;&#125;`&lt;/pre&gt;如果只填写一个, 可以返回字符串而不是对象### license为模块制定一个协议, 通知用户可以使用的权限, 最常见的是 BSD-3-Clause 或 MIT&lt;pre&gt;`&#123;&#39;license&#39;: &#39;MIT&#39;&#125;`&lt;/pre&gt;### author, contributors### filesfiles 属性的值是一个数组, 内容是模块下文件名或文件夹名, 如果是文件夹名, 则文件夹下所有文件也会被包含.可以在模块根目录下创建一个 &#39;.npmignore&#39; 文件, 写在这个文件里的文件会被排除在 file 属性### mainmain 属性指定程序的主入口文件, 比如这个模块(文件夹)命名为&#39;foo&#39;, package.json中&#39; main&#39; 属性指定为&#39;test.js&#39;, 则通过 require(foo)来使用模块的时候会滴啊用 test.js 脚本.他应该指向模块根目录下得一个文件, 默认为 index.js### bin很多模块有一个或多个需要配置到 PATH 路径下的可执行模块...### man制定一个或通过数组指定一些文件夹让 linux 下的 man 指令查找文档地址### directories### repository指定一个代码存放的地址&lt;pre&gt;`&#39;repository&#39;:&#123;  &#39;type&#39;:&#39;git&#39;,  &#39;url&#39;:&#39;https://github.com/...&#39;&#125;</code></pre><p>如果是 Github, 可以用缩写完成<br>‘repository’:’gist:…’`</p><h3 id="scripts"><a href="#scripts" class="headerlink" title="scripts"></a>scripts</h3><p>scripts 属性是一个对象, 里面制定了项目的生命周期各个环节需要执行的命令, key 是生命周期中的时间, value 是要执行的命令<br>具体内容有 install, start, stop 等, 详情见<a href="https://docs.npmjs.com/misc/scripts">npm/scripts</a></p><h3 id="config"><a href="#config" class="headerlink" title="config"></a>config</h3><p>用来设置一些项目不怎么变化的项目配置, 如 port 等</p><h3 id="dependencies"><a href="#dependencies" class="headerlink" title="dependencies"></a>dependencies</h3><p>dependencies 属性是一个对象, 配置依赖模块的模块列表, key 是模块名称, vlaue 是版本范围, 版本范围是一个字符, 可以被一个或多个空格分隔.<br>比如</p><p>```<br>‘dependencies’:<br>{<br>  ‘foo’:’1.0.0 - 2.0.0’<br>  ‘foo1’:’&gt;=1.0.0’<br>}</p><h3 id="devDependencies"><a href="#devDependencies" class="headerlink" title="devDependencies"></a>devDependencies</h3><p>如果有人想下载并使用你的模块, 也许他们并不希望或需要下载一些你在开发过程中额外的测试或文档框架<br>这种情况下最好把这些依赖添加到 devDependencies 中, 这些模块会在 npm link 或者 npm install 的时候被安装, 也可以像其他 npm 配置一样被管理</p>]]></content>
       
-      
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -5196,14 +5126,6 @@
         <content type="html"><![CDATA[<p>创建一个工程目录, 并 cd 到目录中, 运行<br><code>$npm init</code><br>这个工具将引导你创建一个 package.json 文件, 他只覆盖了大多数一般的项目, 并尽量让默认内容全面.<br>运行<code>npm help json</code> 获取 package.json 中的各个字段的文档及其定义<br>后面可以用<br><code>npm install &amp;lt;pkg&amp;gt; --save</code><br>来安装一个包并将其存储为 package.json 文件中的一个依赖模块<br>任何时间按下^C 退出.<br>简单来说:<br><code>npm init</code> 创建或修改一个项目中的 package.json 文件<br>默认名称(显示在括号中)是当前文件夹的名字, 如果对于提示不输入任何字符并按下 Enter 键, npm 会将默认名称当做项目名称.<br>在完成提示内容后, npm init 将会给你一个即将创建的 package.json 文件的预览, 对于我们来说, 他看起来是这样的</p><pre><code>&#123;&quot;name&quot;:&quot;project-name&quot;,&quot;version&quot;:&quot;0.0.0&quot;,&quot;description&quot;:&quot;...&quot;,&quot;main&quot;:&quot;index.js&quot;,&quot;scripts&quot;:&#123;  &quot;test&quot;:&quot;echo \&quot;Error:no test specified\&quot; &amp;amp;&amp;amp; exit 1&quot;&#125;,&quot;keywords&quot;:[&quot;npm&quot;,&quot;example&quot;],&quot;author&quot;:&quot;YourName&quot;,&quot;license&quot;:&quot;MIT&quot;&#125;`&lt;/pre&gt;按下 Enter 进行确认, 你可以在后面随时修改, 通过编辑 package.json 或再次运行 npm init.npm init 永远也不会移除你放在 package.json 中的信息, 仅仅根据需求进行调整.### package.json一个项目的 package.json 文件担任下列角色- 他为 npm 提供一切信息- 他告诉 Node 怎样处理一个包- 他为人们查看项目提供一个进入点### 创建一个包进入点现在创建一个非常简单的脚本并将它存为 index.js&lt;pre&gt;`//index.jsconsole.log(&quot;Hello, npm&quot;);`&lt;/pre&gt;我们可以直接运行脚本&lt;pre&gt;`$node index.jsHello, npm`&lt;/pre&gt;我们可以通过使用 require, 在其他的 Node 应用中应用这段脚本. 首先进入 Node REPL, 一个交互的命令行环境:&lt;pre&gt;`$node&amp;gt; require(&#39;./index.js&#39;)Hello, npm&#123;&#125;`&lt;/pre&gt;(&#123;&#125;是 require 的返回值, 在这个例子中, 他是 index.js 的 exports 对象)Node 允许我们省略.js 扩展名, 因此我们可以简写为 require(&#39;,/index&#39;).如果我们在同一个 REPL 会话中再次运行 require, 我们将得到相同的返回值, 但是不会得到 console.log 输出, 因为 require 不会在同一个脚本中运行两次../在./index 中很重要, 因为他告诉 Node 这个路径是当前文件夹的相对路径. 如果我们不显示给出绝对路径或相对路径, 而是直接给 index, Node 会在一系列文件夹中寻找匹配的模块.回顾一下, 在 package.json 文件夹中, &#39;main&#39;:&#39;index.js&#39; 的作用是什么?当你 require 一个包含指向 main 脚本(&#39;main&#39;:&#39;index.js&#39;)的 package.json 文件的文件夹时, Node 会认为你是在 require 这个脚本(&#39;index.js&#39;), 所以前面的代码可以简写为&lt;pre&gt;`require(./)`&lt;/pre&gt;现在我们可以使用 package.json 来完成上面的工作, 因为我们的脚本命名为 index.js, 他是一个文件夹的默认脚本### 第一个依赖模块使用下面的命令来快速搜索 npm registry`$npm search color`如果想要获得更多的信息, 可以跳转到 npmjs.org, 在&quot;最多依赖&quot;的列表中可以查看流行的库安装依赖模块`$npm install --save colors`这条指令会在本地文件夹中创建一个名为 node_modules 的文件夹并将 colors 下载到其中. `--save`将依赖模块自动加入到 package.json 文件中.&lt;pre&gt;`&quot;dependencies&quot;&#123;  &quot;colors&quot;:&quot;~0.6.0-1&quot;&#125;`&lt;/pre&gt;现在我们来重写 index.js 来使用我们的新库. colors 扩展了 String 的原型因此我们可以非常简洁的表达带有颜色的文本:&lt;pre&gt;`var colors = require(&#39;colors&#39;);console.log(&#39;Hello, &#39;.red,&#39;npm&#39;.green);</code></pre><p>运行 index.js 文件, 你将在原来的输出中获得一个彩色字符串</p><h3 id="node-modules-的层级"><a href="#node-modules-的层级" class="headerlink" title="node_modules 的层级"></a>node_modules 的层级</h3><p>当不显示指定相对路径或绝对路径时, Node 首先查找本地的 ndoe_modules 文件夹, 当你使用 npm install 指令的时候这个文件夹被自动创建. 当 Node 发现 node_modules 下有一个叫做 colors 子目录时, Node 将他当做 require 的目标.<br><strong>查看 node_modules/colors/package.json, 可以找到’main’:’colors’ , 因此 require colors这个文件夹时 Node 会认为 require 了 colors.js 这个脚本</strong><br>然后从 require 函数中返回脚本中的 exports 对象.<br>如果找不到 colors 目录, 则会一直搜索到系统的根目录.</p>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5222,14 +5144,6 @@
       
         <content type="html"><![CDATA[<h3 id="display-table-cell-属性简述"><a href="#display-table-cell-属性简述" class="headerlink" title="display:table-cell 属性简述"></a>display:table-cell 属性简述</h3><p><code>display:table-cell</code> 属性让标签元素鞥一表格单元格的形式呈现, 类似于 td 标签.<br><code>table-cell</code>与<code>float</code>, <code>position:absolute</code> 不兼容.<br><code>table-cell</code>元素可以设置 width, height, padding, 但是不能设置 margin, 和 td 标签一致.</p><h3 id="display-table-cell-与大小不固定元素的垂直居中"><a href="#display-table-cell-与大小不固定元素的垂直居中" class="headerlink" title="display:table-cell 与大小不固定元素的垂直居中"></a>display:table-cell 与大小不固定元素的垂直居中</h3><h3 id="display-table-cell-与两栏自适应布局"><a href="#display-table-cell-与两栏自适应布局" class="headerlink" title="display:table-cell 与两栏自适应布局"></a>display:table-cell 与两栏自适应布局</h3><h3 id="display-table-cell-等高布局"><a href="#display-table-cell-等高布局" class="headerlink" title="display:table-cell 等高布局"></a>display:table-cell 等高布局</h3><p>table 表格中的单元格最大的特点之一就是同一行列表元素都是登高的, 所以等高布局可以借助 table-cell 实现.<br><strong>匿名表格元素创建规则</strong>:CSS2中创建表格元素, 其依赖元素(比如 tr 之于 td, table 之于 tr) 会被模拟出来, 从而使得表格模型能够正常工作. 所有的表格元素都会自动在自身周围生成需要的匿名 table 对象, 使其符合 table/inline-table, table-row, table-cell 的三层嵌套关系.<br>要实现等高布局, 所有的 table-cell 元素一定要留一个用来包裹的标签, CSS 代码如下:</p><p>```<br>.list_row{display:table-row}<br>.list_cell{display:table-cell;width:30%,padding:1.6%; background-color:#F5F5F5;}<br>.list_center{background-color:#F0F3F9;}//用于和旁边的 cell 区分</p>]]></content>
       
-      
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -5250,14 +5164,6 @@
         <content type="html"><![CDATA[<p>通常情况下, 求和函数的定义是这样的</p><pre><code>function sum(arr)&#123;  return arr.reduce(function(x,y)&#123;    return x+y;  &#125;);&#125;sum([1,2,3,4,5]); //15`&lt;/pre&gt;但是, 如果不需要立刻求和, 而是在后面的代码中根据需要进行计算, 可以选择返回一个保存了参数的求和函数&lt;pre&gt;`function lazy_sum(arr)&#123;  var sum = function()&#123;    return arr.reduce(function(x,y)&#123;      return x+y;    &#125;);  &#125;  return sum;&#125;`&lt;/pre&gt;当我们调用`f = lazy_sum()`时会返回保存了参数 arr 的 sum 函数, 直到通过 f()调用 sum 函数前都不会进行求和运算, 可以节约资源.**需要注意的一点**是每一次调用 lazy_sum() 都会返回一个新的函数, 彼此相互独立, 各自占用内存空间同时要注意, 尽管每次生成并返回的都是新的 sum 函数, 但是 lazy_sum() 的局部变量是通用的, 可参考**类方法**与**实例**的关系, 这是使用闭包的目的之一**更要注意**:&lt;pre&gt;`function count()&#123;  var arr = [];  for(var i = 1; i&amp;lt;=3; i++)&#123;    arr.push(function()&#123;        return i*i;      &#125;);  &#125;  return arr;&#125;var results = count();var f1 = results[0];var f2 = results[1];var f3 = results[2];</code></pre><p>在这个例子中, f1(), f2(), f3()的返回值都是16, 原因在于:<br>每一次循环都向 arr 推入一个(function(){})(i), 但都没有计算, 三次循环后 i 变成了4, 所以f1, f2, f3的函数接受的局部变量的值都是4.<br>由此可知闭包保留的是变量, 而不是变量的值.<br>如果一定要引用循环变量, 记得创建一个变量用于保存现场</p><p><strong>闭包可以用于实现装饰器</strong></p>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5276,14 +5182,6 @@
       
         <content type="html"><![CDATA[<p>主要操作包含:</p><p>CSS 前缀补全, LESS/SASS 编译, CSS 压缩, JS 合并压缩 ,图片压缩, 部署发布</p><h3 id="流程分解"><a href="#流程分解" class="headerlink" title="流程分解"></a>流程分解</h3><p>主要分为</p><p>开发过程</p><p>和</p><p>部署过程</p><h4 id="开发过程"><a href="#开发过程" class="headerlink" title="开发过程"></a>开发过程</h4><p>要求每一次编辑都能在页面上即时相应</p><h4 id="部署过程"><a href="#部署过程" class="headerlink" title="部署过程"></a>部署过程</h4><ul><li>CSS Autoprefixer</li><li>Less/Sass =&gt; CSS</li><li>CSS 压缩合并</li><li>CSS Sprite</li><li>Retina @2x &amp; @3x 自动生成适配</li><li>imagemin 图片压缩</li><li>JS 合并压缩</li></ul><h3 id="项目目录结构"><a href="#项目目录结构" class="headerlink" title="项目目录结构"></a>项目目录结构</h3><p>project                  //项目目录<br>|____dev                 //开发目录<br>| |____html<br>| |____images<br>| |____scripts<br>| |____slice             //合成的雪碧图<br>| |____styles<br>|____dist                //生产目录<br>| |____html<br>| |____images<br>| |____scripts<br>| |____sprite            //仅从 src 复制<br>| |____styles<br>|____gulpfile.js<br>|____src                 //源文件目录<br>| |____html<br>| |____images<br>| |____scripts<br>| |____slice             //雪碧图素材<br>| |____styles</p>]]></content>
       
-      
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -5304,14 +5202,6 @@
         <content type="html"><![CDATA[<p>先安装 zsh<br>进入<code>~/.zshrc</code>, 添加<br><code>alias tree=&quot;find . -print | sed -e &#39;s;[^/]*/;|____;g;s;____|; |;g&#39;&quot;</code><br>回到目录, 执行<br><code>source .zshrc</code> 令修改立即生效<br>可以使用<code>tree</code>指令生成文档树</p>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5330,14 +5220,6 @@
       
         <content type="html"><![CDATA[<h3 id="Literal"><a href="#Literal" class="headerlink" title="Literal"></a>Literal</h3><p><code>/patter/attributes</code></p><h3 id="new-RegExp"><a href="#new-RegExp" class="headerlink" title="new RegExp"></a>new RegExp</h3><p><code>new RegExp(pattern, attribtues)</code></p><h3 id="pattern"><a href="#pattern" class="headerlink" title="pattern"></a>pattern</h3><h3 id="RegExp-Attribtues"><a href="#RegExp-Attribtues" class="headerlink" title="RegExp Attribtues"></a>RegExp Attribtues</h3><ul><li>g: global</li><li>i: ignoreCase</li><li>m: multi-lines</li><li>source: literal text</li><li>lastIndex: mark the index where to start next match</li></ul><h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><pre><code>var re = new RegExp(&#39;^[0-9]+$&#39;,&#39;g&#39;);console.log(re.source); //^[0-9]+$`&lt;/pre&gt;&lt;pre&gt;`var re = new RegExp(&#39;\\d&#123;3&#125;&#39;,&#39;g&#39;);var str = &#39;123a456b&#39;;console.log(re.lastIndex); // 0re.exec(str); //return [&#39;123&#39;]console.log(re.lastIndex); // 3re.exec(str); // [&#39;456&#39;]console.log(re.lastIndex); //7re.exec(str);console.log(re.lastIndex) // 0, reset to 0 if exceed.re.lastIndex = 3; //Set Start Indexre.exec(str); // [&#39;456&#39;]</code></pre><h3 id="RegExp-Methods"><a href="#RegExp-Methods" class="headerlink" title="RegExp Methods"></a>RegExp Methods</h3><p>re.compile(re) //execute RegExp in scripts<br>re.exec(str) //return an Array including String, or null.<br>re.test(str) =&gt; true/false</p><h3 id="String-Methods"><a href="#String-Methods" class="headerlink" title="String Methods"></a>String Methods</h3><p>str.search(re,subStr)<br>str.match(re) =&gt; Array including String<br>str.replace(re,str) =&gt; new String<br>str.split(re)</p>]]></content>
       
-      
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -5358,14 +5240,6 @@
         <content type="html"><![CDATA[<p>Shell 在计算机科学中是指”提供用户使用界面”的软件, 通常指的是命令行界面的解析器, 一般来说, 这个词指的是操作系统中提供访问内核所提供服务的程序. Shell 也用于泛指为所有用户提供操作界面的程序, 也就是程序和用户交互的层面. 因此与之相对的是程序内核(Core), 内核不提供和用户的交互功能.</p><h3 id="bash-Bourne-Again-Shell-是-Linux-标准的默认-shell-支持-POSIX-标准-完全兼容-sh"><a href="#bash-Bourne-Again-Shell-是-Linux-标准的默认-shell-支持-POSIX-标准-完全兼容-sh" class="headerlink" title="bash (Bourne Again Shell) 是 Linux 标准的默认 shell, 支持 POSIX 标准, 完全兼容 sh."></a>bash (Bourne Again Shell) 是 Linux 标准的默认 shell, 支持 POSIX 标准, 完全兼容 sh.</h3><p>进入 shell: 一般 Linux 系统中, 桌面(GUI)状态下使用快捷键 Ctrl+Alt+T 能打开一个虚拟终端, 输入 shell 命令并执行.<br>退出 shell: 在 shell 中输入 exit 然后回车<br>默认提示符: 普通用户$, 根用户#<br>查看 shell 版本: <code>echo $SHELL</code><br>查看命令的辅助信息:<br><code>--help</code>, <code>--version</code></p><h3 id="目录文件指令"><a href="#目录文件指令" class="headerlink" title="目录文件指令"></a>目录文件指令</h3><p>pwd: 查看当前目录<br>echo $HOME 或者 echo ~: 查看主目录</p><p>ls: 列出文件或目录下的文件名</p><ul><li>-a(all): 显示所有文件, 包括隐藏文件</li><li>-l(long): 显示详细信息(long 表示长格式显示)</li><li>-d(detail): 显示目录属性</li><li>-h(human): 人性化显示文件大小</li><li>-i(inode): 显示 inode</li><li>-ll(ls -l): 显示目录下文件的长信息</li></ul><p>cd: 改变目录</p><ul><li>~ 进入当前用户的根目录</li><li>同上</li><li>-进入上次目录</li><li>.. 进入上一级目录</li><li>. 进入当前目录</li></ul><p>mkdir: 创建目录(文件夹)</p><ul><li>-p 递归创建<br>e.g. mkdir b/a =&gt;fail, mkdir不能创建多级目录<br>mkdir -p b/a 同时创建 b 和 a</li></ul><p>rmdir: 删除空目录</p><p>rm: 删除目录及文件</p><ul><li>-r强制删除目录</li><li>-f强制</li><li>一般用 rm -rf ..</li></ul><p>touch: 修改文件时间或者创建文件</p><p>chmod: 设置目录或文件的访问权限</p><ul><li>chmod[选项][操作对象][操作符][权限][文件名]</li><li>操作符号<ul><li><ul><li>添加某个权限</li></ul></li><li>-取消某个权限</li><li>=赋予给定权限并取消其他权限</li></ul></li><li>数字设定法<ul><li>chmod abc 文件名</li><li>其中 abc 各为一个数字, 分别表示 user, group, other 的权限</li><li>r为4, w为2, x为1, -为0(二进制位)</li><li>rwx = 7; rw- = 6; r-x = 5</li></ul></li><li>访问权限组(每一个文件或目录的访问权限都有三组)<br>在 Linux 中是按照用户和组来设定权限的<ul><li>所有者权限: 就是文件或者目录的创建者, 一般来说和 root 用户权限相当. 文件被创建时, 文件所有者自动拥有对该文件的读写和可执行权限.</li><li>同组权限: 就是所有者所在的用户组的其他成员的权限</li><li>其他用户权限</li></ul></li><li>访问权限(读取, 写入, 执行)<ul><li>r: 读取文件内容的权限, 或者浏览目录的权限</li><li>w: 新增,修改文件内容的权限, 或者删除, 移动目录内文件的权限</li><li>x: 执行文件的权限, 或者进入目录的权限</li></ul></li><li>用 -ll 也就是 -ls l显示文件或目录的详细信息, 最左的一列为文件的访问权限, 例如:<br><code>-rw-r--r-- 1 root root 483997 Jul 15 18:31 sobsrc.tgz</code><br>这里有10个位置, 第一个制定文件的类型, 通常意义上, 一个目录也是一个文件, 如果第一个字符是-, 表示是一个非目录文件, 如果是 d, 表示是一个目录</li></ul><table><thead><tr>  <th>-</th>  <th>rw-</th>  <th>r--</th>  <th>r--</th></tr></thead><tbody><tr>  <td>非目录的文件</td>  <td>所有者权限</td>  <td>组用户</td>  <td>其他用户</td></tr><tr>  <td>普通文件</td>  <td>可读写</td>  <td>只读</td>  <td>只读</td></tr></tbody></table><p>chown: 改变目录的所有者<br>cp: 复制目录或文件</p><ul><li>-r 复制目录</li><li>-p 连带文件属性复制</li><li>-d 若源文件是链接文件, 则复制链接属性</li><li>-a 相当于 -pdr</li><li>cp[现象][原文件或目录][目标目录]</li></ul><p>mv: 剪切或改名(move)</p><ul><li>mv a ../a 将当前目录下的 a 复制剪切到上一级的 a 目录中</li><li>mv abc.txt de.txt 如果原文件和目标文件在同一目录下, 则为改名, 否则是剪切</li></ul><h3 id="文件内容命令"><a href="#文件内容命令" class="headerlink" title="文件内容命令"></a>文件内容命令</h3><p>diff: 比较两个文件的差异<br>patch: 修补文件(给文件打补丁)<br>cat: 输出文件内容<br>more: 逐屏显示文件内容<br>less: 逐页显示文件内容<br>head: 显示文件开头若干行内容<br>tail: 显示文件最后若干行内容<br>od: 查看特殊格式的文件内容</p><h3 id="常见目录"><a href="#常见目录" class="headerlink" title="常见目录"></a>常见目录</h3><p>/ 根目录<br>/bin 存放必要的命令<br>/boot 存放内核以及启动所需要的文件<br>/dev 存放设备文件<br>/etc 存放系统的配置文件<br>/home 用户文件的主目录<br>/lib 存放必要的运行库<br>/mnt 存放临时的映射文件系统<br>/proc 存放存储进程和系统信息<br>/root 超级用户的主目录<br>/sbin 存放系统管理程序<br>/tmp 存放临时文件<br>/usr 包含了一般不需要修改的应用程序, 命令程序文件, 程序库,手册等<br>/usr/bin 系统命令(普通用户 home)<br>/usr/sbin 系统命令(超级用户 root)<br>/var 包含系统产生的经常变化的文件</p>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5384,14 +5258,6 @@
       
         <content type="html"><![CDATA[<h3 id="安装-homebrew"><a href="#安装-homebrew" class="headerlink" title="安装 homebrew"></a>安装 homebrew</h3><p>终端下执行<br><code>ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</code></p><h3 id="配置-iterm2"><a href="#配置-iterm2" class="headerlink" title="配置 iterm2"></a>配置 iterm2</h3><p>下载后下载配色 solarized, 然后下载 zsh 和 oh-my-zsh, 添加插件 git, osx, ruby, autojump</p><h3 id="安装-Nginx"><a href="#安装-Nginx" class="headerlink" title="安装 Nginx"></a>安装 Nginx</h3><p>终端下执行<br><code>brew install nginx</code><br>安装完成后用浏览器打卡 <a href="http://localhost:8080/">http://localhost:8080</a>, 如果页面显示正常,则表示安装完成<br>nginx 有一下几个操作</p><pre><code>  #打开 nginx  nginx  #nginx -s 重新加载配置|重启|停止|退出  nginx -s reload|reopen|stop|quit  #测试配置是否有语法错误  nginx -t`&lt;/pre&gt;Note: 如果执行不成功, 请使用 sudo 提权默认访问目录是`/usr/local/Cellar/nginx/1.10.0/html`nginx 的配置文件位置为:`/usr/local/etc/nginx/nginx.conf`#### 配置 nginx首先备份一下 nginx.conf ==&gt; nginx.conf.default修改server 部分为:&lt;pre&gt;`server  &#123;    listen    8080;    server_name localhost;    location /&#123;      root /Users/YourId/Documents; //项目目录      #index index.html index.htm;    &#125;  &#125;`&lt;/pre&gt;配置完成后启动 nginx 即可访问### 安装 mySQL终端执行`brew install mysql` 安装完成后默认没有密码, 修改密码 ``` mysql -uroot -p Enter password: mysql&gt;use mysql; mysql&gt; UPDATE user SET password=password(&quot;修改的密码&quot;) WHERE user=&#39;root&#39;;mysql 的操作命令&lt;pre&gt;`  #开启  mysql.server start  #结束  mysql.server stop</code></pre><p>配置文件位于<br><code>/usr/local/Cellar/mysql/5.6.28/my.cnf</code></p>]]></content>
       
-      
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -5412,14 +5278,6 @@
         <content type="html"><![CDATA[<p><code>this.props.children</code></p><p>Children allow you to pass components as data to other components, just like any other prop you use. The special thing about children is that React provides support through its <em>ReactElement API</em> and JSX. XML children translate perfectly to React children.</p><pre><code>var MyDiv = React.createClass(&#123;  render: function()&#123;      return &amp;lt;div&amp;gt;&#123;this.props.children&#125;&amp;lt;/div&amp;gt;&#125;&#125;);ReactDOM.render(  &amp;lt;MyDiv&amp;gt;      &amp;lt;span&amp;gt;Hello&amp;lt;/span&amp;gt;      &amp;lt;span&amp;gt;World&amp;lt;/span&amp;gt;  &amp;lt;/MyDiv&amp;gt;,  node  );`&lt;/pre&gt;### this.props.childrenIf you look at the **JSX** transform, you&#39;ll find that XML children are appended as arguments to the _React.createElement_ call. Most often, your component will render content and include the children in the _render_ output. This is a great way to create UI components, like cards, headers, and buttons.Occasionally, you may want to interact with the children, maybe mutating or separating them. Be careful here and remember to treat **this.props.children** as an **opaque data structure**. Instead of working with **this.props.children** directly, use the **React.Children** utilities to work with children.&lt;pre&gt;`var ListComponent = React.createClasss(&#123;  render: function()&#123;      var children = React.Children.map(        this.props.children,        function(child)&#123;            return &amp;lt;li&amp;gt;&#123;child&#125;&amp;lt;li&amp;gt;        &#125;    );    return &amp;lt;ul&amp;gt;&#123;children&#125;&amp;lt;/ul&amp;gt;;  &#125;  &#125;);  var middleChildren = [  &amp;lt;strong key=&#39;2&#39;&amp;gt;Child 2&amp;lt;/strong&amp;gt;,  &amp;lt;a href=&#39;#&#39; key=&#39;3&#39;&amp;gt;Child 3&amp;lt;/a&amp;gt;  ];  ReactDOM.render(  &amp;lt;ListComponent&amp;gt;    &amp;lt;span&amp;gt;Child 1&amp;lt;/span&amp;gt;    &#123;middleChildren&#125;    &amp;lt;em&amp;gt;Child 4&amp;lt;/em&amp;gt;  &amp;lt;/ListComponent&amp;gt;,  document.body);</code></pre>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5439,14 +5297,6 @@
         <content type="html"><![CDATA[<p>A <strong>Node</strong> is an interface from which a number of DOM types, and allows these various types to be treated similarly.</p><h3 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h3><ul><li>Node.baseURI: return a DOMStirng representing the base URL</li><li>Node.childNodes: return a live NodeList containing all the children of this node. NodeList being live means that if the children of the Node change, the NodeList will update automatically.</li><li>Node.firstChild: return a Node representing the first direct child Node of this Node, or Null if the node has no child.</li><li>Node.lastChild: Return a Node representing the last direct child Node of this Node, or Null if the node has no child.</li><li>Node.nextSibling: return a Node representing the next Node in the tree, or null if there is no one.</li><li>Node.previousSibling</li><li>Node.nodeName: return a DOMString containing the name of the node. The structure of the name will differ with the name type. E.g. An HTMLElement will contain the name of the corresponding tag, like “audio”, for an HTMLAudioElement, a Text node will have the “#text” string, or a Document node will have the “#document” string.</li><li>Node.nodeType: return an unsigned short representing the type of the node. Possible values are:</li></ul><table><thead><tr>  <th align="left">Name</th>  <th align="left">Value</th></tr></thead><tbody><tr>  <td align="left">Element_Node</td>  <td align="left">1</td></tr><tr>  <td align="left">Attribute_Node</td>  <td align="left">2</td></tr><tr>  <td align="left">Text_Node</td>  <td align="left">3</td></tr><tr>  <td align="left">...</td>  <td align="left">...</td></tr><tr>  <td align="left">Document_Node</td>  <td align="left">9</td></tr><tr>  <td align="left">Document_Type_Node</td>  <td align="left">10</td></tr><tr>  <td align="left">Notation_Node</td>  <td align="left">12</td></tr></tbody></table><ul><li>Node.nodeValue: return a DOMString representing the value of an object. For most node types, this returns <strong>null</strong>, and any set operation is ignored.<br>For Nodes of type TEXT_NODE(Text objects), COMMENT_NODE(Comment objects), and PROGRESSING_INSTRUCTION_NODE(ProgressingInstruction objects), the value corresponds to the text data contained in the obejct.</li><li>Node.parentNode: return a Node that is the parent of this node, if there is no such node, like if this node is the top of the tree or if doesn’t participate in a tree, this property returns <strong>Null</strong>.</li><li>Node.parentElement: returns an Element that is the parent of this node. If the node has no parent, or if that parent is not an Element, this property returns <strong>Null</strong>.</li><li>Node.rootNode: return a Node representing the topmost Node in this tree or the current node if it’s the topmost node in the tree.</li><li>Node.textContent: is a DOMString representing the textual content of an element and all its descendants.</li></ul><h3 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h3><ul><li><p>Node.appendChild()</p></li><li><p>Node.cloneNode(): Clone a Node and optionally all of its contents. By default, it clones the content of the node.</p></li><li><p>Node.hasChildNodes(): return a <strong>boolean</strong> indicating if the element has any child nodes, or not.</p></li><li><p>Node.insertBefore(newNode, beforeItsChild)</p></li><li><p>Node.isEqualNode(): return a <strong>boolean</strong> which indicating whether or not two nodes are of the <strong>same type</strong> and all their defining data points match.</p></li><li><p>Node.isSameNode(): return a <strong>boolean</strong> value indicating whether or not the two nodes are the same(that is they reference the same object).</p></li><li><p>Node.removeChild()</p></li><li><p>Node.replace(newNode, replaceItsChild)</p><pre><code>*   Note: replaceNode will not generate new one.&lt;/p&gt;</code></pre><ul><li><p>E.g.</p><p><code>ul&amp;gt;li*3</code></p><p><code>ul.replace(li[2],li[0])</code></p><p>it will act as:<br>remove li[2], put it li[0], remove li[0], so the result looks like</p><p>ul</p></li></ul><p>–li[2]<br>–li[1]<br>`</pre></p><h3 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h3><h4 id="Browser-All-Child-Nodes"><a href="#Browser-All-Child-Nodes" class="headerlink" title="Browser All Child Nodes"></a>Browser All Child Nodes</h4><p>The following function recursively cycles all child nodes of a node and executes a callback function upon them(and upon the parent node itself).<pre>`function DOMComb(oParent, oCallBack){  if(oParent.hasChildNodes()){    for(var oNode = oParent.firstChild; oNode; oNode = oNode.nextSibling){      DOMComb(oNode, oCallBack);    }  }  oCallBack.call(oParent);}`</pre><h4 id="Remove-all-children-nested-within-a-node"><a href="#Remove-all-children-nested-within-a-node" class="headerlink" title="Remove all children nested within a node"></a>Remove all children nested within a node</h4><pre>`Element.prototype.removeAll = function(){  while(this.firstChild){    this.removeAll(this.firstChild);  }  return this;};</li></ul>]]></content>
       
       
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5465,14 +5315,6 @@
       
         <content type="html"><![CDATA[<p>Summary: </p><ul><li><strong>nodeValue</strong> is a little more confusing to use, but faster than innerHTML</li><li><strong>innerHTML</strong> parses content as HTML and takes longer(output <code>text/html</code>)</li><li><strong>textContent</strong> uses straight text, does not parse HTML, and is faster(output <code>text/plain</code>)</li><li><strong>innerText</strong> takes styles into consideration. It won’t get hidden text for instance.</li></ul><h3 id="node-textContent"><a href="#node-textContent" class="headerlink" title="node.textContent"></a>node.textContent</h3><p>The <strong>Node.textContent</strong> property represents the text content of a node and it descendants.</p><h4 id="Syntax"><a href="#Syntax" class="headerlink" title="Syntax"></a>Syntax</h4><p><code>example.textContent =&quot;&amp;lt;a href=&#39;...&#39;&amp;gt;textContent&amp;lt;/a&amp;gt;&quot;</code><br>will output <code>&amp;lt;a href=&#39;...&#39;&amp;gt;textContent&amp;lt;/a&amp;gt;</code></p><h4 id="Differences-from-innerText"><a href="#Differences-from-innerText" class="headerlink" title="Differences from innerText"></a>Differences from innerText</h4><ul><li>textContent gets the content of all elements, including <script> and <style> elements, but innerText doesn't.</li><li>innerText is aware of style and will not return the text of hidden elements, whereas textContent will.</li><li>As innerText is aware of CSS styling, it will trigger a reflow, whereas textContent will not.</li></ul><h4 id="Differences-from-innerHTML"><a href="#Differences-from-innerHTML" class="headerlink" title="Differences from innerHTML"></a>Differences from innerHTML</h4><p>innerHTML returns the HTML as its name indicates. Quite often, in order to retrieve or write text within an element, people use innerHTML. textContent should be used instead (to write or retrieve text). Because the text is not parsed as HTML, it’s likely to have better performance.</p><h3 id="node-nodeValue"><a href="#node-nodeValue" class="headerlink" title="node.nodeValue"></a>node.nodeValue</h3><p>The <strong>node.nodeValue</strong> property returns or sets the value of the current node.</p><h4 id="Syntax-1"><a href="#Syntax-1" class="headerlink" title="Syntax"></a>Syntax</h4><p><code>value = node.nodeValue</code></p><p>value is a string containing the value of the current node, if any.</p>]]></content>
       
-      
-      <categories>
-          
-          <category> note </category>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -5512,12 +5354,6 @@
         <content type="html"><![CDATA[<p>In computing, an <strong>event</strong> is an action or occurrence recognized by software that may be handled by the software. Computer events can be generated or triggered by the system, by the user or in other ways. Typically, events are handled synchronously with the program flow, that is, the software may have one or more dedicated places where events are handled, frequently an event loop. A source of events includes the user, who may interact with the software by way of, for example, keystroke on the keyboard. Another source is a hardware device such as a timer. Software can be trigger its own set of events into the event loop, e.g. to communicate the completion of a task. Software that changes its behavior in response to events is said to be event-driven, often with the goal of being inactive.</p><h3 id="Event-handler"><a href="#Event-handler" class="headerlink" title="Event handler"></a>Event handler</h3><p>In computer programming, an <em>event handler</em> is a <strong>callback</strong> subroutine that handles inputs received in a program(called a <em>listener</em> in Java and JavaScript). Each <em>event</em> is a piece of application-level information from the underlying framework, typically the GUI Toolkit. GUI events including key presses, mouse movement, action selections, and timer expiring.</p>]]></content>
       
       
-      <categories>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5537,12 +5373,6 @@
         <content type="html"><![CDATA[<p><strong>DOM(Document Object Model) events</strong> allow <em>event-driven programming</em> language like JavaScript, JScript, ECMAScript, VBScript and Java to register various <strong>event handler/listener</strong> on the element nodes inside a DOM tree, e.g. HTML, XHTML, XUL, and SVG documents.</p><h3 id="Events"><a href="#Events" class="headerlink" title="Events"></a>Events</h3><h4 id="HTML-Events"><a href="#HTML-Events" class="headerlink" title="HTML Events"></a>HTML Events</h4><p>There is a huge collection of events that can be generated by most element nodes:</p><ul><li>Mouse events;</li><li>Keyboard events;</li><li>HTML frame/object events;</li><li>HTML form events;</li><li>User interface events;</li><li>Mutation events(notification of any changes to the structure of a document);</li><li>Progress events(used by XMLHttpResponse, File API, …)</li></ul><p>Mouse:<br>click, dblclick, mousedown, mouseover, mousemove, mouseout, dragstart, drag, dragenter, dragleave, dragover, drop, dragend</p><ul><li>Click: The sequence of click: mousedown, mouseup, click</li><li>Mouseover: Fires when the pointing device is moved onto an element</li><li>Mouseover: Fires when the pointing device is moved while it is over an element</li><li>Dragstart: Fired on an element when a drag is started</li><li>Dragend: The source of the drag will receive a dragend event when the drag operation is complete, whether it was sucessful or not,</li></ul><p>Keyboard:<br>keydown, keypress, keyup</p><p>HTML frame/object:<br>load, unload, abort, error, resize, scroll</p><ul><li>Load: Fires when the <em>user agent</em> finishes loading all content within a document, including window, frames, objects, and images.</li><li>Unlaod: Fires when the <em>user agent</em> removes all content from a window or frame.</li><li>Abort: Fires when an object/image is stopped from loading before completely loaded.</li><li>Error: Fires when an object/image/frame/ cannot be loaded properly.</li><li>Resize: Fires when a document view is resized.</li><li>Scroll: Fires when an element or document view is scrolled</li></ul><p>HTML form:<br>select, change, submit, reset, focus, blur</p><ul><li>Select: Fires when a user selects some text in a <em>text field</em>, including input and textarea.</li><li>Change: Fires <strong>when a control loses the input focus</strong> and <strong>its value has been modified since gaining focus</strong>.</li><li>Submit: Fires when a form is submitted.</li><li>Reset: Fires when a form is reset.</li><li>Focus: Fires when an element receives focus either via the pointing device or by tab navigation.</li><li>Blur: Fires when an element loses focus.</li></ul><p>User Interface:<br>focusin, focusout, DOMActivate</p><p>Mutation:<br>DOMSubtreeModified, DOMNodeInserted, DOMNodeRemoved, DOMNodeRemovedFromDocument, DOMNodeInsertedIntoDocument, DOMAttrModified, DOMCharacterDataModified</p><p>Progress:<br>loadstart, progress, error, abort, load, loadnd</p><h4 id="Touch-Events"><a href="#Touch-Events" class="headerlink" title="Touch Events"></a>Touch Events</h4><p>Web broswer running on touch-enabled devices will generate additional events</p><p>Touch:<br>touchstart, touchend, touchmove, touchenter, touchleave, touchcancel</p><ul><li>Touchstart: Fires when a finger is placed on the touch surface/screen.</li><li>Touchend: Fires when a finger is removed from the touch surface/screen.</li><li>Touchenter: Fires when a touch point moves onto the interactive area defined by a DOM Element</li><li>Touchcancel: A <strong>user-agent</strong> must dispatch this event type to indicate when a TouchPoint has been disrupted in an implementation-specific manner, such as by moving outside the bounds of the UA window.</li></ul><p>In the W3C draft recommendation, a <code>TouchEvent</code> delivers a <code>TouchList</code> of <code>Touch</code> location, the modifier keys that were active, a <code>TouchList</code> of <code>Touch</code> locations within the targeted DOM element, and a <code>TouchList</code> of <code>Touch</code> lcoations that have changed since the previous <code>TouchEvent</code>.</p><h4 id="Internet-Explorer-specific-events"><a href="#Internet-Explorer-specific-events" class="headerlink" title="Internet Explorer-specific events"></a>Internet Explorer-specific events</h4><p>In addition to the common/W3C events, two major types of events are added by <em>Internet Explorer</em>. Some of the events have been implemented as <em>de facto standards</em> by other browsers.</p><p>Clipbord:<br>cut, copy, paste, beforecut, beforecopy, beforepaste</p><p>Data binding:<br>afterupdate, beforeupdate, cellchange, dataavailable, datasetchagned, datasetcomplete, errorudpate, rowenter, rowexit, rowsdelete, rowinserted</p><ul><li>Afterupdate: Fires immediately after a databound object has been updated.</li><li>Beforeupdate: Fires before a data source has changed.</li><li>Cellchange: Fires when a data source has change.</li><li>Dataavailable: Fires when new data from a data source become available.</li><li>Rowenter: Fires whena new row of data from the data source is available.</li></ul><p>Mouse:<br>contextmenu, selectstart</p><ul><li>Contentmenu: Fires when the context menu is shown.</li><li>Selectstart: Fires when the user starts to select text.</li></ul><p>Keyboard:<br>help</p><ul><li>Help: Fires when the user initiates help.</li></ul><p>HTML frame/object:<br>beforeunload, stop</p><ul><li>Beforeunload: Fires before a document is unloaded.</li><li>Stop: Fires when the user stop loading the object. (unlike abort, stop event can be attached to document).</li></ul>]]></content>
       
       
-      <categories>
-          
-          <category> workNote </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -5561,12 +5391,6 @@
       
         <content type="html"><![CDATA[<p><img src="http://jbcdn2.b0.upaiyun.com/2013/10/syntax1.jpg"></p><p>本篇中的”伪元素”特指”:before”和”:after”</p><h3 id="语法和浏览器支持"><a href="#语法和浏览器支持" class="headerlink" title="语法和浏览器支持"></a>语法和浏览器支持</h3><p>早起的伪元素是使用一个冒号声明的”:”, 在 CSS3中修订后伪元素的声明使用两个冒号”::”, 但是为了目前的兼容性考虑(IE8), 建议使用”:”声明.</p><p>伪元素会在内容元素的前后插入额外的元素, 技术上等同于</p><pre><code>&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;:before&amp;lt;/span&amp;gt;This is the main content.&amp;lt;span&amp;gt;:after&amp;lt;/span&amp;gt;</code></pre><p><img src="http://jbcdn2.b0.upaiyun.com/2013/10/quotationmark-11.jpg"></p><p>当然, 这些元素无法在文档的源码中找到</p>]]></content>
       
-      
-      <categories>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
         <tags>
@@ -6579,14 +6403,6 @@
         <content type="html"><![CDATA[<h2 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h2><p><img src="https://marklodato.github.io/visual-git-guide/basic-usage.svg" alt="Git基本用法"><br>图中, History 即为本地仓库(local repository), Stage(Index) 为暂存目录, 也称为索引, Working Directory 为工作目录.</p><ul><li><code>git add *file*</code> 把Current Working Directory 下的file 放入 Stage</li><li><code>git commit</code> 对 Stage 生成快照并放入 local Repo</li><li><code>git reset -- *file*</code> 用来将 Stage 恢复到上一次 commit 的状态(快照)</li><li><code>git checkout -- *file*</code> 把文件从 Stage 复制到 Current Working Directory, 并且丢弃本地修改</li></ul><p>可以使用 <code>git reset -p</code>, <code>git checkout -p</code>, <code>git add -p</code>进入交互模式.</p><p>可以跳过 Stage, 实现 Working Directory 和 Local Repo 的直接交流.<br><img src="https://marklodato.github.io/visual-git-guide/basic-usage-2.svg" alt="跳过 Stage"></p><ul><li><code>git commit -a</code> 相当于运行 <code>git add</code>把Working Directory 下的文件放入 Stage 并 Commit</li><li><code>git commit *file*</code> 进行一次包含最后一次 Commit, 并加上 Working Directory 快照的提交, 并且文件添加到 Stage</li><li><code>git checkout HEAD</code> 从 Local Repo 中取出上一次 commit 的快照并回滚</li></ul><h2 id="图例"><a href="#图例" class="headerlink" title="图例"></a>图例</h2><p><img src="https://marklodato.github.io/visual-git-guide/conventions.svg" alt="图例"></p><h2 id="命令详解"><a href="#命令详解" class="headerlink" title="命令详解"></a>命令详解</h2><h3 id="Diff"><a href="#Diff" class="headerlink" title="Diff"></a>Diff</h3><p>查看两次提交之间的变动<br><img src="https://marklodato.github.io/visual-git-guide/diff.svg" alt="diff"></p><h3 id="Commit"><a href="#Commit" class="headerlink" title="Commit"></a>Commit</h3><p>执行 Commit 的时候, git 对 Stage 中的文件做一个快照, 提交给 local repo, 记为指向父节点的<strong>新节点</strong>, 然后把 HEAD 指向<strong>新节点</strong>,<br><img src="https://marklodato.github.io/visual-git-guide/commit-master.svg" alt="commit"><br>图中执行 commit 后, stage 生成快照并提交给 repo, 记为新节点 f0cec, 其指向父节点 ed489, 同时 HEAD 从父节点转移至新节点.</p><p>即使当前分支是从某祖父节点出发的, git 也会生成新节点并指向该祖父节点, 并将 HEAD 指向新节点<br><img src="https://marklodato.github.io/visual-git-guide/commit-maint.svg" alt="git"><br>图中 maint 在 commit 前是 master 的子父节点, 在 commit 不再是 master 的祖父节点, 此时合并或衍合是必须的.</p><p>如果想更改一次commit, 使用 <code>git commit --amend</code>, git 会使用当前父节点进行一次新的提交, 新的子节点依旧指向该父节点, 旧的提交会被取消, 如图<br><img src="https://marklodato.github.io/visual-git-guide/commit-amend.svg" alt="amend"></p><h3 id="Checkout"><a href="#Checkout" class="headerlink" title="Checkout"></a>Checkout</h3><p><code>Checkout</code>用于从 Stage 中取出文件放到 Working Directory 中, 也可用于切换分支</p><p>当给定某个文件名时, git 会从指定的节点中拷贝文件到 Stage 和 Working Directory. 比如 <code>git checkout HEAD~ foo.c</code> 会从 HEAD~(即当前父节点)中拷贝 foo.c 文件到 Working Directory 并加到 Stage, 如果<code>checkout</code> 没有添加指定节点, 就会从 Stage 中拷贝文件.<br><img src="https://marklodato.github.io/visual-git-guide/checkout-files.svg" alt="checkout"></p><p>如果不指定文件名, 而是给出一个本地分支名, 则会将 HEAD 指向该分支, 即转为 current branch<br><img src="https://marklodato.github.io/visual-git-guide/checkout-branch.svg" alt="checkout"></p><p>如果没有指定文件名和分支名, 而是一个标签, 远程分支, SHA-1值, 或者像是 master~3之类的东西, 则得到一个匿名分支, 称为 detached HEAD( 被分离的 HEAD 标识)<br><img src="https://marklodato.github.io/visual-git-guide/checkout-detached.svg" alt="checkout"></p><p>当 HEAD 处于分离状态时(不指向任何有名的 branch), commit 可以正常提交, 但不会更新任何有名的 branch( 称为新的匿名分支)<br><img src="https://marklodato.github.io/visual-git-guide/commit-detached.svg" alt="commit"></p><p>此时如果切换到其他分支, 就无法返回这个匿名分支<br><img src="https://marklodato.github.io/visual-git-guide/checkout-after-detached.svg" alt="commit"></p><p>如果想对该匿名分支创建引用, 可以用 <code>git checkout -b *name*</code> 来创建一个指向匿名分支的新分支<br><img src="https://marklodato.github.io/visual-git-guide/checkout-b-detached.svg" alt="commit"></p><h3 id="Reset"><a href="#Reset" class="headerlink" title="Reset"></a>Reset</h3><p><code>reset</code> 指令把当前分支指向另一个位置, 并且有选择的变动 Working Directory 和 Stage. 也用来从 Local Repo 中复制文件到 Stage, 不修改 Working Directory.</p><p>如果不给参数, 则当前分支指向那个节点, 并将 Stage 恢复到对应commit; 如果用 <code>--hard</code> 参数, 则 Working Directory 也恢复到该节点的commit, 如果用 <code>--soft</code> 参数, 则都不变<br><img src="https://marklodato.github.io/visual-git-guide/reset-commit.svg" alt="reset"></p><p>如果不提供版本号, 则默认 HEAD, 这样分支指向不变(依旧指向当前节点), 但是 Stage 会回滚到上一次 commit, 如果用了– hard, 则 Working Directory 也会回滚.<br><img src="https://marklodato.github.io/visual-git-guide/reset.svg" alt="reset"></p><h3 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h3><p><code>merge</code> 将不同的 branch 合并, 合并前, 其他分支的Stage 必须和当前分支的 Stage 相同(即合并的几个分支需要有相同的 Stage).</p><ul><li>如果另一个分支是当前分支的祖父节点, 则合并命令将什么也不做.</li><li>如果当前节点是另一个分支的祖父节点, 则带哦之 fast-forward 合并, 即简单易懂 HEAD, 并生成一个新的 commit<br><img src="https://marklodato.github.io/visual-git-guide/merge-ff.svg" alt="merge"></li></ul><p>如果是一次真正的合并, 默认把当前节点(ed489)和另一个节点(33104)及他们的共同祖父节点(b325c)进行一次三方合并. 结果是先保存Working Directory 和 Stage, 然后在当前节点(ed489)处提交新的节点.<br><img src="https://marklodato.github.io/visual-git-guide/merge.svg" alt="merge"></p><h3 id="Cherry-Pick"><a href="#Cherry-Pick" class="headerlink" title="Cherry Pick"></a>Cherry Pick</h3><p><code>cherry-pick</code> 命令”复制”一个提交节点并在当前分支做一次完全一样的新提交(将某节点作为新节点).<br><img src="https://marklodato.github.io/visual-git-guide/cherry-pick.svg" alt="cherry-pick"></p><h3 id="Rebase"><a href="#Rebase" class="headerlink" title="Rebase"></a>Rebase</h3><p>衍合是合并命令的另一种选择. 合并吧两个父分支合并进行一次提交, 提交历史不是线性的. 衍合在当前分支上重演另一个分支的历史, 提交历史是线性的, 本质上是线性化的自动的 cherry-pick<br><img src="https://marklodato.github.io/visual-git-guide/rebase.svg" alt="rebase"></p><p>上面所有的命令都在 topic 分支中进行, 而不是 master 分支( HEAD 指向 topic), 在 master 分支上重演, 并把分支指向新的节点(就得 topic 分支被回收).</p><p>要限制回滚返回, 使用 <code>--onto</code> 参数<br><img src="https://marklodato.github.io/visual-git-guide/rebase-onto.svg" alt="rebase"></p>]]></content>
       
       
-      <categories>
-          
-          <category> github </category>
-          
-          <category> note </category>
-          
-      </categories>
-      
       
         <tags>
             
@@ -6755,12 +6571,6 @@
       
         <content type="html"><![CDATA[<iframe width="100%" height="800px" src="https://embed.coggle.it/diagram/V0MZgJAlfGdrF97n/fa2bc4066df743e227a47743f2e618ad12096f3b615cb2bca7d05cd28a5107bb" frameborder="0" allowfullscreen=""></iframe>]]></content>
       
-      
-      <categories>
-          
-          <category> workNote </category>
-          
-      </categories>
       
       
     </entry>

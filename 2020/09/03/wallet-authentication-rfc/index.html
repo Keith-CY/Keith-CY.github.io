@@ -1,0 +1,319 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Wallet Authentication RFC[draft] | EzCook</title><meta name="description" content="AbstractThis specification describes the authorization and authentication process between security-sensitive wallets and untrusted applications. Since key-related resources should not be accessible to"><meta name="keywords" content="RFC,CKB"><meta name="author" content="Chen Yu"><meta name="copyright" content="Chen Yu"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="https://ezcook.de/2020/09/03/wallet-authentication-rfc/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin="crossorigin"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="Wallet Authentication RFC[draft]"><meta property="og:url" content="https://ezcook.de/2020/09/03/wallet-authentication-rfc/"><meta property="og:site_name" content="EzCook"><meta property="og:description" content="AbstractThis specification describes the authorization and authentication process between security-sensitive wallets and untrusted applications. Since key-related resources should not be accessible to"><meta property="og:image" content="https://cdnb.artstation.com/p/assets/images/images/021/805/099/large/shen-soldier-02.jpg?1573008236"><meta property="article:published_time" content="2020-09-03T09:25:49.000Z"><meta property="article:modified_time" content="2020-09-07T08:59:42.113Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-136207372-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-136207372-1');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  hexoversion: '5.1.1',
+  algolia: {"appId":"KU7XP6WJWL","apiKey":"6806ddc27f224d4ebc2fe49dc770371c","indexName":"Blog","hits":{"per_page":6},"languages":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}.","hits_stats":"${hits} results found in ${time} ms"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  bookmark: {
+    message_prev: 'Press',
+    message_next: 'to bookmark this page'
+  },
+  runtime_unit: 'days',
+  runtime: false,
+  copyright: {"limitCount":50,"languages":{"author":"Author: Chen Yu","link":"Link: ","source":"Source: EzCook","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true    
+}</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true,
+  postUpdate: '2020-09-07 16:59:42'
+}</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img {
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 5.1.1"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/yudan.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">Articles</div><div class="length_num">307</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">Tags</div><div class="length_num">74</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">Categories</div><div class="length_num">5</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div></div></div><div id="body-wrap"><div id="web_bg" data-type="color"></div><div id="sidebar"><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Abstract"><span class="toc-number">1.</span> <span class="toc-text">Abstract</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction"><span class="toc-number">2.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Specification"><span class="toc-number">3.</span> <span class="toc-text">Specification</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Permission-Restriction"><span class="toc-number">3.1.</span> <span class="toc-text">Permission Restriction</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Permission-Requests"><span class="toc-number">3.2.</span> <span class="toc-text">Permission Requests</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Get-Permission-List"><span class="toc-number">3.2.1.</span> <span class="toc-text">Get Permission List</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Request-Permissions"><span class="toc-number">3.2.2.</span> <span class="toc-text">Request Permissions</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Revoke-Permissions"><span class="toc-number">3.3.</span> <span class="toc-text">Revoke Permissions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Authorization-Process"><span class="toc-number">3.4.</span> <span class="toc-text">Authorization Process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Authentication-Process-Discretionary"><span class="toc-number">3.5.</span> <span class="toc-text">Authentication Process[Discretionary]</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">4.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">5.</span> <span class="toc-text">References</span></a></li></ol></div></div></div><header class="post-bg" id="page-header" style="background-image: url(https://cdnb.artstation.com/p/assets/images/images/021/805/099/large/shen-soldier-02.jpg?1573008236)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">EzCook</a></span><span class="pull-right menus"><div id="search_button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-address-card"></i><span> About</span></a></div><div class="menus_item"><a class="site-page" href="/portfolio/"><i class="fa-fw fas fa-code"></i><span> Portfolio</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">Wallet Authentication RFC[draft]</div></div><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2020-09-03T09:25:49.000Z" title="Created 2020-09-03 17:25:49">2020-09-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2020-09-07T08:59:42.113Z" title="Updated 2020-09-07 16:59:42">2020-09-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Blockchain/">Blockchain</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Blockchain/CKB/">CKB</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">Comments:</span><span class="disqus-comment-count comment-count"><a href="https://ezcook.de/2020/09/03/wallet-authentication-rfc/#disqus_thread"></a></span></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>This specification describes the authorization and authentication process between security-sensitive wallets and untrusted applications.</p>
+<p>Since key-related resources should not be accessible to any untrusted applications, such as a website, until the user grants specific permissions on it, most of the endpoints should be guarded by an authentication system.</p>
+<p>This specification defines some aspects of the authentication system, including:</p>
+<ul>
+<li>Depiction of a permission;</li>
+<li>Two JSON-RPC methods to get and request permissions;</li>
+<li>Two expressive user interfaces to inform permissions to grant and revoke;</li>
+<li>Authorization process between application, wallet and user;</li>
+<li>Authentication process between application and wallet;</li>
+</ul>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>Wallets co-operating with untrusted applications are doing works viz.</p>
+<ul>
+<li>Provide available addresses;</li>
+<li>Provide live cells (including deps) for constructing transactions;</li>
+<li>Switch between blockchain nodes to submit transactions;</li>
+<li>Sign and send transactions proposed from applications;</li>
+<li>Sign and verify messages from applications.</li>
+</ul>
+<p>Some of them should not prohibited until the owner of the wallet grants related permissions on the requester.</p>
+<p>For universal experience between a variety of applications and wallets, this specification proposes a canonical process for these tasks. Following this guide, developers can implement permission systems in a general way, and users can avoid mental burden on permission-grants between different applications.</p>
+<h2 id="Specification"><a href="#Specification" class="headerlink" title="Specification"></a>Specification</h2><h3 id="Permission-Restriction"><a href="#Permission-Restriction" class="headerlink" title="Permission Restriction"></a>Permission Restriction</h3><p>This specification imposes three restrictions on each permission,</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">restrictions:</span></span><br><span class="line">  <span class="attr">deps:</span> <span class="string">string[]</span> <span class="comment"># required permissions for this permission</span></span><br><span class="line">  <span class="attr">expiration:</span> <span class="string">string</span> <span class="string">|</span> <span class="literal">null</span> <span class="comment"># timestamp of expiration datetime, null for permanent</span></span><br><span class="line">  <span class="attr">limit:</span> <span class="string">string</span> <span class="string">|</span> <span class="literal">null</span> <span class="comment"># limitation of invokation, null for unlimited</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Permission-Requests"><a href="#Permission-Requests" class="headerlink" title="Permission Requests"></a>Permission Requests</h3><p>This specification defines two requests in JSON-RPC method:</p>
+<h4 id="Get-Permission-List"><a href="#Get-Permission-List" class="headerlink" title="Get Permission List"></a>Get Permission List</h4><p><code>get_permission_list</code> queries the permission list provided by the wallet. On handling this kinds of request, wallet should return the list of permissions in the following format.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">permission_name:</span></span><br><span class="line">  <span class="attr">is_granted:</span> <span class="string">boolean</span> <span class="comment"># is granted or not</span></span><br><span class="line">  <span class="attr">restriction:</span></span><br><span class="line">    <span class="attr">deps:</span> <span class="string">string[]</span> <span class="comment"># required permissions for this permission</span></span><br><span class="line">    <span class="attr">expiration:</span> <span class="string">string</span> <span class="string">|</span> <span class="literal">null</span> <span class="comment"># timestamp of expiration datetime, null for permanent</span></span><br><span class="line">    <span class="attr">limit:</span> <span class="string">string</span> <span class="string">|</span> <span class="literal">null</span> <span class="comment"># limitation of invokation, null for unlimited</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Request-Permissions"><a href="#Request-Permissions" class="headerlink" title="Request Permissions"></a>Request Permissions</h4><p>To request particular permissions, application should POST a request in following format:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">id:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">jsonrpc:</span> <span class="string">&#x27;2.0&#x27;</span><span class="string">,</span></span><br><span class="line"><span class="attr">method:</span> <span class="string">&#x27;request_permissions&#x27;</span><span class="string">,</span></span><br><span class="line"><span class="attr">params:</span></span><br><span class="line">  <span class="attr">app:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">string</span></span><br><span class="line">    <span class="attr">description:</span> <span class="string">string</span> <span class="string">|</span> <span class="literal">null</span></span><br><span class="line">  <span class="attr">permissions:</span></span><br><span class="line">    <span class="attr">permission_name:</span></span><br><span class="line">      <span class="attr">restriction:</span></span><br><span class="line">        <span class="attr">expiration:</span> <span class="string">string</span> <span class="string">|</span> <span class="literal">null</span></span><br><span class="line">        <span class="attr">limit:</span> <span class="string">string</span> <span class="string">|</span> <span class="literal">null</span></span><br><span class="line">      <span class="attr">reason:</span> <span class="string">string</span> <span class="string">|</span> <span class="literal">null</span></span><br></pre></td></tr></table></figure>
+
+<p>The payload in this request indicates the details as follows:</p>
+<ul>
+<li>Application is requesting <code>permission_name</code> permission</li>
+<li>The <code>permission_request</code> should be available until <code>expiration</code>, eternal if <code>expiration</code> is <code>null</code></li>
+<li>The <code>permission_request</code> will be revoked automatically after <code>limit</code> invocations, <code>null</code> for unlimited.</li>
+<li>Reason to request <code>permission_name</code></li>
+</ul>
+<p>User should be informed with all these information in a proper way, including extra info about the requester.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">┌───────────────────────────────────────────────┐</span><br><span class="line">│ **         Request for Permissions         ** │</span><br><span class="line">├───────────────────────────────────────────────┤</span><br><span class="line">│ Application : app_name                        │</span><br><span class="line">│ Description : app_description                 │</span><br><span class="line">│ Origin      : app_origin                      │</span><br><span class="line">├───────────────────────────────────────────────┤</span><br><span class="line">│ **          Requested Permissions          ** │</span><br><span class="line">├──────────┬─────────────────┬──────────────────┤</span><br><span class="line">│ [x] name │ expiration time │ invocation limit │</span><br><span class="line">│          ├-----------------┴------------------┤</span><br><span class="line">│          │ Reason                             │</span><br><span class="line">├──────────┼─────────────────┬──────────────────┤</span><br><span class="line">│ [x] name │ expiration time │ invocation limit │</span><br><span class="line">├──────────┴─────────────┬───┴──────────────────┤</span><br><span class="line">│          Deny          │         Grant        │</span><br><span class="line">└────────────────────────┴──────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<p>With this interface, requested permissions can be granted as needed, which makes the permission system more flexible.</p>
+<p>Once user confirms, wallet should return:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">id:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">jsonrpc:</span> <span class="string">&#x27;2.0&#x27;</span></span><br><span class="line"><span class="attr">result:</span></span><br><span class="line">  <span class="attr">permissions:</span></span><br><span class="line">    <span class="attr">permission_name:</span></span><br><span class="line">      <span class="attr">is_granted:</span> <span class="string">boolean</span></span><br><span class="line">      <span class="attr">message:</span> <span class="string">string</span> <span class="string">|</span> <span class="literal">null</span> <span class="comment"># reason for rejection, user rejected, permission unregonized, dep permissions are not granted, etc.</span></span><br><span class="line">  <span class="attr">error:</span> <span class="comment"># unexpected error thrown in the procedure, like database error, etc</span></span><br><span class="line">  <span class="attr">message:</span> <span class="comment"># expected exception, such as user denied, password incorrect, permission deps required</span></span><br></pre></td></tr></table></figure>
+
+<p>If user denies, the wallet should return:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">id:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">jsonrpc:</span> <span class="string">&#x27;2.0&#x27;</span></span><br><span class="line"><span class="attr">result:</span></span><br><span class="line">  <span class="attr">code:</span> <span class="number">401</span></span><br><span class="line">  <span class="attr">message:</span> <span class="string">permission</span> <span class="string">request</span> <span class="string">is</span> <span class="string">denied</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Revoke-Permissions"><a href="#Revoke-Permissions" class="headerlink" title="Revoke Permissions"></a>Revoke Permissions</h3><p>A grant should be able to revoke freely in a kind way with essential annotations:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌───────────────────────────────────────────────┐</span><br><span class="line">│ **            Revoke Permission            ** │</span><br><span class="line">├───────────────────────────────────────────────┤</span><br><span class="line">│ Application : app_name                        │</span><br><span class="line">│ Origin      : app_origin                      │</span><br><span class="line">│ Permission  : permission_name                 │</span><br><span class="line">├─────────────┬─────────────────────────────────┤</span><br><span class="line">│ Dependents  │ permission_name                 │</span><br><span class="line">│             ├---------------------------------┤</span><br><span class="line">│             │ permission_name                 │</span><br><span class="line">├─────────────┴─────────┬───────────────────────┤</span><br><span class="line">│         Cancel        │        Confirm        │</span><br><span class="line">└───────────────────────┴───────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="Authorization-Process"><a href="#Authorization-Process" class="headerlink" title="Authorization Process"></a>Authorization Process</h3><p>The authorization process is a sequence of simple tasks that including <code>application requests permissions</code>, <code>inform user necessary information</code>, <code>handle confirmation/rejection/exception</code>.</p>
+<pre class="mermaid">sequenceDiagram
+  participant Application
+  participant Auth
+  participant User
+
+  Application ->> Auth: Request Permissions
+  Auth -->> Application: If Exception Thrown
+  Auth ->> User: App[x] Requests Permissions
+  User ->> Auth: Pick Some or Deny
+  Auth ->> Application: Permissions Granted
+  Auth -->> Application: Request Denied</pre>
+
+<p>This specification has defined a method to request permissions and an advisable user interface to ask user for confirmation. Now the handlers on confirmation, rejection and exception should be complemented in this procedure.</p>
+<p>There are three kinds of result in the end:</p>
+<ol>
+<li>Some permissions are granted;</li>
+<li>Request is denied;</li>
+<li>Exception occurs.</li>
+</ol>
+<p>All these cases are covered by three fields of result of <code>request_permissions</code> defined above:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">permissions:</span> <span class="comment"># result of request_permissions mentioned above, null for exception</span></span><br><span class="line"><span class="attr">error:</span> <span class="comment"># unexpected error thrown in the procedure, like database error, etc</span></span><br><span class="line"><span class="attr">message:</span> <span class="comment"># expected exception, such as user denied, password incorrect, permission deps required</span></span><br></pre></td></tr></table></figure>
+
+<p><code>error</code> and <code>message</code> are worthy distinguishing since they describes different kinds of exception.</p>
+<p><code>error</code> means unexpected exception is thrown, like database error or internal exception. While <code>message</code> indicates an expected behavior is delivered, e.g. user denied, or password is incorrect, etc.</p>
+<p>With all of these definition, the workflow should be much clearer:</p>
+<pre class="mermaid">graph TD
+App[Application] -->|Request| A{Auth}
+A -->|Granted| G[permissions: non-null<br/>error: null<br/>message: null]
+A -->|Denied, Password Error, Dep Error| D[permissions: null<br/>error: null<br/>message: non-null]
+A -->|Unknown Exception| U[permissions: null<br/>error: non-null<br/>message: null]</pre>
+
+<h3 id="Authentication-Process-Discretionary"><a href="#Authentication-Process-Discretionary" class="headerlink" title="Authentication Process[Discretionary]"></a>Authentication Process[Discretionary]</h3><blockquote>
+<p>Defining the process of authentication is good for writing SOLID code but it’s not mandatory in this system.</p>
+</blockquote>
+<p>Name authentication mechanism <code>Strategy</code>, which is a concept from <a target="_blank" rel="noopener" href="http://www.passportjs.org/">passport</a>, and classify them into <code>LocalStrategy</code>, <code>JwtStrategy</code>, etc. by concret mechanisms (More strategies can be found in <a target="_blank" rel="noopener" href="http://www.passportjs.org/packages/">Passport</a>).</p>
+<p>Suppose an endpoint <code>get_xxx</code> should be protected by the auth module <code>auth</code>.</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Verify &#123;</span><br><span class="line">  (payload: <span class="built_in">string</span>) : &#123;</span><br><span class="line">    permissions: Permission[] | <span class="literal">null</span>,</span><br><span class="line">    error?: <span class="built_in">Error</span> | <span class="literal">null</span>,</span><br><span class="line">    message?: <span class="built_in">string</span> | <span class="literal">null</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Strategy&lt;T <span class="keyword">extends</span> Verify&gt; &#123;</span><br><span class="line"></span><br><span class="line">  #name: <span class="built_in">string</span></span><br><span class="line">  #verify: T</span><br><span class="line"></span><br><span class="line">  get name() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.#name</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">constructor</span>(<span class="params">name: <span class="built_in">string</span>, verify: T</span>) &#123;</span><br><span class="line">    <span class="built_in">this</span>.#verify = verify</span><br><span class="line">    <span class="built_in">this</span>.#name = name</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> validate(req: HttpRequest): ReturnType&lt;Verify&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; payload &#125; = <span class="built_in">this</span>.getPayload(req)</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.#verify(payload)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> getPayload: <span class="function">(<span class="params">req: HttpRequest</span>) =&gt;</span> &#123; payload: <span class="built_in">string</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Register authentication strategy</span></span><br><span class="line">auth.use(<span class="keyword">new</span> Strategy(</span><br><span class="line">  <span class="string">&#x27;custom&#x27;</span>,</span><br><span class="line">  (payload: <span class="built_in">string</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> permissions = app.getPermissions(payload)</span><br><span class="line">    <span class="keyword">if</span> (!permissions.xxx.is_granted) &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        permissions: <span class="literal">null</span>,</span><br><span class="line">        message: <span class="string">`Permission xxx is not granted`</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      permissions,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">))</span><br><span class="line"><span class="comment">// Protect endpoint with speicified strategy</span></span><br><span class="line">app.post(<span class="string">`get_xxx`</span>, auth.authenticate(<span class="string">&#x27;custom&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>With this configuration, <code>app</code> invokes <code>auth.validate</code> on each post request before <code>get_xxx</code> route handler and if validation fails, the message will be passed to the router handler for the next step.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>This specification illustrates several facets of authorization and authentication from perspectives of applications, wallets and users. With the APIs defined in this specification, developer experience is unified across different applications while with the request/revoke UIs pictured above, the user experience is also imporved across various wallets.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-2255.md">Wallet Permissions System</a></li>
+<li><a target="_blank" rel="noopener" href="https://ethereum-magicians.org/t/web3-login-permissions/3583">Web3 Login Permissions</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc2617">HTTP Authentication: Basic and Digest Access Authentication</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6750">The OAuth 2.0 Authorization Framework: Bearer Token Usage</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.passportjs.org/docs/">Passport</a></li>
+</ul>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Chen Yu</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://ezcook.de/2020/09/03/wallet-authentication-rfc/">https://ezcook.de/2020/09/03/wallet-authentication-rfc/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/RFC/">RFC</a><a class="post-meta__tags" href="/tags/CKB/">CKB</a></div><div class="post_share"><div class="social-share" data-image="https://cdnb.artstation.com/p/assets/images/images/021/805/099/large/shen-soldier-02.jpg?1573008236" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2020/08/31/shorthand-of-wallet-permissions-system/"><img class="next-cover" src="https://github.com/ethereum/EIPs/raw/master/assets/eip-2255/permissions.png" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Shorthand of Wallet Permissions System</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2019/04/20/note-on-bip-173/" title="Note on Bip 173"><img class="relatedPosts_cover" src="/gallery/thumbnails/segwit.png"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2019-04-20</div><div class="relatedPosts_title">Note on Bip 173</div></div></a></div><div class="relatedPosts_item"><a href="/2019/03/05/note-on-bip32/" title="Note on Bip 32"><img class="relatedPosts_cover" src="/gallery/thumbnails/bip32.png"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2019-03-05</div><div class="relatedPosts_title">Note on Bip 32</div></div></a></div><div class="relatedPosts_item"><a href="/2020/08/27/shorthand-of-ethereum-provider/" title="Shorthand of Ethereum Provider"><img class="relatedPosts_cover" src="/gallery/thumbnails/eip-1193.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-27</div><div class="relatedPosts_title">Shorthand of Ethereum Provider</div></div></a></div><div class="relatedPosts_item"><a href="/2020/08/31/shorthand-of-wallet-permissions-system/" title="Shorthand of Wallet Permissions System"><img class="relatedPosts_cover" src="https://github.com/ethereum/EIPs/raw/master/assets/eip-2255/permissions.png"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-31</div><div class="relatedPosts_title">Shorthand of Wallet Permissions System</div></div></a></div><div class="relatedPosts_item"><a href="/2020/08/31/type-id-on-ckb/" title="Type Id on CKB"><img class="relatedPosts_cover" src="https://upload.wikimedia.org/wikipedia/commons/f/f7/Utrecht_Moreelse_Heraclite.JPG"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-08-31</div><div class="relatedPosts_title">Type Id on CKB</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div id="disqus_thread"></div></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2015 - 2020 By Chen Yu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><script type="text/javascript" id="maid-script" mermaidoptioins="{&quot;theme&quot;:&quot;dark&quot;,&quot;background&quot;:&quot;#fff!important&quot;}" src="https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  var options = JSON.parse(document.getElementById('maid-script').getAttribute('mermaidoptioins'));
+  mermaid.initialize(options);
+}</script></div></footer></div><section id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font_plus" type="button" title="Increase Font Size"><i class="fas fa-plus"></i></button><button id="font_minus" type="button" title="Decrease Font Size"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></section><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div><div><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="/js/search/algolia.js"></script><script>var endLoading = function () {
+  document.body.style.overflow = 'auto';
+  document.getElementById('loading-box').classList.add("loaded")
+}
+window.addEventListener('load',endLoading)</script><div class="js-pjax"><script>if (document.getElementsByClassName('mermaid').length) {
+  if (window.mermaidJsLoad) mermaid.init()
+  else {
+    $.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js', function () {
+      window.mermaidJsLoad = true
+      mermaid.initialize({
+        theme: 'default',
+      })
+      [object Object] && mermaid.init()
+    })
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'https://ezcook.de/2020/09/03/wallet-authentication-rfc/'
+    this.page.identifier = '2020/09/03/wallet-authentication-rfc/'
+    this.page.title = 'Wallet Authentication RFC[draft]'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://ezcook-de.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Disqus' === 'Disqus' || !false) {
+  if (false) loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script><script>if (window.DISQUSWIDGETS === undefined) {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://ezcook-de.disqus.com/count.js';
+  s.id = 'dsq-count-scr';
+  (d.head || d.body).appendChild(s);
+} else {
+  DISQUSWIDGETS.getCount({reset: true});
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  'meta[name=description]',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+const pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+})
+
+document.addEventListener('pjax:complete', function () {
+  refreshFn()
+
+  $('script[data-pjax]').each(function () {
+    $(this).parent().append($(this).remove())
+  })
+
+  GLOBAL_CONFIG.islazyload && lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  if (typeof gtag === 'function') {
+    gtag('config', 'UA-136207372-1', {'page_path': window.location.pathname});
+  }
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+})
+
+document.addEventListener('pjax:send', function () {
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  $(window).off('scroll')
+
+  //reset readmode
+  $('body').hasClass('read-mode') && $('body').removeClass('read-mode')
+
+  //reset font-size
+  $('body').css('font-size') !== originFontSize && $('body').css('font-size', parseFloat(originFontSize))
+})</script></div></body></html>
